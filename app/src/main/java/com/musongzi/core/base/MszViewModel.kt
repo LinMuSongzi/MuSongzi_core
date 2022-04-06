@@ -1,6 +1,8 @@
 package com.musongzi.core.base
 
-class MszViewModel : CoreViewModel() {
+import com.musongzi.core.itf.holder.IHodlerActivity
+
+class MszViewModel : CoreViewModel<IHodlerActivity>() {
 
 
 

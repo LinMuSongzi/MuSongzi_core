@@ -1,6 +1,8 @@
 package com.musongzi.core.itf
 
-interface IAgent:IHodlerClient  {
+import com.musongzi.core.itf.holder.IHodlerClient
+
+interface IAgent: IHodlerClient {
 
 
 }
