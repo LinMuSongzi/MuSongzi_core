@@ -1,6 +1,6 @@
 package com.musongzi.core.itf.holder
 
-interface IHodlerArguments<D> : ILifeObject {
+interface IHodlerArguments<D>  {
 
     fun putArguments(d: D?);
 

@@ -1,4 +1,4 @@
-package com.musongzi.core.base
+package com.musongzi.core.base.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -41,13 +41,15 @@ abstract class ModelFragment<V : IHodlerViewModel<*,*>, D : ViewDataBinding> : D
         return mVp!!
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainViewModel?.get()?.handlerSavedInstanceState(savedInstanceState)
+        initView()
         initData();
         initEvent()
     }
@@ -62,6 +64,8 @@ abstract class ModelFragment<V : IHodlerViewModel<*,*>, D : ViewDataBinding> : D
         val vm = v as? IHodlerViewModel<*,*>
         vm?.let {
             it.attachNow(this)
+            it.putArguments(arguments)
+            it.handlerArguments()
         }
         return v;
     }
@@ -76,5 +80,10 @@ abstract class ModelFragment<V : IHodlerViewModel<*,*>, D : ViewDataBinding> : D
     override fun disimissDialog() {
 
     }
+
+
+
+
+
 
 }

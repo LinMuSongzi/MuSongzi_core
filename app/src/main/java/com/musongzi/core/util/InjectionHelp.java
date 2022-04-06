@@ -1,16 +1,11 @@
 package com.musongzi.core.util;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.musongzi.core.base.ModelFragment;
-import com.musongzi.core.itf.holder.IHodlerViewModel;
 
 import org.jetbrains.annotations.NotNull;
 

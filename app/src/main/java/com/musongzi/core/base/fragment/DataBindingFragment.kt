@@ -1,4 +1,4 @@
-package com.musongzi.core.base
+package com.musongzi.core.base.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import com.musongzi.core.itf.holder.IHodlerActivity
 import com.musongzi.core.itf.holder.IHolderDataBinding
@@ -21,9 +22,9 @@ abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerAct
 
     override fun getHodlerActivity(): FragmentActivity? = activity
 
-    override fun getMainLifecycle(): ILifeObject   = this
+    override fun getMainLifecycle(): IHodlerActivity?   = requireActivity() as? IHodlerActivity
 
-    override fun getThisLifecycle(): Lifecycle?  = this.lifecycle
+    override fun getThisLifecycle(): LifecycleOwner?  = this
 
     override fun getHolderContext(): Context? = context
 
@@ -60,7 +61,8 @@ abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerAct
         }
     }
 
-    private fun getLayoutId(): Int = 0
+    @Deprecated("已过时", ReplaceWith("ViewDataBinding"))
+    protected fun getLayoutId(): Int = 0
 
     protected fun superDatabindingName(): String = DataBindingFragment::class.java.name
 
