@@ -1,11 +1,5 @@
 package com.musongzi.core.itf
 
-interface IRxObserverEasyHelp  :IWant{
-
-
+interface IRxObserverEasyHelp<T>  :IWant{
     fun <T> getRetrofitApiInstance():T
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.musongzi.core.simple
+package com.musongzi.test.simple
 
 import com.musongzi.core.base.business.BaseLifeBusiness
 

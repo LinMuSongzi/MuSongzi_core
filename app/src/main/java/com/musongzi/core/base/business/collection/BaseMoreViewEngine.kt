@@ -13,7 +13,7 @@ import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.PageSupport
-import com.musongzi.core.simple.MszObserver
+import com.musongzi.test.simple.MszObserver
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import org.greenrobot.eventbus.Subscribe

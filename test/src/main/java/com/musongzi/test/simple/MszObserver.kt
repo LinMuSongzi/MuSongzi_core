@@ -1,6 +1,5 @@
-package com.musongzi.core.simple
+package com.musongzi.test.simple
 
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 
