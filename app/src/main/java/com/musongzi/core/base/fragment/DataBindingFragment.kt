@@ -11,11 +11,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
 import com.musongzi.core.itf.IDisconnect
+import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.holder.IHolderDataBinding
 import com.musongzi.core.util.InjectionHelp
+import com.trello.rxlifecycle4.components.support.RxFragment
 
-abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHolderActivity, IDisconnect,
+abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity, IDisconnect,
     IHolderDataBinding<D> {
 
     lateinit var dataBinding: D

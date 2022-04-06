@@ -73,5 +73,24 @@ dependencies {
     //分包
     def multidex_version = "2.0.1"
     api "androidx.multidex:multidex:$multidex_version"
+    api 'com.trello.rxlifecycle4:rxlifecycle:4.0.2'
 
+
+// If you want to bind to Android-specific lifecycles
+    api 'com.trello.rxlifecycle4:rxlifecycle-android:4.0.2'
+
+// If you want pre-written Activities and Fragments you can subclass as providers
+    api 'com.trello.rxlifecycle4:rxlifecycle-components:4.0.2'
+
+// If you want pre-written support preference Fragments you can subclass as providers
+    api 'com.trello.rxlifecycle4:rxlifecycle-components-preference:4.0.2'
+
+// If you want to use Android Lifecycle for providers
+    api 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle:4.0.2'
+
+// If you want to use Kotlin syntax
+    api 'com.trello.rxlifecycle4:rxlifecycle-kotlin:4.0.2'
+
+// If you want to use Kotlin syntax with Android Lifecycle
+    api 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle-kotlin:4.0.2'
 }
