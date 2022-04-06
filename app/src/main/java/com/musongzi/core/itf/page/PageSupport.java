@@ -5,11 +5,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
 import com.musongzi.core.itf.ILifeObject;
 import com.musongzi.core.itf.data.IHolderDataConvert;
+import com.musongzi.core.itf.holder.IHodlerLifecycle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
@@ -64,38 +66,42 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     public PageSupport(CallBack<ListItem, DataEntity> callBack) {
         this.callBack = callBack;
         Log.i(TAG, "PageSupport: " + callBack.pageSize());
-        if (callBack == null) {
+         LifecycleOwner lifecycleOwner = null;
+        if (callBack.getThisLifecycle() != null) {
+            lifecycleOwner = callBack.getThisLifecycle();//.getLifecycle();
+        }
+        if (lifecycleOwner == null) {
             page.observeForever(integer -> {
                 Log.i(TAG, "PageSupport: observeForever  = " + integer);
                 load();
             });
         } else {
-            page.observe(callBack, integer -> {
+            page.observe(lifecycleOwner, integer -> {
                 Log.i(TAG, "PageSupport: observe  = " + integer);
                 load();
             });
         }
 
-        if (callBack.getLifecycle() == null) {
+        if (lifecycleOwner == null) {
             state.observeForever(callBack::handlerState);
         } else {
-            state.observe(callBack, callBack::handlerState);
+            state.observe(lifecycleOwner, callBack::handlerState);
         }
 
         androidx.lifecycle.Observer<Integer> observer = integer -> {
-            Log.i(TAG, "PageSupport: change "+this);
+            Log.i(TAG, "PageSupport: change " + this);
             callBack.handlerData(data, callBack.getCode());
             if (callBack.createPostEvent() != null) {
                 EventBus.getDefault().post(callBack.createPostEvent());
             }
         };
-        if (callBack.getLifecycle()== null) {
+        if (lifecycleOwner == null) {
             size.observeForever(observer);
         } else {
-            size.observe(callBack, observer);
+            size.observe(lifecycleOwner, observer);
         }
-        if (callBack.getLifecycle() != null && callBack.getAdMessage() != null) {
-            callBack.getLifecycle().addObserver(new DefaultLifecycleObserver() {
+        if (lifecycleOwner != null && callBack.getAdMessage() != null) {
+            callBack.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
                 @Override
                 public void onCreate(@NonNull LifecycleOwner owner) {
                     callBack.getAdMessage().load();
@@ -105,7 +111,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
                     owner.getLifecycle().removeObserver(this);
                 }
             });
-            state.observe(callBack, integer -> callBack.getAdMessage().onDataStateChange(integer));
+            state.observe(lifecycleOwner, integer -> callBack.getAdMessage().onDataStateChange(integer));
         }
     }
 
@@ -116,8 +122,8 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     private void load() {
         int p = page.getValue();
         Log.i(TAG, "load: page = " + p);
-        if(simpleObserver == null){
-            simpleObserver =  new Observer<DataEntity>(){
+        if (simpleObserver == null) {
+            simpleObserver = new Observer<DataEntity>() {
 
                 @Override
                 public void onComplete() {
@@ -228,7 +234,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     @Override
     public void onSubscribe(Disposable d) {
-        if(callBack.getObserver() != null) {
+        if (callBack.getObserver() != null) {
             callBack.getObserver().onSubscribe(d);
         }
     }
@@ -262,7 +268,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
             data.addAll(list);
         }
         size.setValue(++size2);
-        if(callBack.getObserver() != null) {
+        if (callBack.getObserver() != null) {
             callBack.getObserver().onNext(entity);
         }
     }
@@ -277,7 +283,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         Log.i(TAG, "onError: pageSupport . " + Arrays.toString(e.getStackTrace()));
 //        isLoaderNow = false;
         state.setValue(STATE_END_ERROR);
-        if(callBack.getObserver() != null) {
+        if (callBack.getObserver() != null) {
             callBack.getObserver().onError(e);
         }
     }
@@ -285,7 +291,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     @Override
     public void onComplete() {
         Log.i(TAG, "onComplete: ");
-        if(callBack.getObserver() != null) {
+        if (callBack.getObserver() != null) {
             callBack.getObserver().onComplete();
         }
     }
@@ -302,8 +308,8 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
 
     @Override
     public void registerPageIdObserver(@NotNull androidx.lifecycle.Observer<Integer> observer) {
-        if (callBack.getLifecycle() != null) {
-            loadId.observe(callBack, observer);
+        if (callBack.getThisLifecycle() != null) {
+            loadId.observe(callBack.getThisLifecycle(), observer);
         } else {
             loadId.observeForever(observer);
         }
@@ -315,7 +321,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      * @param <ListItem>参数泛型定义与   {@link PageSupport} 一致
      * @param <DataEntity>参数泛型定义与 {@link PageSupport} 一致
      */
-    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem,DataEntity>, Book, ILifeObject {
+    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, IHodlerLifecycle {
 
         int getCode();
 

@@ -5,9 +5,9 @@ import com.musongzi.core.itf.IAttach
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IClient
 
-interface IHodlerViewModel<B : IBusiness> : IAgent, IAttach<IHodlerActivity>, IHolderBusiness<B>{
+interface IHodlerViewModel<C : IClient,B : IBusiness> : IAgent, IAttach<IHodlerActivity>, IHolderBusiness<B>,IHodlerClient<C>{
 
-    fun getHolderClient(): IClient?
+//    fun getHolderClient(): IClient?
 
 
 }

@@ -4,7 +4,7 @@ import com.musongzi.core.itf.IBusiness
 
 interface IHolderBusiness<B : IBusiness> {
 
-    fun getHolderBusiness():B
+    fun getHolderBusiness():B?
 
 
 }

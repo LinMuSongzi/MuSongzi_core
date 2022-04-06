@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.IHodlerViewModel
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-class ModelFragment<V : IHodlerViewModel<*>, D : ViewDataBinding> : DataBindingFragment<D>(),
-    ViewModelProvider.Factory {
+abstract class ModelFragment<V : IHodlerViewModel<*,*>, D : ViewDataBinding> : DataBindingFragment<D>(),
+    ViewModelProvider.Factory ,IClient{
 
     var mainViewModel: WeakReference<V?>? = null
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
-    override fun onCreateView(
+    final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,21 +36,45 @@ class ModelFragment<V : IHodlerViewModel<*>, D : ViewDataBinding> : DataBindingF
 
     private fun getMainViewProvider(): ViewModelProvider {
         if (mVp == null) {
-            mVp = ViewModelProvider(getMainViewModelProvider())
+            mVp = ViewModelProvider(getMainViewModelProvider(),this)
         }
         return mVp!!
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initData();
+        initEvent()
+    }
+    abstract fun initView()
+    abstract fun initEvent()
+    abstract fun initData()
 
     protected fun actualTypeArgumentsViewModelIndex(): Int = 0
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val v = modelClass.newInstance()
-        val vm = v as? IHodlerViewModel<*>
+        val vm = v as? IHodlerViewModel<*,*>
         vm?.let {
             it.attachNow(this)
-            it.getHolderBusiness().afterHandlerBusiness()
         }
         return v;
+    }
+
+    override fun getClient(): IClient = this
+
+
+    override fun showDialog(msg: String?) {
+
+    }
+
+    override fun disimissDialog() {
+
     }
 
 }

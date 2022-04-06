@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelStoreOwner
-import com.musongzi.core.itf.ILifeObject
 import com.musongzi.core.itf.holder.IHodlerActivity
 import com.musongzi.core.itf.holder.IHolderDataBinding
 import com.musongzi.core.util.InjectionHelp
 
-open class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerActivity,
+abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerActivity,
     IHolderDataBinding<D> {
 
     lateinit var dataBinding: D
@@ -22,6 +22,8 @@ open class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerActivit
     override fun getHodlerActivity(): FragmentActivity? = activity
 
     override fun getMainLifecycle(): ILifeObject   = this
+
+    override fun getThisLifecycle(): Lifecycle?  = this.lifecycle
 
     override fun getHolderContext(): Context? = context
 
