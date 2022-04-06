@@ -1,7 +1,5 @@
 package com.musongzi.core.itf
 
-interface IClient : IDialogSupport{
-
-
+interface IClient : IDialogSupport,IDisconnect{
 
 }

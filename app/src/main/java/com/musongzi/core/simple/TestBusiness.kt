@@ -1,7 +1,6 @@
 package com.musongzi.core.simple
 
-import com.musongzi.core.base.BaseLifeBusiness
-import com.musongzi.core.itf.IBusiness
+import com.musongzi.core.base.business.BaseLifeBusiness
 
 class TestBusiness : BaseLifeBusiness<TestViewModel>() {
 

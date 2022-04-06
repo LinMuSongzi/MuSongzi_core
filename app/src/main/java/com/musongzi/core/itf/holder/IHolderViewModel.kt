@@ -6,7 +6,7 @@ import com.musongzi.core.itf.IAttach
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IClient
 
-interface IHodlerViewModel<C : IClient,B : IBusiness> : IAgent, IAttach<IHodlerActivity>, IHolderBusiness<B>,IHodlerClient<C>,IHodlerArguments<Bundle>{
+interface IHolderViewModel<C : IClient,B : IBusiness> : IAgent, IAttach<IHolderActivity>, IHolderBusiness<B>,IHolderClient<C>,IHolderArguments<Bundle>{
 
     fun handlerSavedInstanceState(savedInstanceState: Bundle?);
 

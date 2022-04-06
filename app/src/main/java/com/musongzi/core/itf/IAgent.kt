@@ -1,9 +1,8 @@
 package com.musongzi.core.itf
 
-import com.musongzi.core.itf.holder.IHodlerClient
-import com.musongzi.core.itf.holder.IHodlerLifecycle
+import com.musongzi.core.itf.holder.IHolderLifecycle
 
-interface IAgent: IHodlerLifecycle,IClient {
+interface IAgent: IHolderLifecycle,IClient {
 
     fun getHolderClient():IClient?
 

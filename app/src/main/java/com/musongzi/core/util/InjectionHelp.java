@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.musongzi.core.base.business.collection.ListEngine;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
@@ -15,6 +17,23 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class InjectionHelp {
+
+
+    public static ListEngine findAnnotation(Class<?> thisClazz, Class<ListEngine> listEngineClass) {
+//        if(thisClazz.getName().equals("java.lang.Object")){
+//            return null;
+//        }
+        ListEngine listEngine = thisClazz.getAnnotation(listEngineClass);
+        if (listEngine == null) {
+            try {
+                return findAnnotation(thisClazz.getSuperclass(), listEngineClass);
+            } catch (Exception ex) {
+                return null;
+            }
+        } else {
+            return listEngine;
+        }
+    }
 
     @Nullable
     public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex) {
@@ -37,7 +56,7 @@ public class InjectionHelp {
                 //反射获取Databinding通用的静态inflate方法
                 Method method = c.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
                 //根据获取到泛型c class ，调用函数方法初始化指定泛型并且返回
-                return (D) method.invoke(null, LayoutInflater.from(ActivityThreadHelpKt.getCurrentApplication()), parent, false);
+                return (D) method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), parent, false);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -5,13 +5,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
-import com.musongzi.core.itf.ILifeObject;
 import com.musongzi.core.itf.data.IHolderDataConvert;
-import com.musongzi.core.itf.holder.IHodlerLifecycle;
+import com.musongzi.core.itf.holder.IHolderLifecycle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
@@ -321,7 +319,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      * @param <ListItem>参数泛型定义与   {@link PageSupport} 一致
      * @param <DataEntity>参数泛型定义与 {@link PageSupport} 一致
      */
-    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, IHodlerLifecycle {
+    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, IHolderLifecycle {
 
         int getCode();
 

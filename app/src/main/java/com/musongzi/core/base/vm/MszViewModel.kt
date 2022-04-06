@@ -1,9 +1,8 @@
 package com.musongzi.core.base.vm
 
 import android.os.Bundle
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.musongzi.core.base.BaseLifeBusiness
+import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.IAgent
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IClient
@@ -11,17 +10,19 @@ import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-open class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHodlerActivity>(),
-    IHodlerViewModel<C, B> {
+open class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHolderActivity>(),
+    IHolderViewModel<C, B> {
 
+    protected val TAG = javaClass.simpleName
 
     private var savedInstanceStateRf : WeakReference<Bundle?>? = null
-    private lateinit var business: B
-    private var client: C? = null
+    protected lateinit var business: B
+    protected var client: C? = null
 
-    override fun getMainLifecycle(): IHodlerLifecycle? = super.holderActivity?.getMainLifecycle()
+    override fun getMainLifecycle(): IHolderLifecycle? = super.holderActivity?.getMainLifecycle()
 
     override fun getThisLifecycle(): LifecycleOwner? = super.holderActivity?.getThisLifecycle()
+
 
     override fun showDialog(msg: String?) {
         client?.showDialog(msg)
@@ -32,7 +33,7 @@ open class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHodlerActiv
     }
 
 
-    override fun attachNow(t: IHodlerActivity?) {
+    override fun attachNow(t: IHolderActivity?) {
         if (isAttachNow()) {
             return
         }
@@ -43,7 +44,7 @@ open class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHodlerActiv
         business.afterHandlerBusiness()
     }
 
-    fun setClient(client: C) {
+    fun setHolderClient(client: C) {
         this.client = client;
     }
 

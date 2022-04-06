@@ -8,21 +8,21 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
-import com.musongzi.core.itf.holder.IHodlerActivity
+import com.musongzi.core.itf.IDisconnect
+import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.holder.IHolderDataBinding
 import com.musongzi.core.util.InjectionHelp
 
-abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerActivity,
+abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHolderActivity, IDisconnect,
     IHolderDataBinding<D> {
 
     lateinit var dataBinding: D
 
     override fun getHodlerActivity(): FragmentActivity? = activity
 
-    override fun getMainLifecycle(): IHodlerActivity?   = requireActivity() as? IHodlerActivity
+    override fun getMainLifecycle(): IHolderActivity?   = requireActivity() as? IHolderActivity
 
     override fun getThisLifecycle(): LifecycleOwner?  = this
 
@@ -35,6 +35,10 @@ abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerAct
 
     override fun handlerArguments() {
 
+    }
+
+    override fun disconnect() {
+        requireActivity().finish()
     }
 
     override fun getMainViewModelProvider(): ViewModelStoreOwner = this
@@ -64,11 +68,17 @@ abstract class DataBindingFragment<D : ViewDataBinding> : Fragment(), IHodlerAct
     @Deprecated("已过时", ReplaceWith("ViewDataBinding"))
     protected fun getLayoutId(): Int = 0
 
-    protected fun superDatabindingName(): String = DataBindingFragment::class.java.name
+    protected open fun superDatabindingName(): String = DataBindingFragment::class.java.name
 
-    protected fun actualTypeArgumentsDatabindinIndex(): Int = 0
+    protected open fun actualTypeArgumentsDatabindinIndex(): Int = 0
 
     override fun getHolderDataBinding(): D = dataBinding
 
+    override fun notifyDataSetChanged() {
 
+    }
+
+    override fun notifyDataSetChangedItem(postiont: Int) {
+
+    }
 }
