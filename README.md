@@ -23,23 +23,23 @@ class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>
 
 }
 
-  ExtensionMethod.analysisCollectionsEngine(ArrayEngine::class.java)
-  //配置好信息构建一个Fragment
-  fun analysisCollectionsEngine(eClass: Class<*>): Fragment {
-        val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
-        val mCollectionsInfo = cAnnotation?.let {
-            CollectionsViewModel.CollectionsInfo(it)
-        } ?: CollectionsViewModel.CollectionsInfo()
-        val bundle = Bundle();
-        ModelFragment.composeProvider(bundle, false)
-        mCollectionsInfo.engineName = eClass.name
-        bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
-        val collectionsFragment = CollectionsViewFragment();
-        collectionsFragment.arguments = bundle
-        return collectionsFragment
-    }
+class ExtensionMethod{
+      fun analysisCollectionsEngine(eClass: Class<*>): Fragment {
+            val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
+            val mCollectionsInfo = cAnnotation?.let {
+                CollectionsViewModel.CollectionsInfo(it)
+            } ?: CollectionsViewModel.CollectionsInfo()
+            val bundle = Bundle();
+            ModelFragment.composeProvider(bundle, false)
+            mCollectionsInfo.engineName = eClass.name
+            bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
+            val collectionsFragment = CollectionsViewFragment();
+            collectionsFragment.arguments = bundle
+            return collectionsFragment
+        }
+  }
   
-  2)快速构建速配器（RecycleView)
+2)快速构建速配器（RecycleView)
   
   adapter(AdapterStringBinding::class.java)
   
