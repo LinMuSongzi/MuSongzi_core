@@ -69,7 +69,63 @@ class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>
         ?: { _, _, _ -> })
   .................
   }
-  
+    
+3)使用Fragment(项目中有例子)
+    
+    TestMainFragment->
+    class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
+    ......
+    }
+    
+    TestViewModel->
+    class TestViewModel : BaseViewModel<ITestClient, TestBusiness>() {
+    ......
+    }
+    
+    ITestClient 回调函数（CallBack class use at View/activity/Fragment）->
+    interface ITestClient:IClient {
+    ......
+    }
+    
+    TestBusiness->
+    class TestBusiness : BaseLifeBusiness<TestViewModel>() {
+    ......
+    }
+    
+    TestMainFragment 默认持有一个泛型 TestViewModel
+    TestViewModel 持有当前的IHodlerActivity(Fragment) 和 ITestClient(刷新ui回调，)  ，并且持有一个基于泛型的业务实例 TestBusiness；
+                  他们的类注入在 IAttach.attachNow()此方法中注入到ViewModel(继承IAttach)：
+   
+                class MszViewModel<C:IClient,B:IBusiness>...{
+                    ......
+                    override fun attachNow(t: IHolderActivity?) {
+                             if (isAttachNow()) {
+                                    return
+                             }
+                            super.attachNow(t)
+                            client = t?.getClient() as? C
+                            business = createBusiness()
+                            (business as? BaseLifeBusiness<IAgent>)?.setAgentModel(this)
+                            business.afterHandlerBusiness()
+                        }
+    
+                    ......
+    
+                    protected fun createBusiness(): B = InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+    
+                }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
