@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.itf.page.IPageEngine
@@ -16,11 +17,16 @@ import com.musongzi.core.util.TextUtil
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.functions.Consumer
 
 object ExtensionMethod {
 
     @JvmStatic
-    fun <T> T.layoutInflater(p: ViewGroup, res: Int) = LayoutInflater.from(getCurrentApplication()).inflate(res, p, false);
+    fun <T> T.layoutInflater(p: ViewGroup, res: Int) =
+        LayoutInflater.from(getCurrentApplication()).inflate(res, p, false);
 
     fun <T> T.exceptionRun(run: () -> Unit) {
         try {
@@ -48,22 +54,34 @@ object ExtensionMethod {
 
     fun <T> ViewDataBinding.entitySet(entity: String, clazz: Class<T>, entityObject: T?) {
         exceptionRun {
-            javaClass.getMethod("set${TextUtil.capitalizationText(entity)}", clazz).invoke(this, entityObject)
+            javaClass.getMethod("set${TextUtil.capitalizationText(entity)}", clazz)
+                .invoke(this, entityObject)
             Log.i("businessSet", ": succeed " + entity.javaClass.simpleName)
         }
     }
 
     @JvmStatic
-    fun SmartRefreshLayout.refreshLayoutInit(p: IPageEngine<*>?, isEnableRefresh: Boolean, isEnableLoadMore: Boolean) {
+    fun SmartRefreshLayout.refreshLayoutInit(
+        p: IPageEngine<*>?,
+        isEnableRefresh: Boolean,
+        isEnableLoadMore: Boolean
+    ) {
         refreshLayoutInit(this, p, isEnableRefresh, isEnableLoadMore, 500)
     }
+
     @JvmStatic
     fun SmartRefreshLayout.refreshLayoutInit(p: IPageEngine<*>?) {
         refreshLayoutInit(this, p, true, true, 500)
     }
 
     @JvmStatic
-    fun refreshLayoutInit(refreshLayout: SmartRefreshLayout, p: IPageEngine<*>?, isEnableRefresh: Boolean, isEnableLoadMore: Boolean, time: Int) {
+    fun refreshLayoutInit(
+        refreshLayout: SmartRefreshLayout,
+        p: IPageEngine<*>?,
+        isEnableRefresh: Boolean,
+        isEnableLoadMore: Boolean,
+        time: Int
+    ) {
         Log.i("refreshLayoutInit", ": $isEnableRefresh , $isEnableLoadMore")
         if (isEnableRefresh) {
             refreshLayout.setOnRefreshListener {
@@ -90,7 +108,12 @@ object ExtensionMethod {
 
     fun <T : ViewDataBinding, R> R.dataBindingInflate(clazz: Class<T>, view: ViewGroup): T? {
         return exceptionRunByReturn {
-            val method = clazz.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
+            val method = clazz.getDeclaredMethod(
+                "inflate",
+                LayoutInflater::class.java,
+                ViewGroup::class.java,
+                Boolean::class.java
+            )
             method.invoke(null, LayoutInflater.from(getCurrentApplication()), view, false) as? T
         }
     }
@@ -122,12 +145,21 @@ object ExtensionMethod {
      * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
      */
     @JvmStatic
-    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(c: Class<D>, run: ((dataBinding: D, item: I, postion: Int) -> Unit)?) = TypeSupportAdaper.build(realData(), c, run
+    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(
+        c: Class<D>,
+        run: ((dataBinding: D, item: I, postion: Int) -> Unit)?
+    ) = TypeSupportAdaper.build(realData(), c, run
         ?: { _, _, _ -> })
 
     @JvmStatic
-    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(c: Class<D>, run: ((dataBinding: D, item: I, postion: Int) -> Unit)?, isSetBean: Boolean?) = TypeSupportAdaper.build(realData(), c, run
-        ?: { _, _, _ -> }, isSetBean)
+    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(
+        c: Class<D>,
+        run: ((dataBinding: D, item: I, postion: Int) -> Unit)?,
+        isSetBean: Boolean?
+    ) = TypeSupportAdaper.build(
+        realData(), c, run
+            ?: { _, _, _ -> }, isSetBean
+    )
 
     /**
      * 返回一个adapter ，有一个onCreatView，有一个onBindView
@@ -138,35 +170,19 @@ object ExtensionMethod {
      * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
      */
     @JvmStatic
-    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(c: Class<D>, cRun: (D, Int) -> Unit, run: (dataBinding: D, item: I, postion: Int) -> Unit, isSetBean: Boolean? = true) = TypeSupportAdaper.build(realData(), c, cRun, run, isSetBean)
+    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(
+        c: Class<D>,
+        cRun: (D, Int) -> Unit,
+        run: (dataBinding: D, item: I, postion: Int) -> Unit,
+        isSetBean: Boolean? = true
+    ) = TypeSupportAdaper.build(realData(), c, cRun, run, isSetBean)
 
     @JvmStatic
-    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(c: Class<D>, cRun: (D, Int) -> Unit, run: (dataBinding: D, item: I, postion: Int) -> Unit) = TypeSupportAdaper.build(realData(), c, cRun, run, true)
-
-    /**
-     * 返回一个adapter ，有一个onCreatView，有一个onBindView
-     * @receiver T
-     * @param type Int
-     * @param c Class<D>
-     * @param cRun Function2<D, Int, Unit>
-     * @param run Function3<[@kotlin.ParameterName] D, [@kotlin.ParameterName] I, [@kotlin.ParameterName] Int, Unit>
-     * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
-     */
-    @JvmStatic
-    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(type: Int, c: Class<D>, cRun: (D, Int) -> Unit, run: (dataBinding: D, item: I, postion: Int) -> Unit) = TypeSupportAdaper.build(type, realData(), c, cRun, run)
-
-    /**
-     * 返回一个adapter ，有一个onCreatView，有一个onBindView
-     * @receiver T
-     * @param type Int
-     * @param c Class<D>
-     * @param cRun Function2<D, Int, Unit>
-     * @param run Function3<[@kotlin.ParameterName] D, [@kotlin.ParameterName] I, [@kotlin.ParameterName] Int, Unit>
-     * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
-     */
-    @JvmStatic
-    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(type: Int, c: Class<D>, run: (dataBinding: D, item: I, postion: Int) -> Unit) = TypeSupportAdaper.build(type, realData(), c, { d, t -> }, run)
-
+    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(
+        c: Class<D>,
+        cRun: (D, Int) -> Unit,
+        run: (dataBinding: D, item: I, postion: Int) -> Unit
+    ) = TypeSupportAdaper.build(realData(), c, cRun, run, true)
 
     /**
      * 返回一个adapter ，有一个onCreatView，有一个onBindView
@@ -178,7 +194,42 @@ object ExtensionMethod {
      * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
      */
     @JvmStatic
-    fun <T : ISource<I>, I> T.adapter(typeBreakMethod: (Int) -> Int) = TypeSupportAdaper.build(realData(), typeBreakMethod)
+    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(
+        type: Int,
+        c: Class<D>,
+        cRun: (D, Int) -> Unit,
+        run: (dataBinding: D, item: I, postion: Int) -> Unit
+    ) = TypeSupportAdaper.build(type, realData(), c, cRun, run)
+
+    /**
+     * 返回一个adapter ，有一个onCreatView，有一个onBindView
+     * @receiver T
+     * @param type Int
+     * @param c Class<D>
+     * @param cRun Function2<D, Int, Unit>
+     * @param run Function3<[@kotlin.ParameterName] D, [@kotlin.ParameterName] I, [@kotlin.ParameterName] Int, Unit>
+     * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
+     */
+    @JvmStatic
+    fun <T : ISource<I>, D : ViewDataBinding, I> T.adapter(
+        type: Int,
+        c: Class<D>,
+        run: (dataBinding: D, item: I, postion: Int) -> Unit
+    ) = TypeSupportAdaper.build(type, realData(), c, { d, t -> }, run)
+
+
+    /**
+     * 返回一个adapter ，有一个onCreatView，有一个onBindView
+     * @receiver T
+     * @param type Int
+     * @param c Class<D>
+     * @param cRun Function2<D, Int, Unit>
+     * @param run Function3<[@kotlin.ParameterName] D, [@kotlin.ParameterName] I, [@kotlin.ParameterName] Int, Unit>
+     * @return TypeSupportAdaper<[@kotlin.ParameterName] I>
+     */
+    @JvmStatic
+    fun <T : ISource<I>, I> T.adapter(typeBreakMethod: (Int) -> Int) =
+        TypeSupportAdaper.build(realData(), typeBreakMethod)
 
 //    @JvmStatic
 //    fun pickNewPhoto(headImagePath: String?, headImageRequest: Int) {
@@ -192,23 +243,50 @@ object ExtensionMethod {
 //    }
 
     @JvmStatic
-    fun <I, V : ViewDataBinding> IRecycleViewClient<I>.buildInitRecycleView(c: Class<V>, r: (V, I, Int) -> Unit) {
-        buildInitRecycleView(true, true, LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false), getSource()?.adapter(c, r))
+    fun <I, V : ViewDataBinding> IRecycleViewClient<I>.buildInitRecycleView(
+        c: Class<V>,
+        r: (V, I, Int) -> Unit
+    ) {
+        buildInitRecycleView(
+            true,
+            true,
+            LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false),
+            getSource()?.adapter(c, r)
+        )
     }
 
     @JvmStatic
     fun <I> IRecycleViewClient<I>.buildInitRecycleView(r: RecyclerView.Adapter<*>) {
-        buildInitRecycleView(true, true, LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false), r)
+        buildInitRecycleView(
+            true,
+            true,
+            LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false),
+            r
+        )
     }
 
 
     @JvmStatic
-    fun IRecycleViewClient<*>.buildInitRecycleView(isRefresh: Boolean, isMoreLoad: Boolean, adaper: RecyclerView.Adapter<*>?) {
-        buildInitRecycleView(isRefresh, isMoreLoad, LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false), adaper)
+    fun IRecycleViewClient<*>.buildInitRecycleView(
+        isRefresh: Boolean,
+        isMoreLoad: Boolean,
+        adaper: RecyclerView.Adapter<*>?
+    ) {
+        buildInitRecycleView(
+            isRefresh,
+            isMoreLoad,
+            LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false),
+            adaper
+        )
     }
 
     @JvmStatic
-    fun IRecycleViewClient<*>.buildInitRecycleView(isRefresh: Boolean, isMoreLoad: Boolean, layoutManager: RecyclerView.LayoutManager, adaper: RecyclerView.Adapter<*>?) {
+    fun IRecycleViewClient<*>.buildInitRecycleView(
+        isRefresh: Boolean,
+        isMoreLoad: Boolean,
+        layoutManager: RecyclerView.LayoutManager,
+        adaper: RecyclerView.Adapter<*>?
+    ) {
         recycleView()?.let {
             it.layoutManager = layoutManager
             it.adapter = adaper
@@ -216,6 +294,31 @@ object ExtensionMethod {
         refreshView()?.let {
             it.refreshLayoutInit(getPageEngine(), isRefresh, isMoreLoad)
         }
+    }
+
+    fun <T> Observable<T>.sub(c: Consumer<T>) {
+        val TAG = "Observable_Sub";
+        subscribe(object : Observer<T> {
+            override fun onSubscribe(d: Disposable?) {
+                Log.i(TAG, "onSubscribe: ")
+            }
+
+            override fun onNext(t: T) {
+                c.accept(t)
+            }
+
+            override fun onError(e: Throwable?) {
+                Log.i(TAG, "onError: ")
+            }
+
+            override fun onComplete() {
+                Log.i(TAG, "onComplete: ")
+            }
+        })
+    }
+
+    fun Any.toJson(): String {
+        return Gson().toJson(this)
     }
 
 }

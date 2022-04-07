@@ -81,14 +81,14 @@ public class InjectionHelp {
     }
 
     @org.jetbrains.annotations.Nullable
-    public static <V> WeakReference<V> findViewModel(@NotNull Class<?> javaClass, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex) {
+    public static <V> V findViewModel(@NotNull Class<?> javaClass, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex) {
 
         Type type = javaClass.getGenericSuperclass();
         if (type instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
             if (types.length > actualTypeArgumentsViewModelIndex) {
                 Class c = (Class) types[actualTypeArgumentsViewModelIndex];
-                new WeakReference(viewModelProvider.get(c));
+               return (V) viewModelProvider.get(c);
             }
         }
        return findViewModel(javaClass, viewModelProvider, actualTypeArgumentsViewModelIndex);

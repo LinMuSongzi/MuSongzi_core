@@ -15,7 +15,7 @@ abstract class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHolderA
     protected val TAG = javaClass.simpleName
 
     private var savedInstanceStateRf : WeakReference<Bundle?>? = null
-    protected lateinit var business: B
+    lateinit var business: B
     protected var client: C? = null
 
     override fun getMainLifecycle(): IHolderLifecycle? = super.holderActivity?.getMainLifecycle()

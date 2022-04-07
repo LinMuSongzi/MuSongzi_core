@@ -1,8 +1,8 @@
 package com.musongzi.core.itf.holder
 
-interface IHolderApi {
+interface IHolderApi<T> {
 
 
-    fun getApi(): Any?
+    fun getApi(): T?
 
 }

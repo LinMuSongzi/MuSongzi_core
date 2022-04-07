@@ -33,17 +33,10 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
         client?.setRefresh(b)
     }
 
-//    override fun showDialog(msg:String) {
-//        client?.showDialog(msg)
-//    }
 
     override fun disimissDialog() {
         client?.disimissDialog()
     }
-
-//    override fun disconnect() {
-//        client?.disconnect()
-//    }
 
     override fun notifyDataSetChangedItem(postiont: Int) {
         client?.notifyDataSetChangedItem(postiont)

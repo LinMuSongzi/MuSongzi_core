@@ -26,6 +26,7 @@ android {
     }
 
     dataBinding {
+//        noinspection DataBindingWithoutKapt
         enabled = true
     }
 }
@@ -94,7 +95,6 @@ dependencies {
 // If you want to use Kotlin syntax with Android Lifecycle
     api 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle-kotlin:4.0.2'
 
-//    implementation project(':apt-delegate-annotation')
-//    annotationProcessor project(':apt-delegate-compiler')
+
 
 }

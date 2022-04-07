@@ -27,7 +27,7 @@
                 android:id="@+id/id_recyclerView"
                 layout="@layout/msz_layout_recycle_view" />
 
-            <include layout="@layout/layout_empty_data_show" android:id="@id/layout_empty_data_show"/>
+            <include layout="@layout/layout_empty_data_show" android:id="@+id/layout_empty_data_show"/>
 
         </RelativeLayout>
 

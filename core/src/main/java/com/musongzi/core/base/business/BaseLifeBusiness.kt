@@ -1,5 +1,6 @@
 package com.musongzi.core.base.business
 
+import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.musongzi.core.itf.IAgent
@@ -15,7 +16,7 @@ open class BaseLifeBusiness<L : IAgent> : IBusiness, DefaultLifecycleObserver {
 
 
     override fun afterHandlerBusiness() {
-
+        Log.i(TAG, "onCreateView:afterHandlerBusiness; -- ")
     }
 
     fun setAgentModel(l: L) {

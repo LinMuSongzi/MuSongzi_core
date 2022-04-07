@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         d = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        supportFragmentManager.beginTransaction().replace(R.id.id_content_layout,TestMainFragment(),"haha").commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction().replace(R.id.id_content_layout,
+            TestMainFragment(),"haha").commitAllowingStateLoss()
     }
 }

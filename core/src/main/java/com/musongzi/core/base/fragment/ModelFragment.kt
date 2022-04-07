@@ -1,6 +1,7 @@
 package com.musongzi.core.base.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +13,17 @@ import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : DataBindingFragment<D>(),
-    ViewModelProvider.Factory ,IClient{
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
+    DataBindingFragment<D>(),
+    ViewModelProvider.Factory, IClient {
     protected val TAG = javaClass.simpleName
-    private var viewModel: WeakReference<V?>? = null
+    private var viewModel: V? = null
+//    protected val viewModel :V
+//    get() {
+//       return viewModelWeakReference?.get()!!
+//    }
+
+
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
     final override fun onCreateView(
@@ -25,18 +33,29 @@ abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : D
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
         viewModel = instanceViewModel();
+        Log.i(TAG, "onCreateView: viewModel = $viewModel")
+        Log.i(
+            TAG,
+            "onCreateView: viewModel = ${viewModel?.getHolderBusiness()}\n"
+        )
+//        Log.i(TAG, "onCreateView: viewModel = ${viewModel?.get()?.getHolderBusiness()}\n")
         return v;
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel = null
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
 
     override fun superDatabindingName() = ModelFragment::class.java.name
 
-    fun getMainViewModel():V{
-        return viewModel?.get()!!
+    fun getMainViewModel(): V? {
+        return viewModel
     }
 
-    protected fun instanceViewModel(): WeakReference<V?>? = InjectionHelp.findViewModel(
+    protected fun instanceViewModel(): V? = InjectionHelp.findViewModel(
         javaClass,
         getMainViewProvider(),
         actualTypeArgumentsViewModelIndex()
@@ -44,7 +63,7 @@ abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : D
 
     private fun getMainViewProvider(): ViewModelProvider {
         if (mVp == null) {
-            mVp = ViewModelProvider(getMainViewModelProvider(),this)
+            mVp = ViewModelProvider(getMainViewModelProvider(), this)
         }
         return mVp!!
     }
@@ -54,13 +73,14 @@ abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : D
 //
 //    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel?.get()?.handlerSavedInstanceState(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel?.handlerSavedInstanceState(savedInstanceState)
         initView()
         initData();
         initEvent()
     }
+
     abstract fun initView()
     abstract fun initEvent()
     abstract fun initData()
@@ -69,7 +89,7 @@ abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : D
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val v = modelClass.newInstance()
-        val vm = v as? IHolderViewModel<*,*>
+        val vm = v as? IHolderViewModel<*, *>
         vm?.let {
             it.attachNow(this)
             it.putArguments(arguments)
@@ -77,7 +97,6 @@ abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : D
         }
         return v;
     }
-
 
 
     override fun getClient(): IClient = this
@@ -90,10 +109,6 @@ abstract class ModelFragment<V : IHolderViewModel<*,*>, D : ViewDataBinding> : D
     override fun disimissDialog() {
 
     }
-
-
-
-
 
 
 }

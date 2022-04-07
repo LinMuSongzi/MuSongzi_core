@@ -13,9 +13,9 @@ import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.PageSupport
-import com.musongzi.test.simple.MszObserver
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -64,7 +64,24 @@ abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
 //        Log.i(TAG, "laterInit: ")
     }
 
-    protected open fun createObserver(): Observer<Data> = MszObserver()
+    protected open fun createObserver(): Observer<Data> = object : Observer<Data> {
+        override fun onSubscribe(d: Disposable?) {
+
+        }
+
+        override fun onNext(t: Data) {
+
+        }
+
+        override fun onError(e: Throwable?) {
+
+        }
+
+        override fun onComplete() {
+
+        }
+
+    }
 
     override fun getHolderContext(): Context? = callBack.getHolderContext()
 
