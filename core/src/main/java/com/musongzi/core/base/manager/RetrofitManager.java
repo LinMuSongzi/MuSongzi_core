@@ -1,6 +1,9 @@
 package com.musongzi.core.base.manager;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -15,10 +18,15 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.core.ObservableTransformer;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -75,31 +83,46 @@ public class RetrofitManager {
     @NotNull
     public static <T> T getApi(Class<T> tClass, String key, IWant want) {
         Map<String, Object> apis = RetrofitManager.getInstance().apis;
-        if (apis.get(key) == null) {
-            T t = RetrofitManager.getInstance().retrofit.create(tClass);
-            apis.put(key, t);
-        }
+        T t = null;
+
         if (want != null && want.getThisLifecycle() != null) {
-            Proxy.newProxyInstance(tClass.getClassLoader(), tClass.getInterfaces(), (proxy, method, args) -> {
-                Object returnInstance =  method.invoke(getApi(tClass),args);
-                if(method.getReturnType().isAssignableFrom(Observable.class)){
-                    ((Observable<?>)returnInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).compose(want.bindToLifecycle());
+            t = (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class<?>[]{tClass}, new InvocationHandler() {
+                private final Object[] emptyArgs = new Object[0];
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    if (method.getDeclaringClass() == Object.class) {
+                        return method.invoke(this, args);
+                    }
+                    args = args != null ? args : emptyArgs;
+                    Object returnInstance = method.invoke(getApi(tClass), args);
+                    if (method.getReturnType().isAssignableFrom(Observable.class)) {
+                        returnInstance = ((Observable<?>) returnInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).compose(want.bindToLifecycle());
+                    }
+                    return returnInstance;
                 }
-                return returnInstance;
             });
             want.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
                 @Override
                 public void onCreate(@NonNull LifecycleOwner owner) {
-
+//                    Log.i("Observable_Sub", "onCreate api: " + tClass);
                 }
 
                 @Override
                 public void onDestroy(@NonNull LifecycleOwner owner) {
-                    RetrofitManager.getInstance().apis.remove(key);
+                    Object flag = RetrofitManager.getInstance().apis.remove(key);
+                    Log.i("Observable_Sub", "onDestroy: api " + flag);
                 }
             });
         }
-        return (T) apis.get(tClass.getName());
+        if (apis.get(key) == null) {
+            if (t == null) {
+                t = RetrofitManager.getInstance().retrofit.create(tClass);
+            }
+            apis.put(key, t);
+        }
+//        t = (T) apis.get(key);
+        Log.i("Observable_Sub", "getApi: key = " + key);
+        return t;
     }
 
 }

@@ -297,24 +297,7 @@ object ExtensionMethod {
     }
 
     fun <T> Observable<T>.sub(c: Consumer<T>) {
-        val TAG = "Observable_Sub";
-        subscribe(object : Observer<T> {
-            override fun onSubscribe(d: Disposable?) {
-                Log.i(TAG, "onSubscribe: ")
-            }
-
-            override fun onNext(t: T) {
-                c.accept(t)
-            }
-
-            override fun onError(e: Throwable?) {
-                Log.i(TAG, "onError: ")
-            }
-
-            override fun onComplete() {
-                Log.i(TAG, "onComplete: ")
-            }
-        })
+        subscribe(MszObserver(c))
     }
 
     fun Any.toJson(): String {
