@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.musongzi.core.base.adapter.TypeSupportAdaper
+import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.client.IRecycleViewClient
+import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ActivityThreadHelp
@@ -302,6 +304,10 @@ object ExtensionMethod {
 
     fun Any.toJson(): String {
         return Gson().toJson(this)
+    }
+
+    fun <T> ICollectionsViewEngine<*>.getApi(c: Class<T>): T {
+        return RetrofitManager.getInstance().getApi(c, getRefreshViewModel())
     }
 
 }

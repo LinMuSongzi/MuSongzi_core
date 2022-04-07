@@ -7,11 +7,10 @@ import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.musongzi.core.base.business.collection.ListEngine;
+import com.musongzi.core.annotation.CollecttionsEngine;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -19,19 +18,19 @@ import java.lang.reflect.Type;
 public class InjectionHelp {
 
 
-    public static ListEngine findAnnotation(Class<?> thisClazz, Class<ListEngine> listEngineClass) {
+    public static CollecttionsEngine findAnnotation(Class<?> thisClazz, Class<CollecttionsEngine> listEngineClass) {
 //        if(thisClazz.getName().equals("java.lang.Object")){
 //            return null;
 //        }
-        ListEngine listEngine = thisClazz.getAnnotation(listEngineClass);
-        if (listEngine == null) {
+        CollecttionsEngine collecttionsEngine = thisClazz.getAnnotation(listEngineClass);
+        if (collecttionsEngine == null) {
             try {
                 return findAnnotation(thisClazz.getSuperclass(), listEngineClass);
             } catch (Exception ex) {
                 return null;
             }
         } else {
-            return listEngine;
+            return collecttionsEngine;
         }
     }
 

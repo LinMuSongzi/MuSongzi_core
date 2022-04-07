@@ -1,10 +1,10 @@
-package com.musongzi.core.base.business.collection;
+package com.musongzi.core.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ListEngine {
+public @interface CollecttionsEngine {
 
     String title() default "";
 
@@ -19,7 +19,6 @@ public @interface ListEngine {
     String emptyString() default "暂无数据，请下拉刷新一下";
 
     boolean isEnableEventBus() default false;
-
 
     public static final String B = "bundle";
 

@@ -13,8 +13,7 @@ import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
-    DataBindingFragment<D>(),
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : DataBindingFragment<D>(),
     ViewModelProvider.Factory, IClient {
     protected val TAG = javaClass.simpleName
     private var viewModel: V? = null

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.musongzi.core.MszObserver
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.base.vm.IRefreshViewModel
 import com.musongzi.core.itf.holder.IHolderContext
@@ -15,7 +16,6 @@ import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.PageSupport
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
-import io.reactivex.rxjava3.disposables.Disposable
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @property observer Observer<Data> 当前总体数据的一个观察者回调
  * @property initFlag Boolean 是否初始化
  */
-abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
+abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     PageSupport.CallBack<Item, Data>, IHolderContext {
     /**
      * 分页引擎
@@ -41,7 +41,7 @@ abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
     /**
      * 一个抽象的View层。它的实现类在目前框架中是一个[com.android.playmusic.l.viewmodel.imp.CollectionsViewModel]
      */
-    protected lateinit var callBack: IRefreshViewModel<Item>
+    private lateinit var callBack: IRefreshViewModel<Item>
     private lateinit var instanceAdapter: RecyclerView.Adapter<*>
     var supportDataEngine: IDataEngine<Data>? = null
     private val observer: Observer<Data> = createObserver()
@@ -49,37 +49,20 @@ abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
 
     final override fun getAdapter(): RecyclerView.Adapter<*> = instanceAdapter
 
-    final override fun init(callBack: IRefreshViewModel<*>) {
+    final override fun init(i: IRefreshViewModel<*>) {
         if (!initFlag) {
-            this.callBack = callBack as IRefreshViewModel<Item>
+            this.callBack = i as IRefreshViewModel<Item>
             dataPageSupport = PageSupport(this)
             instanceAdapter = myAdapter()
             initFlag = true
-//            Log.i(TAG, "init: $callBack")
-            laterInit(callBack.getBundle())
+            laterInit(i.getBundle())
         }
     }
 
     protected open fun laterInit(bundle: Bundle?) {
-//        Log.i(TAG, "laterInit: ")
     }
 
-    protected open fun createObserver(): Observer<Data> = object : Observer<Data> {
-        override fun onSubscribe(d: Disposable?) {
-
-        }
-
-        override fun onNext(t: Data) {
-
-        }
-
-        override fun onError(e: Throwable?) {
-
-        }
-
-        override fun onComplete() {
-
-        }
+    protected open fun createObserver(): Observer<Data> = MszObserver{
 
     }
 
@@ -120,9 +103,7 @@ abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
     override fun handlerState(integer: Int) {}
 
     override fun handlerData(items: List<Item>, action: Int) {
-//        if (callBack != null) {
         callBack.buildViewByData(items)
-//        }
     }
 
     final override fun getRemoteData(page: Int) =
@@ -130,16 +111,11 @@ abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
 
     protected abstract fun getRemoteDataReal(index: Int): Observable<Data>?
 
-//    override fun lifecycleOwner() = callBack.lifecycleOwner()
-
     override fun onEmptyViewCreate(v: View?) {
 
     }
 
-//    override fun getApiInstance(): Api? = callBack.getApiInstance()
-
     override fun onRefreshViewClientEvent(i: IRefreshViewClient) {
-//        instanceAdapter = myAdapter();
     }
 
     abstract fun myAdapter(): RecyclerView.Adapter<*>
@@ -153,38 +129,13 @@ abstract class BaseMoreViewEngine<Item, Data> : INewCollectionsViewEngine<Item>,
 
     }
 
-//    /**
-//     * 反射默认去data里面的 list ，如果没意外的话~
-//     * @param entity Data
-//     * @return List<Item>
-//     */
-//    abstract override fun transformDataToList(entity: Data) :List<Item>
-
     override fun getPageSupport() = this
 
     override fun getAdMessage(): IAdMessage<Item>? = null
 
-    fun getRefreshViewModel(): IRefreshViewModel<Item> = callBack
+    override fun getRefreshViewModel(): IRefreshViewModel<Item> = callBack
 
     override fun getTag(): String = javaClass.name
-
-
-//    companion object {
-//        const val TAG = "CollectionsViewEngine"
-//
-//        @JvmStatic
-//        fun <D, I, C> transformData(entity: D, c: Class<C>, className: String, index: Int): List<I> {
-//            val clazz = ApkUtil.findGenericClass<D>(c, className, index)
-//            var f = clazz.getDeclaredField("data")
-//            f.isAccessible = true
-//            val data = f.get(entity)
-//            f = data.javaClass.getDeclaredField("list")
-//            f.isAccessible = true
-//            val list = f.get(data)
-//            return list as List<I>;
-//        }
-//
-//    }
 
     override fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
 

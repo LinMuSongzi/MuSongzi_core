@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.musongzi.core.ExtensionMethod;
+import com.musongzi.core.annotation.CollecttionsEngine;
 import com.musongzi.core.base.business.BaseLifeBusiness;
 import com.musongzi.core.base.vm.CollectionsViewModel;
 import com.musongzi.core.itf.IDictionary;
@@ -162,10 +163,10 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
     }
 
     public void handlerEmptyRes(@Nullable ViewGroup llEmpty) {
-        ListEngine listEngine = InjectionHelp.findAnnotation(collectionsViewEngine.getClass(), ListEngine.class);//collectionsViewEngine.getClass().getAnnotation(ListEngine.class);
+        CollecttionsEngine collecttionsEngine = InjectionHelp.findAnnotation(collectionsViewEngine.getClass(), CollecttionsEngine.class);//collectionsViewEngine.getClass().getAnnotation(ListEngine.class);
         int res;
-        if (listEngine != null) {
-            res = listEngine.emptyLoadRes();
+        if (collecttionsEngine != null) {
+            res = collecttionsEngine.emptyLoadRes();
 //            res = iAgent.getArguments().getInt(ViewListPageFactory.ENGINE_EMPTY_LAYOUT, 0);
             if (res != 0) {
                 try {

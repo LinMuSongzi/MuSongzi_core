@@ -13,17 +13,13 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
-abstract class BaseCollectionsViewFragment<D : ViewDataBinding> : LRefreshFrament<CollectionsViewModel, D, Any>(),
-    CollectionsViewClient,
-    CollectionsViewSupport {
+abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LRefreshFrament<CollectionsViewModel, B, Any>(), CollectionsViewClient, CollectionsViewSupport {
 
 //    private var mIHolderCollections : IHolderCollections? = createHolderCollections()
 
     private var mRecycleViewClient: IRefreshViewClient = createRecycleViewClient()
 
     abstract fun createRecycleViewClient(): IRefreshViewClient
-
-//    final override fun openQuickBusinessSet() = false
 
     override fun initEvent() {
         (getMainViewModel()?.getHolderBusiness()?.base as? IHolderCollections)?.onRefreshViewClientEvent(mRecycleViewClient);
@@ -54,34 +50,35 @@ abstract class BaseCollectionsViewFragment<D : ViewDataBinding> : LRefreshFramen
         return mRecycleViewClient.refreshView()
     }
 
-    override fun <I, D> getCollectionsViewEngine(): IHolderCollections? {
-        return object : BaseMoreViewEngine<I, D>() {
-
+    override fun getCollectionsViewEngine(): IHolderCollections? {
+        return object : BaseMoreViewEngine<ITEM, DATA>() {
 
             override fun myAdapter() = this@BaseCollectionsViewFragment.getAdapter()!!
 
             override fun getLayoutManger() = this@BaseCollectionsViewFragment.getLayoutManger()
 
-            override fun getRemoteDataReal(index: Int): Observable<D>? = this@BaseCollectionsViewFragment.getRemoteData(index);
+            override fun getRemoteDataReal(index: Int): Observable<DATA>? =
+                this@BaseCollectionsViewFragment.getRemoteData(index);
 
-            override fun transformDataToList(entity: D): List<I> {
-               return this@BaseCollectionsViewFragment.transformDataToList(entity);
+            override fun transformDataToList(entity: DATA): List<ITEM> {
+                return this@BaseCollectionsViewFragment.transformDataToList(entity);
             }
 
         }
     }
 
-    protected abstract fun <DATA, ITEM> transformDataToList(entity: DATA): List<ITEM>
+    protected abstract fun transformDataToList(entity: DATA): List<ITEM>
 
     override fun getAdapter(): RecyclerView.Adapter<*>? = null
 
-    fun <D> getRemoteData(index: Int): Observable<D>? = null
+    fun getRemoteData(index: Int): Observable<DATA>? = null
 
-    fun <D> createDataEngine(): IDataEngine<D>? = null
+    fun createDataEngine(): IDataEngine<DATA>? = null
 
     override fun getLayoutManger(): RecyclerView.LayoutManager? = null
 
-    override fun superDatabindingName(): String  = BaseCollectionsViewFragment::class.java.name
+    override fun superDatabindingName(): String = BaseCollectionsViewFragment::class.java.name
 
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
+
 }

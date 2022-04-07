@@ -71,17 +71,17 @@ public class RetrofitManager {
     }
 
     @NotNull
-    public static <T> T getApi(Class<T> tClass) {
+    public <T> T getApi(Class<T> tClass) {
         return getApi(tClass, tClass.getName() + "_main", null);
     }
 
     @NotNull
-    public static <T> T getApi(Class<T> tClass, IWant want) {
+    public <T> T getApi(Class<T> tClass, IWant want) {
         return getApi(tClass, tClass.getName(), want);
     }
 
     @NotNull
-    public static <T> T getApi(Class<T> tClass, String key, IWant want) {
+    public <T> T getApi(Class<T> tClass, String key, IWant want) {
         Map<String, Object> apis = RetrofitManager.getInstance().apis;
         T t = null;
 
