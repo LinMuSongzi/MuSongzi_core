@@ -47,6 +47,8 @@ public class RetrofitManager {
 
     private final Retrofit retrofit;
     private OkHttpClient okHttpClient;
+    private CallBack callBack;
+
 
     private RetrofitManager() {
 
@@ -56,6 +58,10 @@ public class RetrofitManager {
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
 
+    }
+
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
     }
 
     private OkHttpClient getOkHttpCLient() {
@@ -86,21 +92,31 @@ public class RetrofitManager {
         T t = null;
 
         if (want != null && want.getThisLifecycle() != null) {
-            t = (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class<?>[]{tClass}, new InvocationHandler() {
+            InvocationHandler invocationHandler = new InvocationHandler() {
                 private final Object[] emptyArgs = new Object[0];
+
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                     if (method.getDeclaringClass() == Object.class) {
                         return method.invoke(this, args);
                     }
                     args = args != null ? args : emptyArgs;
-                    Object returnInstance = method.invoke(getApi(tClass), args);
+                    Object returnInstance = null;
+                    if (callBack != null) {
+                        returnInstance = callBack.invoke(proxy, method, args);
+                    }
+                    if (returnInstance == null) {
+                        returnInstance = method.invoke(MANAGER.getApi(tClass), args);
+                    }
+
                     if (method.getReturnType().isAssignableFrom(Observable.class)) {
                         returnInstance = ((Observable<?>) returnInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).compose(want.bindToLifecycle());
                     }
                     return returnInstance;
                 }
-            });
+            };
+
+            t = (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class<?>[]{tClass}, invocationHandler);
             want.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
                 @Override
                 public void onCreate(@NonNull LifecycleOwner owner) {
@@ -125,4 +141,9 @@ public class RetrofitManager {
         return t;
     }
 
+
+    public interface CallBack extends InvocationHandler {
+
+
+    }
 }

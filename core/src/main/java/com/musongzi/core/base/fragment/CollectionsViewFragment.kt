@@ -30,7 +30,7 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
     override fun isShowHelpTip() {
         val b = getMainViewModel()!!.getHolderBusiness().base
         if (b.page() == b.thisStartPage() && !getMainViewModel()!!.getHolderBusiness().isOtherEmptyRes) {
-            dataBinding.layoutEmptyDataShow.idMainContentTv.text = getMainViewModel()!!.emptyString
+            dataBinding.layoutEmptyDataShow.idMainContentTv.text = getMainViewModel()?.collectionsInfo?.title
         }
     }
 

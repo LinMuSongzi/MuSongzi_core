@@ -1,20 +1,28 @@
 package com.musongzi.core
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.adapter.TypeSupportAdaper
+import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
+import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.IRecycleViewClient
+import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.manager.RetrofitManager
+import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
+import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.TextUtil
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.MaterialHeader
@@ -308,6 +316,23 @@ object ExtensionMethod {
 
     fun <T> ICollectionsViewEngine<*>.getApi(c: Class<T>): T {
         return RetrofitManager.getInstance().getApi(c, getRefreshViewModel())
+    }
+
+
+    fun analysisCollectionsEngine(eClass: Class<*>): Fragment? {
+        if (!eClass.isAssignableFrom(BaseMoreViewEngine::class.java)) {
+            return null
+        }
+        val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
+        val mCollectionsInfo = cAnnotation?.let {
+            CollectionsViewModel.CollectionsInfo(it)
+        } ?: CollectionsViewModel.CollectionsInfo()
+        val bundle = Bundle();
+        mCollectionsInfo.engineName = eClass.name
+        bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
+        val collectionsFragment = CollectionsViewFragment();
+        collectionsFragment.arguments = bundle
+        return collectionsFragment
     }
 
 }

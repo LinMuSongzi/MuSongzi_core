@@ -10,6 +10,6 @@ interface Api {
     @GET("banner/bannerList")
     fun getBannerList(): Observable<ListDataBean<DiscoverBannerBean>>
 
-    fun getArrayEngine(): Observable<List<String>>
+    fun getArrayEngine(page:Int): Observable<List<String>>
 
 }

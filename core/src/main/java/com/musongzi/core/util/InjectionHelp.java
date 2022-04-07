@@ -18,14 +18,14 @@ import java.lang.reflect.Type;
 public class InjectionHelp {
 
 
-    public static CollecttionsEngine findAnnotation(Class<?> thisClazz, Class<CollecttionsEngine> listEngineClass) {
+    public static CollecttionsEngine findAnnotation(Class<?> thisClazz) {
 //        if(thisClazz.getName().equals("java.lang.Object")){
 //            return null;
 //        }
-        CollecttionsEngine collecttionsEngine = thisClazz.getAnnotation(listEngineClass);
+        CollecttionsEngine collecttionsEngine = thisClazz.getAnnotation(CollecttionsEngine.class);
         if (collecttionsEngine == null) {
             try {
-                return findAnnotation(thisClazz.getSuperclass(), listEngineClass);
+                return findAnnotation(thisClazz.getSuperclass());
             } catch (Exception ex) {
                 return null;
             }
@@ -87,9 +87,9 @@ public class InjectionHelp {
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
             if (types.length > actualTypeArgumentsViewModelIndex) {
                 Class c = (Class) types[actualTypeArgumentsViewModelIndex];
-               return (V) viewModelProvider.get(c);
+                return (V) viewModelProvider.get(c);
             }
         }
-       return findViewModel(javaClass, viewModelProvider, actualTypeArgumentsViewModelIndex);
+        return findViewModel(javaClass, viewModelProvider, actualTypeArgumentsViewModelIndex);
     }
 }

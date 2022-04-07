@@ -43,35 +43,33 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
 
     public void handlerArguments(@NonNull Bundle arguments) {
         instanceCollectionViewEngine(arguments);
-        checkTopTitleUI(arguments);
+        checkTopTitleUI();
     }
 
-    private void checkTopTitleUI(Bundle arguments) {
-        String title = arguments.getString(ViewListPageFactory.TITLE_KEY, "");
-        iAgent.emptyString = arguments.getString(ViewListPageFactory.ENABLE_EMPTY_KEY, "");
-        getIAgent().getHolderClient().updateTitle(title);
+    private void checkTopTitleUI() {
+        if (getIAgent().getHolderClient() != null) {
+            getIAgent().getHolderClient().updateTitle(iAgent.collectionsInfo.getTitle());
+        }
     }
 
     private void instanceCollectionViewEngine(Bundle arguments) {
-//        mIDictionaryClass;
+
         if (arguments == null) {
             mIDictionaryClass = iAgent.getHolderClient().engineName();
         } else {
-            mIDictionaryClass = arguments.getString(ViewListPageFactory.ENGINE_KEY);
+            mIDictionaryClass = iAgent.collectionsInfo.getEngineName();
         }
-//        if()
         collectionsViewEngine = iAgent.getHolderClient().getCollectionsViewEngine();
-
         if (collectionsViewEngine == null) {
             try {
-                collectionsViewEngine = ViewListPageFactory.create(mIDictionaryClass, iAgent); //(IViewPageEngine) getClass().getClassLoader().loadClass(mIDictionaryClass).getDeclaredMethod(RecycleListFragment.method).invoke(iAgent.getClient());
+                collectionsViewEngine = ViewListPageFactory.create(mIDictionaryClass, iAgent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         Log.i(TAG, "instanceCollectionViewEngine: " + collectionsViewEngine + " , " + mIDictionaryClass);
         if (!isEnableEventBus()) {
-            if (isRegisterEventBus = arguments.getBoolean(ViewListPageFactory.ENGINE_EVENTBUS)) {
+            if (isRegisterEventBus && iAgent.collectionsInfo.isEnableEventBus()) {
                 EventBus.getDefault().register(collectionsViewEngine);
             }
         }
@@ -80,21 +78,8 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
 
     @Override
     public void handlerView(RecyclerView r, SmartRefreshLayout s) {
-//        RecycleDataBusiness.Companion.refreshLayoutInit(s, this, iAgent.getArguments().getBoolean(ViewListPageFactory.ENABLE_REFRESH_KEY), iAgent.getArguments().getBoolean(ViewListPageFactory.ENABLE_LOADMORE_KEY));
-//        if (collectionsViewEngine.getLayoutManger() == null) {
-//            r.setLayoutManager(new LinearLayoutManager(iAgent.getContext(), LinearLayoutManager.VERTICAL, false));
-//        } else {
-//            r.setLayoutManager(collectionsViewEngine.getLayoutManger());
-//        }
-//        r.setAdapter(new ListOkAdapter(collectionsViewEngine.realData(), collectionsViewEngine) {
-//            @Override
-//            public void convertData(@NotNull ViewDataBinding d, Object entity, int postion) {
-//                collectionsViewEngine.convertData(d, entity, postion);
-//            }
-//        });
-
         Log.i(TAG, "handlerView: mIDictionaryClass = " + mIDictionaryClass);
-        refreshLayoutInit(s, this, iAgent.getArguments().getBoolean(ViewListPageFactory.ENABLE_REFRESH_KEY, false), iAgent.getArguments().getBoolean(ViewListPageFactory.ENABLE_LOADMORE_KEY, false));
+        refreshLayoutInit(s, this, iAgent.collectionsInfo.isEnableReFresh(), iAgent.collectionsInfo.isEnableLoadMore());
         final RecyclerView.LayoutManager l = collectionsViewEngine.getLayoutManger();
         if (l == null) {
             r.setLayoutManager(new LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false));
@@ -102,7 +87,6 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
             r.setLayoutManager(l);
         }
         r.setAdapter(collectionsViewEngine.getAdapter());
-
     }
 
     @Override
@@ -163,7 +147,7 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
     }
 
     public void handlerEmptyRes(@Nullable ViewGroup llEmpty) {
-        CollecttionsEngine collecttionsEngine = InjectionHelp.findAnnotation(collectionsViewEngine.getClass(), CollecttionsEngine.class);//collectionsViewEngine.getClass().getAnnotation(ListEngine.class);
+        CollecttionsEngine collecttionsEngine = InjectionHelp.findAnnotation(collectionsViewEngine.getClass());
         int res;
         if (collecttionsEngine != null) {
             res = collecttionsEngine.emptyLoadRes();

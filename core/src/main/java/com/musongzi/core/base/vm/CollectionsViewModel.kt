@@ -2,9 +2,14 @@ package com.musongzi.core.base.vm
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.lifecycle.ViewModelProvider
+import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.business.collection.CollectionsBusiness
+import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
+import java.io.Serializable
+import android.os.Parcel as Parcel1
 
 /**
  * 构建一个自动填充的集合viewmode
@@ -14,14 +19,21 @@ import com.musongzi.core.base.client.CollectionsViewClient
  *
  *
  */
-class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusiness>(), IRefreshViewModel<Any> {
+class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusiness>(),
+    IRefreshViewModel<Any> {
 
-    lateinit var emptyString: String
+//    lateinit var emptyString: String
 
+    lateinit var collectionsInfo:CollectionsInfo
     var tags = "CollectionsViewFragment"
 
     override fun handlerArguments() {
         super.handlerArguments()
+        collectionsInfo = if(getArguments()!=null) {
+            CollectionsInfo()
+        }else {
+            getArguments()!!.getParcelable(ViewListPageFactory.INFO_KEY)!!
+        }
         business.handlerArguments(getArguments())
     }
 
@@ -43,7 +55,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
     }
 
     override fun getHolderContext(): Context? {
-       return super.holderActivity?.getHolderContext()
+        return super.holderActivity?.getHolderContext()
     }
 
     override fun getViewModelProvider(thisOrTopProvider: Boolean): ViewModelProvider {
@@ -57,5 +69,64 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
     override fun getBundle(): Bundle? = getArguments()
 
+    class CollectionsInfo(): Parcelable {
+
+        constructor(c: CollecttionsEngine?) :this() {
+            c?.let {
+                isEnableEventBus = it.isEnableEventBus
+                isEnableLoadMore = it.isEnableLoadMore
+                isEnableEventBus = it.isEnableEventBus
+                title = it.title
+                emptyLoadRes = it.emptyLoadRes
+                modelKey = it.modelKey
+                emptyString = it.emptyString
+            }
+        }
+
+        var isEnableReFresh = true
+        var isEnableLoadMore = true
+        var isEnableEventBus = true
+        var title: String = ""
+        var emptyLoadRes = 0
+        var modelKey: String = ""
+        var emptyString: String = ""
+        var engineName:String = ""
+
+        constructor(parcel: android.os.Parcel) : this() {
+            isEnableReFresh = parcel.readByte() != 0.toByte()
+            isEnableLoadMore = parcel.readByte() != 0.toByte()
+            isEnableEventBus = parcel.readByte() != 0.toByte()
+            title = parcel.readString()!!
+            emptyLoadRes = parcel.readInt()
+            modelKey = parcel.readString()!!
+            emptyString = parcel.readString()!!
+            engineName = parcel.readString()!!
+        }
+
+        override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
+            parcel.writeByte(if (isEnableReFresh) 1 else 0)
+            parcel.writeByte(if (isEnableLoadMore) 1 else 0)
+            parcel.writeByte(if (isEnableEventBus) 1 else 0)
+            parcel.writeString(title)
+            parcel.writeInt(emptyLoadRes)
+            parcel.writeString(modelKey)
+            parcel.writeString(emptyString)
+            parcel.writeString(engineName)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<CollectionsInfo> {
+            override fun createFromParcel(parcel: android.os.Parcel): CollectionsInfo {
+                return CollectionsInfo(parcel)
+            }
+
+            override fun newArray(size: Int): Array<CollectionsInfo?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 
 }

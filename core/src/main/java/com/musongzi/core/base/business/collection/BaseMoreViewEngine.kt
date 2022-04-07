@@ -109,7 +109,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     final override fun getRemoteData(page: Int) =
         supportDataEngine?.getRemoteData(page) ?: getRemoteDataReal(page)
 
-    protected abstract fun getRemoteDataReal(index: Int): Observable<Data>?
+    protected abstract fun getRemoteDataReal(page: Int): Observable<Data>?
 
     override fun onEmptyViewCreate(v: View?) {
 

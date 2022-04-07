@@ -15,14 +15,14 @@ import io.reactivex.rxjava3.core.Observable
 
 abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LRefreshFrament<CollectionsViewModel, B, Any>(), CollectionsViewClient, CollectionsViewSupport {
 
-//    private var mIHolderCollections : IHolderCollections? = createHolderCollections()
-
     private var mRecycleViewClient: IRefreshViewClient = createRecycleViewClient()
 
     abstract fun createRecycleViewClient(): IRefreshViewClient
 
     override fun initEvent() {
-        (getMainViewModel()?.getHolderBusiness()?.base as? IHolderCollections)?.onRefreshViewClientEvent(mRecycleViewClient);
+        (getMainViewModel()?.getHolderBusiness()?.base as? IHolderCollections)?.onRefreshViewClientEvent(
+            mRecycleViewClient
+        );
     }
 
     override fun initData() {
@@ -53,16 +53,17 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LR
     override fun getCollectionsViewEngine(): IHolderCollections? {
         return object : BaseMoreViewEngine<ITEM, DATA>() {
 
-            override fun myAdapter() = this@BaseCollectionsViewFragment.getAdapter()!!
+            override fun myAdapter() =
+                this@BaseCollectionsViewFragment.getAdapter()!!
 
-            override fun getLayoutManger() = this@BaseCollectionsViewFragment.getLayoutManger()
+            override fun getLayoutManger() =
+                this@BaseCollectionsViewFragment.getLayoutManger()
 
             override fun getRemoteDataReal(index: Int): Observable<DATA>? =
                 this@BaseCollectionsViewFragment.getRemoteData(index);
 
-            override fun transformDataToList(entity: DATA): List<ITEM> {
-                return this@BaseCollectionsViewFragment.transformDataToList(entity);
-            }
+            override fun transformDataToList(entity: DATA): List<ITEM> =
+                this@BaseCollectionsViewFragment.transformDataToList(entity);
 
         }
     }
