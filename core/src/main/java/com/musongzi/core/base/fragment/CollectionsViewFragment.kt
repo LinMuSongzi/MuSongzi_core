@@ -13,11 +13,13 @@ import com.musongzi.core.util.StringUtil
  * 一个基于集合的基本碎片
  * 核心作用作为view层提供刷新和绑定view功能
  */
-open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding>(),
-    CollectionsViewClient {
+open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>(), CollectionsViewClient {
 
+    override fun actualTypeArgumentsDatabindinIndex(): Int = 0
 
-    override fun <I, D> getCollectionsViewEngine(): IHolderCollections? = null
+    override fun superDatabindingName(): String = BaseCollectionsViewFragment::class.java.name
+
+    override fun getCollectionsViewEngine(): IHolderCollections? = null
 
     override fun initView() {
         getMainViewModel()!!.getHolderBusiness().handlerView(recycleView(), refreshView())
@@ -43,7 +45,8 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
 
     }
 
-    override fun getViewModelProvider(thisOrTopProvider: Boolean) = if (thisOrTopProvider) ViewModelProvider(this) else ViewModelProvider(requireActivity());
+    override fun getViewModelProvider(thisOrTopProvider: Boolean) =
+        if (thisOrTopProvider) ViewModelProvider(this) else ViewModelProvider(requireActivity());
 
     override fun createRecycleViewClient(): IRefreshViewClient {
         return object : IRefreshViewClient {
@@ -58,8 +61,8 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
         }
     }
 
-    override fun <DATA, ITEM> transformDataToList(entity: DATA): List<ITEM> {
-        TODO("Not yet implemented")
+    override fun transformDataToList(entity: Any): List<Any> {
+        return ArrayList()
     }
 
 
