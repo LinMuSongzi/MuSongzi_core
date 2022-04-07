@@ -51,13 +51,11 @@ public class RetrofitManager {
 
 
     private RetrofitManager() {
-
+        ActivityLifeManager.getInstance();
         retrofit = new Retrofit.Builder().baseUrl(URL)
                 .client(getOkHttpCLient())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create()).build();
-
-
     }
 
     public void setCallBack(CallBack callBack) {
