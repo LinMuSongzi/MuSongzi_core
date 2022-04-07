@@ -33,11 +33,6 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LR
 
     override fun engineName() = null
 
-    companion object {
-        @kotlin.jvm.JvmField
-        var BUNDLE_KEY = "bundle_key"
-    }
-
     override fun recycleView(): RecyclerView? {
         return mRecycleViewClient.recycleView()
     }

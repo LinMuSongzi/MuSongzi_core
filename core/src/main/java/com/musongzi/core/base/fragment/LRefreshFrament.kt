@@ -15,6 +15,7 @@ import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.vm.MszViewModel
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
+import com.musongzi.core.util.InjectionHelp
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import org.jetbrains.annotations.NotNull
 import java.lang.Exception
@@ -41,7 +42,12 @@ abstract class LRefreshFrament<V : @androidx.annotation.NonNull MszViewModel<*, 
         Log.i(TAG, "setRefresh: 6")
     }
 
-//    override fun getCallBack(): Any? = this
+
+//    override fun instanceViewModel(): V? = InjectionHelp.findViewModel(
+//        javaClass,
+//        getMainViewProvider(),
+//        actualTypeArgumentsViewModelIndex()
+//    )
 
     override fun notifyDataSetChanged() {
         super.notifyDataSetChanged()

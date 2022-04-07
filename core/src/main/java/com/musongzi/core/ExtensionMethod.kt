@@ -16,8 +16,10 @@ import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.fragment.CollectionsViewFragment
+import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
+import com.musongzi.core.base.vm.CoreViewModel
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ActivityThreadHelp
@@ -328,6 +330,7 @@ object ExtensionMethod {
             CollectionsViewModel.CollectionsInfo(it)
         } ?: CollectionsViewModel.CollectionsInfo()
         val bundle = Bundle();
+        ModelFragment.composeProvider(bundle, false)
         mCollectionsInfo.engineName = eClass.name
         bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
         val collectionsFragment = CollectionsViewFragment();

@@ -8,21 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.musongzi.core.base.vm.CoreViewModel
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : DataBindingFragment<D>(),
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
+    DataBindingFragment<D>(),
     ViewModelProvider.Factory, IClient {
     protected val TAG = javaClass.simpleName
     private var viewModel: V? = null
-//    protected val viewModel :V
-//    get() {
-//       return viewModelWeakReference?.get()!!
-//    }
-
-
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
     final override fun onCreateView(
@@ -33,11 +29,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
         val v = super.onCreateView(inflater, container, savedInstanceState)
         viewModel = instanceViewModel();
         Log.i(TAG, "onCreateView: viewModel = $viewModel")
-        Log.i(
-            TAG,
-            "onCreateView: viewModel = ${viewModel?.getHolderBusiness()}\n"
-        )
-//        Log.i(TAG, "onCreateView: viewModel = ${viewModel?.get()?.getHolderBusiness()}\n")
+        Log.i(TAG, "onCreateView: viewModel = ${viewModel?.getHolderBusiness()}\n")
         return v;
     }
 
@@ -54,17 +46,32 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
         return viewModel
     }
 
-    protected fun instanceViewModel(): V? = InjectionHelp.findViewModel(
+    protected open fun instanceViewModel(): V? = InjectionHelp.findViewModel(
         javaClass,
-        getMainViewProvider(),
+        getProvider(),
         actualTypeArgumentsViewModelIndex()
     )
+
+    private fun getProvider(): ViewModelProvider = arguments?.let {
+        if (it.getBoolean(PROVIDER_MODEL_KEY, true)) {
+            getMainViewProvider()
+        } else {
+            getThisViewProvider()
+        }
+    } ?: getMainViewProvider()
 
     private fun getMainViewProvider(): ViewModelProvider {
         if (mVp == null) {
             mVp = ViewModelProvider(getMainViewModelProvider(), this)
         }
         return mVp!!
+    }
+
+    private fun getThisViewProvider(): ViewModelProvider {
+        if (vp == null) {
+            vp = ViewModelProvider(this, this)
+        }
+        return vp!!
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -109,5 +116,13 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
 
     }
 
+    companion object {
+        const val PROVIDER_MODEL_KEY = "provider_model_key"
+
+        fun composeProvider(b: Bundle?, flag: Boolean) {
+            b?.putBoolean(PROVIDER_MODEL_KEY, flag)
+        }
+
+    }
 
 }
