@@ -143,7 +143,6 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
 
                 @Override
                 public void onNext(DataEntity dataEntity) {
-
                     PageSupport.this.onNext(dataEntity);
                 }
             };

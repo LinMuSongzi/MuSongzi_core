@@ -1,5 +1,6 @@
 package com.musongzi.test
 
+import com.musongzi.core.StringChooseBean
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.bean.ListDataBean
 import io.reactivex.rxjava3.core.Observable
@@ -10,6 +11,6 @@ interface Api {
     @GET("banner/bannerList")
     fun getBannerList(): Observable<ListDataBean<DiscoverBannerBean>>
 
-    fun getArrayEngine(page:Int): Observable<List<String>>
+    fun getArrayEngine(page:Int): Observable<Array<StringChooseBean>>
 
 }

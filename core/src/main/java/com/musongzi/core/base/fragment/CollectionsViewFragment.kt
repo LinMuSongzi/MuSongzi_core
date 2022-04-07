@@ -4,7 +4,6 @@ import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.base.business.collection.IHolderCollections
-import com.musongzi.core.base.client.CollectionsViewClient
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.databinding.FragmentRecycleListBinding
 import com.musongzi.core.util.StringUtil
@@ -13,11 +12,9 @@ import com.musongzi.core.util.StringUtil
  * 一个基于集合的基本碎片
  * 核心作用作为view层提供刷新和绑定view功能
  */
-open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>(), CollectionsViewClient {
+open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>() {
 
-    override fun actualTypeArgumentsDatabindinIndex(): Int = 0
 
-    override fun superDatabindingName(): String = BaseCollectionsViewFragment::class.java.name
 
     override fun getCollectionsViewEngine(): IHolderCollections? = null
 

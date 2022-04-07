@@ -321,10 +321,7 @@ object ExtensionMethod {
     }
 
 
-    fun analysisCollectionsEngine(eClass: Class<*>): Fragment? {
-        if (!eClass.isAssignableFrom(BaseMoreViewEngine::class.java)) {
-            return null
-        }
+    fun analysisCollectionsEngine(eClass: Class<*>): Fragment {
         val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
         val mCollectionsInfo = cAnnotation?.let {
             CollectionsViewModel.CollectionsInfo(it)
@@ -336,6 +333,11 @@ object ExtensionMethod {
         val collectionsFragment = CollectionsViewFragment();
         collectionsFragment.arguments = bundle
         return collectionsFragment
+    }
+
+    fun String.bean() = StringChooseBean().let {
+        it.title = this
+        it
     }
 
 }

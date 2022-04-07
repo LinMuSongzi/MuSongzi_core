@@ -14,8 +14,7 @@ import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
-    DataBindingFragment<D>(),
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : DataBindingFragment<D>(),
     ViewModelProvider.Factory, IClient {
     protected val TAG = javaClass.simpleName
     private var viewModel: V? = null
@@ -39,6 +38,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
+    protected open fun actualTypeArgumentsViewModelIndex(): Int = 0
 
     override fun superDatabindingName() = ModelFragment::class.java.name
 
@@ -48,9 +48,12 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     protected open fun instanceViewModel(): V? = InjectionHelp.findViewModel(
         javaClass,
+        superViewModelName(),
         getProvider(),
         actualTypeArgumentsViewModelIndex()
     )
+
+    protected open fun superViewModelName(): String = ModelFragment::class.java.name
 
     private fun getProvider(): ViewModelProvider = arguments?.let {
         if (it.getBoolean(PROVIDER_MODEL_KEY, true)) {
@@ -91,7 +94,6 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     abstract fun initEvent()
     abstract fun initData()
 
-    protected fun actualTypeArgumentsViewModelIndex(): Int = 0
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val v = modelClass.newInstance()

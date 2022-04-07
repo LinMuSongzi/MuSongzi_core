@@ -17,8 +17,7 @@ import com.musongzi.core.itf.holder.IHolderDataBinding
 import com.musongzi.core.util.InjectionHelp
 import com.trello.rxlifecycle4.components.support.RxFragment
 
-abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity, IDisconnect,
-    IHolderDataBinding<D> {
+abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity, IDisconnect, IHolderDataBinding<D> {
 
     lateinit var dataBinding: D
 

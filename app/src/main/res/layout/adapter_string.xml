@@ -6,7 +6,7 @@
 
         <variable
             name="bean"
-            type="java.lang.String" />
+            type="com.musongzi.core.StringChooseBean" />
 
     </data>
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:paddingVertical="20dp"
-            android:text="@{bean}"
+            android:text="@{bean.title}"
             android:textColor="#333333"
             tools:text="哈哈哈哈" />
 

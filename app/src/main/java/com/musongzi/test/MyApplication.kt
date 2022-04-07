@@ -5,6 +5,7 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.multidex.MultiDexApplication
+import com.musongzi.core.ExtensionMethod.bean
 import com.musongzi.core.base.manager.RetrofitManager
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
 import java.util.*
@@ -24,27 +25,28 @@ class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallba
         RetrofitManager.getInstance().setCallBack { proxy, method, args ->
             var cb: Any? = null
             if (method.name == "getArrayEngine") {
-                if ((args[0] as Int) > 0) {
-                    cb = ObservableCreate.fromArray(ArrayList<String>())
+                if ((args[0] as Int) > 1) {
+                    cb = ObservableCreate.fromArray(emptyArray<String>())
                 } else {
                     cb = ObservableCreate.fromArray(
-                        arrayOf(
-                            "a",
-                            "1",
-                            "2",
-                            "3",
-                            "4",
-                            "5",
-                            "6",
-                            "ad",
-                            "1",
-                            "2",
-                            "3",
-                            "4",
-                            "5",
-                            "6",
-                            "ad"
-                        )
+                            arrayOf(
+                                "a".bean(),
+                                "1".bean(),
+                                "2".bean(),
+                                "3".bean(),
+                                "4".bean(),
+                                "5".bean(),
+                                "6".bean(),
+                                "ad".bean(),
+                                "1".bean(),
+                                "2".bean(),
+                                "3".bean(),
+                                "4".bean(),
+                                "5".bean(),
+                                "6".bean(),
+                                "ad".bean()
+                            )
+
                     )
                 }
             }

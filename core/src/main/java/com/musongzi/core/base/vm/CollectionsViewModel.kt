@@ -14,24 +14,24 @@ import android.os.Parcel as Parcel1
 /**
  * 构建一个自动填充的集合viewmode
  *
- * 由于在 [com.android.playmusic.l.ActivityManager.buildCollectionFragment] 中对viewmodel的 [com.android.playmusic.l.business.listengine.ViewListPageFactory.ENGINE_KEY] key进行了赋值
+ * 由于在 [buildCollectionFragment] 中对viewmodel的 key进行了赋值
  * 当次model初始化的时候会独立于各自的Engine作用域
  *
  *
  */
-class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusiness>(),
+class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
     IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
 
-    lateinit var collectionsInfo:CollectionsInfo
+    lateinit var collectionsInfo: CollectionsInfo
     var tags = "CollectionsViewFragment"
 
     override fun handlerArguments() {
         super.handlerArguments()
-        collectionsInfo = if(getArguments()!=null) {
+        collectionsInfo = if (getArguments() == null) {
             CollectionsInfo()
-        }else {
+        } else {
             getArguments()!!.getParcelable(ViewListPageFactory.INFO_KEY)!!
         }
         business.handlerArguments(getArguments())
@@ -69,9 +69,9 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
     override fun getBundle(): Bundle? = getArguments()
 
-    class CollectionsInfo(): Parcelable {
+    class CollectionsInfo() : Parcelable {
 
-        constructor(c: CollecttionsEngine?) :this() {
+        constructor(c: CollecttionsEngine?) : this() {
             c?.let {
                 isEnableEventBus = it.isEnableEventBus
                 isEnableLoadMore = it.isEnableLoadMore
@@ -90,7 +90,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
         var emptyLoadRes = 0
         var modelKey: String = ""
         var emptyString: String = ""
-        var engineName:String = ""
+        var engineName: String = ""
 
         constructor(parcel: android.os.Parcel) : this() {
             isEnableReFresh = parcel.readByte() != 0.toByte()

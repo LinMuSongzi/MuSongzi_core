@@ -83,6 +83,10 @@ public class RetrofitManager {
 
     @NotNull
     public <T> T getApi(Class<T> tClass, IWant want) {
+        if (want != null) {
+            String key = tClass.getName() + want.hashCode();
+            return getApi(tClass, key, want);
+        }
         return getApi(tClass, tClass.getName(), want);
     }
 
@@ -126,7 +130,7 @@ public class RetrofitManager {
                 @Override
                 public void onDestroy(@NonNull LifecycleOwner owner) {
                     Object flag = RetrofitManager.getInstance().apis.remove(key);
-                    Log.i("Observable_Sub", "onDestroy: api " + flag);
+                    Log.i("Observable_Sub", "onDestroy: api " + flag + " , key = " + key);
                 }
             });
         }

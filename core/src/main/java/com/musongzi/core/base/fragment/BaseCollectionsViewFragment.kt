@@ -13,7 +13,12 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
-abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LRefreshFrament<CollectionsViewModel, B, Any>(), CollectionsViewClient, CollectionsViewSupport {
+abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LRefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>, CollectionsViewSupport {
+
+    override fun actualTypeArgumentsViewModelIndex() = 0
+    override fun actualTypeArgumentsDatabindinIndex(): Int = 0
+    override fun superViewModelName() = LRefreshFrament::class.java.name
+    override fun superDatabindingName() = BaseCollectionsViewFragment::class.java.name
 
     private var mRecycleViewClient: IRefreshViewClient = createRecycleViewClient()
 
@@ -72,9 +77,5 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LR
     fun createDataEngine(): IDataEngine<DATA>? = null
 
     override fun getLayoutManger(): RecyclerView.LayoutManager? = null
-
-    override fun superDatabindingName(): String = BaseCollectionsViewFragment::class.java.name
-
-    override fun actualTypeArgumentsDatabindinIndex(): Int = 0
 
 }
