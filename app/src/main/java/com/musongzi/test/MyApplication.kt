@@ -8,6 +8,9 @@ import androidx.multidex.MultiDexApplication
 import com.musongzi.core.ExtensionMethod.bean
 import com.musongzi.core.base.manager.RetrofitManager
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import java.lang.reflect.Method
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -18,18 +21,17 @@ class MyApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-//        registerActivityLifecycleCallbacks(this)
         Thread.UncaughtExceptionHandler { t, e ->
             Log.i(TAG, "onCreate: " + e.message + " , " + Arrays.toString(e.stackTrace) + "\n");
         }
-        //test
-        RetrofitManager.getInstance().setCallBack { proxy, method, args ->
-            var cb: Any? = null
-            if (method.name == "getArrayEngine") {
-                if ((args[0] as Int) > 1) {
-                    cb = ObservableCreate.fromArray(emptyArray<String>())
-                } else {
-                    cb = ObservableCreate.fromArray(
+        RetrofitManager.getInstance().init(object : RetrofitManager.CallBack {
+            override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
+                var cb: Any? = null
+                if (method.name == "getArrayEngine") {
+                    if ((args[0] as Int) > 1) {
+                        cb = ObservableCreate.fromArray(emptyArray<String>())
+                    } else {
+                        cb = ObservableCreate.fromArray(
                             arrayOf(
                                 "a".bean(),
                                 "1".bean(),
@@ -48,10 +50,16 @@ class MyApplication : MultiDexApplication() {
                                 "ad".bean()
                             )
 
-                    )
+                        )
+                    }
                 }
+                return cb
             }
-            cb
-        }
+
+            override fun getOkHttpCLient(): OkHttpClient? = null
+
+            override fun getRetrofit(): Retrofit? = null
+
+        })
     }
 }
