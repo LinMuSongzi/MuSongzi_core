@@ -105,49 +105,49 @@ public class RetrofitManager {
     @NotNull
     public <T> T getApi(Class<T> tClass, String key, IWant want) {
         Map<String, Object> apis = RetrofitManager.getInstance().apis;
-        T t = null;
+        T t = (T) apis.get(key);
 
-        if (want != null && want.getThisLifecycle() != null) {
-            InvocationHandler invocationHandler = new InvocationHandler() {
-                private final Object[] emptyArgs = new Object[0];
 
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                    if (method.getDeclaringClass() == Object.class) {
-                        return method.invoke(this, args);
-                    }
-                    args = args != null ? args : emptyArgs;
-                    Object returnInstance = null;
-                    if (callBack != null) {
-                        returnInstance = callBack.invoke(proxy, method, args);
-                    }
-                    if (returnInstance == null) {
-                        returnInstance = method.invoke(MANAGER.getApi(tClass), args);
-                    }
+        if (t == null) {
+            if (want != null && want.getThisLifecycle() != null) {
+                InvocationHandler invocationHandler = new InvocationHandler() {
+                    private final Object[] emptyArgs = new Object[0];
 
-                    if (method.getReturnType().isAssignableFrom(Observable.class)) {
-                        returnInstance = ((Observable<?>) returnInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).compose(want.bindToLifecycle());
-                    }
-                    return returnInstance;
-                }
-            };
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        if (method.getDeclaringClass() == Object.class) {
+                            return method.invoke(this, args);
+                        }
+                        args = args != null ? args : emptyArgs;
+                        Object returnInstance = null;
+                        if (callBack != null) {
+                            returnInstance = callBack.invoke(proxy, method, args);
+                        }
+                        if (returnInstance == null) {
+                            returnInstance = method.invoke(MANAGER.getApi(tClass), args);
+                        }
 
-            t = (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class<?>[]{tClass}, invocationHandler);
-            want.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
-                @Override
-                public void onCreate(@NonNull LifecycleOwner owner) {
+                        if (method.getReturnType().isAssignableFrom(Observable.class)) {
+                            returnInstance = ((Observable<?>) returnInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).compose(want.bindToLifecycle());
+                        }
+                        return returnInstance;
+                    }
+                };
+
+                t = (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class<?>[]{tClass}, invocationHandler);
+                want.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
+                    @Override
+                    public void onCreate(@NonNull LifecycleOwner owner) {
 //                    Log.i("Observable_Sub", "onCreate api: " + tClass);
-                }
+                    }
 
-                @Override
-                public void onDestroy(@NonNull LifecycleOwner owner) {
-                    Object flag = RetrofitManager.getInstance().apis.remove(key);
-                    Log.i("Observable_Sub", "onDestroy: api " + flag + " , key = " + key);
-                }
-            });
-        }
-        if (apis.get(key) == null) {
-            if (t == null) {
+                    @Override
+                    public void onDestroy(@NonNull LifecycleOwner owner) {
+                        Object flag = RetrofitManager.getInstance().apis.remove(key);
+                        Log.i("Observable_Sub", "onDestroy: api " + flag + " , key = " + key);
+                    }
+                });
+            }else {
                 t = RetrofitManager.getInstance().retrofit.create(tClass);
             }
             apis.put(key, t);
