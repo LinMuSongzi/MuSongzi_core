@@ -16,5 +16,4 @@ class TestBusiness : BaseLifeBusiness<TestViewModel>() {
             iAgent.getHolderClient()?.showText(it.toJson())
         }
     }
-
 }

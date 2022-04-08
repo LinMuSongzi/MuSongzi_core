@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.musongzi.core">
 
 <!--    <application-->
@@ -8,5 +9,18 @@
 <!--        android:roundIcon="@mipmap/ic_launcher_round"-->
 <!--        android:supportsRtl="true"-->
 <!--        android:theme="@style/AppTheme" />-->
+    <application>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.musongzi.core.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.musongzi.core.base.HodlerInit"
+                android:value="@string/androidx_startup" />
+        </provider>
+        
+    </application>
 
 </manifest>

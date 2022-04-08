@@ -95,6 +95,6 @@ dependencies {
 // If you want to use Kotlin syntax with Android Lifecycle
     api 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle-kotlin:4.0.2'
 
-
+    api "androidx.startup:startup-runtime:1.0.0-alpha01"
 
 }

@@ -3,7 +3,6 @@ package com.musongzi.core.base.manager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -11,6 +10,7 @@ import com.musongzi.core.itf.IWant;
 import com.musongzi.core.util.ActivityThreadHelp;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -45,17 +45,27 @@ public class RetrofitManager {
         MANAGER = new RetrofitManager();
     }
 
-    private final Retrofit retrofit;
+    private Retrofit retrofit;
     private OkHttpClient okHttpClient;
     private CallBack callBack;
 
 
     private RetrofitManager() {
-        ActivityLifeManager.getInstance();
-        retrofit = new Retrofit.Builder().baseUrl(URL)
-                .client(getOkHttpCLient())
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create()).build();
+    }
+
+    public void init(CallBack callBack){
+        if(retrofit != null){
+            return;
+        }
+        setCallBack(callBack);
+        if(callBack!=null){
+            retrofit = callBack.getRetrofit();
+        }else {
+            retrofit = new Retrofit.Builder().baseUrl(URL)
+                    .client(getOkHttpCLient())
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create()).build();
+        }
     }
 
     public void setCallBack(CallBack callBack) {
@@ -63,9 +73,13 @@ public class RetrofitManager {
     }
 
     private OkHttpClient getOkHttpCLient() {
-        Cache cache = new Cache(ActivityThreadHelp.getCurrentApplication().getCacheDir(), 1024 * 1024 * 200);
-        okHttpClient = new OkHttpClient().newBuilder().cache(cache).build();
-
+        if (callBack != null) {
+            okHttpClient = callBack.getOkHttpCLient();
+        }
+        if(okHttpClient == null){
+            Cache cache = new Cache(ActivityThreadHelp.getCurrentApplication().getCacheDir(), 1024 * 1024 * 200);
+            okHttpClient = new OkHttpClient().newBuilder().cache(cache).build();
+        }
         return okHttpClient;
     }
 
@@ -85,7 +99,7 @@ public class RetrofitManager {
             String key = tClass.getName() + want.hashCode();
             return getApi(tClass, key, want);
         }
-        return getApi(tClass, tClass.getName(), want);
+        return getApi(tClass, tClass.getName(), null);
     }
 
     @NotNull
@@ -145,7 +159,10 @@ public class RetrofitManager {
 
 
     public interface CallBack extends InvocationHandler {
+        @Nullable
+        OkHttpClient getOkHttpCLient();
 
-
+        @Nullable
+        Retrofit getRetrofit();
     }
 }
