@@ -1,6 +1,6 @@
 package com.musongzi.core.itf
 
-interface INotifyDataSetChanged {
+interface INotifyDataSetChanged :IClient{
     fun notifyDataSetChanged()
     fun notifyDataSetChangedItem(postiont:Int)
 }

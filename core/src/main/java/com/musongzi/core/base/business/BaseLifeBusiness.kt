@@ -19,6 +19,8 @@ open class BaseLifeBusiness<L : IAgent> : IBusiness, DefaultLifecycleObserver {
         Log.i(TAG, "onCreateView:afterHandlerBusiness; -- ")
     }
 
+//    override fun getNextByClass(nextClass: Class<*>): IBusiness?  = null
+
     fun setAgentModel(l: L) {
         this.iAgent = l;
         l.getThisLifecycle()?.lifecycle?.addObserver(this)

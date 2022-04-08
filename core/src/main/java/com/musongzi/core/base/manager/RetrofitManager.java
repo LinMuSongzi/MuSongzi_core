@@ -53,14 +53,14 @@ public class RetrofitManager {
     private RetrofitManager() {
     }
 
-    public void init(CallBack callBack){
-        if(retrofit != null){
+    public void init(CallBack callBack) {
+        if (retrofit != null) {
             return;
         }
         setCallBack(callBack);
-        if(callBack!=null){
+        if (callBack != null && callBack.getRetrofit() != null) {
             retrofit = callBack.getRetrofit();
-        }else {
+        } else {
             retrofit = new Retrofit.Builder().baseUrl(URL)
                     .client(getOkHttpCLient())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
@@ -76,7 +76,7 @@ public class RetrofitManager {
         if (callBack != null) {
             okHttpClient = callBack.getOkHttpCLient();
         }
-        if(okHttpClient == null){
+        if (okHttpClient == null) {
             Cache cache = new Cache(ActivityThreadHelp.getCurrentApplication().getCacheDir(), 1024 * 1024 * 200);
             okHttpClient = new OkHttpClient().newBuilder().cache(cache).build();
         }

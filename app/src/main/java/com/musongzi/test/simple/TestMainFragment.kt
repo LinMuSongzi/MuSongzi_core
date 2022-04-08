@@ -9,7 +9,7 @@ import com.musongzi.test.vm.TestViewModel
 class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
 
     override fun initData() {
-
+        showDialog("")
     }
 
     override fun initEvent() {

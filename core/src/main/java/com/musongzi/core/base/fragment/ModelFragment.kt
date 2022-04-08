@@ -1,5 +1,6 @@
 package com.musongzi.core.base.fragment
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,14 +13,17 @@ import com.musongzi.core.base.vm.CoreViewModel
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
+import com.musongzi.core.view.TipDialog
 import java.lang.ref.WeakReference
 
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : DataBindingFragment<D>(),
-    ViewModelProvider.Factory, IClient {
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
+    DataBindingFragment<D>(),
+    ViewModelProvider.Factory {
     protected val TAG = javaClass.simpleName
     private var viewModel: V? = null
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
+    private var tipDialog: Dialog? = null
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -111,12 +115,20 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
 
 
     override fun showDialog(msg: String?) {
-
+        (tipDialog ?: let {
+            val t = createDialog()
+            tipDialog = t;
+            t
+        }).show()
     }
 
     override fun disimissDialog() {
-
+        tipDialog?.apply {
+            dismiss()
+        }
     }
+
+    protected open fun createDialog() = TipDialog(requireActivity())
 
     companion object {
         const val PROVIDER_MODEL_KEY = "provider_model_key"

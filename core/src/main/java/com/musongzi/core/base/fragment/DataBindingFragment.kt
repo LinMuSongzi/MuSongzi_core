@@ -8,24 +8,41 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
+import com.musongzi.core.base.client.FragmentClient
+import com.musongzi.core.base.client.FragmentControlClient
+import com.musongzi.core.base.client.imp.FragmentBusinessControlClientImpl
+import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.IDisconnect
 import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.holder.IHolderDataBinding
+import com.musongzi.core.itf.holder.IHolderFragmentManager
 import com.musongzi.core.util.InjectionHelp
 import com.trello.rxlifecycle4.components.support.RxFragment
 
-abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity, IDisconnect, IHolderDataBinding<D> {
+abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
+    IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
 
     lateinit var dataBinding: D
 
+    lateinit var fControl: FragmentControlClient
+
+    override fun layoutId(): Int = 0
+
+    override fun getHolderFragmentManager() = childFragmentManager
+
+    override fun getHolderParentFragmentManager(): FragmentManager? = parentFragmentManager
+
+//    override fun getNextByClass(nextClass: Class<*>): IClient?  = null
+
     override fun getHodlerActivity(): FragmentActivity? = activity
 
-    override fun getMainLifecycle(): IHolderActivity?   = requireActivity() as? IHolderActivity
+    override fun getMainLifecycle(): IHolderActivity? = requireActivity() as? IHolderActivity
 
-    override fun getThisLifecycle(): LifecycleOwner?  = this
+    override fun getThisLifecycle(): LifecycleOwner? = this
 
     override fun getHolderContext(): Context? = context
 
@@ -49,6 +66,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        fControl = FragmentBusinessControlClientImpl(this)
         return instanceView(layoutInflater, container!!)
     }
 
@@ -82,4 +100,43 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     override fun notifyDataSetChangedItem(postiont: Int) {
 
     }
+
+
+    override fun addFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
+        fControl.addFragment(fragment, tag, isHide)
+    }
+
+    override fun <F : Fragment> addFragment(
+        fragmentClass: Class<F>,
+        tag: String?,
+        isHide: Boolean
+    ) {
+        fControl.addFragment(fragmentClass, tag, isHide)
+    }
+
+    override fun replaceFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
+        fControl.replaceFragment(fragment, tag, isHide)
+    }
+
+    override fun <F : Fragment> replaceFragment(
+        fragmentClass: Class<F>,
+        tag: String?,
+        isHide: Boolean
+    ) {
+        fControl.replaceFragment(fragmentClass, tag, isHide)
+    }
+
+    override fun removeFragment(tag: String) {
+        fControl.removeFragment(tag)
+    }
+
+    override fun removeFragment(fragment: Fragment) {
+        fControl.removeFragment(fragment)
+    }
+
+    override fun <F : Fragment> removeFragment(fragmentClass: Class<F>) {
+        fControl.removeFragment(fragmentClass)
+    }
+
+    override fun getFragmentByTag(tag: String): Fragment? = fControl.getFragmentByTag(tag)
 }
