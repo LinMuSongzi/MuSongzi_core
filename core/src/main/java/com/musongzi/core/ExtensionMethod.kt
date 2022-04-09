@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.adapter.TypeSupportAdaper
+import com.musongzi.core.base.business.HandlerChooseBusiness
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
@@ -20,6 +21,7 @@ import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.CoreViewModel
+import com.musongzi.core.base.vm.IHandlerChooseViewModel
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ActivityThreadHelp
@@ -339,5 +341,14 @@ object ExtensionMethod {
         it.title = this
         it
     }
+
+
+    /**
+     * 注意如果当前的IHandlerChooseViewModel 子类不是
+     */
+    fun <I : IHandlerChooseViewModel<*>> I.wantPick() = getHolderBusiness()?.let {
+            return@let it.getNext(HandlerChooseBusiness::class.java)
+        } ?: HandlerChooseBusiness(this)
+
 
 }

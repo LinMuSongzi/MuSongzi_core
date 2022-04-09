@@ -1,8 +1,9 @@
 package com.musongzi.core.itf
 
-interface IBusiness {
+interface IBusiness :INeed{
 
     fun afterHandlerBusiness()
+
 
 
 }

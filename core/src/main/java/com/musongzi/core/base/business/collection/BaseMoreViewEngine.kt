@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.musongzi.core.ExtensionMethod.wantPick
 import com.musongzi.core.MszObserver
+import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.client.IRefreshViewClient
+import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IRefreshViewModel
 import com.musongzi.core.itf.holder.IHolderContext
 import com.musongzi.core.itf.holder.IHolderLifecycle
@@ -31,7 +34,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @property observer Observer<Data> 当前总体数据的一个观察者回调
  * @property initFlag Boolean 是否初始化
  */
-abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
+abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsViewEngine<Item>,
     PageSupport.CallBack<Item, Data>, IHolderContext {
     /**
      * 分页引擎
@@ -39,9 +42,9 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private lateinit var dataPageSupport: PageSupport<Item, Data>
 
     /**
-     * 一个抽象的View层。它的实现类在目前框架中是一个[com.android.playmusic.l.viewmodel.imp.CollectionsViewModel]
+     * 一个抽象的View层。它的实现类在目前框架中是一个[CollectionsViewModel]
      */
-    private lateinit var callBack: IRefreshViewModel<Item>
+    protected lateinit var callBack: IRefreshViewModel<Item>
     private lateinit var instanceAdapter: RecyclerView.Adapter<*>
     var supportDataEngine: IDataEngine<Data>? = null
     private val observer: Observer<Data> = createObserver()
@@ -62,7 +65,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     protected open fun laterInit(bundle: Bundle?) {
     }
 
-    protected open fun createObserver(): Observer<Data> = MszObserver{
+    protected open fun createObserver(): Observer<Data> = MszObserver {
 
     }
 
@@ -140,4 +143,16 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
 
     override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
+
+
+    fun pickSingle(i: Item) {
+        (callBack as CollectionsViewModel).wantPick().pickRun(i)
+    }
+
+    fun pickSingle(view:View,i: Item) {
+        view.setOnClickListener {
+            (callBack as CollectionsViewModel).wantPick().pickRun(i)
+        }
+    }
+
 }

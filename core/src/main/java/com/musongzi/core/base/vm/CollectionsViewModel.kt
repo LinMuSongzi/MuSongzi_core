@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.annotation.CollecttionsEngine
+import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
+import com.musongzi.core.itf.page.ISource
 import java.io.Serializable
 import android.os.Parcel as Parcel1
 
@@ -20,7 +22,7 @@ import android.os.Parcel as Parcel1
  *
  */
 class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
-    IRefreshViewModel<Any> {
+    IHandlerChooseViewModel<CollectionsBusiness>, IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
 
@@ -127,6 +129,14 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
                 return arrayOfNulls(size)
             }
         }
+    }
+
+    override fun baseDatas(): ISource<BaseChooseBean>? {
+        return business.base as? ISource<BaseChooseBean>
+    }
+
+    override fun updateByPick() {
+        notifyDataSetChanged()
     }
 
 }

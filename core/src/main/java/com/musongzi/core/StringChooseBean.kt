@@ -1,8 +1,9 @@
 package com.musongzi.core
 
-class StringChooseBean {
+import com.musongzi.core.base.bean.BaseChooseBean
+
+class StringChooseBean : BaseChooseBean() {
 
     var title = ""
-    var isChoose = false
 
 }
