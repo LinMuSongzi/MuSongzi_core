@@ -35,7 +35,7 @@
             android:textSize="15dp"
             android:textStyle="bold"
             android:visibility="@{bean.choose ? View.VISIBLE : View.GONE }"
-            tools:text="已选择" />
+            android:text="已选择" />
 
     </RelativeLayout>
 </layout>

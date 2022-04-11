@@ -3,6 +3,7 @@ package com.musongzi.core.base.fragment
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.CollectionsViewSupport
 import com.musongzi.core.base.business.collection.IHolderCollections
@@ -13,7 +14,9 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
-abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LRefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>, CollectionsViewSupport {
+abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChooseBean, DATA> :
+    LRefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
+    CollectionsViewSupport {
 
     override fun actualTypeArgumentsViewModelIndex() = 0
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
@@ -59,8 +62,8 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : LR
             override fun getLayoutManger() =
                 this@BaseCollectionsViewFragment.getLayoutManger()
 
-            override fun getRemoteDataReal(index: Int): Observable<DATA>? =
-                this@BaseCollectionsViewFragment.getRemoteData(index);
+            override fun getRemoteDataReal(page: Int): Observable<DATA>? =
+                this@BaseCollectionsViewFragment.getRemoteData(page);
 
             override fun transformDataToList(entity: DATA): List<ITEM> =
                 this@BaseCollectionsViewFragment.transformDataToList(entity);

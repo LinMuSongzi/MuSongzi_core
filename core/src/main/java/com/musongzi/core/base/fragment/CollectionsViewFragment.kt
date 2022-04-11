@@ -3,6 +3,7 @@ package com.musongzi.core.base.fragment
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
+import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.IHolderCollections
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.databinding.FragmentRecycleListBinding
@@ -12,7 +13,7 @@ import com.musongzi.core.util.StringUtil
  * 一个基于集合的基本碎片
  * 核心作用作为view层提供刷新和绑定view功能
  */
-open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>() {
+open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, BaseChooseBean, Any>() {
 
 
 
@@ -58,7 +59,7 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
         }
     }
 
-    override fun transformDataToList(entity: Any): List<Any> {
+    override fun transformDataToList(entity: Any): List<BaseChooseBean> {
         return ArrayList()
     }
 
