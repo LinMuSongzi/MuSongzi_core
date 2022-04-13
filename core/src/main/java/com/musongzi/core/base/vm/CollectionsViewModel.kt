@@ -36,7 +36,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
         } else {
             getArguments()!!.getParcelable(ViewListPageFactory.INFO_KEY)!!
         }
-        business.handlerArguments(getArguments())
+
     }
 
     override fun buildViewByData(datas: List<Any>) {

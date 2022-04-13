@@ -1,6 +1,7 @@
 package com.musongzi.core.base.fragment
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.bean.BaseChooseBean
@@ -23,9 +24,18 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     override fun superViewModelName() = LRefreshFrament::class.java.name
     override fun superDatabindingName() = BaseCollectionsViewFragment::class.java.name
 
-    private var mRecycleViewClient: IRefreshViewClient = createRecycleViewClient()
+    private lateinit var mRecycleViewClient: IRefreshViewClient
 
     abstract fun createRecycleViewClient(): IRefreshViewClient
+
+    override fun initView() {
+        getMainViewModel()?.business?.handlerArguments(arguments)
+    }
+
+    override fun handlerArguments() {
+        super.handlerArguments()
+        mRecycleViewClient = createRecycleViewClient()
+    }
 
     override fun initEvent() {
         (getMainViewModel()?.getHolderBusiness()?.base as? IHolderCollections)?.onRefreshViewClientEvent(
@@ -51,6 +61,10 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
 
     override fun refreshView(): SmartRefreshLayout? {
         return mRecycleViewClient.refreshView()
+    }
+
+    override fun emptyView(): ViewGroup? {
+        return mRecycleViewClient.recycleView()
     }
 
     override fun getCollectionsViewEngine(): IHolderCollections? {

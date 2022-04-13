@@ -20,6 +20,7 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
     override fun getCollectionsViewEngine(): IHolderCollections? = null
 
     override fun initView() {
+        super.initView()
         getMainViewModel()!!.getHolderBusiness().handlerView(recycleView(), refreshView())
         getMainViewModel()!!.getHolderBusiness().handlerEmptyRes(emptyView())
     }

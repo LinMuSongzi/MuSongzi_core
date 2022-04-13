@@ -33,6 +33,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         viewModel = instanceViewModel();
         Log.i(TAG, "onCreateView: viewModel = $viewModel")
         Log.i(TAG, "onCreateView: viewModel = ${viewModel?.getHolderBusiness()}\n")
+        handlerArguments()
         return v;
     }
 
