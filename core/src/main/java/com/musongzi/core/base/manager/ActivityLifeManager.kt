@@ -8,10 +8,11 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.musongzi.core.itf.IEventManager
+import com.musongzi.core.itf.ISingleManager
 import com.musongzi.core.util.ActivityThreadHelp
 
-class ActivityLifeManager private constructor() : ComponentCallbacks,
-    Application.ActivityLifecycleCallbacks {
+class ActivityLifeManager private constructor() : ComponentCallbacks,Application.ActivityLifecycleCallbacks {
 
     companion object {
         private val MANAGER = ActivityLifeManager()
@@ -24,12 +25,38 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         fun printActivity(activity: Activity): String {
             return "hashCode: ${activity.hashCode()} , name = " + activity.javaClass.name
         }
+
+        fun getEventManager(): IEventManager {
+           return MANAGER.managers[EVENT_MANGER] as IEventManager
+        }
+
+        const val EVENT_MANGER = "com.musongzi.core.base.manager.EventManger"
+
     }
+    private lateinit var managerStr :List<String>
+    private val managers = HashMap<String,ISingleManager>()
 
     init {
         ActivityThreadHelp.getCurrentApplication().let {
             it.registerComponentCallbacks(this)
             (it as Application).registerActivityLifecycleCallbacks(this)
+        }
+        initManager();
+    }
+
+
+
+
+    private fun initManager() {
+        managerStr = ArrayList<String>().let {
+            it.add(EVENT_MANGER)
+            it
+        }
+
+        for(v in managerStr){
+            val m = javaClass.classLoader!!.loadClass(v).newInstance() as ISingleManager
+            m.onReady()
+            managers[v] = m
         }
     }
 

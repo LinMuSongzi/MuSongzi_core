@@ -11,7 +11,7 @@ object ActivityThreadHelp {
     @JvmStatic
     fun getCurrentApplication(): Context {
         val classLoader = Context::class.java.classLoader
-        val tClass = classLoader!!.loadClass("android.app.ActivityThread")
-        return tClass.getDeclaredMethod("currentApplication").invoke(null) as Context
+        val tClass = classLoader?.loadClass("android.app.ActivityThread")
+        return tClass?.getDeclaredMethod("currentApplication")?.invoke(null) as Context
     }
 }

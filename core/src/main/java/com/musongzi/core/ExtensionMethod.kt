@@ -6,25 +6,28 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.business.HandlerChooseBusiness
-import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
+import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
-import com.musongzi.core.base.vm.CoreViewModel
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
+import com.musongzi.core.itf.IEventHelp
+import com.musongzi.core.itf.IEventManager
+import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
-import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.TextUtil
@@ -32,9 +35,10 @@ import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observer
-import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
 
 object ExtensionMethod {
 
@@ -342,13 +346,37 @@ object ExtensionMethod {
         it
     }
 
+    fun <I : IEventHelp> IHolderLifecycle.addVideoHandler(e: Class<I>, h: () -> I) {
+        getThisLifecycle()?.let {
+            it.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onCreate(owner: LifecycleOwner) {
+                    ActivityLifeManager.getEventManager().put(e.name, h)
+                }
+
+                override fun onDestroy(owner: LifecycleOwner) {
+                    ActivityLifeManager.getEventManager().remove(e.name, h)
+                }
+
+            })
+        }
+    }
+
+    //    fun <I : IEventHelp> Any.callInteface(c: Class<I>): {
+//        ActivityLifeManager.getEventManager().call(c.name)
+//    }
+    fun <T> Class<T>.event(): T {
+       return Proxy.newProxyInstance(classLoader, arrayOf(this)) { proxy, method, args ->
+           ActivityLifeManager.getEventManager().invoke(proxy, method, args)
+       } as T
+    }
+
 
     /**
      * 注意如果当前的IHandlerChooseViewModel 子类不是
      */
     fun <I : IHandlerChooseViewModel<*>> I.wantPick() = getHolderBusiness()?.let {
-            return@let it.getNext(HandlerChooseBusiness::class.java)
-        } ?: HandlerChooseBusiness(this)
+        return@let it.getNext(HandlerChooseBusiness::class.java)
+    } ?: HandlerChooseBusiness(this)
 
 
 }

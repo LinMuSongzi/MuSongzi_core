@@ -1,8 +1,11 @@
 package com.musongzi.test.simple
 
 import android.util.Log
+import com.musongzi.core.ExtensionMethod.event
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.databinding.FragmentTestMainBinding
+import com.musongzi.core.itf.IClient
+import com.musongzi.core.itf.INext
 import com.musongzi.test.ITestClient
 import com.musongzi.test.vm.TestViewModel
 
@@ -13,7 +16,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     }
 
     override fun initEvent() {
-
+        IClient::class.java.event().disconnect()
     }
 
     override fun initView() {
