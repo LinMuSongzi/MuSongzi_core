@@ -118,8 +118,111 @@ object ExtensionMethod{
                 }
     
     
+简单事务管理
+    com.android.playmusic.l.viewmodel.imp.EventManger
+    
+    使用方式调用  {interface.class}.event.{method}即可
+    
+    任何注册接口和其父类方法都会被回调
+    
+    例如：
+    --->
+    class MyApplication : MultiDexApplication(){
+    companion object {
+        const val TAG = "MyApplication"
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+    //注册了接口
+        registerEvent(IClient::class.java){
+            object:IClient{
+                override fun showDialog(msg: String?) {
+                    Log.i(TAG, "EventManger showDialog: $msg ${this@MyApplication}")
+                }
+
+                override fun disimissDialog() {
+
+                }
+
+                override fun disconnect() {
+
+                }
+            }
+        }
+    }
     
     
+    -->
+   class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
+
+        override fun initData() {
+        }
+
+        override fun initEvent() {
+            //使用接口回调
+            ITestClient::class.java.event()?.showDialog("哈哈哈")
+        }
+
+        override fun showDialog(msg: String?) {
+            super.showDialog(msg)
+            Log.i(TAG, "EventManger showDialog: msg = $msg ")
+        }
+
+
+        override fun initView() {
+            //注册了接口
+            registerEvent(IClient::class.java) {
+                this
+            }
+
+            Log.i(TAG, "initView: ${getMainViewModel()}")
+            getMainViewModel()?.business?.checkBanner()
+        }
+
+        override fun showText(msg: String) {
+            dataBinding.idMainContentTv.text = msg
+        }
+    }
+    
+    
+    
+    核心方法扩展方法
+    ---->
+    com.musongzi.core.base.manager.ActivityLifeManager
+    
+      fun <T> IHolderLifecycle.registerEvent(e: Class<T>, h: () -> T) {
+            if (!e.isInterface) {
+                Log.i("registerEvent", ": 1 ")
+                return
+            }
+            Log.i("registerEvent", ": 2 ")
+            getThisLifecycle()?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
+                override fun onCreate(owner: LifecycleOwner) {
+                    Log.i("registerEvent", ": 3 ")
+                    getEventManager().put(e, h)
+                }
+
+                override fun onDestroy(owner: LifecycleOwner) {
+                    Log.i("registerEvent", ": 4 ")
+                    getEventManager().remove(e, h.invoke())
+                }
+
+            })
+        }
+
+        fun <T> Class<T>.event(): T? {
+            return if (!isInterface) {
+                Log.i("eventFind", ": 1 必须是接口")
+                null
+            } else {
+                Log.i("eventFind", ": 2 ")
+                Proxy.newProxyInstance(classLoader, arrayOf(this)) { proxy, method, args ->
+                    Log.i("eventFind", ": 2 ")
+                    (getEventManager() as EventManger).asInvocationHandler().invoke(proxy, method, args)
+                } as T
+            }
+        }
     
     
     
