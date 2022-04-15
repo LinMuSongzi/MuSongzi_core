@@ -23,8 +23,6 @@ import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
-import com.musongzi.core.itf.IEventHelp
-import com.musongzi.core.itf.IEventManager
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
@@ -36,8 +34,6 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Consumer
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 
 object ExtensionMethod {
@@ -344,30 +340,6 @@ object ExtensionMethod {
     fun String.bean() = StringChooseBean().let {
         it.title = this
         it
-    }
-
-    fun <I : IEventHelp> IHolderLifecycle.addVideoHandler(e: Class<I>, h: () -> I) {
-        getThisLifecycle()?.let {
-            it.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onCreate(owner: LifecycleOwner) {
-                    ActivityLifeManager.getEventManager().put(e.name, h)
-                }
-
-                override fun onDestroy(owner: LifecycleOwner) {
-                    ActivityLifeManager.getEventManager().remove(e.name, h)
-                }
-
-            })
-        }
-    }
-
-    //    fun <I : IEventHelp> Any.callInteface(c: Class<I>): {
-//        ActivityLifeManager.getEventManager().call(c.name)
-//    }
-    fun <T> Class<T>.event(): T {
-       return Proxy.newProxyInstance(classLoader, arrayOf(this)) { proxy, method, args ->
-           ActivityLifeManager.getEventManager().invoke(proxy, method, args)
-       } as T
     }
 
 

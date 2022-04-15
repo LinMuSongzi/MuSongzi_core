@@ -8,11 +8,16 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.musongzi.core.itf.IEventManager
 import com.musongzi.core.itf.ISingleManager
+import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.util.ActivityThreadHelp
+import java.lang.reflect.Proxy
 
-class ActivityLifeManager private constructor() : ComponentCallbacks,Application.ActivityLifecycleCallbacks {
+class ActivityLifeManager private constructor() : ComponentCallbacks,
+    Application.ActivityLifecycleCallbacks {
 
     companion object {
         private val MANAGER = ActivityLifeManager()
@@ -27,14 +32,49 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,Application
         }
 
         fun getEventManager(): IEventManager {
-           return MANAGER.managers[EVENT_MANGER] as IEventManager
+            return MANAGER.managers[EVENT_MANGER] as IEventManager
         }
 
         const val EVENT_MANGER = "com.musongzi.core.base.manager.EventManger"
 
+
+        fun <T> IHolderLifecycle.registerEvent(e: Class<T>, h: () -> T) {
+            if (!e.isInterface) {
+                Log.i("registerEvent", ": 1 ")
+                return
+            }
+            Log.i("registerEvent", ": 2 ")
+            getThisLifecycle()?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
+                override fun onCreate(owner: LifecycleOwner) {
+                    Log.i("registerEvent", ": 3 ")
+                    getEventManager().put(e, h)
+                }
+
+                override fun onDestroy(owner: LifecycleOwner) {
+                    Log.i("registerEvent", ": 4 ")
+                    getEventManager().remove(e, h.invoke())
+                }
+
+            })
+        }
+
+        fun <T> Class<T>.event(): T? {
+            return if (!isInterface) {
+                Log.i("eventFind", ": 1 必须是接口")
+                null
+            } else {
+                Log.i("eventFind", ": 2 ")
+                Proxy.newProxyInstance(classLoader, arrayOf(this)) { proxy, method, args ->
+                    Log.i("eventFind", ": 2 ")
+                    (getEventManager() as EventManger).help.invoke(proxy, method, args)
+                } as T
+            }
+        }
+
     }
-    private lateinit var managerStr :List<String>
-    private val managers = HashMap<String,ISingleManager>()
+
+    private lateinit var managerStr: List<String>
+    private val managers = HashMap<String, ISingleManager>()
 
     init {
         ActivityThreadHelp.getCurrentApplication().let {
@@ -45,15 +85,13 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,Application
     }
 
 
-
-
     private fun initManager() {
         managerStr = ArrayList<String>().let {
             it.add(EVENT_MANGER)
             it
         }
 
-        for(v in managerStr){
+        for (v in managerStr) {
             val m = javaClass.classLoader!!.loadClass(v).newInstance() as ISingleManager
             m.onReady()
             managers[v] = m
@@ -147,5 +185,9 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,Application
         }
         return aList
     }
+
+
+
+
 
 }

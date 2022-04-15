@@ -1,43 +1,45 @@
 package com.musongzi.core.base.manager
 
-import com.musongzi.core.IVideoHandler
+import android.util.Log
 import com.musongzi.core.itf.IEventManager
+import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 
 internal class EventManger : IEventManager {
 
-
-    var classMap = HashMap<Class<*>, List<Any>>()
-
-
-    override fun put(name: String, h: () -> Any) {
-        TODO("Not yet implemented")
+    companion object {
+        const val TAG = "EventManger"
     }
 
+    var classMap = HashMap<Class<*>, Set<Any>>()
 
-    override fun remove(name: String, callBack: Any) {
-        TODO("Not yet implemented")
+    val help: EventMangerHelp by lazy {
+        EventMangerHelp(this@EventManger)
     }
 
-    override fun call(name: String) {
-        TODO("Not yet implemented")
+    override fun <T> put(name: Class<T>, h: () -> T) {
+        var c: LinkedHashSet<Any>? = classMap[name] as? LinkedHashSet<Any>
+        Log.i(TAG, ": put 0 ")
+        if (c == null) {
+            Log.i(TAG, ": put 1 ")
+            c = LinkedHashSet()
+            classMap[name] = c
+        }
+
+        c.add(h.invoke()!!)
+        Log.i(TAG, ": put 2 , size = " + c.size)
     }
 
+    override fun <T> remove(name: Class<T>, callBack: T) {
+        val c = classMap[name]
+        c?.let {
+            Log.i(TAG, ": remove 1 ,size = " + it.size)
+            (it as LinkedHashSet).remove(callBack)
+        }
+        Log.i(TAG, ": remove 2 ,size = " + c?.size)
+    }
 
     override fun onReady() {
-        TODO("Not yet implemented")
-    }
 
-    override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any? {
-        for (v in classMap.keys) {
-            if (v.isInstance(proxy)) {
-                for (instance in classMap[v]!!) {
-                   return method?.invoke(instance,args)
-                }
-                break
-            }
-        }
-        return null
     }
-
 }
