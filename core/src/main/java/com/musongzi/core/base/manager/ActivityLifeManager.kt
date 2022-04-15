@@ -74,7 +74,7 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
                 Log.i("eventFind", ": 2 ")
                 Proxy.newProxyInstance(classLoader, arrayOf(this)) { proxy, method, args ->
                     Log.i("eventFind", ": 2 ")
-                    (getEventManager() as EventManger).help.invoke(proxy, method, args)
+                    (getEventManager() as EventManger).asInvocationHandler().invoke(proxy, method, args)
                 } as T
             }
         }
