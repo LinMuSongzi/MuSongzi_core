@@ -19,7 +19,7 @@ class EventMangerHelp implements InvocationHandler {
             if (c.isInstance(proxy)) {
                 for (Object instance : eventManger.getClassMap().get(c)) {
                     method.invoke(instance, args);
-                    Log.i(EventManger.TAG, "invoke: class = " + c.getName() + " , method = " + method.getName());
+//                    Log.i(EventManger.TAG, "invoke: class = " + c.getName() + " , method = " + method.getName());
                 }
             }
         }

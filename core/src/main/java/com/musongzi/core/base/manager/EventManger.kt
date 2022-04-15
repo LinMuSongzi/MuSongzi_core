@@ -21,7 +21,7 @@ internal class EventManger : IEventManager {
         var c: LinkedHashSet<Any>? = classMap[name] as? LinkedHashSet<Any>
         Log.i(TAG, ": put 0 ")
         if (c == null) {
-            Log.i(TAG, ": put 1 ")
+            Log.i(TAG, ": put 1 list null add ")
             c = LinkedHashSet()
             classMap[name] = c
         }

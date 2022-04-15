@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.musongzi.core.ExtensionMethod.bean
+import com.musongzi.core.base.manager.ActivityLifeManager
+import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.RetrofitManager
+import com.musongzi.core.itf.IClient
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -14,13 +17,34 @@ import java.lang.reflect.Method
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MyApplication : MultiDexApplication() {
+class MyApplication : MultiDexApplication(){
     companion object {
         const val TAG = "MyApplication"
     }
 
     override fun onCreate() {
         super.onCreate()
+
+        registerEvent(IClient::class.java){
+            object:IClient{
+//                override fun showText(msg: String) {
+//
+//                }
+
+                override fun showDialog(msg: String?) {
+                    Log.i(TAG, "EventManger showDialog: $msg ${this@MyApplication}")
+                }
+
+                override fun disimissDialog() {
+
+                }
+
+                override fun disconnect() {
+
+                }
+            }
+        }
+
         Thread.UncaughtExceptionHandler { t, e ->
             Log.i(TAG, "onCreate: " + e.message + " , " + Arrays.toString(e.stackTrace) + "\n");
         }
@@ -62,4 +86,6 @@ class MyApplication : MultiDexApplication() {
 
         })
     }
+
+
 }

@@ -38,6 +38,14 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         const val EVENT_MANGER = "com.musongzi.core.base.manager.EventManger"
 
 
+        fun <T> registerEvent(e: Class<T>, h: () -> T) {
+            if (!e.isInterface) {
+                Log.i("registerEvent", ": 1 ")
+                return
+            }
+            getEventManager().put(e, h)
+        }
+
         fun <T> IHolderLifecycle.registerEvent(e: Class<T>, h: () -> T) {
             if (!e.isInterface) {
                 Log.i("registerEvent", ": 1 ")
@@ -185,9 +193,6 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         }
         return aList
     }
-
-
-
 
 
 }

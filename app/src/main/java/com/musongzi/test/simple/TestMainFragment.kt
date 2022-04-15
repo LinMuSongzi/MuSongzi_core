@@ -18,7 +18,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     }
 
     override fun initEvent() {
-        IClient::class.java.event()?.showDialog("哈哈哈")
+        ITestClient::class.java.event()?.showDialog("哈哈哈")
     }
 
     override fun showDialog(msg: String?) {
