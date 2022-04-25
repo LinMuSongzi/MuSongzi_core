@@ -12,6 +12,7 @@ import com.musongzi.core.util.ActivityThreadHelp;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -110,6 +111,8 @@ public class RetrofitManager {
 
         if (t == null) {
             if (want != null && want.getThisLifecycle() != null) {
+                final WeakReference<CallBack> c = new WeakReference(callBack);
+                final WeakReference<RetrofitManager> r = new WeakReference(MANAGER);
                 InvocationHandler invocationHandler = new InvocationHandler() {
                     private final Object[] emptyArgs = new Object[0];
 
@@ -120,11 +123,11 @@ public class RetrofitManager {
                         }
                         args = args != null ? args : emptyArgs;
                         Object returnInstance = null;
-                        if (callBack != null) {
-                            returnInstance = callBack.invoke(proxy, method, args);
+                        if (c.get() != null) {
+                            returnInstance = c.get().invoke(proxy, method, args);
                         }
                         if (returnInstance == null) {
-                            returnInstance = method.invoke(MANAGER.getApi(tClass), args);
+                            returnInstance = method.invoke(r.get().getApi(tClass), args);
                         }
 
                         if (method.getReturnType().isAssignableFrom(Observable.class)) {
@@ -147,7 +150,7 @@ public class RetrofitManager {
                         Log.i("Observable_Sub", "onDestroy: api " + flag + " , key = " + key);
                     }
                 });
-            }else {
+            } else {
                 t = RetrofitManager.getInstance().retrofit.create(tClass);
             }
             apis.put(key, t);

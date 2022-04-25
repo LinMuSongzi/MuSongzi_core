@@ -32,7 +32,7 @@ class MyApplication : MultiDexApplication(){
 //                }
 
                 override fun showDialog(msg: String?) {
-                    Log.i(TAG, "EventManger showDialog: $msg ${this@MyApplication}")
+//                    Log.i(TAG, "EventManger showDialog: $msg ${this@MyApplication}")
                 }
 
                 override fun disimissDialog() {

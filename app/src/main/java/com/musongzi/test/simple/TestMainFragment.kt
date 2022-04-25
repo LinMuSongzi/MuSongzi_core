@@ -18,12 +18,22 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     }
 
     override fun initEvent() {
-        ITestClient::class.java.event()?.showDialog("哈哈哈")
+        Thread {
+            val sl = System.currentTimeMillis()
+            Log.i(TAG, "initEvent: start $sl")
+            for (v in 1..10_000_000) {
+                ITestClient::class.java.event()?.showDialog("哈哈哈")
+            }
+            val el = System.currentTimeMillis()
+            Log.i(TAG, "initEvent:   end $el")
+            Log.i(TAG, "initEvent: ${sl - el}")
+        }.start()
+
     }
 
     override fun showDialog(msg: String?) {
-        super.showDialog(msg)
-        Log.i(TAG, "EventManger showDialog: msg = $msg ")
+//        super.showDialog(msg)
+//        Log.i(TAG, "EventManger showDialog: msg = $msg ")
     }
 
 
