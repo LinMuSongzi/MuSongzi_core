@@ -7,7 +7,6 @@ import com.musongzi.core.base.manager.ActivityLifeManager.Companion.event
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.databinding.FragmentTestMainBinding
 import com.musongzi.core.itf.IClient
-import com.musongzi.core.itf.INext
 import com.musongzi.test.ITestClient
 import com.musongzi.test.vm.TestViewModel
 
@@ -21,9 +20,9 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
         Thread {
             val sl = System.currentTimeMillis()
             Log.i(TAG, "initEvent: start $sl")
-            for (v in 1..10_000_000) {
+//            for (v in 1..10_000_000) {
                 ITestClient::class.java.event()?.showDialog("哈哈哈")
-            }
+//            }
             val el = System.currentTimeMillis()
             Log.i(TAG, "initEvent:   end $el")
             Log.i(TAG, "initEvent: ${sl - el}")
