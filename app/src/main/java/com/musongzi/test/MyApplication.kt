@@ -10,9 +10,13 @@ import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.itf.IClient
+import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
 import okhttp3.OkHttpClient
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import retrofit2.Retrofit
 import java.lang.reflect.Method
 import java.util.*
@@ -23,9 +27,14 @@ class MyApplication : MultiDexApplication(){
         const val TAG = "MyApplication"
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessage(d: DiscoverBannerBean){
+
+    }
+
     override fun onCreate() {
         super.onCreate()
-
+        EventBus.getDefault().register(this)
         registerEvent(ILoginEvent::class.java){
             object:ILoginEvent{
                 override fun onLogin() {
