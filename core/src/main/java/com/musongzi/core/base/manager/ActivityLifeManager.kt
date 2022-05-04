@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -67,16 +66,7 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         }
 
         fun <T> Class<T>.event(): T? {
-            return if (!isInterface) {
-                Log.i("eventFind", ": 1 必须是接口")
-                null
-            } else {
-                Log.i("eventFind", ": 2 ")
-                Proxy.newProxyInstance(classLoader, arrayOf(this)) { proxy, method, args ->
-                    Log.i("eventFind", ": 2 ")
-                    (getEventManager() as EventManger).asInvocationHandler().invoke(proxy, method, args)
-                } as T
-            }
+            return  getEventManager().asInterface(this)
         }
 
     }

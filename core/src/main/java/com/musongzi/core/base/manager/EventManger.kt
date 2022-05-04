@@ -3,6 +3,7 @@ package com.musongzi.core.base.manager
 import android.util.Log
 import com.musongzi.core.itf.IEventManager
 import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Proxy
 
 /**
  * 事件事务管理
@@ -18,6 +19,7 @@ internal class EventManger : IEventManager {
     }
 
     var classMap = HashMap<Class<*>, Set<Any>>()
+    var arrayProxyInstanceMap = HashMap<Class<*>, Any>()
 
     private val help: EventMangerHelp by lazy {
         EventMangerHelp(this@EventManger)
@@ -39,10 +41,24 @@ internal class EventManger : IEventManager {
     override fun <T> remove(name: Class<T>, callBack: T) {
         val c = classMap[name]
         c?.let {
-//            Log.i(TAG, ": remove 1 ,size = " + it.size)
             (it as LinkedHashSet).remove(callBack)
         }
-//        Log.i(TAG, ": remove 2 ,size = " + c?.size)
+    }
+
+    override fun <T> asInterface(clazz: Class<T>): T? {
+        return if (!clazz.isInterface) {
+            null;
+        } else {
+            val api = arrayProxyInstanceMap
+            var instance = api[clazz]
+            if (instance == null) {
+                instance = Proxy.newProxyInstance(javaClass.classLoader, arrayOf(clazz)) { proxy, method, args ->
+                    asInvocationHandler().invoke(proxy, method, args)
+                }
+                api[clazz] = instance
+            }
+            instance as T
+        }
     }
 
     fun asInvocationHandler() = help

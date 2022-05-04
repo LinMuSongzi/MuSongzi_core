@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 
 class EventMangerHelp implements InvocationHandler {
 
@@ -18,11 +19,12 @@ class EventMangerHelp implements InvocationHandler {
         for (Class<?> c : eventManger.getClassMap().keySet()) {
             if (c.isInstance(proxy)) {
                 for (Object instance : eventManger.getClassMap().get(c)) {
+//                    Log.i("eventFind", ": " + method.getName() + " , " + instance);
                     method.invoke(instance, args);
-//                    Log.i(EventManger.TAG, "invoke: class = " + c.getName() + " , method = " + method.getName());
                 }
             }
         }
         return null;
     }
+
 }

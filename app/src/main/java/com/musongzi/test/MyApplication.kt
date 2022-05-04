@@ -10,7 +10,6 @@ import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.itf.IClient
-import com.musongzi.test.event.ILoginEvent
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
