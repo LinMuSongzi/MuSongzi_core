@@ -8,9 +8,17 @@ import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEven
 import com.musongzi.core.databinding.FragmentTestMainBinding
 import com.musongzi.core.itf.IClient
 import com.musongzi.test.ITestClient
+import com.musongzi.test.event.ILoginEvent
 import com.musongzi.test.vm.TestViewModel
+import java.lang.Math.abs
+import java.text.SimpleDateFormat
 
-class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
+class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient ,ILoginEvent{
+
+    companion object
+    {
+        const val FOTMAT_DATA = "MM:dd HH:mm:ss:SSS"
+    }
 
     override fun initData() {
 //        showDialog("")
@@ -19,13 +27,13 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     override fun initEvent() {
         Thread {
             val sl = System.currentTimeMillis()
-            Log.i(TAG, "initEvent: start $sl")
-//            for (v in 1..10_000_000) {
-                ITestClient::class.java.event()?.showDialog("哈哈哈")
-//            }
+            Log.i(TAG, "initEvent: start ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}")
+            for (v in 1..1_000_000) {
+                ILoginEvent::class.java.event()?.onLogin()
+            }
             val el = System.currentTimeMillis()
-            Log.i(TAG, "initEvent:   end $el")
-            Log.i(TAG, "initEvent: ${sl - el}")
+            Log.i(TAG, "initEvent:   end ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}")
+            Log.i(TAG, "initEvent: ${abs(sl - el)}")
         }.start()
 
     }
@@ -38,7 +46,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
     override fun initView() {
 
-        registerEvent(IClient::class.java) {
+        registerEvent(ILoginEvent::class.java) {
             this
         }
 
@@ -48,6 +56,17 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
     override fun showText(msg: String) {
         dataBinding.idMainContentTv.text = msg
+    }
+
+    override fun onLogin() {
+//        Log.i(TAG, "onLogin: 1")
+//        var a = 0
+//        a++
+//        Log.i(TAG, "onLogin: $a")
+    }
+
+    override fun onLogout() {
+
     }
 
 
