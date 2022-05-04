@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.musongzi.core.ExtensionMethod
+import com.musongzi.core.ExtensionMethod.analysisCollectionsEngine
 import com.musongzi.test.databinding.ActivityMainBinding
 import com.musongzi.test.databinding.ActivityTowBinding
 import com.musongzi.test.engine.ArrayEngine
@@ -29,6 +30,6 @@ class TowActivity : AppCompatActivity() {
     }
 
     private fun createFragment2(): Fragment {
-        return ExtensionMethod.analysisCollectionsEngine(ArrayEngine::class.java)
+        return analysisCollectionsEngine(ArrayEngine::class.java)
     }
 }

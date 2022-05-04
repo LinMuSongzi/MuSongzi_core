@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.business.HandlerChooseBusiness
+import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.IRecycleViewClient
@@ -323,7 +324,7 @@ object ExtensionMethod {
     }
 
 
-    fun analysisCollectionsEngine(eClass: Class<*>): Fragment {
+    fun <E: BaseMoreViewEngine<*,*>> analysisCollectionsEngine(eClass: Class<E>): Fragment {
         val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
         val mCollectionsInfo = cAnnotation?.let {
             CollectionsViewModel.CollectionsInfo(it)
