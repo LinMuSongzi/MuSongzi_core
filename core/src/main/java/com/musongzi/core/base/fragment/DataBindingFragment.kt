@@ -38,7 +38,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
 //    override fun getNextByClass(nextClass: Class<*>): IClient?  = null
 
-    override fun getHodlerActivity(): FragmentActivity? = activity
+    override fun getHolderActivity(): FragmentActivity? = activity
 
     override fun getMainLifecycle(): IHolderActivity? = requireActivity() as? IHolderActivity
 

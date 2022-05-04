@@ -1,24 +1,30 @@
 package com.musongzi.test.simple
 
-import android.provider.Contacts
 import android.util.Log
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.event
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.databinding.FragmentTestMainBinding
-import com.musongzi.core.itf.IClient
-import com.musongzi.core.itf.INext
 import com.musongzi.test.ITestClient
+import com.musongzi.test.event.ILoginEvent
 import com.musongzi.test.vm.TestViewModel
 
-class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
+class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient,
+    ILoginEvent {
 
     override fun initData() {
 //        showDialog("")
     }
 
     override fun initEvent() {
-        ITestClient::class.java.event()?.showDialog("哈哈哈")
+        Thread {
+            val s = System.currentTimeMillis()
+            for (v in 1..200000) {
+                ILoginEvent::class.java.event()?.onLogin()
+            }
+            Log.i(TAG, "initEvent: " + (System.currentTimeMillis() - s)/1000)
+        }.start()
+
     }
 
     override fun showDialog(msg: String?) {
@@ -29,7 +35,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
     override fun initView() {
 
-        registerEvent(IClient::class.java) {
+        registerEvent(ILoginEvent::class.java) {
             this
         }
 
@@ -39,6 +45,14 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
     override fun showText(msg: String) {
         dataBinding.idMainContentTv.text = msg
+    }
+
+    override fun onLogin() {
+        //  Log.i(TAG, "onLogine: TestMainFragment")
+    }
+
+    override fun onLogout() {
+        // Log.i(TAG, "onLogout: TestMainFragment")
     }
 
 

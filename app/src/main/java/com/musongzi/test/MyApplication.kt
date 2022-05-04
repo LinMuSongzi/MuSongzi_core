@@ -10,6 +10,7 @@ import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.itf.IClient
+import com.musongzi.test.event.ILoginEvent
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -25,23 +26,16 @@ class MyApplication : MultiDexApplication(){
     override fun onCreate() {
         super.onCreate()
 
-        registerEvent(IClient::class.java){
-            object:IClient{
-//                override fun showText(msg: String) {
-//
-//                }
-
-                override fun showDialog(msg: String?) {
-                    Log.i(TAG, "EventManger showDialog: $msg ${this@MyApplication}")
+        registerEvent(ILoginEvent::class.java){
+            object:ILoginEvent{
+                override fun onLogin() {
+                   // Log.i(TAG, "onLogine: MyApplication ")
                 }
 
-                override fun disimissDialog() {
-
+                override fun onLogout() {
+                   // Log.i(TAG, "onLogout: MyApplication ")
                 }
 
-                override fun disconnect() {
-
-                }
             }
         }
 

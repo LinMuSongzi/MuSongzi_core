@@ -29,4 +29,8 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H> ,IWa
         return holderActivity?.bindToLifecycle()
     }
 
+//    companion object{
+//        const val
+//    }
+
 }

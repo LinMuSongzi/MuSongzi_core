@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.IAgent
+import com.musongzi.core.itf.IAgentHolder
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.*
@@ -15,7 +16,9 @@ abstract class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHolderA
     protected val TAG = javaClass.simpleName
 
     private var savedInstanceStateRf : WeakReference<Bundle?>? = null
-    lateinit var business: B
+    val business: B by lazy{
+        createBusiness()
+    }
     protected var client: C? = null
 
     override fun getMainLifecycle(): IHolderLifecycle? = super.holderActivity?.getMainLifecycle()
@@ -33,16 +36,18 @@ abstract class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHolderA
 
 
     override fun attachNow(t: IHolderActivity?) {
-        if (isAttachNow()) {
-            return
+        synchronized(this) {
+            if (isAttachNow()) {
+                return
+            }
+            super.attachNow(t)
+            client = t?.getClient() as? C
+            (business as? IAgentHolder<IAgent>)?.setAgentModel(this)
+            business.afterHandlerBusiness()
         }
-        super.attachNow(t)
-        client = t?.getClient() as? C
-        business = createBusiness()
-        (business as? BaseLifeBusiness<IAgent>)?.setAgentModel(this)
-        business.afterHandlerBusiness()
     }
 
+    @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
     fun setHolderClient(client: C) {
         this.client = client;
     }

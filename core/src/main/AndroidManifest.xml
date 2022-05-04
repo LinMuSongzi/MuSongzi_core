@@ -17,7 +17,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="com.musongzi.core.base.HodlerInit"
+                android:name="com.musongzi.core.base.HolderInit"
                 android:value="@string/androidx_startup" />
         </provider>
         

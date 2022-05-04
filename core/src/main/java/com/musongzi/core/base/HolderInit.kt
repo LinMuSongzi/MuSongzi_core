@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.startup.Initializer
 import com.musongzi.core.base.manager.ActivityLifeManager
 
-class HodlerInit :Initializer<ActivityLifeManager>{
+class HolderInit :Initializer<ActivityLifeManager>{
 
     override fun create(context: Context): ActivityLifeManager {
        return ActivityLifeManager.getInstance()
