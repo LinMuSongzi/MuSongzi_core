@@ -38,11 +38,12 @@ class MyApplication : MultiDexApplication(){
         registerEvent(ILoginEvent::class.java){
             object:ILoginEvent{
                 override fun onLogin() {
-                   // Log.i(TAG, "onLogine: MyApplication ")
+//                    Log.i(TAG, "onLogin: MyApplication")
+                    Log.i(TAG, "onLogin: MyApplication ")
                 }
 
                 override fun onLogout() {
-                   // Log.i(TAG, "onLogout: MyApplication ")
+                    Log.i(TAG, "onLogout: MyApplication ")
                 }
 
             }

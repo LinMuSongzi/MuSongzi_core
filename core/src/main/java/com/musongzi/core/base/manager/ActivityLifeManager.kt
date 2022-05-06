@@ -34,7 +34,7 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
             return MANAGER.managers[EVENT_MANGER] as IEventManager
         }
 
-        const val EVENT_MANGER = "com.musongzi.core.base.manager.EventManger"
+        const val EVENT_MANGER = "com.musongzi.core.base.manager.EventManager"
 
 
         fun <T> registerEvent(e: Class<T>, h: () -> T) {

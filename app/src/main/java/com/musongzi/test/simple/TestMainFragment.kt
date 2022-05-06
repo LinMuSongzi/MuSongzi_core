@@ -30,22 +30,22 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
 
     override fun initEvent() {
-        Thread {
+//        Thread {
             val sl = System.currentTimeMillis()
             activity?.runOnUiThread {
                 Log.i(TAG, "initEvent: start ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}")
             }
-            for (v in 1..1_000_000) {
+//            for (v in 1..1_000_000) {
                 ILoginEvent::class.java.event()?.onLogin()
 //                EventBus.getDefault().post(DiscoverBannerBean())
-            }
+//            }
             val el = System.currentTimeMillis()
             activity?.runOnUiThread {
                 Log.i(TAG, "initEvent:   end ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}")
                 Log.i(TAG, "initEvent: ${abs(sl - el)}")
             }
 
-        }.start()
+//        }.start()
 
     }
 
@@ -86,7 +86,9 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     override fun onLogin() {
         count++
         if(count == 1000000){
-            Log.i(TAG, "initEvent: $count")
+            Log.i(TAG, "onLogin initEvent: $count")
+        }else{
+            Log.i(TAG, "onLogin initEvent: $count")
         }
     }
 
