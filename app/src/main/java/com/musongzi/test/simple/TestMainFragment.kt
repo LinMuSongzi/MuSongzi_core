@@ -10,6 +10,7 @@ import com.musongzi.core.itf.IClient
 import com.musongzi.test.ITestClient
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
+import com.musongzi.test.event.IMusicEvent
 import com.musongzi.test.vm.TestViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -17,10 +18,11 @@ import org.greenrobot.eventbus.ThreadMode
 import java.lang.Math.abs
 import java.text.SimpleDateFormat
 
-class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient ,ILoginEvent{
+class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient,
+    ILoginEvent {
 
-    companion object
-    {
+    companion object {
+        const val MAX_OUNT = 100_000
         const val FOTMAT_DATA = "MM:dd HH:mm:ss:SSS"
     }
 
@@ -28,34 +30,53 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 //        showDialog("")
     }
 
-
-    override fun initEvent() {
+    fun testClick() {
 //        Thread {
             val sl = System.currentTimeMillis()
             activity?.runOnUiThread {
-                Log.i(TAG, "initEvent: start ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}")
+                Log.i(
+                    TAG,
+                    "initEvent: start ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}"
+                )
             }
-//            for (v in 1..1_000_000) {
-                ILoginEvent::class.java.event()?.onLogin()
-//                EventBus.getDefault().post(DiscoverBannerBean())
+//            for (v in 1..MAX_OUNT) {
+                IMusicEvent::class.java.event()?.onLogin()
+//            IMusicEvent::class.java.event()?.play()
+//            EventBus.getDefault().post(DiscoverBannerBean())
 //            }
             val el = System.currentTimeMillis()
             activity?.runOnUiThread {
-                Log.i(TAG, "initEvent:   end ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}")
-                Log.i(TAG, "initEvent: ${abs(sl - el)}")
+                Log.i(
+                    TAG,
+                    "initEvent:   end ${SimpleDateFormat(FOTMAT_DATA).format(System.currentTimeMillis())}"
+                )
+                Log.i(TAG, "initEvent: time ${abs(sl - el)}")
             }
 
 //        }.start()
+    }
 
+
+    override fun initEvent() {
+        dataBinding.idMainContentTv.setOnClickListener {
+            testClick()
+        }
     }
 
     var count = 0
 
+    override fun onLogin() {
+//        count++
+//        if (count == MAX_OUNT) {
+//            Log.i(TAG, "initEvent onLogin: count = $count")
+//        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessage(d: DiscoverBannerBean){
+    fun onMessage(d: DiscoverBannerBean) {
         count++
-        if(count == 1000000){
-            Log.i(TAG, "initEvent: $count")
+        if (count == MAX_OUNT) {
+            Log.i(TAG, "initEvent onMessage: $count")
         }
     }
 
@@ -83,14 +104,6 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
         dataBinding.idMainContentTv.text = msg
     }
 
-    override fun onLogin() {
-        count++
-        if(count == 1000000){
-            Log.i(TAG, "onLogin initEvent: $count")
-        }else{
-            Log.i(TAG, "onLogin initEvent: $count")
-        }
-    }
 
     override fun onLogout() {
 

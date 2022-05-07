@@ -12,6 +12,7 @@ import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.itf.IClient
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
+import com.musongzi.test.event.IMusicEvent
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
@@ -35,21 +36,25 @@ class MyApplication : MultiDexApplication(){
     override fun onCreate() {
         super.onCreate()
         EventBus.getDefault().register(this)
-        registerEvent(ILoginEvent::class.java){
-            object:ILoginEvent{
+        registerEvent(IMusicEvent::class.java){
+            object:IMusicEvent{
+                override fun play() {
+                    Log.i(TAG, "initEvent play: MyApplication")
+                }
+
                 override fun onLogin() {
-//                    Log.i(TAG, "onLogin: MyApplication")
-                    Log.i(TAG, "onLogin: MyApplication ")
+//                    Log.i(TAG, "initEvent onLogin: MyApplication")
+//                    Log.i(TAG, "onLogin: MyApplication ")
                 }
 
                 override fun onLogout() {
-                    Log.i(TAG, "onLogout: MyApplication ")
+                    Log.i(TAG, "initEvent onLogout: MyApplication ")
                 }
 
             }
         }
 
-        Thread.UncaughtExceptionHandler { t, e ->
+        Thread.UncaughtExceptionHandler { _, e ->
             Log.i(TAG, "onCreate: " + e.message + " , " + Arrays.toString(e.stackTrace) + "\n");
         }
         RetrofitManager.getInstance().init(object : RetrofitManager.CallBack {
