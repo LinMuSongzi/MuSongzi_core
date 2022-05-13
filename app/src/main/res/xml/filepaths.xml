@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<paths>
+    <external-path
+        name="camera_photos"
+        path="." />
+
+    <external-path
+        name="download"
+        path="Download" />
+    <external-files-path
+        name="share_files"
+        path="." />
+</paths>
+
