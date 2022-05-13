@@ -69,7 +69,7 @@ public class Enter {
     //0000_0000 0000_0000 1111_1111 0000_0000
     static int LOW_3_3_MARK = LOW_3_MARK << bThr;
 
-    public static void jiami(InputStream inputStream, OutputStream outputStream) throws Exception {
+    public static void jiami(InputStream inputStream, OutputStream outputStream,boolean isDecord) throws Exception {
 
 
         int read;
@@ -80,18 +80,19 @@ public class Enter {
 //        int low16 = re2 & LOW_8_8_MARK;
 //        re2 &= ~(LOW_8_MARK | LOW_8_8_MARK);
 //        re2 |= (low8 << 8) | (low16 >>> 8);
-        byte[] bytes = new byte[10];
+        byte[] bytes = new byte[1024];
 
         do {
             read = inputStream.read(bytes);
             int re2 = read;
+            Log.i(TAG, "jiami: read = " + read);
             if (read == 0) {
                 continue;
             }
             if (read == -1) {
                 break;
             }
-            for (int index = 0; index < 10; index++) {
+            for (int index = 0; index < 1024; index++) {
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append(TAG);
                 byte bss = bytes[index];
@@ -104,6 +105,9 @@ public class Enter {
                 stringBuffer.append("\n thisByte  " + bss);
 
                 int thisByte = bss;//!flag ? bss * -1 : bss;
+                if(isDecord) {
+                    thisByte = thisByte ^ LOW_3_MARK;
+                }
                 //0000 1011
                 //0000
 
@@ -120,8 +124,11 @@ public class Enter {
 //                if (!flag) {
 //                    re2 *= -1;
 //                }
+                if(!isDecord) {
+                    re2 = re2 ^ LOW_3_MARK;
+                }
                 stringBuffer.append(" \n re2 " + re2 + " , (low3 << 3) = " + (low3 << 3) + " , (center3 >> 3) = " + (center3 >> 3));
-                Log.i(TAG, stringBuffer.toString() + "\n\n");
+//                Log.i(TAG, stringBuffer.toString() + "\n\n");
 
                 outputStream.write(re2);
             }

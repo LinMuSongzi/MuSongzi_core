@@ -9,14 +9,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/id_edittext"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:hint="请输入"
+            android:textSize="15dp"
+            android:textColor="#333333"
+            android:layout_above="@+id/id_main_content_tv"
+            />
+
+
+
+
         <TextView
             android:id="@+id/id_main_content_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="哈哈哈哈"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp"
+            android:text="写入"
             android:textColor="#0f79d1"
-            android:textSize="15dp" />
+            android:textSize="18dp" />
 
     </RelativeLayout>
 </layout>
