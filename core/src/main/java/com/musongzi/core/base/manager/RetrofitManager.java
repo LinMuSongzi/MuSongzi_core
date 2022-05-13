@@ -111,8 +111,8 @@ public class RetrofitManager {
 
         if (t == null) {
             if (want != null && want.getThisLifecycle() != null) {
-                final WeakReference<CallBack> c = new WeakReference(callBack);
-                final WeakReference<RetrofitManager> r = new WeakReference(MANAGER);
+                final WeakReference<CallBack> c = new WeakReference<>(callBack);
+                final WeakReference<RetrofitManager> r = new WeakReference<>(MANAGER);
                 InvocationHandler invocationHandler = new InvocationHandler() {
                     private final Object[] emptyArgs = new Object[0];
 
@@ -139,11 +139,6 @@ public class RetrofitManager {
 
                 t = (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class<?>[]{tClass}, invocationHandler);
                 want.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
-                    @Override
-                    public void onCreate(@NonNull LifecycleOwner owner) {
-//                    Log.i("Observable_Sub", "onCreate api: " + tClass);
-                    }
-
                     @Override
                     public void onDestroy(@NonNull LifecycleOwner owner) {
                         Object flag = RetrofitManager.getInstance().apis.remove(key);

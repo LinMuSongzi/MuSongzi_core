@@ -9,10 +9,12 @@ import com.musongzi.test.Api
 
 open class BaseViewModel<C : IClient, B : IBusiness> : MszViewModel<C, B>(), IHolderApi<Api> {
 
-    override fun getApi(): Api {
-        return RetrofitManager.getInstance().getApi(Api::class.java, this)
+    private val apiInstance: Api by lazy {
+        RetrofitManager.getInstance().getApi(Api::class.java, this)
     }
 
-
+    override fun getApi(): Api {
+        return apiInstance
+    }
 
 }

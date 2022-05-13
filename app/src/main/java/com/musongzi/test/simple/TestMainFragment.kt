@@ -40,7 +40,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
                 )
             }
 //            for (v in 1..MAX_OUNT) {
-                IMusicEvent::class.java.event()?.onLogin()
+                ILoginEvent::class.java.event()?.onLogin()
 //            IMusicEvent::class.java.event()?.play()
 //            EventBus.getDefault().post(DiscoverBannerBean())
 //            }
@@ -68,7 +68,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     override fun onLogin() {
 //        count++
 //        if (count == MAX_OUNT) {
-//            Log.i(TAG, "initEvent onLogin: count = $count")
+            Log.i(TAG, "initEvent onLogin: count = $count")
 //        }
     }
 

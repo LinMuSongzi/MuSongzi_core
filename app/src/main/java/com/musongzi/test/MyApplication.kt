@@ -43,7 +43,7 @@ class MyApplication : MultiDexApplication(){
                 }
 
                 override fun onLogin() {
-//                    Log.i(TAG, "initEvent onLogin: MyApplication")
+                    Log.i(TAG, "initEvent onLogin: MyApplication")
 //                    Log.i(TAG, "onLogin: MyApplication ")
                 }
 

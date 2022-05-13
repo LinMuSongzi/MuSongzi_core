@@ -1,8 +1,12 @@
 package com.musongzi.core.base.manager
 
+import android.content.Context
 import android.util.Log
 import com.musongzi.core.base.manager.event.EventMethodProxy
 import com.musongzi.core.itf.IEventManager
+import com.musongzi.core.util.ActivityThreadHelp
+import dalvik.system.DexFile
+import java.lang.Appendable
 import java.lang.Exception
 import java.lang.reflect.Proxy
 
@@ -36,6 +40,10 @@ internal class EventManager : IEventManager {
         if (!name.isInterface) {
             throw Exception("必须是接口才可以！！！！！！！！！")
         }
+        holderMap(name).add(h.invoke()!!)
+    }
+
+    override fun holderMap(name: Class<*>): HashSet<Any> {
         val mmap = instancesByClassMap
         var c: Pair<Pair<*, *>?, Set<Any>>? = mmap[name]
         val set: Set<Any>
@@ -49,13 +57,16 @@ internal class EventManager : IEventManager {
                 if (name.isAssignableFrom(k)) {
                     mmap[k]?.first?.second?.addParent(newMethod)
                 }
+                if (k.isAssignableFrom(name)) {
+                    mmap[k]?.first?.second?.addChild(newMethod)
+                }
             }
             instancesByClassMap[name] = c
 
         } else {
             set = c.second as HashSet<Any>
         }
-        set.add(h.invoke()!!)
+        return set;
     }
 
     override fun <T> remove(name: Class<T>, callBack: T) {
@@ -74,6 +85,24 @@ internal class EventManager : IEventManager {
     }
 
     override fun onReady() {
-
+//        val str = ActivityThreadHelp.getCurrentApplication().applicationInfo.metaData.getString("event_package")!!;
+//        for (v in getClassesNameListInPackage(str, ActivityThreadHelp.getCurrentApplication())) {
+//            holderMap(ActivityThreadHelp.getCurrentApplication().classLoader.loadClass(v))
+//        }
     }
+
+//    fun getClassesNameListInPackage(packageName: String, context: Context): List<String> {
+//        val realPackageName = "${context.packageName}.$packageName"
+//        val df = DexFile(context.packageCodePath)
+//        val enumration = df.entries()
+//        val list = mutableListOf<String>()
+//        while (enumration.hasMoreElements()) {
+//            val className = enumration.nextElement()
+//            if (className.contains(realPackageName)) {
+//                list.add(className)
+//            }
+//        }
+//        return list
+//    }
+
 }

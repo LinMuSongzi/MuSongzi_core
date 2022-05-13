@@ -10,12 +10,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import kotlin.Pair;
 
 public class EventMethodProxy implements InvocationHandler {
 
@@ -23,7 +20,8 @@ public class EventMethodProxy implements InvocationHandler {
     Class<?> aClass;
     final List<Method> methods = new ArrayList<Method>();
     final List<Class<?>> interfaces = new ArrayList<>();
-    final List<EventMethodProxy> parentAdd = new ArrayList<>();
+    final List<EventMethodProxy> parents = new ArrayList<>();
+    final List<EventMethodProxy> childs = new ArrayList<>();
     Set<Object> instanceSet;
     EventManager eventManager;
 
@@ -45,8 +43,8 @@ public class EventMethodProxy implements InvocationHandler {
         }
         Log.i(TAG, "invoke: " + method);
         try {
-            findParentMethod(method, args);
-            for (Object instance : classSetMap) {
+            Set<Object> ss = findParentMethod(this, method, args);
+            for (Object instance : ss) {
                 method.invoke(instance, args);
             }
         } catch (Exception ex) {
@@ -55,18 +53,49 @@ public class EventMethodProxy implements InvocationHandler {
         return null;
     }
 
-    private void findParentMethod(Method method, Object[] args) {
-        boolean parentFlag = methods.indexOf(method) < 0;
-        if (parentFlag) {
-            for (EventMethodProxy cc : parentAdd) {
-                cc.invoke(null, method, args);
+    private static Set<Object> findParentMethod(EventMethodProxy eventMethodProxy, Method method, Object[] args) throws Exception {
+        boolean isMyFlag = eventMethodProxy.methods.indexOf(method) >= 0;
+        if (isMyFlag) {
+            if (eventMethodProxy.childs.isEmpty()) {
+                return eventMethodProxy.instanceSet;
+            } else {
+                return findChildMethod(eventMethodProxy, method, args);
+            }
+        } else {
+            if (eventMethodProxy.parents.isEmpty()) {
+                throw new Exception("错误！");
+            } else {
+                Set<Object> set = new HashSet<>();
+                for (EventMethodProxy ep : eventMethodProxy.parents) {
+                    set.addAll(findParentMethod(ep, method, args));
+                }
+                return set;
             }
         }
     }
 
-    public void addParent(@NotNull EventMethodProxy k) {
+    private static Set<Object> findChildMethod(EventMethodProxy eventMethodProxy, Method method, Object[] args) throws Exception {
+        Set<Object> set = new HashSet<>();
+        for (EventMethodProxy child : eventMethodProxy.childs) {
+            if (!child.instanceSet.isEmpty()) {
+                set.addAll(child.instanceSet);
+            }
+            if (!child.childs.isEmpty()) {
+                set.addAll(findParentMethod(child, method, args));
+            }
+        }
+        return set;
+    }
+
+    public void addParent(@NotNull EventMethodProxy parent) {
         Log.i(TAG, "addParent: 有父类注册进来了");
-        Log.i(TAG, "addParent: 自己是：" + aClass.getCanonicalName() + " , 父类是：" + k.aClass.getCanonicalName());
-        parentAdd.add(k);
+        Log.i(TAG, "addParent: 自己是：" + aClass.getCanonicalName() + " , 父类是：" + parent.aClass.getCanonicalName());
+        parents.add(parent);
+    }
+
+    public void addChild(@NotNull EventMethodProxy child) {
+        Log.i(TAG, "addParent: 有子类类注册进来了");
+        Log.i(TAG, "addParent: 自己是：" + aClass.getCanonicalName() + " , 子类类是：" + child.aClass.getCanonicalName());
+        childs.add(child);
     }
 }
