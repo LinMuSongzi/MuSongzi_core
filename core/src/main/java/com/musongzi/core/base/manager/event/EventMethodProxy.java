@@ -103,6 +103,11 @@ public class EventMethodProxy implements InvocationHandler {
 //        childs.add(child);
 //    }
 
+
+    public Set<Object> getInstanceSet() {
+        return instanceSet;
+    }
+
     @NotNull
     public Object getInstance() {
         if(instance == null) {
