@@ -225,7 +225,9 @@ object ExtensionMethod{
         }
     
     
-    
+------ 1.0.1
+
+1，预期打算改进，eventmanager
     
     
     
