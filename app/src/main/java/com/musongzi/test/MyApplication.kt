@@ -36,7 +36,7 @@ class MyApplication : MultiDexApplication(){
     override fun onCreate() {
         super.onCreate()
         EventBus.getDefault().register(this)
-        registerEvent(IMusicEvent::class.java){
+        registerEvent(ILoginEvent::class.java){
             object:IMusicEvent{
                 override fun play() {
                     Log.i(TAG, "initEvent play: MyApplication")

@@ -34,7 +34,7 @@ internal class EventManager : IEventManager {
      *
      *
      */
-    var instancesByClassMap = HashMap<Class<*>, Pair<Pair<*, EventMethodProxy>?, Set<Any>>?>()
+    private var instancesByClassMap = HashMap<Class<*>, Pair<EventMethodProxy, Set<Any>>?/*所有注册的实例*/>()
 
     override fun <T> put(name: Class<T>, h: () -> T) {
         if (!name.isInterface) {
@@ -45,22 +45,23 @@ internal class EventManager : IEventManager {
 
     override fun holderMap(name: Class<*>): HashSet<Any> {
         val mmap = instancesByClassMap
-        var c: Pair<Pair<*, *>?, Set<Any>>? = mmap[name]
+        var c: Pair<EventMethodProxy, Set<Any>>? = mmap[name]
         val set: Set<Any>
         if (c == null) {
             set = HashSet();
             val newMethod = EventMethodProxy(this, name, set);
-            val instance = Proxy.newProxyInstance(javaClass.classLoader, arrayOf(name), newMethod)
-            val p2 = instance to newMethod
-            c = p2 to set
-            for (k in mmap.keys) {
-                if (name.isAssignableFrom(k)) {
-                    mmap[k]?.first?.second?.addParent(newMethod)
-                }
-                if (k.isAssignableFrom(name)) {
-                    mmap[k]?.first?.second?.addChild(newMethod)
-                }
-            }
+//            newMethod.instance
+            //Proxy.newProxyInstance(javaClass.classLoader, arrayOf(name), newMethod)
+//            val p2 = instance to newMethod
+            c = newMethod to set
+//            for (k in mmap.keys) {
+//                if (name.isAssignableFrom(k)) {
+//                    mmap[k]?.first?.second?.addParent(newMethod)
+//                }
+//                if (k.isAssignableFrom(name)) {
+//                    mmap[k]?.first?.second?.addChild(newMethod)
+//                }
+//            }
             instancesByClassMap[name] = c
 
         } else {
@@ -80,29 +81,12 @@ internal class EventManager : IEventManager {
         return if (!clazz.isInterface) {
             null;
         } else {
-            instancesByClassMap[clazz]?.first?.first as? T
+            instancesByClassMap[clazz]?.first?.instance as? T
         }
     }
 
     override fun onReady() {
-//        val str = ActivityThreadHelp.getCurrentApplication().applicationInfo.metaData.getString("event_package")!!;
-//        for (v in getClassesNameListInPackage(str, ActivityThreadHelp.getCurrentApplication())) {
-//            holderMap(ActivityThreadHelp.getCurrentApplication().classLoader.loadClass(v))
-//        }
     }
 
-//    fun getClassesNameListInPackage(packageName: String, context: Context): List<String> {
-//        val realPackageName = "${context.packageName}.$packageName"
-//        val df = DexFile(context.packageCodePath)
-//        val enumration = df.entries()
-//        val list = mutableListOf<String>()
-//        while (enumration.hasMoreElements()) {
-//            val className = enumration.nextElement()
-//            if (className.contains(realPackageName)) {
-//                list.add(className)
-//            }
-//        }
-//        return list
-//    }
 
 }

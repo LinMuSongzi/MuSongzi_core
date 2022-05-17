@@ -29,8 +29,8 @@ import org.greenrobot.eventbus.ThreadMode
  * @property dataPageSupport PageSupport<Item, Data> 数据分页引擎类
  * @property callBack IRefreshViewModel<Item> 回调模型
  * @property instanceAdapter Adapter<*> 子类需要实现的adapter，
-创建方式由[com.android.playmusic.l.business.itf.ISource]的扩展函数
-[com.android.playmusic.l.common.ExtensionMethod.adapter]实例化 ，可以根据业务实现多种type
+创建方式由[ISource]的扩展函数
+[ExtensionMethod.adapter]实例化 ，可以根据业务实现多种type
  * @property observer Observer<Data> 当前总体数据的一个观察者回调
  * @property initFlag Boolean 是否初始化
  */
