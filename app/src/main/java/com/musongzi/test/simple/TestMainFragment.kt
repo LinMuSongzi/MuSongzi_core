@@ -109,8 +109,8 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
             this
         }
 
-        Log.i(TAG, "initView: ${getMainViewModel()}")
-        getMainViewModel()?.business?.checkBanner()
+        Log.i(TAG, "initView: ${getViewModel()}")
+        getViewModel().business.checkBanner()
     }
 
     override fun onLogout() {

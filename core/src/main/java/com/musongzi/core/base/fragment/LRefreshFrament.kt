@@ -83,9 +83,9 @@ abstract class LRefreshFrament<V : @androidx.annotation.NonNull MszViewModel<*, 
     }
 
 
-    override fun getSource() = getMainViewModel() as? ISource<Item>
+    override fun getSource() = getViewModel() as? ISource<Item>
 
-    override fun getPageEngine() = getMainViewModel() as? IPageEngine<Item>
+    override fun getPageEngine() = getViewModel() as? IPageEngine<Item>
 
     override fun refreshView(): SmartRefreshLayout? = null
 

@@ -80,17 +80,24 @@ public class InjectionHelp {
     }
 
     @org.jetbrains.annotations.Nullable
-    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex) {
+    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class<?>[] classes) {
         if (javaClass.getSuperclass().getName().equals(name)) {
             Type type = javaClass.getGenericSuperclass();
             if (type instanceof ParameterizedType) {
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
                 if (types.length > actualTypeArgumentsViewModelIndex) {
                     Class c = (Class) types[actualTypeArgumentsViewModelIndex];
+                    if (classes != null && classes.length == 1) {
+                        classes[0] = c;
+                    }
                     return (V) viewModelProvider.get(c);
                 }
             }
         }
-        return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex);
+        return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex, classes);
+    }
+
+    public static <V> V getViewModel(@NotNull ViewModelProvider provider, @org.jetbrains.annotations.Nullable Class clazz) {
+        return (V) provider.get(clazz);
     }
 }

@@ -20,53 +20,68 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     DataBindingFragment<D>(),
     ViewModelProvider.Factory {
     protected val TAG = javaClass.simpleName
-    private var viewModel: V? = null
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
     private var tipDialog: Dialog? = null
+    private var modelProviderEnable = PROVIDER_NORMAL;
+
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
-        viewModel = instanceViewModel();
-        Log.i(TAG, "onCreateView: viewModel = $viewModel")
-        Log.i(TAG, "onCreateView: viewModel = ${viewModel?.getHolderBusiness()}\n")
+        arguments?.let {
+            modelProviderEnable = it.getInt(PROVIDER_MODEL_KEY, PROVIDER_NORMAL)
+        }
+        instanceViewModel();
+        Log.i(TAG, "onCreateView: viewModel = ${getViewModel()}")
+        Log.i(TAG, "onCreateView: viewModel = ${getViewModel()}\n")
         handlerArguments()
         return v;
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel = null
+    fun getViewModel(): V {
+        return InjectionHelp.getViewModel(getProvider(), CLASS_CACHE[0])
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
+
     protected open fun actualTypeArgumentsViewModelIndex(): Int = 0
 
     override fun superDatabindingName() = ModelFragment::class.java.name
-
-    fun getMainViewModel(): V? {
-        return viewModel
-    }
 
     protected open fun instanceViewModel(): V? = InjectionHelp.findViewModel(
         javaClass,
         superViewModelName(),
         getProvider(),
-        actualTypeArgumentsViewModelIndex()
+        actualTypeArgumentsViewModelIndex(),
+        if (CLASS_CACHE[0] == null) CLASS_CACHE else null
     )
 
     protected open fun superViewModelName(): String = ModelFragment::class.java.name
 
-    private fun getProvider(): ViewModelProvider = arguments?.let {
-        if (it.getBoolean(PROVIDER_MODEL_KEY, true)) {
-            getMainViewProvider()
-        } else {
-            getThisViewProvider()
+    private fun getProvider(): ViewModelProvider {
+        val p: ViewModelProvider
+        when {
+            modelProviderEnable.and(PROVIDER_MAIN) > 0 -> {
+                p = getMainViewProvider()
+            }
+            modelProviderEnable.and(PROVIDER_SINGLE) > 0 -> {
+                p = getThisViewProvider()
+            }
+            else -> {
+                modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
+                return getProvider()
+            }
         }
-    } ?: getMainViewProvider()
+
+        return p
+    }
+
+    protected open fun isSingleViewModelProvider(): Boolean {
+        return true
+    }
 
     private fun getMainViewProvider(): ViewModelProvider {
         if (mVp == null) {
@@ -82,14 +97,10 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         return vp!!
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel?.handlerSavedInstanceState(savedInstanceState)
+        getViewModel().handlerSavedInstanceState(savedInstanceState)
         initView()
         initData();
         initEvent()
@@ -133,6 +144,12 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     companion object {
         const val PROVIDER_MODEL_KEY = "provider_model_key"
+
+        val CLASS_CACHE = arrayOfNulls<Class<*>>(1)
+
+        const val PROVIDER_NORMAL = 1
+        const val PROVIDER_SINGLE = PROVIDER_NORMAL.shl(1);
+        const val PROVIDER_MAIN = PROVIDER_NORMAL.shl(2);
 
         fun composeProvider(b: Bundle?, flag: Boolean) {
             b?.putBoolean(PROVIDER_MODEL_KEY, flag)

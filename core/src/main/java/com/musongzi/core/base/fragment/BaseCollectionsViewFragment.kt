@@ -29,7 +29,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     abstract fun createRecycleViewClient(): IRefreshViewClient
 
     override fun initView() {
-        getMainViewModel()?.business?.handlerArguments(arguments)
+        getViewModel().business.handlerArguments(arguments)
     }
 
     override fun handlerArguments() {
@@ -38,13 +38,13 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     }
 
     override fun initEvent() {
-        (getMainViewModel()?.getHolderBusiness()?.base as? IHolderCollections)?.onRefreshViewClientEvent(
+        (getViewModel().getHolderBusiness().base as? IHolderCollections)?.onRefreshViewClientEvent(
             mRecycleViewClient
         );
     }
 
     override fun initData() {
-        getMainViewModel()?.getHolderBusiness()?.refresh()
+        getViewModel().getHolderBusiness().refresh()
     }
 
     override fun setRefresh(b: Boolean) {}
