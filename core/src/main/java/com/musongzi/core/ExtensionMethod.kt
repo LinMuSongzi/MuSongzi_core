@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -25,6 +26,7 @@ import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
 import com.musongzi.core.itf.holder.IHolderLifecycle
+import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
@@ -351,5 +353,12 @@ object ExtensionMethod {
         return@let it.getNext(HandlerChooseBusiness::class.java)
     } ?: HandlerChooseBusiness(this)
 
+    fun <V : ViewModel> Class<V>.topInstance(b: IHolderViewModelProvider?): V? {
+        return b?.topViewModelProvider()?.get(this)
+    }
+
+    fun <V : ViewModel> Class<V>.thisInstance(b: IHolderViewModelProvider?): V? {
+        return b?.thisViewModelProvider()?.get(this)
+    }
 
 }

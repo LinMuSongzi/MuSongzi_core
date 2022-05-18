@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.musongzi.core.base.client.FragmentClient
 import com.musongzi.core.base.client.FragmentControlClient
@@ -24,11 +25,26 @@ import com.musongzi.core.util.InjectionHelp
 import com.trello.rxlifecycle4.components.support.RxFragment
 
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
-    IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
+    IDisconnect, IHolderDataBinding<D>, FragmentControlClient,ViewModelProvider.Factory {
 
     lateinit var dataBinding: D
 
     lateinit var fControl: FragmentControlClient
+
+    private val mMainModelProvider:ViewModelProvider by lazy {
+        ViewModelProvider(requireActivity(),this)
+    }
+    private val mMyModelProvider:ViewModelProvider by lazy {
+        ViewModelProvider(this,this)
+    }
+
+    override fun topViewModelProvider(): ViewModelProvider {
+        return mMainModelProvider
+    }
+
+    override fun thisViewModelProvider(): ViewModelProvider {
+        return mMyModelProvider
+    }
 
     override fun layoutId(): Int = 0
 
@@ -36,7 +52,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     override fun getHolderParentFragmentManager(): FragmentManager? = parentFragmentManager
 
-//    override fun getNextByClass(nextClass: Class<*>): IClient?  = null
+//    override fun getNextByClass(nextClass: Class<*>): IClient?  = nul
 
     override fun getHolderActivity(): FragmentActivity? = activity
 
@@ -58,8 +74,6 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     override fun disconnect() {
         requireActivity().finish()
     }
-
-    override fun getMainViewModelProvider(): ViewModelStoreOwner = this
 
     override fun onCreateView(
         inflater: LayoutInflater,

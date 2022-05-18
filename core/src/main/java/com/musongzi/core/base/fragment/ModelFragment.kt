@@ -9,16 +9,13 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.musongzi.core.base.vm.CoreViewModel
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
-import java.lang.ref.WeakReference
 
 abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
-    DataBindingFragment<D>(),
-    ViewModelProvider.Factory {
+    DataBindingFragment<D>(){
     protected val TAG = javaClass.simpleName
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
@@ -36,7 +33,6 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         }
         instanceViewModel();
         Log.i(TAG, "onCreateView: viewModel = ${getViewModel()}")
-        Log.i(TAG, "onCreateView: viewModel = ${getViewModel()}\n")
         handlerArguments()
         return v;
     }
@@ -53,22 +49,22 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     protected open fun instanceViewModel(): V? = InjectionHelp.findViewModel(
         javaClass,
-        superViewModelName(),
+        superFragmentName(),
         getProvider(),
         actualTypeArgumentsViewModelIndex(),
         if (CLASS_CACHE[0] == null) CLASS_CACHE else null
     )
 
-    protected open fun superViewModelName(): String = ModelFragment::class.java.name
+    protected open fun superFragmentName(): String = ModelFragment::class.java.name
 
     private fun getProvider(): ViewModelProvider {
         val p: ViewModelProvider
         when {
             modelProviderEnable.and(PROVIDER_MAIN) > 0 -> {
-                p = getMainViewProvider()
+                p = topViewModelProvider()
             }
             modelProviderEnable.and(PROVIDER_SINGLE) > 0 -> {
-                p = getThisViewProvider()
+                p = thisViewModelProvider()
             }
             else -> {
                 modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
@@ -83,19 +79,19 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         return true
     }
 
-    private fun getMainViewProvider(): ViewModelProvider {
-        if (mVp == null) {
-            mVp = ViewModelProvider(getMainViewModelProvider(), this)
-        }
-        return mVp!!
-    }
-
-    private fun getThisViewProvider(): ViewModelProvider {
-        if (vp == null) {
-            vp = ViewModelProvider(this, this)
-        }
-        return vp!!
-    }
+//    private fun getMainViewProvider(): ViewModelProvider {
+//        if (mVp == null) {
+//            mVp = ViewModelProvider(getMainViewModelProvider(), this)
+//        }
+//        return mVp!!
+//    }
+//
+//    private fun getThisViewProvider(): ViewModelProvider {
+//        if (vp == null) {
+//            vp = ViewModelProvider(this, this)
+//        }
+//        return vp!!
+//    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -21,7 +21,7 @@ class TowActivity : AppCompatActivity() {
         d = DataBindingUtil.setContentView(this, R.layout.activity_tow)
         supportFragmentManager.beginTransaction().replace(
             R.id.id_content_layout,
-            createFragment2(), "haha"
+            createFragment1(), "haha"
         ).commitAllowingStateLoss()
     }
 

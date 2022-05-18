@@ -1,12 +1,12 @@
 package com.musongzi.test.simple
 
-import android.os.Environment
 import android.util.Log
+import com.musongzi.core.ExtensionMethod.thisInstance
+import com.musongzi.core.ExtensionMethod.topInstance
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.event
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.databinding.FragmentTestMainBinding
-import com.musongzi.test.Enter
 import com.musongzi.test.ITestClient
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
@@ -14,9 +14,7 @@ import com.musongzi.test.vm.TestViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.*
 import java.lang.Math.abs
-import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 
 class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient,
@@ -36,6 +34,8 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
             }
 
         }
+
+        Log.i(TAG, "initData: ViewModel = "+TestViewModel::class.java.thisInstance(this))
 
     }
 

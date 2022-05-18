@@ -21,7 +21,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
 
     override fun actualTypeArgumentsViewModelIndex() = 0
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
-    override fun superViewModelName() = LRefreshFrament::class.java.name
+    override fun superFragmentName() = LRefreshFrament::class.java.name
     override fun superDatabindingName() = BaseCollectionsViewFragment::class.java.name
 
     private lateinit var mRecycleViewClient: IRefreshViewClient
