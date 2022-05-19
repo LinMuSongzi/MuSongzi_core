@@ -2,6 +2,7 @@ package com.musongzi.core.base.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.musongzi.core.base.client.FragmentClient
@@ -26,6 +28,11 @@ import com.trello.rxlifecycle4.components.support.RxFragment
 
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient,ViewModelProvider.Factory {
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        Log.i("ViewModel", "create: "+modelClass.name)
+        return modelClass.newInstance();
+    }
 
     lateinit var dataBinding: D
 
