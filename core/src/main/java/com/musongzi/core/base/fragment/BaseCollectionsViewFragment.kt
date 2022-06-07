@@ -16,12 +16,12 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
 abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChooseBean, DATA> :
-    LRefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
+    RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
     CollectionsViewSupport {
 
     override fun actualTypeArgumentsViewModelIndex() = 0
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
-    override fun superFragmentName() = LRefreshFrament::class.java.name
+    override fun superFragmentName() = RefreshFrament::class.java.name
     override fun superDatabindingName() = BaseCollectionsViewFragment::class.java.name
 
     private lateinit var mRecycleViewClient: IRefreshViewClient

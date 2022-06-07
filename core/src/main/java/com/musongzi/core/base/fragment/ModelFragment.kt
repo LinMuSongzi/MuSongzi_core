@@ -14,8 +14,7 @@ import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
 
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
-    DataBindingFragment<D>(){
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : DataBindingFragment<D>(){
     protected val TAG = javaClass.simpleName
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
@@ -108,14 +107,14 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val v = modelClass.newInstance()
-        val vm = v as? IHolderViewModel<*, *>
+        val superV = super.create(modelClass)
+        val vm = superV as? IHolderViewModel<*, *>
         vm?.let {
             it.attachNow(this)
             it.putArguments(arguments)
             it.handlerArguments()
         }
-        return v;
+        return superV
     }
 
 

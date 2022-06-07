@@ -35,7 +35,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @property initFlag Boolean 是否初始化
  */
 abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsViewEngine<Item>,
-    PageSupport.CallBack<Item, Data>, IHolderContext {
+    PageSupport.CallBack<Item, Data>, IHolderContext ,IAnalyticSpanner<List<Item>,Data>{
     /**
      * 分页引擎
      */
@@ -144,7 +144,6 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
 
-
     fun pickSingle(i: Item) {
         (callBack as CollectionsViewModel).wantPick().pickRun(i)
     }
@@ -155,4 +154,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
         }
     }
 
+    override fun useSpanner(data: Data): List<Item>? {
+        return null
+    }
 }

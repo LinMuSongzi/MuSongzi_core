@@ -10,10 +10,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.*
 import com.musongzi.core.base.client.FragmentClient
 import com.musongzi.core.base.client.FragmentControlClient
 import com.musongzi.core.base.client.imp.FragmentBusinessControlClientImpl
@@ -29,9 +26,11 @@ import com.trello.rxlifecycle4.components.support.RxFragment
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient,ViewModelProvider.Factory {
 
+
+
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         Log.i("ViewModel", "create: "+modelClass.name)
-        return modelClass.newInstance();
+        return savedStateViewModelFactory.create(modelClass);
     }
 
     lateinit var dataBinding: D
@@ -43,6 +42,10 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
     private val mMyModelProvider:ViewModelProvider by lazy {
         ViewModelProvider(this,this)
+    }
+
+    val savedStateViewModelFactory  : SavedStateViewModelFactory by lazy{
+        SavedStateViewModelFactory(null,this@DataBindingFragment)
     }
 
     override fun topViewModelProvider(): ViewModelProvider {
