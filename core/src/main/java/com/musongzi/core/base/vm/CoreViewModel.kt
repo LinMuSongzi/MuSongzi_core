@@ -1,12 +1,13 @@
 package com.musongzi.core.base.vm
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.musongzi.core.itf.IAttach
 import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.trello.rxlifecycle4.LifecycleTransformer
 
-abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H> ,IWant{
+abstract class CoreViewModel<H : IHolderActivity>(var mSavedStateHandle : SavedStateHandle) : ViewModel(), IAttach<H> ,IWant{
 
     protected var holderActivity: IHolderActivity? = null
 

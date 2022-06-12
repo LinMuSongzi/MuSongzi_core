@@ -1,24 +1,16 @@
 package com.musongzi.core.base.fragment
 
-import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.vm.MszViewModel
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
-import com.musongzi.core.util.InjectionHelp
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import org.jetbrains.annotations.NotNull
-import java.lang.Exception
 
 
 /**
@@ -27,7 +19,7 @@ import java.lang.Exception
  * @param M : LViewModel<*, *>
  * @param D : ViewDataBinding
  */
-abstract class LRefreshFrament<V : @androidx.annotation.NonNull MszViewModel<*, *>, D : @androidx.annotation.NonNull ViewDataBinding, Item> : ModelFragment<V, D>(),
+abstract class RefreshFrament<V : @androidx.annotation.NonNull MszViewModel<*, *>, D : @androidx.annotation.NonNull ViewDataBinding, Item> : ModelFragment<V, D>(),
     IRefreshClient<Item>, IRecycleViewClient<Item> {
 
     override fun setRefresh(b: Boolean) {
@@ -95,6 +87,6 @@ abstract class LRefreshFrament<V : @androidx.annotation.NonNull MszViewModel<*, 
 
     override fun recycleView(): RecyclerView? = null
 
-    override fun superDatabindingName() :String = LRefreshFrament::class.java.name
+    override fun superDatabindingName() :String = RefreshFrament::class.java.name
 
 }

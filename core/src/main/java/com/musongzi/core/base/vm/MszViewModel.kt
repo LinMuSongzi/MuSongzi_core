@@ -2,6 +2,7 @@ package com.musongzi.core.base.vm
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.SavedStateHandle
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.IAgent
 import com.musongzi.core.itf.IAgentHolder
@@ -11,7 +12,7 @@ import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class MszViewModel<C : IClient, B : IBusiness> : CoreViewModel<IHolderActivity>(), IHolderViewModel<C, B> {
+abstract class MszViewModel<C : IClient, B : IBusiness>(mSavedStateHandle : SavedStateHandle) : CoreViewModel<IHolderActivity>(mSavedStateHandle), IHolderViewModel<C, B> {
 
     protected val TAG = javaClass.simpleName
 

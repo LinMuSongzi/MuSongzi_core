@@ -38,8 +38,8 @@ public class InjectionHelp {
     public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex) {
 
 //        Log.i(TAG, "getDataBinding: " + aClass.getSuperclass().getName() + " , " + name);
-        if (aClass.getSuperclass().getName().equals(name)) {
-            Class c = null;
+        if (aClass.getSuperclass() != null && name.equals(aClass.getSuperclass().getName())){//aClass.getSuperclass().getName().equals(name)) {
+            Class<?> c = null;
             //获取所有父类的泛型
             Type[] types = ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments();
 
