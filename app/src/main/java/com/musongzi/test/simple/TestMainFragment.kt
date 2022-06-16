@@ -25,6 +25,8 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
         const val FOTMAT_DATA = "MM:dd HH:mm:ss:SSS"
     }
 
+
+
     override fun initData() {
         dataBinding.idMainContentTv.setOnClickListener {
 
@@ -35,7 +37,26 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
         }
 
-        Log.i(TAG, "initData: ViewModel = "+TestViewModel::class.java.thisInstance(this))
+        "test".liveDataObserver<Long>(this) {
+            Log.i(TAG, "initData: $it")
+        }
+
+
+        val runnable = object :Runnable {
+            override fun run() {
+                "test".liveDataChange(this@TestMainFragment, System.currentTimeMillis())
+                dataBinding.root.postDelayed(this, 2000);
+            }
+        }
+
+//        val r = {
+            dataBinding.root.postDelayed(runnable, 2000);
+//        }
+
+
+
+
+        Log.i(TAG, "initData: ViewModel = " + TestViewModel::class.java.thisInstance(this))
 
     }
 

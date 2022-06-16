@@ -7,9 +7,11 @@ import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.trello.rxlifecycle4.LifecycleTransformer
 
-abstract class CoreViewModel<H : IHolderActivity>(var mSavedStateHandle : SavedStateHandle) : ViewModel(), IAttach<H> ,IWant{
+abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H> ,IWant{
 
     protected var holderActivity: IHolderActivity? = null
+
+    protected var mSavedStateHandle : SavedStateHandle? = null
 
     override fun attachNow(t: H?) {
         holderActivity = t;
@@ -18,7 +20,6 @@ abstract class CoreViewModel<H : IHolderActivity>(var mSavedStateHandle : SavedS
     override fun clear() {
         holderActivity = null;
     }
-
 
     fun disconnect() {
         holderActivity?.getClient()?.disconnect()

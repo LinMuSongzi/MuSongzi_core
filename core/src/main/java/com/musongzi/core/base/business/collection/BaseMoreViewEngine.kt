@@ -44,7 +44,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
     /**
      * 一个抽象的View层。它的实现类在目前框架中是一个[CollectionsViewModel]
      */
-    protected lateinit var callBack: IRefreshViewModel<Item>
+    private lateinit var callBack: IRefreshViewModel<Item>
     private lateinit var instanceAdapter: RecyclerView.Adapter<*>
     var supportDataEngine: IDataEngine<Data>? = null
     private val observer: Observer<Data> = createObserver()

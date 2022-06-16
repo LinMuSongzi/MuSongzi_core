@@ -7,14 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
 
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : DataBindingFragment<D>(){
+abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
+    DataBindingFragment<D>() {
     protected val TAG = javaClass.simpleName
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
@@ -66,7 +66,8 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
                 p = thisViewModelProvider()
             }
             else -> {
-                modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
+                modelProviderEnable =
+                    modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
                 return getProvider()
             }
         }
@@ -106,15 +107,16 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
     abstract fun initData()
 
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val superV = super.create(modelClass)
-        val vm = superV as? IHolderViewModel<*, *>
+    protected override fun create(vm: IHolderViewModel<*, *>?) {
+//        val superV = savedStateRegistry.c
+        Log.i(TAG, "createViewModel: $vm")
+//        val vm = superV as? IHolderViewModel<*, *>
         vm?.let {
             it.attachNow(this)
             it.putArguments(arguments)
             it.handlerArguments()
         }
-        return superV
+//        return vm as T
     }
 
 
@@ -148,6 +150,18 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> : 
 
         fun composeProvider(b: Bundle?, flag: Boolean) {
             b?.putBoolean(PROVIDER_MODEL_KEY, flag)
+        }
+
+
+        fun <T> String.liveDataObserver(mode:ModelFragment<*, *>, observer: Observer<T>) {
+            mode.getViewModel().getHolderSavedStateHandle()?.getLiveData<T>(this)?.observe(mode, observer)
+        }
+
+
+        fun <T> String.liveDataChange(model:ModelFragment<*, *>, v: T?) {
+            model.getViewModel().getHolderSavedStateHandle()?.getLiveData<T>(this)?.apply {
+                value = v
+            }
         }
 
     }
