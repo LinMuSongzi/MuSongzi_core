@@ -26,34 +26,33 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     }
 
 
-
     override fun initData() {
         dataBinding.idMainContentTv.setOnClickListener {
 
             if (!dataBinding.idEdittext.text.isNullOrEmpty()) {
 //                var byte = ByteArrayInputStream(dataBinding.idEdittext.text.toStr.toByteArray()ing());
-
             }
 
         }
 
-        "test".liveDataObserver<Long>(this) {
+        "test".liveDataObserver<Long>(this.getViewModel()) {
             Log.i(TAG, "initData: $it")
         }
 
 
-        val runnable = object :Runnable {
+        val runnable = object : Runnable {
             override fun run() {
-                "test".liveDataChange(this@TestMainFragment, System.currentTimeMillis())
+                "test".liveDataChange(
+                    this@TestMainFragment.getViewModel(),
+                    System.currentTimeMillis()
+                )
                 dataBinding.root.postDelayed(this, 2000);
             }
         }
 
 //        val r = {
-            dataBinding.root.postDelayed(runnable, 2000);
+        dataBinding.root.postDelayed(runnable, 2000);
 //        }
-
-
 
 
         Log.i(TAG, "initData: ViewModel = " + TestViewModel::class.java.thisInstance(this))

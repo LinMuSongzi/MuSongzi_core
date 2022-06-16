@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.*
 import com.musongzi.core.itf.IClient
+import com.musongzi.core.itf.IHolderSavedStateHandle
+import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
@@ -153,13 +155,21 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         }
 
 
-        fun <T> String.liveDataObserver(mode:ModelFragment<*, *>, observer: Observer<T>) {
-            mode.getViewModel().getHolderSavedStateHandle()?.getLiveData<T>(this)?.observe(mode, observer)
+        /**
+         * 一定要在生命周期大于oncreate里使用
+         */
+        fun <T> String.liveDataObserver(life: ILifeSaveStateHandle?, observer: Observer<T>) {
+            life?.getThisLifecycle()?.let{
+                life.getHolderSavedStateHandle()?.getLiveData<T>(this)?.observe(it, observer)
+            }
+
         }
 
-
-        fun <T> String.liveDataChange(model:ModelFragment<*, *>, v: T?) {
-            model.getViewModel().getHolderSavedStateHandle()?.getLiveData<T>(this)?.apply {
+        /**
+         * 一定要在生命周期大于oncreate里使用
+         */
+        fun <T> String.liveDataChange(life: IHolderSavedStateHandle?, v: T?) {
+            life?.getHolderSavedStateHandle()?.getLiveData<T>(this)?.apply {
                 value = v
             }
         }
