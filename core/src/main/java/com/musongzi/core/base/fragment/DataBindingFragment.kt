@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
+import androidx.savedstate.SavedStateRegistryOwner
 import com.musongzi.core.base.client.FragmentClient
 import com.musongzi.core.base.client.FragmentControlClient
 import com.musongzi.core.base.client.imp.FragmentBusinessControlClientImpl
@@ -20,32 +21,52 @@ import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.holder.IHolderDataBinding
 import com.musongzi.core.itf.holder.IHolderFragmentManager
+import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.trello.rxlifecycle4.components.support.RxFragment
 
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
-    IDisconnect, IHolderDataBinding<D>, FragmentControlClient,ViewModelProvider.Factory {
+    IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
 
 
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        Log.i("ViewModel", "create: "+modelClass.name)
-        return savedStateViewModelFactory.create(modelClass);
-    }
+//    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+////        Log.i("ViewModel", "create: "+modelClass.name)
+//        return savedStateViewModelFactory.create(modelClass);
+//    }
 
     lateinit var dataBinding: D
 
-    lateinit var fControl: FragmentControlClient
+    private lateinit var fControl: FragmentControlClient
 
-    private val mMainModelProvider:ViewModelProvider by lazy {
-        ViewModelProvider(requireActivity(),this)
+    private val mMainModelProvider: ViewModelProvider by lazy {
+        ViewModelProvider(requireActivity(), newFactory(requireActivity()))
     }
-    private val mMyModelProvider:ViewModelProvider by lazy {
-        ViewModelProvider(this,this)
+    private val mMyModelProvider: ViewModelProvider by lazy {
+        ViewModelProvider(this, newFactory(this))
     }
 
-    val savedStateViewModelFactory  : SavedStateViewModelFactory by lazy{
-        SavedStateViewModelFactory(null,this@DataBindingFragment)
+    private fun newFactory(owner: SavedStateRegistryOwner): ViewModelProvider.Factory =
+        object : AbstractSavedStateViewModelFactory(owner, getFactoryDefaultArgs()) {
+            override fun <T : ViewModel?> create(
+                key: String,
+                modelClass: Class<T>,
+                handle: SavedStateHandle
+            ): T {
+                val t = modelClass.newInstance()
+                (t as? IHolderViewModel<*, *>)?.let {
+                    if (it.getHolderSavedStateHandle() == null) {
+                        it.setHolderSavedStateHandle(handle)
+                    }
+                    create(it)
+                }
+                return t;
+            }
+        }
+
+    protected abstract fun create(vm: IHolderViewModel<*, *>?)
+
+    private fun getFactoryDefaultArgs(): Bundle? {
+        return null;
     }
 
     override fun topViewModelProvider(): ViewModelProvider {
@@ -163,4 +184,19 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
 
     override fun getFragmentByTag(tag: String): Fragment? = fControl.getFragmentByTag(tag)
+
+
+//    open class NativeSimpleFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle?) :
+//        AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+//
+//        override fun <T : ViewModel?> create(
+//            key: String,
+//            modelClass: Class<T>,
+//            handle: SavedStateHandle
+//        ): T {
+//            TODO("Not yet implemented")
+//        }
+//
+//    }
+
 }
