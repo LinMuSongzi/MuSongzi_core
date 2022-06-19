@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.musongzi.core.annotation.CollecttionsEngine;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 public class InjectionHelp {
 
@@ -38,7 +40,7 @@ public class InjectionHelp {
     public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex) {
 
 //        Log.i(TAG, "getDataBinding: " + aClass.getSuperclass().getName() + " , " + name);
-        if (aClass.getSuperclass() != null && name.equals(aClass.getSuperclass().getName())){//aClass.getSuperclass().getName().equals(name)) {
+        if (aClass.getSuperclass() != null && name.equals(aClass.getSuperclass().getName())) {//aClass.getSuperclass().getName().equals(name)) {
             Class<?> c = null;
             //获取所有父类的泛型
             Type[] types = ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments();
@@ -80,21 +82,19 @@ public class InjectionHelp {
     }
 
     @org.jetbrains.annotations.Nullable
-    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class<?>[] classes) {
+    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
         if (javaClass.getSuperclass().getName().equals(name)) {
             Type type = javaClass.getGenericSuperclass();
             if (type instanceof ParameterizedType) {
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
                 if (types.length > actualTypeArgumentsViewModelIndex) {
                     Class c = (Class) types[actualTypeArgumentsViewModelIndex];
-                    if (classes != null && classes.length == 1) {
-                        classes[0] = c;
-                    }
+                    findClass[0] = c;
                     return (V) viewModelProvider.get(c);
                 }
             }
         }
-        return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex, classes);
+        return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex, findClass);
     }
 
     public static <V> V getViewModel(@NotNull ViewModelProvider provider, @org.jetbrains.annotations.Nullable Class clazz) {

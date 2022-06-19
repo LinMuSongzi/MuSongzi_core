@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.ExtensionMethod.wantPick
 import com.musongzi.core.MszObserver
+import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.base.vm.CollectionsViewModel
@@ -58,12 +59,18 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
             dataPageSupport = PageSupport(this)
             instanceAdapter = myAdapter()
             initFlag = true
-            laterInit(i.getBundle())
+            i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
+                runOnHadBundleData(it)
+            }
         }
     }
 
-    protected open fun laterInit(bundle: Bundle?) {
+    protected open fun runOnHadBundleData(it: Bundle) {
+
     }
+
+//    protected open fun laterInit(bundle: Bundle?) {
+//    }
 
     protected open fun createObserver(): Observer<Data> = MszObserver {
 

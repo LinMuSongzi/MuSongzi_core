@@ -32,14 +32,18 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         arguments?.let {
             modelProviderEnable = it.getInt(PROVIDER_MODEL_KEY, PROVIDER_NORMAL)
         }
-        instanceViewModel();
+        if(CLASS_CACHE[javaClass.name] == null){
+            val c = arrayOfNulls<Class<*>>(1)
+            instanceViewModel(c);
+            CLASS_CACHE[javaClass.name] = c[0]
+        }
         Log.i(TAG, "onCreateView: viewModel = ${getViewModel()}")
         handlerArguments()
         return v;
     }
 
     fun getViewModel(): V {
-        return InjectionHelp.getViewModel(getProvider(), CLASS_CACHE[0])
+        return InjectionHelp.getViewModel(getProvider(), CLASS_CACHE[javaClass.name])
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
@@ -48,12 +52,12 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     override fun superDatabindingName() = ModelFragment::class.java.name
 
-    protected open fun instanceViewModel(): V? = InjectionHelp.findViewModel(
+    protected open fun instanceViewModel(clazz:Array<Class<*>?>): V? = InjectionHelp.findViewModel(
         javaClass,
         superFragmentName(),
         getProvider(),
         actualTypeArgumentsViewModelIndex(),
-        if (CLASS_CACHE[0] == null) CLASS_CACHE else null
+        clazz
     )
 
     protected open fun superFragmentName(): String = ModelFragment::class.java.name
@@ -144,14 +148,14 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     companion object {
         const val PROVIDER_MODEL_KEY = "provider_model_key"
 
-        val CLASS_CACHE = arrayOfNulls<Class<*>>(1)
+        val CLASS_CACHE = HashMap<String,Class<*>?>()
 
         const val PROVIDER_NORMAL = 1
         const val PROVIDER_SINGLE = PROVIDER_NORMAL.shl(1);
         const val PROVIDER_MAIN = PROVIDER_NORMAL.shl(2);
 
         fun composeProvider(b: Bundle?, flag: Boolean) {
-            b?.putBoolean(PROVIDER_MODEL_KEY, flag)
+            b?.putInt(PROVIDER_MODEL_KEY, if(flag) PROVIDER_MAIN else PROVIDER_SINGLE)
         }
 
 

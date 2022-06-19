@@ -29,21 +29,11 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
 
 
-//    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-////        Log.i("ViewModel", "create: "+modelClass.name)
-//        return savedStateViewModelFactory.create(modelClass);
-//    }
-
     lateinit var dataBinding: D
 
     private lateinit var fControl: FragmentControlClient
 
-    private val mMainModelProvider: ViewModelProvider by lazy {
-        ViewModelProvider(requireActivity(), newFactory(requireActivity()))
-    }
-    private val mMyModelProvider: ViewModelProvider by lazy {
-        ViewModelProvider(this, newFactory(this))
-    }
+    private var mMainModelProvider: ViewModelProvider? = null
 
     private fun newFactory(owner: SavedStateRegistryOwner): ViewModelProvider.Factory =
         object : AbstractSavedStateViewModelFactory(owner, getFactoryDefaultArgs()) {
@@ -70,11 +60,23 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
 
     override fun topViewModelProvider(): ViewModelProvider {
-        return mMainModelProvider
+        val m: ViewModelProvider
+        if (this.mMainModelProvider == null) {
+            m = ViewModelProvider(requireActivity(), newFactory(requireActivity()))
+            this.mMainModelProvider = m;
+            lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
+                    mMainModelProvider = null
+                }
+            })
+        } else {
+            m = this.mMainModelProvider!!
+        }
+        return m
     }
 
     override fun thisViewModelProvider(): ViewModelProvider {
-        return mMyModelProvider
+        return ViewModelProvider(this, newFactory(this))
     }
 
     override fun layoutId(): Int = 0
@@ -117,13 +119,16 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View {
         return if (getLayoutId() == 0) {
-            dataBinding = InjectionHelp.findDataBinding(
-                javaClass,
-                container,
-                superDatabindingName(),
-                actualTypeArgumentsDatabindinIndex()
-            )!!
+            if (view == null) {
+                dataBinding = InjectionHelp.findDataBinding(
+                    javaClass,
+                    container,
+                    superDatabindingName(),
+                    actualTypeArgumentsDatabindinIndex()
+                )!!
+            }
             dataBinding.root
+
         } else {
             inflater.inflate(getLayoutId(), container, false);
         }

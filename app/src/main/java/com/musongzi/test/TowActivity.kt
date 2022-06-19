@@ -15,13 +15,30 @@ class TowActivity : AppCompatActivity() {
 
     lateinit var d: ActivityTowBinding
 
+    var f = createFragment1()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         d = DataBindingUtil.setContentView(this, R.layout.activity_tow)
+        go()
+        window.decorView.postDelayed({
+            replace()
+        }, 3000)
+
+        window.decorView.postDelayed({
+            go()
+        }, 6000)
+    }
+
+    private fun replace() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.id_content_layout, createFragment2()).commit()
+    }
+
+    private fun go() {
         supportFragmentManager.beginTransaction().replace(
             R.id.id_content_layout,
-            createFragment1(), "haha"
+            f, "haha"
         ).commitAllowingStateLoss()
     }
 
