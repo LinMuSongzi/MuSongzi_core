@@ -57,6 +57,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
         if (!initFlag) {
             this.callBack = i as IRefreshViewModel<Item>
             dataPageSupport = PageSupport(this)
+            dataPageSupport.enableRefreshLimit(enableLoaderLimite())
             instanceAdapter = myAdapter()
             initFlag = true
             i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
@@ -64,6 +65,8 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
             }
         }
     }
+
+    protected open fun enableLoaderLimite() = true
 
     protected open fun runOnHadBundleData(it: Bundle) {
 
@@ -147,7 +150,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     override fun getTag(): String = javaClass.name
 
-    override fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
+    fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
 
     override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
 
