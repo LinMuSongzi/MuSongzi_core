@@ -6,10 +6,10 @@ import com.musongzi.core.itf.holder.IHolderBusiness
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.page.ISource
 
-interface IHandlerChooseViewModel<B :IBusiness> : IHolderLifecycle, IHolderBusiness<B> {
+interface IHandlerChooseViewModel<B : IBusiness> : IHolderLifecycle, IHolderBusiness<B> {
 
     fun baseDatas(): ISource<BaseChooseBean>?
 
-    fun updateByPick();
+    fun updateByPick(pickData: BaseChooseBean?);
 
 }

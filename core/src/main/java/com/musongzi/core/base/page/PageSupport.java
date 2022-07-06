@@ -1,4 +1,4 @@
-package com.musongzi.core.itf.page;
+package com.musongzi.core.base.page;
 
 import android.util.Log;
 
@@ -10,7 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.musongzi.core.itf.ILifeObject;
 import com.musongzi.core.itf.data.IHolderDataConvert;
-import com.musongzi.core.itf.holder.IHolderLifecycle;
+import com.musongzi.core.itf.page.Book;
+import com.musongzi.core.itf.page.IAdMessage;
+import com.musongzi.core.itf.page.ILimitOnLoaderState;
+import com.musongzi.core.itf.page.ILimitRead;
+import com.musongzi.core.itf.page.IPageEngine;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
@@ -30,14 +34,14 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * @param <ListItem>   每项数据的泛型{@link #data}
  * @param <DataEntity> remote 数据端加载进入来的未过滤的基本数据泛型 通过{@link CallBack#transformDataToList(DataEntity)} 转化成{@link #data}
  */
-public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>, Observer<DataEntity>, ILimitRead,ILimitOnLoaderState {
+public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>, Observer<DataEntity>, ILimitRead, ILimitOnLoaderState {
 
     private static final String TAG = "PageSupport";
 
     /**
      * 分页的最基本的数据存储原型
      */
-    private final List<ListItem> data = new ArrayList<>();
+    private final List<ListItem> data = new PageArrayList<>();
 //    /**
 //     * 是否正在加载
 //     */

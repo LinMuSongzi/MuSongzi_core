@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,11 +19,9 @@ import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
-import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
-import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
@@ -37,7 +33,7 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Consumer
-import java.lang.reflect.Proxy
+import kotlin.jvm.Throws
 
 object ExtensionMethod {
 
@@ -326,7 +322,7 @@ object ExtensionMethod {
     }
 
 
-    fun <E: BaseMoreViewEngine<*,*>> analysisCollectionsEngine(eClass: Class<E>): Fragment {
+    fun <E : BaseMoreViewEngine<*, *>> analysisCollectionsEngine(eClass: Class<E>): Fragment {
         val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
         val mCollectionsInfo = cAnnotation?.let {
             CollectionsViewModel.CollectionsInfo(it)
@@ -359,6 +355,21 @@ object ExtensionMethod {
 
     fun <V : ViewModel> Class<V>.thisInstance(b: IHolderViewModelProvider?): V? {
         return b?.thisViewModelProvider()?.get(this)
+    }
+
+    @Throws(Exception::class)
+    fun isDebug(): Boolean {
+        val context = getCurrentApplication();
+        val bc = "${context.packageName}$.BuildConfig"
+        Log.i("isDebug", "isDebug: $bc")
+        val bcIntsance =ExtensionMethod::class.java.classLoader!!.loadClass(bc)
+
+        return bcIntsance.let {
+            val f = it.getDeclaredField("BUILD_TYPE");
+            val type = f.get(null);
+            "debug" == type
+        }
+
     }
 
 }

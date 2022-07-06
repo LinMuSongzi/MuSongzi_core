@@ -19,7 +19,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
  * @param M : LViewModel<*, *>
  * @param D : ViewDataBinding
  */
-abstract class RefreshFrament<V : @androidx.annotation.NonNull MszViewModel<*, *>, D : @androidx.annotation.NonNull ViewDataBinding, Item> : ModelFragment<V, D>(),
+abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> : ModelFragment<V, D>(),
     IRefreshClient<Item>, IRecycleViewClient<Item> {
 
     override fun setRefresh(b: Boolean) {
