@@ -18,9 +18,9 @@ abstract class MszViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHolde
 
     protected val TAG = javaClass.simpleName
 
-    constructor(savedStateHandle: SavedStateHandle) : this() {
-        setHolderSavedStateHandle(savedStateHandle)
-    }
+//    constructor(savedStateHandle: SavedStateHandle) : this() {
+//        setHolderSavedStateHandle(savedStateHandle)
+//    }
 
     final override fun setHolderSavedStateHandle(savedStateHandle: SavedStateHandle) {
         if (mSavedStateHandle == null) {

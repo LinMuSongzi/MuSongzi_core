@@ -38,7 +38,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     }
 
     override fun initEvent() {
-        (getViewModel().getHolderBusiness().base as? IHolderCollections)?.onRefreshViewClientEvent(
+        (getViewModel().getHolderBusiness().base as? IHolderCollections)?.onRefreshViewClientOnEvent(
             mRecycleViewClient
         );
     }

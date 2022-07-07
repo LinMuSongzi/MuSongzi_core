@@ -29,6 +29,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         savedInstanceState: Bundle?
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
+        savedInstance = savedInstanceState;
         arguments?.let {
             modelProviderEnable = it.getInt(PROVIDER_MODEL_KEY, PROVIDER_NORMAL)
         }
@@ -44,6 +45,11 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     fun getViewModel(): V {
         return InjectionHelp.getViewModel(getProvider(), CLASS_CACHE[javaClass.name])
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        savedInstance = null
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
@@ -113,16 +119,8 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     abstract fun initData()
 
 
-    protected override fun create(vm: IHolderViewModel<*, *>?) {
-//        val superV = savedStateRegistry.c
-        Log.i(TAG, "createViewModel: $vm")
-//        val vm = superV as? IHolderViewModel<*, *>
-        vm?.let {
-            it.attachNow(this)
-            it.putArguments(arguments)
-            it.handlerArguments()
-        }
-//        return vm as T
+    override fun create(vm: IHolderViewModel<*, *>?) {
+        InjectionHelp.injectViewModel(this,savedInstance,vm)
     }
 
 

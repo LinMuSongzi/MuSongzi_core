@@ -28,6 +28,8 @@ import com.trello.rxlifecycle4.components.support.RxFragment
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
 
+    protected var savedInstance :Bundle? = null
+
 
     lateinit var dataBinding: D
 

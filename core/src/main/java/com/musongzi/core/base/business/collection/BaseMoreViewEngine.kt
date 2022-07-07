@@ -128,7 +128,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     }
 
-    override fun onRefreshViewClientEvent(i: IRefreshViewClient) {
+    override fun onRefreshViewClientOnEvent(i: IRefreshViewClient) {
     }
 
     abstract fun myAdapter(): RecyclerView.Adapter<*>

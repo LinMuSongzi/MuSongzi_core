@@ -1,5 +1,6 @@
 package com.musongzi.core.util;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,6 +10,11 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.musongzi.core.annotation.CollecttionsEngine;
+import com.musongzi.core.itf.IAgentHolder;
+import com.musongzi.core.itf.IClient;
+import com.musongzi.core.itf.holder.IHolderActivity;
+import com.musongzi.core.itf.holder.IHolderLifecycle;
+import com.musongzi.core.itf.holder.IHolderViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +22,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+
+import io.reactivex.rxjava3.annotations.NonNull;
 
 public class InjectionHelp {
 
@@ -99,5 +107,37 @@ public class InjectionHelp {
 
     public static <V> V getViewModel(@NotNull ViewModelProvider provider, @org.jetbrains.annotations.Nullable Class clazz) {
         return (V) provider.get(clazz);
+    }
+
+
+
+    @org.jetbrains.annotations.Nullable
+    public static <A extends IHolderLifecycle, B extends IAgentHolder<A>> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
+        B instance = null;
+        try {
+            instance = targetClass.newInstance();
+            instance.setAgentModel(agent);
+            instance.afterHandlerBusiness();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return instance;
+    }
+
+    public static <C extends IClient> void injectViewModel(@NonNull C activity, Bundle oldImpl, @org.jetbrains.annotations.Nullable IHolderViewModel vm) {
+        if(vm != null){
+            /**
+             *       Log.i(TAG, "createViewModel: $vm")
+             * //        val vm = superV as? IHolderViewModel<*, *>
+             *         vm?.let {
+             *             it.attachNow(this)
+             *             it.putArguments(arguments)
+             *             it.handlerArguments()
+             *         }
+             */
+            vm.attachNow(activity);
+            vm.putArguments(oldImpl);
+            vm.handlerArguments();
+        }
     }
 }
