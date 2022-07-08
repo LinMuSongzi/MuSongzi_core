@@ -6,12 +6,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.musongzi.core.ExtensionMethod
 import com.musongzi.core.ExtensionMethod.analysisCollectionsEngine
+import com.musongzi.test.activity.BaseActivity
 import com.musongzi.test.databinding.ActivityMainBinding
 import com.musongzi.test.databinding.ActivityTowBinding
 import com.musongzi.test.engine.ArrayEngine
 import com.musongzi.test.simple.TestMainFragment
 
-class TowActivity : AppCompatActivity() {
+class TowActivity : BaseActivity() {
 
     lateinit var d: ActivityTowBinding
 
@@ -27,7 +28,7 @@ class TowActivity : AppCompatActivity() {
 
         window.decorView.postDelayed({
             go()
-        }, 6000)
+        }, 10000)
     }
 
     private fun replace() {

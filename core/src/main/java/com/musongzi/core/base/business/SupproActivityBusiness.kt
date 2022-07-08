@@ -4,13 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
-import com.musongzi.core.base.activity.MszFragmentActivity
+import com.musongzi.core.R
+import com.musongzi.core.base.bean.FragmentEventInfo
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.INotifyDataSetChanged
@@ -28,11 +31,33 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 /*** created by linhui * on 2022/7/6 */
 class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActivityBusiness {
 
-    var holderLifecycleImpl: HolderLifecycleImpl? = null
+
+    override fun checkEvent() {
+        val h = iAgent as HolderLifecycleImpl;
+        h.activity.getHolderContext()?.let {
+            if (it is Activity) {
+                it.setContentView(R.layout.activity_normal_fragment)
+                val fragmentEventInfo: FragmentEventInfo? = h.getArguments()?.getParcelable(INFO_KEY)
+                if (fragmentEventInfo != null) {
+                    val titleView: TextView = it.findViewById(R.id.tv_title)
+                    titleView.text = fragmentEventInfo.sinfo.title
+                    if (it is AppCompatActivity) {
+                        val dataBundle = h.getArguments()?.getBundle(BUNDLE_KEY)
+                        it.supportFragmentManager.beginTransaction().replace(
+                            R.id.id_content_layout,
+                            it.classLoader.loadClass(fragmentEventInfo.className) as Class<out Fragment>,
+                            dataBundle,
+                            it.javaClass.name+"_fragment"
+                        ).commitNow()
+                    }
+                }
+            }
+        }
+    }
 
 
     override fun getHolderContext(): Context? {
-        return holderLifecycleImpl?.activity?.getHolderContext()
+        return (iAgent as IHolderActivity).getHolderContext()
     }
 
     class HolderLifecycleImpl(private val savedInstance: Bundle?, var activity: IHolderContext) :
@@ -76,7 +101,8 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             (activity as? IHolderArguments<Bundle>)?.putArguments(d)
         }
 
-        override fun getArguments(): Bundle? = (activity.getHolderContext() as? Activity)?.intent?.extras
+        override fun getArguments(): Bundle? =
+            (activity.getHolderContext() as? Activity)?.intent?.extras
 
         override fun handlerArguments() {
             (activity as? IHolderArguments<Bundle>)?.handlerArguments()
@@ -188,15 +214,18 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
 
     companion object {
 
+        const val BUNDLE_KEY = "support_bundle_key"
+        const val INFO_KEY = "support_activity_key"
+
         fun create(bundle: Bundle?, activity: IHolderContext): ISupprotActivityBusiness {
-            val impl = HolderLifecycleImpl(bundle,activity)
+            val impl = HolderLifecycleImpl(bundle, activity)
             val business: SupproActivityBusiness = injectBusiness(
                 SupproActivityBusiness::class.java,
                 impl
             )!!
-            if (business.holderLifecycleImpl == impl) {
-                Log.i(business.TAG, "create: 初始化成功")
-            }
+//            if (business.holderLifecycleImpl == impl) {
+                Log.i(business.TAG, "create: 初始化成功 $impl")
+//            }
             return business
         }
 

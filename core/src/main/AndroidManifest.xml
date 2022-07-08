@@ -20,6 +20,9 @@
                 android:name="com.musongzi.core.base.HolderInit"
                 android:value="@string/androidx_startup" />
         </provider>
+
+
+        <activity android:name=".base.activity.NormalFragmentActivity" android:screenOrientation="portrait"/>
         
     </application>
 

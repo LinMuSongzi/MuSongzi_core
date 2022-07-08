@@ -1,5 +1,7 @@
 package com.musongzi.core
 
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,14 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.musongzi.core.annotation.CollecttionsEngine
+import com.musongzi.core.base.activity.NormalFragmentActivity
 import com.musongzi.core.base.adapter.TypeSupportAdaper
+import com.musongzi.core.base.bean.FragmentEventInfo
+import com.musongzi.core.base.bean.StyleMessageInfo
 import com.musongzi.core.base.business.HandlerChooseBusiness
+import com.musongzi.core.base.business.SupproActivityBusiness
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
+import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
@@ -362,7 +369,7 @@ object ExtensionMethod {
         val context = getCurrentApplication();
         val bc = "${context.packageName}$.BuildConfig"
         Log.i("isDebug", "isDebug: $bc")
-        val bcIntsance =ExtensionMethod::class.java.classLoader!!.loadClass(bc)
+        val bcIntsance = ExtensionMethod::class.java.classLoader!!.loadClass(bc)
 
         return bcIntsance.let {
             val f = it.getDeclaredField("BUILD_TYPE");
@@ -371,5 +378,24 @@ object ExtensionMethod {
         }
 
     }
+
+    @JvmStatic
+    @JvmOverloads
+    fun <F : Fragment> Class<F>.startActivityNormal(
+        title: String? = null,
+        barColor: Int = Color.WHITE,
+        dataBundle: Bundle? = null
+    ) {
+        ActivityLifeManager.getInstance().getTopActivity()?.let {
+            val intent = Intent(it, NormalFragmentActivity::class.java)
+            val fInfo = FragmentEventInfo(this.name, StyleMessageInfo(title, barColor))
+            intent.putExtra(SupproActivityBusiness.INFO_KEY, fInfo)
+            dataBundle?.let { b ->
+                intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
+            }
+            it.startActivity(intent)
+        }
+    }
+
 
 }

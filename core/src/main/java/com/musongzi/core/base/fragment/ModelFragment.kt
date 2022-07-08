@@ -17,7 +17,7 @@ import com.musongzi.core.view.TipDialog
 
 abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     DataBindingFragment<D>() {
-    protected val TAG = javaClass.simpleName
+
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
     private var tipDialog: Dialog? = null

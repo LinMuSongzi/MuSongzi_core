@@ -66,7 +66,7 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         }
 
         fun <T> Class<T>.event(): T? {
-            return  getEventManager().asInterface(this)
+            return getEventManager().asInterface(this)
         }
 
     }
@@ -140,7 +140,9 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
     }
 
     override fun onActivityDestroyed(activity: Activity) {
+        lifeActivityList.remove(activity)
         Log.i(TAG, "onActivityDestroyed: " + printActivity(activity))
+
     }
 
     fun getTopCompatActivity(): AppCompatActivity? {
@@ -148,7 +150,7 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         if (lifeActivityList.isEmpty()) {//&& Looper.getMainLooper().thread == Thread.currentThread()){
             return null;
         }
-        return lifeActivityList[lifeActivityList.size] as? AppCompatActivity;
+        return lifeActivityList[lifeActivityList.size - 1] as? AppCompatActivity;
     }
 
     fun getTopActivity(): Activity? {
@@ -156,7 +158,7 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
         if (lifeActivityList.isEmpty()) {//&& Looper.getMainLooper().thread == Thread.currentThread()){
             return null;
         }
-        return lifeActivityList[lifeActivityList.size]
+        return lifeActivityList[lifeActivityList.size - 1]
     }
 
     fun <A : Activity> findActivity(c: Class<A>): A? {

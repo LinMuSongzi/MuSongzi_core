@@ -38,6 +38,7 @@ class MyApplication : MultiDexApplication(){
         super.onCreate()
 
 
+
         Thread.setDefaultUncaughtExceptionHandler{t,e->
             Log.i(TAG, "message: t = ${e.message}")
             for(error in e.stackTrace){

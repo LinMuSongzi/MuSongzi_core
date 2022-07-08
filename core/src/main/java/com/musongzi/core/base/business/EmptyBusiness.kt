@@ -1,4 +1,4 @@
-package com.musongzi.core.base.vm
+package com.musongzi.core.base.business
 
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.holder.IHolderLifecycle

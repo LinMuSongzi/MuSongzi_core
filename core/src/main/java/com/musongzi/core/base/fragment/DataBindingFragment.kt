@@ -1,5 +1,6 @@
 package com.musongzi.core.base.fragment
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     protected var savedInstance :Bundle? = null
 
+    protected val TAG = javaClass.name
 
     lateinit var dataBinding: D
 
@@ -115,12 +117,14 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i(TAG, "FragmentState:onCreateView")
         fControl = FragmentBusinessControlClientImpl(this)
         return instanceView(layoutInflater, container!!)
     }
 
     private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View {
         return if (getLayoutId() == 0) {
+            Log.i(TAG, "FragmentState:instanceView findDataBinding")
             if (view == null) {
                 dataBinding = InjectionHelp.findDataBinding(
                     javaClass,
@@ -132,6 +136,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
             dataBinding.root
 
         } else {
+            Log.i(TAG, "FragmentState:instanceView inflate layout")
             inflater.inflate(getLayoutId(), container, false);
         }
     }
@@ -191,6 +196,69 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
 
     override fun getFragmentByTag(tag: String): Fragment? = fControl.getFragmentByTag(tag)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i(TAG, "FragmentState:onCreate")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i(TAG, "FragmentState:onResume")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG, "FragmentState:onStart")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i(TAG, "FragmentState:onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i(TAG, "FragmentState:onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "FragmentState:onDestory")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.i(TAG, "FragmentState:onDestoryView")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i(TAG, "FragmentState:onDetach")
+    }
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        Log.i(TAG, "FragmentState:onAttach(activity:$activity)")
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.i(TAG, "FragmentState:onAttach(context:$context)")
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        Log.i(TAG, "FragmentState:onHiddenChange($hidden)")
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        Log.i(TAG, "FragmentState:onLowMemory")
+    }
+
+//    on
+
 
 
 //    open class NativeSimpleFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle?) :
