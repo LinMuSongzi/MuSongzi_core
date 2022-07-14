@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 
 interface IHolderSavedStateHandle {
 
-   fun getHolderSavedStateHandle(): SavedStateHandle?
+   fun getHolderSavedStateHandle(): ISaveStateHandle
 
-   fun setHolderSavedStateHandle(savedStateHandle: SavedStateHandle)
+   fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle)
 
 }

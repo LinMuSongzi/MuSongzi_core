@@ -5,10 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
 import com.musongzi.core.base.business.BaseLifeBusiness
-import com.musongzi.core.itf.IAgent
-import com.musongzi.core.itf.IAgentHolder
-import com.musongzi.core.itf.IBusiness
-import com.musongzi.core.itf.IClient
+import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
@@ -22,14 +19,12 @@ abstract class MszViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHolde
 //        setHolderSavedStateHandle(savedStateHandle)
 //    }
 
-    final override fun setHolderSavedStateHandle(savedStateHandle: SavedStateHandle) {
-        if (mSavedStateHandle == null) {
-            Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
-            super.mSavedStateHandle = savedStateHandle
-        }
+    final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
+        Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
+        super.mSavedStateHandle = savedStateHandle
     }
 
-    final override fun getHolderSavedStateHandle(): SavedStateHandle? {
+    final override fun getHolderSavedStateHandle(): ISaveStateHandle {
         return mSavedStateHandle
     }
 

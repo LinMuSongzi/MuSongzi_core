@@ -119,9 +119,9 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     abstract fun initData()
 
 
-    override fun create(vm: IHolderViewModel<*, *>?) {
-        InjectionHelp.injectViewModel(this,savedInstance,vm)
-    }
+//    override fun create(vm: IHolderViewModel<*, *>?) {
+//        InjectionHelp.injectViewModel(this,savedInstance,vm)
+//    }
 
 
     override fun getClient(): IClient = this
@@ -154,26 +154,6 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
         fun composeProvider(b: Bundle?, flag: Boolean) {
             b?.putInt(PROVIDER_MODEL_KEY, if(flag) PROVIDER_MAIN else PROVIDER_SINGLE)
-        }
-
-
-        /**
-         * 一定要在生命周期大于oncreate里使用
-         */
-        fun <T> String.liveDataObserver(life: ILifeSaveStateHandle?, observer: Observer<T>) {
-            life?.getThisLifecycle()?.let{
-                life.getHolderSavedStateHandle()?.getLiveData<T>(this)?.observe(it, observer)
-            }
-
-        }
-
-        /**
-         * 一定要在生命周期大于oncreate里使用
-         */
-        fun <T> String.liveDataChange(life: IHolderSavedStateHandle?, v: T?) {
-            life?.getHolderSavedStateHandle()?.getLiveData<T>(this)?.apply {
-                value = v
-            }
         }
 
     }

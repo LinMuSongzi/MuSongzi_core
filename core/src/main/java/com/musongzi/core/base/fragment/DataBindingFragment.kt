@@ -46,21 +46,12 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
                 modelClass: Class<T>,
                 handle: SavedStateHandle
             ): T {
-                val t = modelClass.newInstance()
-                (t as? IHolderViewModel<*, *>)?.let {
-                    if (it.getHolderSavedStateHandle() == null) {
-                        it.setHolderSavedStateHandle(handle)
-                    }
-                    create(it)
-                }
-                return t;
+                return InjectionHelp.injectViewModel(this@DataBindingFragment,arguments,modelClass,handle)!!
             }
         }
 
-    protected abstract fun create(vm: IHolderViewModel<*, *>?)
-
     private fun getFactoryDefaultArgs(): Bundle? {
-        return null;
+        return arguments;
     }
 
     override fun topViewModelProvider(): ViewModelProvider {

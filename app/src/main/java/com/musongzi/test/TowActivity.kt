@@ -21,14 +21,15 @@ class TowActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         d = DataBindingUtil.setContentView(this, R.layout.activity_tow)
-        go()
-        window.decorView.postDelayed({
-            replace()
-        }, 3000)
+        replace();
+//        go()
+//        window.decorView.postDelayed({
+//            replace()
+//        }, 3000)
 
-        window.decorView.postDelayed({
-            go()
-        }, 10000)
+//        window.decorView.postDelayed({
+//            go()
+//        }, 10000)
     }
 
     private fun replace() {

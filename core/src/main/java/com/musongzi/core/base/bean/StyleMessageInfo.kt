@@ -5,7 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 /*** created by linhui * on 2022/7/7 */
-class StyleMessageInfo(var title:String? = null, var barColor:Int = Color.WHITE) :Parcelable{
+class StyleMessageInfo @JvmOverloads constructor(var title:String? = null, var barColor:Int = Color.WHITE) :Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt()

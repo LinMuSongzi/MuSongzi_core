@@ -3,6 +3,7 @@ package com.musongzi.core.base.vm
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.musongzi.core.itf.IAttach
+import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.trello.rxlifecycle4.LifecycleTransformer
@@ -11,7 +12,7 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H> ,IWa
 
     protected var holderActivity: IHolderActivity? = null
 
-    protected var mSavedStateHandle : SavedStateHandle? = null
+    protected lateinit var mSavedStateHandle : ISaveStateHandle
 
     override fun attachNow(t: H?) {
         holderActivity = t;

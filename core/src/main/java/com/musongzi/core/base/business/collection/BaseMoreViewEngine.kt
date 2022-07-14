@@ -55,6 +55,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     final override fun init(i: IRefreshViewModel<*>) {
         if (!initFlag) {
+            onInitBefore(i);
             this.callBack = i as IRefreshViewModel<Item>
             dataPageSupport = PageSupport(this)
             dataPageSupport.enableRefreshLimit(enableLoaderLimite())
@@ -63,7 +64,18 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
             i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
                 runOnHadBundleData(it)
             }
+            onInitAfter(i);
         }
+    }
+
+    protected open fun onInitAfter(iRefreshViewModel: IRefreshViewModel<Item>) {
+    }
+
+    /**
+     * 慎重重写
+     */
+    protected open fun onInitBefore(i: IRefreshViewModel<*>) {
+
     }
 
     protected open fun enableLoaderLimite() = true

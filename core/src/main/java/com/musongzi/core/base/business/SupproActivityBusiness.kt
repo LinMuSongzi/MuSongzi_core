@@ -32,6 +32,8 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActivityBusiness {
 
 
+
+
     override fun checkEvent() {
         val h = iAgent as HolderLifecycleImpl;
         h.activity.getHolderContext()?.let {
@@ -199,14 +201,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             modelClass: Class<T>,
             handle: SavedStateHandle
         ): T {
-            val t = modelClass.newInstance()
-            (t as? IHolderViewModel<*, *>)?.let {
-                if (it.getHolderSavedStateHandle() == null) {
-                    it.setHolderSavedStateHandle(handle)
-                }
-                InjectionHelp.injectViewModel(activity, defaultArgs, t);
-            }
-            return t
+            return InjectionHelp.injectViewModel(activity, defaultArgs, modelClass, handle)!!
         }
 
     }

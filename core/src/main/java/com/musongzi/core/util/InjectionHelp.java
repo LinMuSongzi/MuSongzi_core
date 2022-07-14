@@ -6,10 +6,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.musongzi.core.annotation.CollecttionsEngine;
+import com.musongzi.core.base.vm.ActivityHelpViewModel;
+import com.musongzi.core.base.vm.SaveStateHandleWarp;
 import com.musongzi.core.itf.IAgentHolder;
 import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.holder.IHolderActivity;
@@ -124,20 +127,46 @@ public class InjectionHelp {
         return instance;
     }
 
-    public static <C extends IClient> void injectViewModel(@NonNull C activity, Bundle oldImpl, @org.jetbrains.annotations.Nullable IHolderViewModel vm) {
-        if(vm != null){
-            /**
-             *       Log.i(TAG, "createViewModel: $vm")
-             * //        val vm = superV as? IHolderViewModel<*, *>
-             *         vm?.let {
-             *             it.attachNow(this)
-             *             it.putArguments(arguments)
-             *             it.handlerArguments()
-             *         }
-             */
-            vm.attachNow(activity);
-            vm.putArguments(oldImpl);
-            vm.handlerArguments();
+    /**
+     *
+     * @param activity 或许是activity，或许是fragment
+     * @param defaultArgs 如果调用者是activity，defaultArgs 是activity的 savedInstanceState.
+     *                    如果调用者是frament ，defaultArgs 是fragment的argment bundle
+     * @param clazz
+     * @param savedStateHandle
+     * @param <C>
+     * @param <V>
+     * @return
+     */
+    @org.jetbrains.annotations.Nullable
+    public static <C extends IClient,V extends ViewModel> V injectViewModel(@NonNull C activity, Bundle defaultArgs,
+                                                           @org.jetbrains.annotations.Nullable Class<V> clazz,SavedStateHandle savedStateHandle) {
+        try {
+            V vmI = clazz.newInstance();
+
+            if (vmI instanceof IHolderViewModel) {
+                IHolderViewModel vmInstance = (IHolderViewModel) vmI;
+                /**
+                 *       Log.i(TAG, "createViewModel: $vm")
+                 * //        val vm = superV as? IHolderViewModel<*, *>
+                 *         vm?.let {
+                 *             it.attachNow(this)
+                 *             it.putArguments(arguments)
+                 *             it.handlerArguments()
+                 *         }
+                 */
+                vmInstance.attachNow(activity);
+                vmInstance.setHolderSavedStateHandle(new SaveStateHandleWarp(savedStateHandle));
+                vmInstance.putArguments(defaultArgs);
+                vmInstance.handlerArguments();
+            }
+            return vmI;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+//            if(clazz != ActivityHelpViewModel.class){
+//              return   injectViewModel(activity, defaultArgs, ActivityHelpViewModel.class, savedStateHandle);
+//            }
         }
     }
 }

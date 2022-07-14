@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import com.musongzi.core.ExtensionMethod.startActivity
 import com.musongzi.core.ExtensionMethod.startActivityNormal
 import com.musongzi.test.activity.BaseActivity
 import com.musongzi.test.databinding.ActivityMainBinding
@@ -22,7 +23,8 @@ class MainActivity : BaseActivity() {
     }
 
     fun goTow(v: View) {
-        TowFragment::class.java.startActivityNormal("第二个页面")
+        TowActivity::class.java.startActivity()
+        //TowFragment::class.java.startActivityNormal("第二个页面")
     }
 
 }
