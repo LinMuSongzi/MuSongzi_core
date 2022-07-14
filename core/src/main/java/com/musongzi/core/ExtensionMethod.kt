@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -436,11 +437,19 @@ object ExtensionMethod {
         }
     }
 
+    /**
+     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
+     */
     @JvmStatic
     fun <T> String.saveStateChange(holder: IHolderSavedStateHandle, v: T) {
         holder.getHolderSavedStateHandle()[this] = v
     }
 
+
+    /**
+     * 观察数据基于“key”的livedate，
+     * isRemove 是否此次监听仅为一次
+     */
     @JvmOverloads
     @JvmStatic
     fun <T> String.liveSaveStateObserver(holder: ILifeSaveStateHandle, isRemove: Boolean = false, observer: Observer<T>) {
@@ -459,11 +468,19 @@ object ExtensionMethod {
         }
     }
 
+    /**
+     * 获取基于“key”的可观察的livedata
+     */
     @JvmStatic
-    fun <T> String.getSaveStateLiveData(holder: IHolderSavedStateHandle): MutableLiveData<T> {
+    fun <T> String.getSaveStateLiveData(holder: IHolderSavedStateHandle): LiveData<T> {
         return holder.getHolderSavedStateHandle().getLiveData(this);
     }
 
+    /**
+     * 观察数据基于“key”的livedate，
+     * 观察者返回值 ： true 表示此次观察将会移除观察者。
+     *            ： false 表示此次观察不会移除观察者
+     */
     @JvmStatic
     fun <T> String.liveSaveStateObserverCall(holder: ILifeSaveStateHandle, observer: (call: T) -> Boolean) {
         holder.getThisLifecycle()?.let {

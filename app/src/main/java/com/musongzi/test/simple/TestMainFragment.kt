@@ -1,6 +1,9 @@
 package com.musongzi.test.simple
 
 import android.util.Log
+import com.musongzi.core.ExtensionMethod.liveSaveStateObserver
+import com.musongzi.core.ExtensionMethod.liveSaveStateObserverCall
+import com.musongzi.core.ExtensionMethod.saveStateChange
 import com.musongzi.core.ExtensionMethod.thisInstance
 import com.musongzi.core.ExtensionMethod.topInstance
 import com.musongzi.core.base.fragment.ModelFragment
@@ -27,6 +30,38 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
 
     override fun initData() {
+
+        val testKey = "bookNmae"
+
+        /**
+         * 添加基于key的事实观察者（只有党onresume时候才会回调）
+         */
+        testKey.liveSaveStateObserver<String>(getViewModel()){
+            Log.i(TAG, "liveSaveStateObserver false: 观察到的储存于SavedStateHandler 数据变化是 $it")
+        }
+        /**
+         * 添加基于key的观察者,只观察一次
+         */
+        testKey.liveSaveStateObserver<String>(getViewModel(),true){
+            Log.i(TAG, "liveSaveStateObserver true: 观察到的储存于SavedStateHandler 数据变化是 $it")
+        }
+
+        /**
+         * 添加基于key的观察者,如果返回true，将移除观察者
+         */
+        testKey.liveSaveStateObserverCall<String>(getViewModel()){
+            Log.i(TAG, "liveSaveStateObserverCall: ")
+            "《玉蒲团》" == it
+        }
+        /**
+         * 改变基于key的数据
+         */
+        testKey.saveStateChange(getViewModel(),"《三国演义》")
+
+
+
+
+
 //        dataBinding.idMainContentTv.setOnClickListener {
 //
 //            if (!dataBinding.idEdittext.text.isNullOrEmpty()) {
