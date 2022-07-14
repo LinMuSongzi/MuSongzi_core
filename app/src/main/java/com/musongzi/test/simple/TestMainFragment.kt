@@ -1,12 +1,15 @@
 package com.musongzi.test.simple
 
-import android.os.Environment
 import android.util.Log
+import com.musongzi.core.ExtensionMethod.liveSaveStateObserver
+import com.musongzi.core.ExtensionMethod.liveSaveStateObserverCall
+import com.musongzi.core.ExtensionMethod.saveStateChange
+import com.musongzi.core.ExtensionMethod.thisInstance
+import com.musongzi.core.ExtensionMethod.topInstance
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.event
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.databinding.FragmentTestMainBinding
-import com.musongzi.test.Enter
 import com.musongzi.test.ITestClient
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
@@ -14,9 +17,7 @@ import com.musongzi.test.vm.TestViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.*
 import java.lang.Math.abs
-import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 
 class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient,
@@ -27,15 +28,69 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
         const val FOTMAT_DATA = "MM:dd HH:mm:ss:SSS"
     }
 
+
     override fun initData() {
-        dataBinding.idMainContentTv.setOnClickListener {
 
-            if (!dataBinding.idEdittext.text.isNullOrEmpty()) {
-//                var byte = ByteArrayInputStream(dataBinding.idEdittext.text.toStr.toByteArray()ing());
+        val testKey = "bookNmae"
 
-            }
-
+        /**
+         * 添加基于key的事实观察者（只有党onresume时候才会回调）
+         */
+        testKey.liveSaveStateObserver<String>(getViewModel()){
+            Log.i(TAG, "liveSaveStateObserver false: 观察到的储存于SavedStateHandler 数据变化是 $it")
         }
+        /**
+         * 添加基于key的观察者,只观察一次
+         */
+        testKey.liveSaveStateObserver<String>(getViewModel(),true){
+            Log.i(TAG, "liveSaveStateObserver true: 观察到的储存于SavedStateHandler 数据变化是 $it")
+        }
+
+        /**
+         * 添加基于key的观察者,如果返回true，将移除观察者
+         */
+        testKey.liveSaveStateObserverCall<String>(getViewModel()){
+            Log.i(TAG, "liveSaveStateObserverCall: ")
+            "《玉蒲团》" == it
+        }
+        /**
+         * 改变基于key的数据
+         */
+        testKey.saveStateChange(getViewModel(),"《三国演义》")
+
+
+
+
+
+//        dataBinding.idMainContentTv.setOnClickListener {
+//
+//            if (!dataBinding.idEdittext.text.isNullOrEmpty()) {
+////                var byte = ByteArrayInputStream(dataBinding.idEdittext.text.toStr.toByteArray()ing());
+//            }
+//
+//        }
+//
+//        "test".liveDataObserver<Long>(this.getViewModel()) {
+//            Log.i(TAG, "initData: $it")
+//        }
+//
+//
+//        val runnable = object : Runnable {
+//            override fun run() {
+//                "test".liveDataChange(
+//                    this@TestMainFragment.getViewModel(),
+//                    System.currentTimeMillis()
+//                )
+//                dataBinding.root.postDelayed(this, 2000);
+//            }
+//        }
+//
+////        val r = {
+//        dataBinding.root.postDelayed(runnable, 2000);
+////        }
+//
+//
+//        Log.i(TAG, "initData: ViewModel = " + TestViewModel::class.java.thisInstance(this))
 
     }
 
@@ -109,8 +164,8 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
             this
         }
 
-        Log.i(TAG, "initView: ${getMainViewModel()}")
-        getMainViewModel()?.business?.checkBanner()
+        Log.i(TAG, "initView: ${getViewModel()}")
+        getViewModel().business.checkBanner()
     }
 
     override fun onLogout() {

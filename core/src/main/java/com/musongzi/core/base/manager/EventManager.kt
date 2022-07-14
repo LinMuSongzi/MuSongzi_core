@@ -34,7 +34,7 @@ internal class EventManager : IEventManager {
      *
      *
      */
-    private var instancesByClassMap = HashMap<Class<*>, Pair<EventMethodProxy, Set<Any>>?/*所有注册的实例*/>()
+    private var instancesByClassMap = HashMap<Class<*>, EventMethodProxy>()
 
     override fun <T> put(name: Class<T>, h: () -> T) {
         if (!name.isInterface) {
@@ -45,7 +45,7 @@ internal class EventManager : IEventManager {
 
     override fun holderMap(name: Class<*>): HashSet<Any> {
         val mmap = instancesByClassMap
-        var c: Pair<EventMethodProxy, Set<Any>>? = mmap[name]
+        var c: EventMethodProxy? = mmap[name]
         val set: Set<Any>
         if (c == null) {
             set = HashSet();
@@ -53,7 +53,7 @@ internal class EventManager : IEventManager {
 //            newMethod.instance
             //Proxy.newProxyInstance(javaClass.classLoader, arrayOf(name), newMethod)
 //            val p2 = instance to newMethod
-            c = newMethod to set
+//            c = newMethod to set
 //            for (k in mmap.keys) {
 //                if (name.isAssignableFrom(k)) {
 //                    mmap[k]?.first?.second?.addParent(newMethod)
@@ -62,18 +62,17 @@ internal class EventManager : IEventManager {
 //                    mmap[k]?.first?.second?.addChild(newMethod)
 //                }
 //            }
-            instancesByClassMap[name] = c
+            instancesByClassMap[name] = newMethod
 
         } else {
-            set = c.second as HashSet<Any>
+            set = c.instanceSet as HashSet<Any>
         }
         return set;
     }
 
     override fun <T> remove(name: Class<T>, callBack: T) {
-        val c = instancesByClassMap[name]
-        c?.let {
-            (it.second as HashSet).remove(callBack)
+        instancesByClassMap[name]?.apply {
+            instanceSet.remove(callBack)
         }
     }
 
@@ -81,7 +80,7 @@ internal class EventManager : IEventManager {
         return if (!clazz.isInterface) {
             null;
         } else {
-            instancesByClassMap[clazz]?.first?.instance as? T
+            instancesByClassMap[clazz]?.instance as? T
         }
     }
 

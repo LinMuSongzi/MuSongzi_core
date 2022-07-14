@@ -135,7 +135,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
         return business.base as? ISource<BaseChooseBean>
     }
 
-    override fun updateByPick() {
+    override fun updateByPick(info:BaseChooseBean?) {
         notifyDataSetChanged()
     }
 

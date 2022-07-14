@@ -154,7 +154,7 @@ object ExtensionMethod{
     
     
     -->
-   class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
+    class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient {
 
         override fun initData() {
         }
@@ -225,7 +225,107 @@ object ExtensionMethod{
         }
     
     
+------ 1.0.1
+
+1，预期打算改进，eventmanager
+
+ ViewModel新增基于SavedStateHandler 存储观察功能 ；基本使用方式
     
+    位于 com.musongzi.core.ExtensionMethod
+    实例：
+     class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient,
+        ILoginEvent {
+        
+     .....
+    
+        override fun initData() {
+    
+            val testKey = "bookNmae"
+    
+            /**
+             * 添加基于key的事实观察者（只有党onresume时候才会回调）
+             */
+            testKey.liveSaveStateObserver<String>(getViewModel()){
+                Log.i(TAG, "initData: 观察到的储存于SavedStateHandler 数据变化是 $it")
+            }
+            /**
+             * 添加基于key的观察者,只观察一次
+             */
+            testKey.liveSaveStateObserver<String>(getViewModel(),true){
+                Log.i(TAG, "initData: 观察到的储存于SavedStateHandler 数据变化是 $it")
+            }
+    
+            /**
+             * 添加基于key的观察者,如果返回true，将移除观察者
+             */
+            testKey.liveSaveStateObserverCall<String>(getViewModel()){
+                "《玉蒲团》" == it
+            }
+            /**
+             * 改变基于key的数据
+             */
+            testKey.saveStateChange(getViewModel(),"《三国演义》")
+    .....
+    }
+    
+ 
+    /**
+      * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
+      */
+     @JvmStatic
+     fun <T> String.saveStateChange(holder: IHolderSavedStateHandle, v: T) {
+         holder.getHolderSavedStateHandle()[this] = v
+     }
+ 
+ 
+     /**
+      * 观察数据基于“key”的livedate，
+      * isRemove 是否此次监听仅为一次
+      */
+     @JvmOverloads
+     @JvmStatic
+     fun <T> String.liveSaveStateObserver(holder: ILifeSaveStateHandle, isRemove: Boolean = false, observer: Observer<T>) {
+         holder.getThisLifecycle()?.let {
+             val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+             if (isRemove) {
+                 liveData.observe(it, object : Observer<T> {
+                     override fun onChanged(t: T) {
+                         observer.onChanged(t)
+                         liveData.removeObserver(this)
+                     }
+                 })
+             } else {
+                 liveData.observe(it, observer)
+             }
+         }
+     }
+ 
+     /**
+      * 获取基于“key”的可观察的livedata
+      */
+     @JvmStatic
+     fun <T> String.getSaveStateLiveData(holder: IHolderSavedStateHandle): LiveData<T> {
+         return holder.getHolderSavedStateHandle().getLiveData(this);
+     }
+ 
+     /**
+      * 观察数据基于“key”的livedate，
+      * 观察者返回值 ： true 表示此次观察将会移除观察者。 
+      *            ： false 表示此次观察不会移除观察者
+      */
+     @JvmStatic
+     fun <T> String.liveSaveStateObserverCall(holder: ILifeSaveStateHandle, observer: (call: T) -> Boolean) {
+         holder.getThisLifecycle()?.let {
+             val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+             liveData.observe(it, object : Observer<T> {
+                 override fun onChanged(t: T) {
+                     if (observer.invoke(t)) {
+                         liveData.removeObserver(this)
+                     }
+                 }
+             })
+         }
+     }
     
     
     

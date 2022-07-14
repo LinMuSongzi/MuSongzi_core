@@ -21,15 +21,15 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
 
     override fun initView() {
         super.initView()
-        getMainViewModel()!!.getHolderBusiness().handlerView(recycleView(), refreshView())
-        getMainViewModel()!!.getHolderBusiness().handlerEmptyRes(emptyView())
+        getViewModel().getHolderBusiness().handlerView(recycleView(), refreshView())
+        getViewModel().getHolderBusiness().handlerEmptyRes(emptyView())
     }
 
 
     override fun isShowHelpTip() {
-        val b = getMainViewModel()!!.getHolderBusiness().base
-        if (b.page() == b.thisStartPage() && !getMainViewModel()!!.getHolderBusiness().isOtherEmptyRes) {
-            dataBinding.layoutEmptyDataShow.idMainContentTv.text = getMainViewModel()?.collectionsInfo?.title
+        val b = getViewModel().getHolderBusiness().base
+        if (b.page() == b.thisStartPage() && !getViewModel().getHolderBusiness().isOtherEmptyRes) {
+            dataBinding.layoutEmptyDataShow.idMainContentTv.text = getViewModel().collectionsInfo.title
         }
     }
 

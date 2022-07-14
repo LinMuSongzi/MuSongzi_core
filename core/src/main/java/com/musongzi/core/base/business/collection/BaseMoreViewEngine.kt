@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.ExtensionMethod.wantPick
 import com.musongzi.core.MszObserver
+import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.base.vm.CollectionsViewModel
@@ -16,7 +17,7 @@ import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
-import com.musongzi.core.itf.page.PageSupport
+import com.musongzi.core.base.page.PageSupport
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import org.greenrobot.eventbus.Subscribe
@@ -35,7 +36,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @property initFlag Boolean 是否初始化
  */
 abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsViewEngine<Item>,
-    PageSupport.CallBack<Item, Data>, IHolderContext {
+    PageSupport.CallBack<Item, Data>, IHolderContext ,IAnalyticSpanner<List<Item>,Data>{
     /**
      * 分页引擎
      */
@@ -44,7 +45,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
     /**
      * 一个抽象的View层。它的实现类在目前框架中是一个[CollectionsViewModel]
      */
-    protected lateinit var callBack: IRefreshViewModel<Item>
+    private lateinit var callBack: IRefreshViewModel<Item>
     private lateinit var instanceAdapter: RecyclerView.Adapter<*>
     var supportDataEngine: IDataEngine<Data>? = null
     private val observer: Observer<Data> = createObserver()
@@ -54,16 +55,37 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     final override fun init(i: IRefreshViewModel<*>) {
         if (!initFlag) {
+            onInitBefore(i);
             this.callBack = i as IRefreshViewModel<Item>
             dataPageSupport = PageSupport(this)
+            dataPageSupport.enableRefreshLimit(enableLoaderLimite())
             instanceAdapter = myAdapter()
             initFlag = true
-            laterInit(i.getBundle())
+            i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
+                runOnHadBundleData(it)
+            }
+            onInitAfter(i);
         }
     }
 
-    protected open fun laterInit(bundle: Bundle?) {
+    protected open fun onInitAfter(iRefreshViewModel: IRefreshViewModel<Item>) {
     }
+
+    /**
+     * 慎重重写
+     */
+    protected open fun onInitBefore(i: IRefreshViewModel<*>) {
+
+    }
+
+    protected open fun enableLoaderLimite() = true
+
+    protected open fun runOnHadBundleData(it: Bundle) {
+
+    }
+
+//    protected open fun laterInit(bundle: Bundle?) {
+//    }
 
     protected open fun createObserver(): Observer<Data> = MszObserver {
 
@@ -118,7 +140,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     }
 
-    override fun onRefreshViewClientEvent(i: IRefreshViewClient) {
+    override fun onRefreshViewClientOnEvent(i: IRefreshViewClient) {
     }
 
     abstract fun myAdapter(): RecyclerView.Adapter<*>
@@ -140,10 +162,9 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     override fun getTag(): String = javaClass.name
 
-    override fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
+    fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
 
     override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
-
 
     fun pickSingle(i: Item) {
         (callBack as CollectionsViewModel).wantPick().pickRun(i)
@@ -155,4 +176,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
         }
     }
 
+    override fun useSpanner(data: Data): List<Item>? {
+        return null
+    }
 }

@@ -1,19 +1,31 @@
 package com.musongzi.core
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.musongzi.core.annotation.CollecttionsEngine
+import com.musongzi.core.base.activity.NormalFragmentActivity
 import com.musongzi.core.base.adapter.TypeSupportAdaper
+import com.musongzi.core.base.bean.FragmentEventInfo
+import com.musongzi.core.base.bean.StyleMessageInfo
 import com.musongzi.core.base.business.HandlerChooseBusiness
+import com.musongzi.core.base.business.SupproActivityBusiness
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
@@ -24,9 +36,12 @@ import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
-import com.musongzi.core.itf.holder.IHolderLifecycle
+import com.musongzi.core.itf.IHolderSavedStateHandle
+import com.musongzi.core.itf.ILifeSaveStateHandle
+import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
+import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.TextUtil
@@ -35,7 +50,8 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Consumer
-import java.lang.reflect.Proxy
+import kotlin.jvm.Throws
+import kotlin.jvm.internal.Intrinsics
 
 object ExtensionMethod {
 
@@ -324,7 +340,7 @@ object ExtensionMethod {
     }
 
 
-    fun <E: BaseMoreViewEngine<*,*>> analysisCollectionsEngine(eClass: Class<E>): Fragment {
+    fun <E : BaseMoreViewEngine<*, *>> analysisCollectionsEngine(eClass: Class<E>): Fragment {
         val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(eClass)
         val mCollectionsInfo = cAnnotation?.let {
             CollectionsViewModel.CollectionsInfo(it)
@@ -351,5 +367,132 @@ object ExtensionMethod {
         return@let it.getNext(HandlerChooseBusiness::class.java)
     } ?: HandlerChooseBusiness(this)
 
+    fun <V : ViewModel> Class<V>.topInstance(b: IHolderViewModelProvider?): V? {
+        return b?.topViewModelProvider()?.get(this)
+    }
+
+    fun <V : ViewModel> Class<V>.thisInstance(b: IHolderViewModelProvider?): V? {
+        return b?.thisViewModelProvider()?.get(this)
+    }
+
+    @Throws(Exception::class)
+    fun isDebug(): Boolean {
+        val context = getCurrentApplication();
+        val bc = "${context.packageName}$.BuildConfig"
+        Log.i("isDebug", "isDebug: $bc")
+        val bcIntsance = ExtensionMethod::class.java.classLoader!!.loadClass(bc)
+
+        return bcIntsance.let {
+            val f = it.getDeclaredField("BUILD_TYPE");
+            val type = f.get(null);
+            "debug" == type
+        }
+
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun <F : Fragment> Class<F>.startActivityNormal(
+        title: String? = null,
+        barColor: Int = Color.WHITE,
+        dataBundle: Bundle? = null
+    ) {
+        ActivityLifeManager.getInstance().getTopActivity()?.let {
+            val intent = Intent(it, NormalFragmentActivity::class.java)
+            val fInfo = FragmentEventInfo(this.name, StyleMessageInfo(title, barColor))
+            intent.putExtra(SupproActivityBusiness.INFO_KEY, fInfo)
+            dataBundle?.let { b ->
+                intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
+            }
+            it.startActivity(intent)
+        }
+    }
+
+    fun <A : Activity> Class<A>.startActivity() {
+        ActivityLifeManager.getInstance().getTopActivity()?.let {
+            try {
+                it.startActivity(Intent(it, this))
+            } catch (e: Exception) {
+                toast("无法打开${this.canonicalName}活动~", it)
+                e.printStackTrace()
+            }
+        }
+
+    }
+
+    fun toast(msg: String?, activity: Activity? = null) {
+        msg?.let {
+            if (Thread.currentThread() != Looper.getMainLooper().thread) {
+                Handler(Looper.getMainLooper()).post {
+                    toast(it)
+                }
+                return
+            }
+            val c = activity ?: ActivityLifeManager.getInstance().getTopActivity()
+            if (c != null && !c.isFinishing) {
+                Toast.makeText(c, it, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(getCurrentApplication(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
+     */
+    @JvmStatic
+    fun <T> String.saveStateChange(holder: IHolderSavedStateHandle, v: T) {
+        holder.getHolderSavedStateHandle()[this] = v
+    }
+
+
+    /**
+     * 观察数据基于“key”的livedate，
+     * isRemove 是否此次监听仅为一次
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun <T> String.liveSaveStateObserver(holder: ILifeSaveStateHandle, isRemove: Boolean = false, observer: Observer<T>) {
+        holder.getThisLifecycle()?.let {
+            val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+            if (isRemove) {
+                liveData.observe(it, object : Observer<T> {
+                    override fun onChanged(t: T) {
+                        observer.onChanged(t)
+                        liveData.removeObserver(this)
+                    }
+                })
+            } else {
+                liveData.observe(it, observer)
+            }
+        }
+    }
+
+    /**
+     * 获取基于“key”的可观察的livedata
+     */
+    @JvmStatic
+    fun <T> String.getSaveStateLiveData(holder: IHolderSavedStateHandle): LiveData<T> {
+        return holder.getHolderSavedStateHandle().getLiveData(this);
+    }
+
+    /**
+     * 观察数据基于“key”的livedate，
+     * 观察者返回值 ： true 表示此次观察将会移除观察者。
+     *            ： false 表示此次观察不会移除观察者
+     */
+    @JvmStatic
+    fun <T> String.liveSaveStateObserverCall(holder: ILifeSaveStateHandle, observer: (call: T) -> Boolean) {
+        holder.getThisLifecycle()?.let {
+            val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+            liveData.observe(it, object : Observer<T> {
+                override fun onChanged(t: T) {
+                    if (observer.invoke(t)) {
+                        liveData.removeObserver(this)
+                    }
+                }
+            })
+        }
+    }
 
 }

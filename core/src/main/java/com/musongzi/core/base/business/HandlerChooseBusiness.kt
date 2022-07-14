@@ -1,9 +1,13 @@
 package com.musongzi.core.base.business
 
 import com.musongzi.core.base.bean.BaseChooseBean
+import com.musongzi.core.base.business.itf.ISinglePickBusiness
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
 
-class HandlerChooseBusiness() : BaseLifeBusiness<IHandlerChooseViewModel<*>>() {
+/**
+ * 单选业务
+ */
+class HandlerChooseBusiness() : BaseLifeBusiness<IHandlerChooseViewModel<*>>() , ISinglePickBusiness {
 
 
     constructor(v: IHandlerChooseViewModel<*>) : this() {
@@ -11,23 +15,23 @@ class HandlerChooseBusiness() : BaseLifeBusiness<IHandlerChooseViewModel<*>>() {
         afterHandlerBusiness()
     }
 
-    var pickData: BaseChooseBean? = null
+    private var pickData: BaseChooseBean? = null
 
-    private fun pick(t: BaseChooseBean?, isPick: Boolean) = let {
+    private fun pick(t: BaseChooseBean?, isPick: Boolean): HandlerChooseBusiness {
         if (t != null) {
             t.choose(isPick)
             if (isPick) {
                 pickData = t;
             }
         }
-        it
+        return this
     }
 
     fun pickRun(t: BaseChooseBean?) = pick(pickData, t)
 
-    fun pick(unPick: BaseChooseBean?, tPick: BaseChooseBean?) = let {
-        it.pick(unPick, false).pick(tPick, true).iAgent.updateByPick()
-        it
+    fun pick(unPick: BaseChooseBean?, tPick: BaseChooseBean?): HandlerChooseBusiness {
+        pick(unPick, false).pick(tPick, true).iAgent.updateByPick(pickData)
+        return this
     }
 
     fun <T : BaseChooseBean> pickRun(t: T, call: (T) -> Unit) {

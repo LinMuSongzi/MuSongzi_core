@@ -10,6 +10,7 @@ import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.itf.IClient
+import com.musongzi.core.util.WriteTxt
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
 import com.musongzi.test.event.IMusicEvent
@@ -35,6 +36,17 @@ class MyApplication : MultiDexApplication(){
 
     override fun onCreate() {
         super.onCreate()
+
+
+
+        Thread.setDefaultUncaughtExceptionHandler{t,e->
+            Log.i(TAG, "message: t = ${e.message}")
+            for(error in e.stackTrace){
+                Log.i(TAG, "error: $error")
+            }
+            WriteTxt.exception(e)
+        }
+
         EventBus.getDefault().register(this)
         registerEvent(ILoginEvent::class.java){
             object:IMusicEvent{

@@ -20,6 +20,6 @@ public @interface CollecttionsEngine {
 
     boolean isEnableEventBus() default false;
 
-    public static final String B = "bundle";
+    public static final String B = "CollecttionsEngine_bundle";
 
 }

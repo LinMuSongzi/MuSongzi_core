@@ -1,4 +1,4 @@
-package com.musongzi.core.itf.page;
+package com.musongzi.core.base.page;
 
 import android.util.Log;
 
@@ -8,15 +8,22 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
+import com.musongzi.core.itf.ILifeObject;
 import com.musongzi.core.itf.data.IHolderDataConvert;
-import com.musongzi.core.itf.holder.IHolderLifecycle;
+import com.musongzi.core.itf.page.Book;
+import com.musongzi.core.itf.page.IAdMessage;
+import com.musongzi.core.itf.page.ILimitOnLoaderState;
+import com.musongzi.core.itf.page.ILimitRead;
+import com.musongzi.core.itf.page.IPageEngine;
 
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 
@@ -27,7 +34,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * @param <ListItem>   每项数据的泛型{@link #data}
  * @param <DataEntity> remote 数据端加载进入来的未过滤的基本数据泛型 通过{@link CallBack#transformDataToList(DataEntity)} 转化成{@link #data}
  */
-public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>, Observer<DataEntity> {
+public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>, Observer<DataEntity>, ILimitRead, ILimitOnLoaderState {
 
     private static final String TAG = "PageSupport";
 
@@ -45,29 +52,78 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     protected CallBack<ListItem, DataEntity> callBack;
     /**
-     * 最后一此的数据长度
+     * 最后一次的数据长度
      */
     private int lastSize = 0;
     private int size2 = 0;
     private int maxPage = -1;
     public boolean isEndPage = false;
+    /**
+     * 状态
+     */
     public final MutableLiveData<Integer> state = new MutableLiveData<>();
+    /**
+     * 此size不是数据长度，是数据更新的次数
+     */
     private final MutableLiveData<Integer> size = new MutableLiveData<>();
+    /**
+     * page 当前的页数。不一定第一页就是0或者1
+     */
     private final MutableLiveData<Integer> page = new MutableLiveData<>();
-
+    /**
+     * 识别一次加载 load->next 完整id，但是未想好写进代码里
+     */
     private final MutableLiveData<Integer> loadId = new MutableLiveData<>(0);
 
-    private Observer<DataEntity> simpleObserver;
-//    public PageSupport() {
-//    }
+    /**
+     * 包裹的一个静态代理
+     */
+    @Deprecated
+    private Observer<DataEntity> mFlashObserver;
+    /**
+     * 准备刷新时候，会被赋值。标记当前刷新时间
+     */
+    private long thisRefreshTime = 0;
+    /**
+     * 准备下一页加载更多时候，会被赋值。标记当前记载更多的时间
+     */
+    private long thisNextTime = 0;
+    /**
+     * 刷新的时间的间隔阚值
+     */
+    private long thisRefreshTimeLimite = 1500;
+    /**
+     * 加载更多数据的时间的间隔阚值
+     */
+    private long thisNextTimeLimite = 1500;
+
+    private boolean enableRefreshLimit = true;
+    private boolean enableNextLoadLimit = true;
+
+    public long getThisRefreshTimeLimite() {
+        return thisRefreshTimeLimite;
+    }
+
+    public void setThisRefreshTimeLimite(long thisRefreshTimeLimite) {
+        this.thisRefreshTimeLimite = thisRefreshTimeLimite;
+    }
+
+    public long getThisNextTimeLimite() {
+        return thisNextTimeLimite;
+    }
+
+    public void setThisNextTimeLimite(long thisNextTimeLimite) {
+        this.thisNextTimeLimite = thisNextTimeLimite;
+    }
+
+    PageSupport() throws Exception {
+        throw new Exception("不允许初始化,请使用带参数的构造方法 PageSupport(CallBack<ListItem, DataEntity> callBack) ");
+    }
 
     public PageSupport(CallBack<ListItem, DataEntity> callBack) {
         this.callBack = callBack;
+        LifecycleOwner lifecycleOwner = callBack.getThisLifecycle();
         Log.i(TAG, "PageSupport: " + callBack.pageSize());
-         LifecycleOwner lifecycleOwner = null;
-        if (callBack.getThisLifecycle() != null) {
-            lifecycleOwner = callBack.getThisLifecycle();//.getLifecycle();
-        }
         if (lifecycleOwner == null) {
             page.observeForever(integer -> {
                 Log.i(TAG, "PageSupport: observeForever  = " + integer);
@@ -86,7 +142,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
             state.observe(lifecycleOwner, callBack::handlerState);
         }
 
-        androidx.lifecycle.Observer<Integer> observer = integer -> {
+        androidx.lifecycle.Observer<Integer> observer = mState -> {
             Log.i(TAG, "PageSupport: change " + this);
             callBack.handlerData(data, callBack.getCode());
             if (callBack.createPostEvent() != null) {
@@ -99,7 +155,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
             size.observe(lifecycleOwner, observer);
         }
         if (lifecycleOwner != null && callBack.getAdMessage() != null) {
-            callBack.getThisLifecycle().getLifecycle().addObserver(new DefaultLifecycleObserver() {
+            lifecycleOwner.getLifecycle().addObserver(new DefaultLifecycleObserver() {
                 @Override
                 public void onCreate(@NonNull LifecycleOwner owner) {
                     callBack.getAdMessage().load();
@@ -109,7 +165,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
                     owner.getLifecycle().removeObserver(this);
                 }
             });
-            state.observe(lifecycleOwner, integer -> callBack.getAdMessage().onDataStateChange(integer));
+            state.observe(lifecycleOwner, mState -> callBack.getAdMessage().onDataStateChange(mState));
         }
     }
 
@@ -120,34 +176,40 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     private void load() {
         int p = page.getValue();
         Log.i(TAG, "load: page = " + p);
-        if (simpleObserver == null) {
-            simpleObserver = new Observer<DataEntity>() {
+        if (mFlashObserver == null) {
+            mFlashObserver = new Observer<DataEntity>() {
 
                 @Override
                 public void onComplete() {
-
+//                    super.onComplete();
                     PageSupport.this.onComplete();
                 }
 
                 @Override
                 public void onSubscribe(Disposable d) {
-
+//                    super.onSubscribe(d);
                     PageSupport.this.onSubscribe(d);
                 }
 
                 @Override
                 public void onError(Throwable e) {
-
+//                    super.onError(e);
                     PageSupport.this.onError(e);
                 }
 
                 @Override
                 public void onNext(DataEntity dataEntity) {
+//                    super.onNext(dataEntity);
                     PageSupport.this.onNext(dataEntity);
                 }
             };
         }
-        callBack.getRemoteData(p).subscribe(simpleObserver);
+        Observable<DataEntity> observable = callBack.getRemoteData(p);
+        if (observable != null) {
+            observable.subscribe(mFlashObserver);
+        } else {
+            Log.i(TAG, "load: Observable<DataEntity> observable = callBack.getRemoteData(p) , Observable = null , not load ");
+        }
     }
 
     /**
@@ -156,6 +218,20 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     @Override
     public void next() {
+        nextNewMethod(true);
+    }
+
+    private void nextNewMethod(boolean isEnableLimiteMoreLoadByMethodPara) {
+        if(isEnableLimiteMoreLoadByMethodPara) {
+            if (enableNextLoadLimit) {
+                if (Math.abs(thisNextTime - System.currentTimeMillis()) <= thisNextTimeLimite) {
+                    Log.i(TAG, "refresh: 加载下一页间隔时间短~");
+                    return;
+                }
+            }
+        }
+        thisNextTime = System.currentTimeMillis();
+
         Log.i(TAG, "next: 2");
         if (isEndPage) {
             state.setValue(NO_MORE_PAGE);
@@ -172,6 +248,10 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         page.setValue(page.getValue() + 1);
     }
 
+//    private long thisNextTimeLimite() {
+//        return 1500;
+//    }
+
     /**
      * 重新加载
      * 其中分页第一项受{@link CallBack#thisStartPage()} 的回调来控制
@@ -179,11 +259,29 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     @Override
     public void refresh() {
+        refreshNewMethod(true);
+    }
+
+    private void refreshNewMethod(boolean isEnableLimiteRefreshByMethodPara) {
+        if(isEnableLimiteRefreshByMethodPara) {
+            if(enableRefreshLimit) {
+                if (Math.abs(thisRefreshTime - System.currentTimeMillis()) <= thisRefreshTimeLimite) {
+                    Log.i(TAG, "refresh: 刷新间隔时间短~");
+                    return;
+                }
+            }
+        }
+        thisRefreshTime = System.currentTimeMillis();
+
         isEndPage = false;
         lastSize = 0;
         state.setValue(STATE_START_REFRASH);
         page.setValue(callBack.thisStartPage());
     }
+
+//    private long thisRefreshTimeLimite() {
+//        return 1500;
+//    }
 
     @Override
     public int state() {
@@ -312,25 +410,63 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         }
     }
 
+    @Override
+    public void refreshNoLimite() {
+        refreshNewMethod(false);
+    }
+
+    @Override
+    public void nextNoLimite() {
+        nextNewMethod(false);
+    }
+
+    @Override
+    public void enableRefreshLimit(boolean enable) {
+        enableRefreshLimit = enable;
+    }
+
+    @Override
+    public void enableMoreLoadLimit(boolean enable) {
+        enableNextLoadLimit = enable;
+    }
+
     /**
      * 提供给外部环境的基本回调函数
      *
      * @param <ListItem>参数泛型定义与   {@link PageSupport} 一致
      * @param <DataEntity>参数泛型定义与 {@link PageSupport} 一致
      */
-    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, IHolderLifecycle {
+    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, ILifeObject {
 
+        /**
+         * 身份id
+         * @return
+         */
         int getCode();
 
+        /**
+         * 某些地方还在使用，因为一开始没想好，暂时先标记为过时
+         *
+         * @return
+         */
         @Deprecated
         @Nullable
         Object createPostEvent();
 
+        /**
+         * 此回调不是覆盖原来的observer的意思，仅仅作为第二者参与数据回来时函数回调
+         *
+         * @return
+         */
         @Nullable
         Observer<DataEntity> getObserver();
 
         void handlerState(Integer integer);
 
+        /**
+         * 广告辅助接口，用来处理数据集中广告业务
+         * @return
+         */
         @Nullable
         IAdMessage<ListItem> getAdMessage();
 

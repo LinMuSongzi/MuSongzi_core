@@ -2,13 +2,17 @@ package com.musongzi.test
 
 import android.Manifest
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import com.musongzi.core.ExtensionMethod.startActivity
+import com.musongzi.core.ExtensionMethod.startActivityNormal
+import com.musongzi.test.activity.BaseActivity
 import com.musongzi.test.databinding.ActivityMainBinding
-class MainActivity : AppCompatActivity() {
+import com.musongzi.test.fragment.TowFragment
+
+class MainActivity : BaseActivity() {
 
     lateinit var d: ActivityMainBinding
 
@@ -19,7 +23,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun goTow(v: View) {
-        startActivity(Intent(this, TowActivity::class.java))
+        TowActivity::class.java.startActivity()
+        //TowFragment::class.java.startActivityNormal("第二个页面")
     }
 
 }

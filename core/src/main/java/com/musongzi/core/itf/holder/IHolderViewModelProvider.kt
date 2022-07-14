@@ -1,10 +1,15 @@
 package com.musongzi.core.itf.holder
 
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 
-interface IHolderViewModelProvider :ViewModelStoreOwner{
+interface IHolderViewModelProvider {
 
-    fun getMainViewModelProvider():ViewModelStoreOwner
+    fun isRootProvider() = topViewModelProvider() == thisViewModelProvider();
+
+    fun topViewModelProvider(): ViewModelProvider
+
+    fun thisViewModelProvider(): ViewModelProvider
 
 }

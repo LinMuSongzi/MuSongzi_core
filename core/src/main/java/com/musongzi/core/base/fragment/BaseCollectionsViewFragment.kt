@@ -16,12 +16,12 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
 abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChooseBean, DATA> :
-    LRefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
+    RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
     CollectionsViewSupport {
 
     override fun actualTypeArgumentsViewModelIndex() = 0
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
-    override fun superViewModelName() = LRefreshFrament::class.java.name
+    override fun superFragmentName() = RefreshFrament::class.java.name
     override fun superDatabindingName() = BaseCollectionsViewFragment::class.java.name
 
     private lateinit var mRecycleViewClient: IRefreshViewClient
@@ -29,7 +29,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     abstract fun createRecycleViewClient(): IRefreshViewClient
 
     override fun initView() {
-        getMainViewModel()?.business?.handlerArguments(arguments)
+        getViewModel().business.handlerArguments(arguments)
     }
 
     override fun handlerArguments() {
@@ -38,13 +38,13 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     }
 
     override fun initEvent() {
-        (getMainViewModel()?.getHolderBusiness()?.base as? IHolderCollections)?.onRefreshViewClientEvent(
+        (getViewModel().getHolderBusiness().base as? IHolderCollections)?.onRefreshViewClientOnEvent(
             mRecycleViewClient
         );
     }
 
     override fun initData() {
-        getMainViewModel()?.getHolderBusiness()?.refresh()
+        getViewModel().getHolderBusiness().refresh()
     }
 
     override fun setRefresh(b: Boolean) {}

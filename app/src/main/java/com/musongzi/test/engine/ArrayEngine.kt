@@ -5,12 +5,18 @@ import com.musongzi.core.ExtensionMethod.getApi
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
+import com.musongzi.core.base.vm.IRefreshViewModel
 import com.musongzi.test.Api
 import com.musongzi.test.databinding.AdapterStringBinding
 import io.reactivex.rxjava3.core.Observable
 
 @CollecttionsEngine(isEnableReFresh = true, isEnableLoadMore = true, isEnableEventBus = true)
 class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>>() {
+
+
+    override fun onInitAfter(iRefreshViewModel: IRefreshViewModel<StringChooseBean>) {
+
+    }
 
     override fun getRemoteDataReal(page: Int): Observable<Array<StringChooseBean>> = getApi(Api::class.java).getArrayEngine(page)
 

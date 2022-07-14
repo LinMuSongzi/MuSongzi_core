@@ -9,49 +9,14 @@ import com.musongzi.core.itf.holder.IHolderLifecycle
 import org.greenrobot.eventbus.EventBus
 import java.lang.Exception
 
-open class BaseLifeBusiness<L : IHolderLifecycle> : IAgentHolder<L>, DefaultLifecycleObserver{
-
-    @JvmField
-    protected val TAG = javaClass.simpleName
-    private var cacheBusinessMaps = HashMap<String, IBusiness>()
-    protected lateinit var iAgent: L
-
+open class BaseLifeBusiness<L : IHolderLifecycle> : BaseMapBusiness<L>(), DefaultLifecycleObserver{
 
     override fun afterHandlerBusiness() {
         Log.i(TAG, "onCreateView:afterHandlerBusiness; -- ")
     }
 
-    override fun <Next : IBusiness> getNext(search: Class<Next>): Next? {
-        return getNext(search.name, search)
-    }
-
-    private fun <Next : IBusiness> getNext(
-        searchString: String,
-        searchClass: Class<Next>
-    ): Next? {
-        var business: Next? = cacheBusinessMaps[searchString] as? Next
-        if (business == null) {
-            if(!searchClass.isInterface) {
-                business = searchClass.newInstance()
-                (business as? IAgentHolder<IHolderLifecycle>)?.let {
-                    try {
-                        it.setAgentModel(iAgent)
-                        it.afterHandlerBusiness();
-                        cacheBusinessMaps[searchString] = it
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        business = null
-                    }
-                }
-            }
-        }
-        Log.i(TAG, "getNext: $business")
-        return business
-    }
-
     override fun setAgentModel(v: L) {
-        Log.i(TAG, "setAgentModel: now set")
-        this.iAgent = v;
+        super.setAgentModel(v)
         v.getThisLifecycle()?.lifecycle?.addObserver(this)
     }
 
