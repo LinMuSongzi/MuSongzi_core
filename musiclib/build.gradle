@@ -3,17 +3,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 32
-
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    androidExtensions {
+        experimental = true
+    }
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 32
-        versionCode 20220716
-        versionName "1.0.0"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
