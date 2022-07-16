@@ -19,6 +19,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="aptlib" target="1.7" />
+      <module name="comment" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
