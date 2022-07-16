@@ -1,5 +1,6 @@
 package com.musongzi.test.simple
 
+import android.media.MediaCodec
 import android.util.Log
 import com.musongzi.core.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.core.ExtensionMethod.liveSaveStateObserverCall
@@ -60,6 +61,10 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
 
 
 
+
+//        val mediaCodec:MediaCodec = null;
+//
+//        mediaCodec.dequeueOutputBuffer(null,0);
 
 
 //        dataBinding.idMainContentTv.setOnClickListener {
