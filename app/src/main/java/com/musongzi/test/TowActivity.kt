@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.musongzi.core.ExtensionMethod
-import com.musongzi.core.ExtensionMethod.analysisCollectionsEngine
+import com.musongzi.comment.ExtensionMethod.convertFragemnt
 import com.musongzi.test.activity.BaseActivity
 import com.musongzi.test.databinding.ActivityMainBinding
 import com.musongzi.test.databinding.ActivityTowBinding
@@ -49,6 +48,8 @@ class TowActivity : BaseActivity() {
     }
 
     private fun createFragment2(): Fragment {
-        return analysisCollectionsEngine(ArrayEngine::class.java)
+        return ArrayEngine::class.java.convertFragemnt{
+            it.title = "修改了哈哈哈哈"
+        }
     }
 }

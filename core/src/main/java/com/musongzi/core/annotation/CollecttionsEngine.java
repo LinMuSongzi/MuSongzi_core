@@ -20,6 +20,8 @@ public @interface CollecttionsEngine {
 
     boolean isEnableEventBus() default false;
 
+    boolean openLazyLoad() default false;
+
     public static final String B = "CollecttionsEngine_bundle";
 
 }

@@ -18,6 +18,7 @@ import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.base.page.PageSupport
+import com.musongzi.core.itf.data.IChoose
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import org.greenrobot.eventbus.Subscribe
@@ -35,8 +36,8 @@ import org.greenrobot.eventbus.ThreadMode
  * @property observer Observer<Data> 当前总体数据的一个观察者回调
  * @property initFlag Boolean 是否初始化
  */
-abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsViewEngine<Item>,
-    PageSupport.CallBack<Item, Data>, IHolderContext ,IAnalyticSpanner<List<Item>,Data>{
+abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
+    PageSupport.CallBack<Item, Data>, IHolderContext, IAnalyticSpanner<List<Item>, Data> {
     /**
      * 分页引擎
      */
@@ -154,7 +155,7 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     }
 
-    override fun getPageSupport() = this
+    override  fun getPageSupport() = this
 
     override fun getAdMessage(): IAdMessage<Item>? = null
 
@@ -166,13 +167,13 @@ abstract class BaseMoreViewEngine<Item : BaseChooseBean, Data> : ICollectionsVie
 
     override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
 
-    fun pickSingle(i: Item) {
-        (callBack as CollectionsViewModel).wantPick().pickRun(i)
+    fun <C : IChoose> pickSingle(pick: C) {
+        (callBack as CollectionsViewModel).wantPick().pickRun(pick)
     }
 
-    fun pickSingle(view:View,i: Item) {
+    fun <C : IChoose> pickSingle(view: View, pick: C) {
         view.setOnClickListener {
-            (callBack as CollectionsViewModel).wantPick().pickRun(i)
+            (callBack as CollectionsViewModel).wantPick().pickRun(pick)
         }
     }
 

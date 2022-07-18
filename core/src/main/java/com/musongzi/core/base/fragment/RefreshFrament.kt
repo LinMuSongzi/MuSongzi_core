@@ -34,6 +34,10 @@ abstract class RefreshFrament<V :EasyViewModel<*, *>, D :ViewDataBinding, Item> 
         Log.i(TAG, "setRefresh: 6")
     }
 
+    override fun isSingleViewModelProvider(): Boolean {
+        return true
+    }
+
 
 //    override fun instanceViewModel(): V? = InjectionHelp.findViewModel(
 //        javaClass,

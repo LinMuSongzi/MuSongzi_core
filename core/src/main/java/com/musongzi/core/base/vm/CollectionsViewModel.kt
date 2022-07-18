@@ -3,6 +3,7 @@ package com.musongzi.core.base.vm
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.bean.BaseChooseBean
@@ -80,6 +81,7 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
                 emptyLoadRes = it.emptyLoadRes
                 modelKey = it.modelKey
                 emptyString = it.emptyString
+                openLazyLoad = if (it.openLazyLoad) LAZY_LOAD_OPEN_FLAG else LAZY_LOAD_CLOSE_FLAG
             }
         }
 
@@ -91,6 +93,8 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
         var modelKey: String = ""
         var emptyString: String = ""
         var engineName: String = ""
+        var openLazyLoad = LAZY_LOAD_CLOSE_FLAG
+
 
         constructor(parcel: android.os.Parcel) : this() {
             isEnableReFresh = parcel.readByte() != 0.toByte()
@@ -101,6 +105,7 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
             modelKey = parcel.readString()!!
             emptyString = parcel.readString()!!
             engineName = parcel.readString()!!
+            openLazyLoad = parcel.readInt()
         }
 
         override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
@@ -112,6 +117,7 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
             parcel.writeString(modelKey)
             parcel.writeString(emptyString)
             parcel.writeString(engineName)
+            parcel.writeInt(openLazyLoad)
         }
 
         override fun describeContents(): Int {
@@ -133,8 +139,19 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
         return business.base as? ISource<BaseChooseBean>
     }
 
-    override fun updateByPick(info:BaseChooseBean?) {
+    override fun updateByPick(info: BaseChooseBean?) {
         notifyDataSetChanged()
+    }
+
+    fun joinLazyLoad() {
+        Log.i(TAG, "joinLazyLoad: " + hashCode())
+    }
+
+    companion object {
+
+        const val LAZY_LOAD_OPEN_FLAG = 0x101
+        const val LAZY_LOAD_CLOSE_FLAG = 0x102
+
     }
 
 }
