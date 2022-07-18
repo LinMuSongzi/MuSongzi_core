@@ -7,7 +7,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.client.IRefreshClient
-import com.musongzi.core.base.vm.MszViewModel
+import com.musongzi.core.base.vm.EasyViewModel
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -19,7 +19,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
  * @param M : LViewModel<*, *>
  * @param D : ViewDataBinding
  */
-abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> : ModelFragment<V, D>(),
+abstract class RefreshFrament<V :EasyViewModel<*, *>, D :ViewDataBinding, Item> : ModelFragment<V, D>(),
     IRefreshClient<Item>, IRecycleViewClient<Item> {
 
     override fun setRefresh(b: Boolean) {

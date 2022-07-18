@@ -10,8 +10,6 @@ import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
 import com.musongzi.core.itf.page.ISource
-import java.io.Serializable
-import android.os.Parcel as Parcel1
 
 /**
  * 构建一个自动填充的集合viewmode
@@ -21,7 +19,7 @@ import android.os.Parcel as Parcel1
  *
  *
  */
-class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
+class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
     IHandlerChooseViewModel<CollectionsBusiness>, IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
