@@ -150,7 +150,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     }
 
     override fun showText(msg: String) {
-
+        dataBinding.idMainContentTv.text = msg
     }
 
     override fun showDialog(msg: String?) {

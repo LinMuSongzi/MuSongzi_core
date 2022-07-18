@@ -7,6 +7,7 @@ import com.musongzi.core.base.fragment.ModelFragment
 
 /*** created by linhui * on 2022/7/18 */
 open class SplashFragment : ModelFragment<SplashViewModel, FragmentSplashBinding>() {
+
     override fun initView() {
 
     }

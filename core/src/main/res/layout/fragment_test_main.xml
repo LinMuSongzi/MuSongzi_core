@@ -5,8 +5,9 @@
 
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
         android:layout_height="match_parent">
 
 
@@ -17,6 +18,7 @@
             android:padding="10dp"
             android:hint="请输入"
             android:textSize="15dp"
+            android:layout_margin="20dp"
             android:textColor="#333333"
             android:layout_above="@+id/id_main_content_tv"
             />
@@ -26,8 +28,8 @@
 
         <TextView
             android:id="@+id/id_main_content_tv"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="100dp"
@@ -36,5 +38,5 @@
             android:textColor="#0f79d1"
             android:textSize="18dp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </layout>
