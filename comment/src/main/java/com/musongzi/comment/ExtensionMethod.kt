@@ -355,10 +355,7 @@ object ExtensionMethod {
 
     @JvmStatic
     @JvmOverloads
-    fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragemnt(
-        data: Bundle? = null,
-        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
-    ): Fragment {
+    fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragemnt(data: Bundle? = null, onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null): Fragment {
         val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(this)
         val mCollectionsInfo = cAnnotation?.let {
             CollectionsViewModel.CollectionsInfo(it)
