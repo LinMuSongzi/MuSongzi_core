@@ -3,20 +3,29 @@ package com.musongzi.comment
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
+import com.musongzi.comment.ExtensionMethod.getResUri
 import com.musongzi.comment.business.DoubleLimiteBusiness
+import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.MszObserver
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
@@ -42,8 +51,10 @@ import com.musongzi.core.itf.INeed
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
+import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
 import com.musongzi.core.util.InjectionHelp
+import com.musongzi.core.util.ScreenUtil
 import com.musongzi.core.util.TextUtil
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.MaterialHeader
@@ -549,5 +560,69 @@ object ExtensionMethod {
             check(k, run)
         }
     }
+
+    @JvmStatic
+    fun EditText.search(call: (String) -> Unit) {
+        setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (event?.action == KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_ENTER) {
+                        call(text.toString())
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+    }
+
+    @JvmStatic
+    fun EditText.searchByObservable(call: (Observable<String>) -> Unit) {
+        setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (event?.action == KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_ENTER) {
+                        call(Observable.create { it.onNext(text.toString()) })
+                        return true
+                    }
+                }
+                return false
+            }
+        })
+    }
+
+    @JvmStatic
+    fun Int.dp(): Float {
+        return ScreenUtil.dp2px(this.toFloat()).toFloat()
+    }
+
+    @JvmStatic
+    fun Int.getResUri(): Uri {
+        return ApkUtil.getResUri(this)
+    }
+
+    @JvmStatic
+    fun Int.getDrawable(): Drawable {
+        return ActivityCompat.getDrawable(ActivityThreadHelp.getCurrentApplication(), this)!!
+    }
+
+    @JvmStatic
+    fun Int.getResUriString(): String {
+        return ApkUtil.getResUri(this).toString()
+    }
+
+//    @JvmStatic
+//    fun String?.showWeb() {
+//        this?.apply {
+//            ApkUtil.startSimpleWebHtml(this, false)
+//        }
+//    }
+//
+//    @JvmStatic
+//    fun String?.showHtml() {
+//        this?.apply {
+//            ApkUtil.startSimpleWebHtml(this, true)
+//        }
+//    }
 
 }
