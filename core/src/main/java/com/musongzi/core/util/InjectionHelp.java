@@ -82,6 +82,7 @@ public class InjectionHelp {
 
 
     public static <T> Class<T> findGenericClass(@NotNull Class<?> aClass, int actualTypeArgumentsViewModelIndex) {
+//        Class<T> cache = findCache();
         Type type = aClass.getGenericSuperclass();
         if (type instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();

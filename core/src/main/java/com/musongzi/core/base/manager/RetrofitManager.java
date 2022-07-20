@@ -31,6 +31,7 @@ import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -79,7 +80,9 @@ public class RetrofitManager {
         }
         if (okHttpClient == null) {
             Cache cache = new Cache(ActivityThreadHelp.getCurrentApplication().getCacheDir(), 1024 * 1024 * 200);
-            okHttpClient = new OkHttpClient().newBuilder().cache(cache).build();
+            okHttpClient = new OkHttpClient().newBuilder()
+            //添加日志拦截器
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)).build();
         }
         return okHttpClient;
     }

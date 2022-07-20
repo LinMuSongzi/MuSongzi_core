@@ -78,8 +78,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
                 p = thisViewModelProvider()
             }
             else -> {
-                modelProviderEnable =
-                    modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
+                modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
                 return getProvider()
             }
         }
@@ -88,7 +87,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     }
 
     protected open fun isSingleViewModelProvider(): Boolean {
-        return true
+        return false
     }
 
 //    private fun getMainViewProvider(): ViewModelProvider {
@@ -148,8 +147,19 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
         val CLASS_CACHE = HashMap<String,Class<*>?>()
 
+        /**
+         * 1
+         */
         const val PROVIDER_NORMAL = 1
+
+        /**
+         * 2
+         */
         const val PROVIDER_SINGLE = PROVIDER_NORMAL.shl(1);
+
+        /**
+         * 4
+         */
         const val PROVIDER_MAIN = PROVIDER_NORMAL.shl(2);
 
         fun composeProvider(b: Bundle?, flag: Boolean) {

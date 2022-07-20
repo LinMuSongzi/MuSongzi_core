@@ -2,11 +2,10 @@ package com.musongzi.test.simple
 
 import android.media.MediaCodec
 import android.util.Log
-import com.musongzi.core.ExtensionMethod.liveSaveStateObserver
-import com.musongzi.core.ExtensionMethod.liveSaveStateObserverCall
-import com.musongzi.core.ExtensionMethod.saveStateChange
-import com.musongzi.core.ExtensionMethod.thisInstance
-import com.musongzi.core.ExtensionMethod.topInstance
+import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
+import com.musongzi.comment.ExtensionMethod.liveSaveStateObserverCall
+import com.musongzi.comment.ExtensionMethod.saveStateChange
+import com.musongzi.comment.ExtensionMethod.searchByObservable
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.event
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
@@ -58,8 +57,6 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
          * 改变基于key的数据
          */
         testKey.saveStateChange(getViewModel(),"《三国演义》")
-
-
 
 
 //        val mediaCodec:MediaCodec = null;
@@ -150,7 +147,7 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
     }
 
     override fun showText(msg: String) {
-
+        dataBinding.idMainContentTv.text = msg
     }
 
     override fun showDialog(msg: String?) {

@@ -3,6 +3,7 @@ package com.musongzi.core.base.vm
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.bean.BaseChooseBean
@@ -10,8 +11,6 @@ import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
 import com.musongzi.core.itf.page.ISource
-import java.io.Serializable
-import android.os.Parcel as Parcel1
 
 /**
  * 构建一个自动填充的集合viewmode
@@ -21,7 +20,7 @@ import android.os.Parcel as Parcel1
  *
  *
  */
-class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
+class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
     IHandlerChooseViewModel<CollectionsBusiness>, IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
@@ -82,6 +81,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
                 emptyLoadRes = it.emptyLoadRes
                 modelKey = it.modelKey
                 emptyString = it.emptyString
+                openLazyLoad = if (it.openLazyLoad) LAZY_LOAD_OPEN_FLAG else LAZY_LOAD_CLOSE_FLAG
             }
         }
 
@@ -93,6 +93,8 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
         var modelKey: String = ""
         var emptyString: String = ""
         var engineName: String = ""
+        var openLazyLoad = LAZY_LOAD_CLOSE_FLAG
+
 
         constructor(parcel: android.os.Parcel) : this() {
             isEnableReFresh = parcel.readByte() != 0.toByte()
@@ -103,6 +105,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
             modelKey = parcel.readString()!!
             emptyString = parcel.readString()!!
             engineName = parcel.readString()!!
+            openLazyLoad = parcel.readInt()
         }
 
         override fun writeToParcel(parcel: android.os.Parcel, flags: Int) {
@@ -114,6 +117,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
             parcel.writeString(modelKey)
             parcel.writeString(emptyString)
             parcel.writeString(engineName)
+            parcel.writeInt(openLazyLoad)
         }
 
         override fun describeContents(): Int {
@@ -135,8 +139,19 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient<Any>, Collection
         return business.base as? ISource<BaseChooseBean>
     }
 
-    override fun updateByPick(info:BaseChooseBean?) {
+    override fun updateByPick(info: BaseChooseBean?) {
         notifyDataSetChanged()
+    }
+
+    fun joinLazyLoad() {
+        Log.i(TAG, "joinLazyLoad: " + hashCode())
+    }
+
+    companion object {
+
+        const val LAZY_LOAD_OPEN_FLAG = 0x101
+        const val LAZY_LOAD_CLOSE_FLAG = 0x102
+
     }
 
 }

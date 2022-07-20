@@ -3,6 +3,7 @@ package com.musongzi.core.base.fragment
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
@@ -15,9 +16,10 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
-abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChooseBean, DATA> :
-    RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
+abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
     CollectionsViewSupport {
+
+    var totalLiveData = MutableLiveData(0)
 
     override fun actualTypeArgumentsViewModelIndex() = 0
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
@@ -44,7 +46,11 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM : BaseChoos
     }
 
     override fun initData() {
-        getViewModel().getHolderBusiness().refresh()
+        if(getViewModel().collectionsInfo.openLazyLoad.and(CollectionsViewModel.LAZY_LOAD_CLOSE_FLAG) > 0) {
+            getViewModel().getHolderBusiness().refresh()
+        }else{
+            getViewModel().joinLazyLoad();
+        }
     }
 
     override fun setRefresh(b: Boolean) {}
