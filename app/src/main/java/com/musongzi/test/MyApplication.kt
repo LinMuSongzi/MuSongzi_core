@@ -1,15 +1,12 @@
 package com.musongzi.test
 
-import android.app.Activity
-import android.app.Application
-import android.os.Bundle
 import android.util.Log
+import androidx.databinding.DataBinderMapperImpl
+import androidx.databinding.DataBindingUtil
 import androidx.multidex.MultiDexApplication
-import com.musongzi.core.ExtensionMethod.bean
-import com.musongzi.core.base.manager.ActivityLifeManager
+import com.musongzi.core.ExtensionCoreMethod.bean
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.RetrofitManager
-import com.musongzi.core.itf.IClient
 import com.musongzi.core.util.WriteTxt
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.event.ILoginEvent
@@ -22,7 +19,6 @@ import org.greenrobot.eventbus.ThreadMode
 import retrofit2.Retrofit
 import java.lang.reflect.Method
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MyApplication : MultiDexApplication(){
     companion object {
@@ -36,8 +32,12 @@ class MyApplication : MultiDexApplication(){
 
     override fun onCreate() {
         super.onCreate()
-
-
+        //com.musongzi.comment.DataBinderMapperImpl()
+//        val dClass = DataBindingUtil::class.java
+//        dClass.getDeclaredField("sMapper").let {
+//            it.isAccessible = true
+//            (it.get(null) as DataBinderMapperImpl).addMapper(com.musongzi.comment.DataBinderMapperImpl())
+//        }
 
         Thread.setDefaultUncaughtExceptionHandler{t,e->
             Log.i(TAG, "message: t = ${e.message}")

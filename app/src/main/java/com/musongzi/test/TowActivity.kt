@@ -13,13 +13,11 @@ import com.musongzi.test.simple.TestMainFragment
 
 class TowActivity : BaseActivity() {
 
-    lateinit var d: ActivityTowBinding
 
-    var f = createFragment1()
+    var indexFragment = createFragment1()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        d = DataBindingUtil.setContentView(this, R.layout.activity_tow)
 //        replace();
         go()
 //        window.decorView.postDelayed({
@@ -39,7 +37,7 @@ class TowActivity : BaseActivity() {
     private fun go() {
         supportFragmentManager.beginTransaction().replace(
             R.id.id_content_layout,
-            f, "haha"
+            indexFragment, "haha"
         ).commitAllowingStateLoss()
     }
 

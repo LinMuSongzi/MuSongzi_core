@@ -6,17 +6,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
-import com.musongzi.core.base.vm.ActivityHelpViewModel;
+import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
 import com.musongzi.core.base.vm.SaveStateHandleWarp;
 import com.musongzi.core.itf.IAgentHolder;
 import com.musongzi.core.itf.IClient;
-import com.musongzi.core.itf.holder.IHolderActivity;
-import com.musongzi.core.itf.holder.IHolderLifecycle;
+import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.holder.IHolderViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 
@@ -114,9 +114,8 @@ public class InjectionHelp {
     }
 
 
-
     @org.jetbrains.annotations.Nullable
-    public static <A extends IHolderLifecycle, B extends IAgentHolder<A>> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
+    public static <A extends IViewInstance, B extends IAgentHolder<A>> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
         B instance = null;
         try {
             instance = targetClass.newInstance();
@@ -129,10 +128,9 @@ public class InjectionHelp {
     }
 
     /**
-     *
-     * @param activity 或许是activity，或许是fragment
-     * @param defaultArgs 如果调用者是activity，defaultArgs 是activity的 savedInstanceState.
-     *                    如果调用者是frament ，defaultArgs 是fragment的argment bundle
+     * @param activity         或许是activity，或许是fragment
+     * @param defaultArgs      如果调用者是activity，defaultArgs 是activity的 savedInstanceState.
+     *                         如果调用者是frament ，defaultArgs 是fragment的argment bundle
      * @param clazz
      * @param savedStateHandle
      * @param <C>
@@ -140,8 +138,8 @@ public class InjectionHelp {
      * @return
      */
     @org.jetbrains.annotations.Nullable
-    public static <C extends IClient,V extends ViewModel> V injectViewModel(@NonNull C activity, Bundle defaultArgs,
-                                                           @org.jetbrains.annotations.Nullable Class<V> clazz,SavedStateHandle savedStateHandle) {
+    public static <C extends IClient, V extends ViewModel> V injectViewModel(@NonNull C activity, Bundle defaultArgs,
+                                                                             @org.jetbrains.annotations.Nullable Class<V> clazz, SavedStateHandle savedStateHandle) {
         try {
             V vmI = clazz.newInstance();
 
@@ -162,12 +160,32 @@ public class InjectionHelp {
                 vmInstance.handlerArguments();
             }
             return vmI;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
 //            if(clazz != ActivityHelpViewModel.class){
 //              return   injectViewModel(activity, defaultArgs, ActivityHelpViewModel.class, savedStateHandle);
 //            }
         }
+    }
+
+    public static ISupprotActivityBusiness injectActivityBusiness(ClassLoader classLoader, String name) {
+        try {
+            return (ISupprotActivityBusiness) classLoader.loadClass(name).newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @NotNull
+    public static Fragment injectFragment(@org.jetbrains.annotations.NotNull ClassLoader classLoader, @NotNull String className, @org.jetbrains.annotations.Nullable Bundle dataBundle) {
+        try {
+            Class c = classLoader.loadClass(className);
+            return ExtensionCoreMethod.instance(c,dataBundle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

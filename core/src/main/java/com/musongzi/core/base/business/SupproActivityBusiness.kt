@@ -32,24 +32,27 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActivityBusiness {
 
 
-
-
     override fun checkEvent() {
         val h = iAgent as HolderLifecycleImpl;
         h.activity.getHolderContext()?.let {
             if (it is Activity) {
                 it.setContentView(R.layout.activity_normal_fragment)
-                val fragmentEventInfo: FragmentEventInfo? = h.getArguments()?.getParcelable(INFO_KEY)
+                val fragmentEventInfo: FragmentEventInfo? =
+                    h.getArguments()?.getParcelable(INFO_KEY)
                 if (fragmentEventInfo != null) {
                     val titleView: TextView = it.findViewById(R.id.tv_title)
                     titleView.text = fragmentEventInfo.sinfo.title
                     if (it is AppCompatActivity) {
                         val dataBundle = h.getArguments()?.getBundle(BUNDLE_KEY)
+                        val fragment: Fragment = InjectionHelp.injectFragment(
+                            it.classLoader,
+                            fragmentEventInfo.className,
+                            dataBundle
+                        )
                         it.supportFragmentManager.beginTransaction().replace(
                             R.id.id_content_layout,
-                            it.classLoader.loadClass(fragmentEventInfo.className) as Class<out Fragment>,
-                            dataBundle,
-                            it.javaClass.name+"_fragment"
+                            fragment,
+                            fragmentEventInfo.tag
                         ).commitNow()
                     }
                 }
@@ -219,7 +222,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
                 impl
             )!!
 //            if (business.holderLifecycleImpl == impl) {
-                Log.i(business.TAG, "create: 初始化成功 $impl")
+            Log.i(business.TAG, "create: 初始化成功 $impl")
 //            }
             return business
         }

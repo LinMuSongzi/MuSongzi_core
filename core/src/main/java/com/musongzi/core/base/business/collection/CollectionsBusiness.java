@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.musongzi.core.ExtensionMethod;
+import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
 import com.musongzi.core.base.business.BaseLifeBusiness;
 import com.musongzi.core.base.vm.CollectionsViewModel;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static com.musongzi.core.ExtensionMethod.refreshLayoutInit;
+import static com.musongzi.core.ExtensionCoreMethod.refreshLayoutInit;
 
 
 /**
@@ -154,7 +154,7 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
 //            res = iAgent.getArguments().getInt(ViewListPageFactory.ENGINE_EMPTY_LAYOUT, 0);
             if (res != 0) {
                 try {
-                    View view = ExtensionMethod.INSTANCE.layoutInflater(this, llEmpty, res);
+                    View view = ExtensionCoreMethod.INSTANCE.layoutInflater(this, llEmpty, res);
                     llEmpty.removeAllViews();
                     llEmpty.addView(view);
                     collectionsViewEngine.onEmptyViewCreate(view);

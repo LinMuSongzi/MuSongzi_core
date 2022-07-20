@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.musongzi.core.ExtensionMethod.wantPick
+import com.musongzi.core.ExtensionCoreMethod.wantPick
 import com.musongzi.core.MszObserver
 import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IRefreshViewModel

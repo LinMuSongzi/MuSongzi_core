@@ -1,7 +1,7 @@
 package com.musongzi.test.engine
 
-import com.musongzi.core.ExtensionMethod.adapter
-import com.musongzi.core.ExtensionMethod.getApi
+import com.musongzi.core.ExtensionCoreMethod.adapter
+import com.musongzi.core.ExtensionCoreMethod.getApi
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine

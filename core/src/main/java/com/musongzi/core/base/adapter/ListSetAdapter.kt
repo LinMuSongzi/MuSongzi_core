@@ -1,8 +1,7 @@
-package com.android.playmusic.l.adapter
+package com.musongzi.core.base.adapter
 
-import android.util.Log
 import androidx.databinding.ViewDataBinding
-import com.musongzi.core.ExtensionMethod.entitySet
+import com.musongzi.core.ExtensionCoreMethod.entitySet
 
 /**
  * 处理因为，itemtype 列表不一致的情况的adapter

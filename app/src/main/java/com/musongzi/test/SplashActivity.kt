@@ -7,11 +7,14 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.musongzi.comment.ExtensionMethod.startActivity
+import com.musongzi.comment.ExtensionMethod.startActivityNormal
 import com.musongzi.test.activity.BaseActivity
+import com.musongzi.test.activity.MainIndexActivity
 import com.musongzi.test.databinding.ActivityMainBinding
+import com.musongzi.test.fragment.MainIndexFragment
 import com.musongzi.test.fragment.TowFragment
 
-class MainActivity : BaseActivity() {
+class SplashActivity : BaseActivity() {
 
     lateinit var d: ActivityMainBinding
 
@@ -22,7 +25,10 @@ class MainActivity : BaseActivity() {
     }
 
     fun goTow(v: View) {
-        TowActivity::class.java.startActivity()
+        MainIndexFragment::class.java.startActivityNormal(
+            MainIndexActivity::class.java
+        )
+//        MainActivity::class.java.startActivity()
         //TowFragment::class.java.startActivityNormal("第二个页面")
     }
 

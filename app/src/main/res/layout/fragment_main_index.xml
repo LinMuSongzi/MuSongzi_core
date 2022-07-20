@@ -9,17 +9,26 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".SplashActivity">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/id_content_layout"
+
+        <androidx.viewpager2.widget.ViewPager2
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.musongzi.comment.view.MainBottomView
+            android:id="@+id/id_bottom_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:background="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_height="100dp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

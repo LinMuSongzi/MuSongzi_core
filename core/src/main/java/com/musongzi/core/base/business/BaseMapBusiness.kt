@@ -3,12 +3,13 @@ package com.musongzi.core.base.business
 import android.util.Log
 import com.musongzi.core.itf.IAgentHolder
 import com.musongzi.core.itf.IBusiness
+import com.musongzi.core.itf.IViewInstance
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import java.lang.Exception
 import kotlin.jvm.Throws
 
 /*** created by linhui * on 2022/7/6 */
-abstract class BaseMapBusiness<L: IHolderLifecycle> : IAgentHolder<L> {
+abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> {
     @JvmField
     protected val TAG = javaClass.simpleName
 
@@ -38,7 +39,7 @@ abstract class BaseMapBusiness<L: IHolderLifecycle> : IAgentHolder<L> {
         if (business == null) {
             if(!searchClass.isInterface) {
                 business = searchClass.newInstance()
-                (business as? IAgentHolder<IHolderLifecycle>)?.let {
+                (business as? IAgentHolder<L>)?.let {
                     try {
                         it.setAgentModel(iAgent)
                         it.afterHandlerBusiness();

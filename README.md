@@ -119,7 +119,6 @@ object ExtensionMethod{
     
     
 简单事务管理
-    com.android.playmusic.l.viewmodel.imp.EventManger
     
     使用方式调用  {interface.class}.event.{method}即可
     

@@ -1,14 +1,17 @@
 package com.musongzi.core
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
-import com.musongzi.core.ExtensionMethod.refreshLayoutInit
 import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.business.HandlerChooseBusiness
 import com.musongzi.core.base.business.collection.ICollectionsViewEngine
@@ -25,10 +28,9 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Consumer
-import kotlin.jvm.Throws
 
 /*** created by linhui * on 2022/7/20 */
-object ExtensionMethod {
+object ExtensionCoreMethod {
     fun <T> T.exceptionRun(run: () -> Unit) {
         try {
             run()
@@ -46,7 +48,7 @@ object ExtensionMethod {
         return null;
     }
 
-    fun <T : ViewDataBinding, R> R.dataBindingInflate(clazz: Class<T>, view: ViewGroup): T? {
+    fun <D : ViewDataBinding, R> R.dataBindingInflate(clazz: Class<D>, view: ViewGroup): D? {
         return exceptionRunByReturn {
             val method = clazz.getDeclaredMethod(
                 "inflate",
@@ -54,7 +56,7 @@ object ExtensionMethod {
                 ViewGroup::class.java,
                 Boolean::class.java
             )
-            method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), view, false) as? T
+            method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), view, false) as? D
         }
     }
 
@@ -91,6 +93,10 @@ object ExtensionMethod {
         it
     }
 
+    fun <T> T.threadStart(r: Runnable) {
+        Thread(r).start()
+//        ThreadUtil.startThread(r)
+    }
 
     fun <T> Observable<T>.sub(c: Consumer<T>) {
         subscribe(MszObserver(c))
@@ -273,6 +279,33 @@ object ExtensionMethod {
     fun <T : ISource<I>, I> T.adapter(typeBreakMethod: (Int) -> Int) =
         TypeSupportAdaper.build(realData(), typeBreakMethod)
 
+
+    @JvmStatic
+    fun RecyclerView.linearLayoutManager(adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+        linearLayoutManager(LinearLayoutManager.VERTICAL, adapterMethod);
+    }
+
+    @JvmStatic
+    fun RecyclerView.linearLayoutManager(or: Int, adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+        val mLayoutManager = LinearLayoutManager(null, or, false)
+        val a = adapterMethod(mLayoutManager)
+        layoutManager = mLayoutManager
+        adapter = a
+    }
+
+    @JvmStatic
+    fun RecyclerView.gridLayoutManager(span: Int, adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+        gridLayoutManager(span, GridLayoutManager.VERTICAL, adapterMethod)
+    }
+
+    @JvmStatic
+    fun RecyclerView.gridLayoutManager(span: Int, or: Int, adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+        val mLayoutManager = GridLayoutManager(null, span, or, false)
+        val a = adapterMethod(mLayoutManager)
+        layoutManager = mLayoutManager
+        adapter = a
+    }
+
 //    @JvmStatic
 //    fun pickNewPhoto(headImagePath: String?, headImageRequest: Int) {
 //        val image = ArrayList<LocalMedia>()
@@ -321,6 +354,8 @@ object ExtensionMethod {
             adaper
         )
     }
+    @JvmStatic
+    fun Int.androidColorGet() = ActivityCompat.getColor(ActivityThreadHelp.getCurrentApplication(),this)
 
     @JvmStatic
     fun IRecycleViewClient<*>.buildInitRecycleView(
@@ -338,8 +373,20 @@ object ExtensionMethod {
         }
     }
 
-
+    @JvmStatic
     fun <T> ICollectionsViewEngine<*>.getApi(c: Class<T>): T {
         return RetrofitManager.getInstance().getApi(c, getRefreshViewModel())
     }
+
+
+    @JvmStatic
+    fun <F : Fragment> Class<F>.instance(bundle: Bundle? = null): F {
+        return bundle?.let {
+            newInstance().let { f->
+                f.arguments = bundle
+                f
+            }
+        } ?:newInstance()
+    }
+
 }

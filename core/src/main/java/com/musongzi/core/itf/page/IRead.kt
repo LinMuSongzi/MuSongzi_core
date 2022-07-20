@@ -1,4 +1,4 @@
-package com.android.playmusic.module.business.page
+package com.musongzi.core.itf.page
 
 interface IRead {
 

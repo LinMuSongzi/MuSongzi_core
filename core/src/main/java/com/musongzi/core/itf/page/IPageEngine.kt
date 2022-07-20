@@ -1,7 +1,6 @@
 package com.musongzi.core.itf.page
 
 import androidx.lifecycle.Observer
-import com.android.playmusic.module.business.page.IRead
 
 /**
  * 书本数据加载的一个基本引擎接口
