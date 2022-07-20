@@ -6,7 +6,7 @@
 
         <variable
             name="bean"
-            type="com.musongzi.comment.view.MainBottomView.Info" />
+            type="com.musongzi.comment.bean.SimpleCardInfo" />
 
     </data>
 
