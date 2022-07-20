@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import com.musongzi.core.ExtensionMethod.startActivity
-import com.musongzi.core.ExtensionMethod.startActivityNormal
+import com.musongzi.comment.ExtensionMethod.startActivity
 import com.musongzi.test.activity.BaseActivity
 import com.musongzi.test.databinding.ActivityMainBinding
 import com.musongzi.test.fragment.TowFragment

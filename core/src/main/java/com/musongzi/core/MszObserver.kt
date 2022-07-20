@@ -1,7 +1,6 @@
 package com.musongzi.core
 
 import android.util.Log
-import com.musongzi.core.ExtensionMethod.toJson
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
@@ -17,7 +16,7 @@ class MszObserver<T>(var c: Consumer<T>) : Observer<T> {
     }
 
     override fun onNext(t: T) {
-        Log.i(TAG, "onNext: Thread = " + Thread.currentThread() + " : " + t?.toJson())
+//        Log.i(TAG, "onNext: Thread = " + Thread.currentThread() + " : " + t)
         c.accept(t)
     }
 

@@ -1,14 +1,14 @@
 package com.musongzi.core.base.page
 
 import android.util.Log
-import com.musongzi.core.ExtensionMethod.isDebug
+//import com.musongzi.core.ExtensionMethod.isDebug
 
 /**
  *
  */
 class PageArrayList<T> : ArrayList<T>() {
 
-    private var enablePrintLog = true;//isDebug()
+    private var enablePrintLog = true//isDebug()
 
     companion object {
         const val TAG = "PageArrayList"

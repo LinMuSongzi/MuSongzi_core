@@ -10,6 +10,7 @@ import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
+import com.musongzi.core.itf.data.IChoose
 import com.musongzi.core.itf.page.ISource
 
 /**
@@ -135,11 +136,11 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
         }
     }
 
-    override fun baseDatas(): ISource<BaseChooseBean>? {
-        return business.base as? ISource<BaseChooseBean>
+    override fun baseDatas(): ISource<IChoose>? {
+        return business.base as? ISource<IChoose>
     }
 
-    override fun updateByPick(info: BaseChooseBean?) {
+    override fun updateByPick(info: IChoose?) {
         notifyDataSetChanged()
     }
 
