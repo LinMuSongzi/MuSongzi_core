@@ -4,17 +4,21 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.View
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
+import com.gyf.immersionbar.ImmersionBar
 import com.musongzi.core.R
 import com.musongzi.core.base.bean.FragmentEventInfo
+import com.musongzi.core.base.bean.StyleMessageInfo
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
+import com.musongzi.core.databinding.ActivityNormalFragmentBinding
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.INotifyDataSetChanged
 import com.musongzi.core.itf.IWant
@@ -31,19 +35,22 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 /*** created by linhui * on 2022/7/6 */
 class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActivityBusiness {
 
+    lateinit var dataBinding: ActivityNormalFragmentBinding
 
     override fun checkEvent() {
         val h = iAgent as HolderLifecycleImpl;
-        h.activity.getHolderContext()?.let {
+        h.activity.getHolderContext()?.let { it ->
             if (it is Activity) {
-                it.setContentView(R.layout.activity_normal_fragment)
+                dataBinding = DataBindingUtil.setContentView(it, R.layout.activity_normal_fragment)
                 val fragmentEventInfo: FragmentEventInfo? =
                     h.getArguments()?.getParcelable(INFO_KEY)
                 if (fragmentEventInfo != null) {
-                    val titleView: TextView = it.findViewById(R.id.tv_title)
-                    titleView.text = fragmentEventInfo.sinfo.title
+                    handlerBarBusiness(it, fragmentEventInfo.sinfo!!)
                     if (it is AppCompatActivity) {
-                        val dataBundle = h.getArguments()?.getBundle(BUNDLE_KEY)
+                        var dataBundle: Bundle? = h.getArguments()?.getBundle(BUNDLE_KEY)
+                        if (fragmentEventInfo.businessInfo != null) {
+                            dataBundle = handlerBusinesInstanceInfo(fragmentEventInfo,dataBundle)
+                        }
                         val fragment: Fragment = InjectionHelp.injectFragment(
                             it.classLoader,
                             fragmentEventInfo.className,
@@ -55,9 +62,41 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
                             fragmentEventInfo.tag
                         ).commitNow()
                     }
+                } else {
+                    dataBinding.titleLayout.root.visibility = View.GONE
                 }
             }
         }
+    }
+
+    /**
+     * 处理business 实例问题
+     */
+    private fun handlerBusinesInstanceInfo(
+        fragmentEventInfo: FragmentEventInfo,
+        dataBundle: Bundle?
+    ): Bundle? {
+       return if (dataBundle == null) {
+            Bundle().let { b ->
+                b.putParcelable(
+                    InjectionHelp.BUSINESS_NAME_KEY,
+                    fragmentEventInfo.businessInfo
+                )
+                b
+            }
+        }else{
+            null;
+       }
+    }
+
+    /**
+     * 处理状态栏
+     */
+    private fun handlerBarBusiness(it: Activity, info: StyleMessageInfo) {
+        ImmersionBar.with(it).apply {
+            statusBarDarkFont(info.statusTextColorFlag == 1)
+        }.statusBarColor(info.statusColor).fitsSystemWindows(true).init()
+        dataBinding.titleLayout.bean = info
     }
 
 

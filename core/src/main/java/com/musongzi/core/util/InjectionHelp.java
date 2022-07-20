@@ -31,6 +31,9 @@ import io.reactivex.rxjava3.annotations.NonNull;
 public class InjectionHelp {
 
 
+    @org.jetbrains.annotations.NotNull
+    public static final String BUSINESS_NAME_KEY = "BUSINESS_NAME_KEY";
+
     public static CollecttionsEngine findAnnotation(Class<?> thisClazz) {
 //        if(thisClazz.getName().equals("java.lang.Object")){
 //            return null;
@@ -154,9 +157,9 @@ public class InjectionHelp {
                  *             it.handlerArguments()
                  *         }
                  */
+                vmInstance.putArguments(defaultArgs);
                 vmInstance.attachNow(activity);
                 vmInstance.setHolderSavedStateHandle(new SaveStateHandleWarp(savedStateHandle));
-                vmInstance.putArguments(defaultArgs);
                 vmInstance.handlerArguments();
             }
             return vmI;

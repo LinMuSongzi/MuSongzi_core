@@ -22,6 +22,7 @@ import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.activity.NormalFragmentActivity
+import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentEventInfo
 import com.musongzi.core.base.bean.StyleMessageInfo
 import com.musongzi.core.base.business.SupproActivityBusiness
@@ -107,13 +108,42 @@ object ExtensionMethod {
     @JvmOverloads
     fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
         activity: Class<A>? = null,
-        title: String? = null,
-        barColor: Int = Color.WHITE,
-        dataBundle: Bundle? = null
+        mStyleMessageInfo:StyleMessageInfo,
+        dataBundle: Bundle? = null,
+        businessClassName: String? = null
     ) {
         ActivityLifeManager.getInstance().getTopActivity()?.let {
             val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
-            val fInfo = FragmentEventInfo(this.name, StyleMessageInfo(title, barColor))
+            val fInfo = FragmentEventInfo(
+                this.name,
+                mStyleMessageInfo,
+                if (businessClassName != null) BusinessInfo(businessClassName) else null
+            )
+            intent.putExtra(SupproActivityBusiness.INFO_KEY, fInfo)
+            dataBundle?.let { b ->
+                intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
+            }
+            it.startActivity(intent)
+        }
+    }
+
+
+    @JvmStatic
+    @JvmOverloads
+    fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
+        activity: Class<A>? = null,
+        title: String? = null,
+        barColor: Int = R.color.bg_white,
+        dataBundle: Bundle? = null,
+        businessClassName: String? = null
+    ) {
+        ActivityLifeManager.getInstance().getTopActivity()?.let {
+            val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
+            val fInfo = FragmentEventInfo(
+                this.name,
+                StyleMessageInfo(title, barColor),
+                if (businessClassName != null) BusinessInfo(businessClassName) else null
+            )
             intent.putExtra(SupproActivityBusiness.INFO_KEY, fInfo)
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
@@ -303,7 +333,6 @@ object ExtensionMethod {
         }
         return this
     }
-
 
 
 }

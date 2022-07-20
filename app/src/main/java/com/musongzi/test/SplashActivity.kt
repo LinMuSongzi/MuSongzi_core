@@ -2,6 +2,7 @@ package com.musongzi.test
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
@@ -26,7 +27,8 @@ class SplashActivity : BaseActivity() {
 
     fun goTow(v: View) {
         MainIndexFragment::class.java.startActivityNormal(
-            MainIndexActivity::class.java
+            MainIndexActivity::class.java,
+            "主页", Color.WHITE,null,
         )
 //        MainActivity::class.java.startActivity()
         //TowFragment::class.java.startActivityNormal("第二个页面")

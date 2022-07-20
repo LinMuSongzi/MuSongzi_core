@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
+import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.*
@@ -15,9 +16,7 @@ abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHold
 
     protected val TAG = javaClass.simpleName
 
-//    constructor(savedStateHandle: SavedStateHandle) : this() {
-//        setHolderSavedStateHandle(savedStateHandle)
-//    }
+    private var businessInfo: BusinessInfo? = null
 
     final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
         Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
@@ -70,8 +69,21 @@ abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHold
         client = null;
     }
 
-    protected fun createBusiness(): B =
-        InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+    protected fun createBusiness(): B {
+       return businessInfo?.let {
+            BusinessInfo::class.java.classLoader?.loadClass(it.className)?.newInstance() as? B
+        } ?: InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+
+//       return if(businessInfo == null) {
+//            InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+//        }else{
+//           val b =  businessInfo?.let {
+//                BusinessInfo::class.java.classLoader?.loadClass(it.className)?.newInstance() as? B
+//            }
+//           b ?: InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+//        }
+    }
+
 
     override fun getHolderBusiness(): B = business
 
@@ -86,7 +98,9 @@ abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHold
     }
 
     override fun putArguments(d: Bundle?) {
-
+        d?.let {
+            businessInfo = d.getParcelable(InjectionHelp.BUSINESS_NAME_KEY)
+        }
     }
 
     override fun getArguments(): Bundle? {
