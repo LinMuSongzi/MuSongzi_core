@@ -136,10 +136,6 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
         }
     }
 
-    override fun baseDatas(): ISource<IChoose>? {
-        return business.base as? ISource<IChoose>
-    }
-
     override fun updateByPick(info: IChoose?) {
         notifyDataSetChanged()
     }

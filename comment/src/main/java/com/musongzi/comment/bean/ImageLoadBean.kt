@@ -1,33 +1,36 @@
 package com.musongzi.comment.bean
 
 import android.net.Uri
+import android.util.Log
 import com.musongzi.comment.ExtensionMethod.getResUri
+import com.musongzi.comment.ExtensionMethod.getResUriString
+import com.musongzi.comment.util.ApkUtil.TAG
 import com.musongzi.core.base.bean.BaseChooseBean
 
 /*** created by linhui * on 2022/7/20 */
 class ImageLoadBean() : BaseChooseBean() {
 
-     lateinit var uri: Uri
 
-    private fun convert(res:Int){
-        uri = res.getResUri()
+    var uriStr : String? = null
+    var res:Int = 0
+
+    private fun convert(res: Int) {
+        this.res = res
+//        uriStr = res.getResUriString()
     }
 
-    private fun convert(res:String){
-        uri = Uri.parse(res)
+    private fun convert(uriStr: String) {
+        this.uriStr = uriStr
     }
 
-    private fun convert(res:Uri){
-        uri = res
-    }
+    constructor(res: Any) : this() {
 
-    constructor(res:Any):this(){
         when (res) {
             is Int -> {
                 convert(res)
             }
             is Uri -> {
-                convert(res)
+                convert(res.toString())
             }
             is String -> {
                 convert(res)

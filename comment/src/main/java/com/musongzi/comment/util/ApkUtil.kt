@@ -12,7 +12,7 @@ object ApkUtil {
     const val TAG = "ApkUtil_msz"
 
     fun getResUri(resId: Int): Uri {
-        val r: Resources = ActivityThreadHelp.getCurrentApplication().getResources()
+        val r: Resources = ActivityThreadHelp.getCurrentApplication().resources
         val uri = Uri.parse(
             ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
                     + r.getResourcePackageName(resId) + "/"
@@ -21,6 +21,17 @@ object ApkUtil {
         )
         Log.i(ApkUtil.TAG, "getResUri: $uri")
         return uri
+    }
+
+    fun getResUriString(resId: Int): String {
+        val r: Resources = ActivityThreadHelp.getCurrentApplication().resources
+        return ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" +
+                r.getResourcePackageName(resId) +
+                "/" +
+                r.getResourceTypeName(resId) +
+                "/" +
+                r.getResourceEntryName(resId)
     }
 
 }

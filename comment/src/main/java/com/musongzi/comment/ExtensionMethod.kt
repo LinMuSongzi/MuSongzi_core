@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -226,6 +227,15 @@ object ExtensionMethod {
     }
 
     /**
+     * 获取基于“key”的可观察的value
+     */
+    @JvmStatic
+    fun <T> String.getSaveStateValue(holder: IHolderSavedStateHandle): T? {
+        return holder.getHolderSavedStateHandle()[this]
+    }
+
+
+    /**
      * 观察数据基于“key”的livedate，
      * 观察者返回值 ： true 表示此次观察将会移除观察者。
      *            ： false 表示此次观察不会移除观察者
@@ -308,7 +318,7 @@ object ExtensionMethod {
 
     @JvmStatic
     fun Int.getResUriString(): String {
-        return ApkUtil.getResUri(this).toString()
+        return ApkUtil.getResUriString(this)
     }
 
     /**
@@ -326,6 +336,30 @@ object ExtensionMethod {
     ): Page {
         offscreenPageLimit = offscreen ?: fragmentList.size
         adapter = object : FragmentStateAdapter(f) {
+            override fun getItemCount() = fragmentList.size
+
+            override fun createFragment(position: Int) = fragmentList[position]
+
+        }
+        return this
+    }
+
+    /**
+     * viewpage 绑定一个adapter
+     * @receiver Page
+     * @param f FragmentManager
+     * @param fragmentList List<Fragment>
+     * @return Page
+     */
+    @JvmStatic
+    fun <Page : ViewPager2> Page.bindAdapter(
+        fragmentManager: FragmentManager,
+        lifecycle:LifecycleOwner,
+        fragmentList: List<Fragment>,
+        offscreen: Int? = null
+    ): Page {
+        offscreenPageLimit = offscreen ?: fragmentList.size
+        adapter = object : FragmentStateAdapter(fragmentManager,lifecycle.lifecycle) {
             override fun getItemCount() = fragmentList.size
 
             override fun createFragment(position: Int) = fragmentList[position]

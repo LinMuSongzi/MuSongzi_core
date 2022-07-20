@@ -11,7 +11,7 @@ import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
+abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
     IHolderViewModel<C, B> {
 
     protected val TAG = javaClass.simpleName
@@ -87,7 +87,7 @@ abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHold
 
     override fun getHolderBusiness(): B = business
 
-    override fun getHolderClient(): C? = client
+    override fun getHolderClient(): C? = client as? C
 
     override fun handlerSavedInstanceState(savedInstanceState: Bundle?) {
         savedInstanceStateRf = WeakReference(savedInstanceState)

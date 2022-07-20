@@ -1,4 +1,3 @@
-
 package com.musongzi.comment.util
 
 import android.graphics.drawable.Drawable
@@ -11,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.target.ViewTarget
+import com.musongzi.core.ExtensionCoreMethod.androidColorGet
 import com.musongzi.core.util.ScreenUtil.SCREEN_1_3_WDITH
 
 /*** created by linhui * on 2022/7/20 */
@@ -61,13 +61,21 @@ fun RequestBuilder<Drawable>.overrideInto(
     } ?: into(imageView)
 }
 
-fun ImageView.showImage(uri: Any, conifgOverride: (() -> Pair<Int, Int>)? = null) {
-    Glide.with(this).loadByAny(uri).placeholderRes().errorRes().memoryCacheStrategy()
-        .overrideInto(this, conifgOverride)
+fun ImageView.showImage(uri: Any?, conifgOverride: (() -> Pair<Int, Int>)? = null) {
+    uri?.let {
+        Glide.with(this).loadByAny(it).placeholderRes().errorRes().memoryCacheStrategy()
+            .overrideInto(this, conifgOverride)
+    }
 }
 
+@BindingAdapter("setTextColorRes")
+fun setTextColorRes(textView: TextView, res: Int) {
+    textView.setTextColor(res.androidColorGet())
+}
+
+
 @BindingAdapter("setTextNormal")
-fun setText(textView: TextView, str: CharSequence) {
+fun setText(textView: TextView, str: CharSequence?) {
     textView.text = str
 }
 
@@ -76,40 +84,47 @@ fun setText(textView: TextView, res: Int) {
     textView.setText(res)
 }
 
+//@BindingAdapter("imageLoadRect")
+//fun imageLoadRect(image: ImageView, uri: Uri?) {
+//    image.showImage(uri) {
+//        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
+//    }
+//}
+
 @BindingAdapter("imageLoadRect")
-fun imageLoadRect(image: ImageView, uri: Uri) {
+fun imageLoadRect(image: ImageView, uri: Any?) {
     image.showImage(uri) {
         SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
     }
 }
 
-@BindingAdapter("imageLoadRect")
-fun imageLoadRect(image: ImageView, id: Int) {
-    image.showImage(id) {
-        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
-    }
-}
+//@BindingAdapter("imageLoadRect")
+//fun imageLoadRect(image: ImageView, id: Int) {
+//    image.showImage(id) {
+//        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
+//    }
+//}
 
-@BindingAdapter("imageLoadRect")
-fun imageLoadRect(image: ImageView, uri: String) {
-    image.showImage(uri) {
-        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
-    }
-}
+//@BindingAdapter("imageLoadRect")
+//fun imageLoadRect(image: ImageView, uri: String?) {
+//    image.showImage(uri) {
+//        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
+//    }
+//}
 
 @BindingAdapter("imageLoadNormal")
-fun imageLoadNormal(image: ImageView, uri: Uri) {
+fun imageLoadNormal(image: ImageView, uri: Any?) {
     image.showImage(uri)
 }
 
-@BindingAdapter("imageLoadNormal")
-fun imageLoadNormal(image: ImageView, res: Int) {
-    image.showImage(res)
-}
-
-@BindingAdapter("imageLoadNormal")
-fun imageLoadNormal(image: ImageView, uri: String) {
-    image.showImage(uri)
-}
+//@BindingAdapter("imageLoadNormal")
+//fun imageLoadNormal(image: ImageView, res: Int) {
+//    image.showImage(res)
+//}
+//
+//@BindingAdapter("imageLoadNormal")
+//fun imageLoadNormal(image: ImageView, uri: String?) {
+//    image.showImage(uri)
+//}
 
 

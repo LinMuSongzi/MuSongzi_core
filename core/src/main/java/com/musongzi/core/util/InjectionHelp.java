@@ -19,6 +19,8 @@ import com.musongzi.core.itf.IAgentHolder;
 import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.holder.IHolderViewModel;
+import com.musongzi.core.itf.page.IDataEngine;
+import com.musongzi.core.itf.page.IRead;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +31,11 @@ import java.lang.reflect.Type;
 import io.reactivex.rxjava3.annotations.NonNull;
 
 public class InjectionHelp {
+
+
+    public static class Text<T extends IRead>{
+
+    }
 
 
     @org.jetbrains.annotations.NotNull
