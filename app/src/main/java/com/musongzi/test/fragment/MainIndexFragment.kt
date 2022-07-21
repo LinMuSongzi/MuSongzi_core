@@ -3,7 +3,6 @@ package com.musongzi.test.fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.musongzi.comment.client.IMainIndexClient
-import com.musongzi.core.ExtensionCoreMethod.businessSet
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.test.databinding.FragmentMainIndexBinding
 import com.musongzi.test.vm.MainIndexViewModel

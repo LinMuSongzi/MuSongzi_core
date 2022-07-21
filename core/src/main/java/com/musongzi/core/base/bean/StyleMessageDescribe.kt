@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 /*** created by linhui * on 2022/7/7 */
 @Parcelize
-data class StyleMessageInfo @JvmOverloads constructor(
+data class StyleMessageDescribe @JvmOverloads constructor(
     var title: String? = null,
     var barColor: Int = R.color.bg_white,
     var rightText:String? = null,

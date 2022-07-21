@@ -9,7 +9,7 @@ import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.comment.R
 import com.musongzi.comment.bean.ImageLoadBean
 import com.musongzi.comment.bean.SimpleCardInfo
-import com.musongzi.comment.viewmodel.IMainIndexViewModel
+import com.musongzi.comment.viewmodel.itf.IMainIndexViewModel
 import com.musongzi.comment.databinding.AdapterMainBottomItemBinding
 import com.musongzi.core.ExtensionCoreMethod.adapter
 import com.musongzi.core.ExtensionCoreMethod.linearLayoutManager

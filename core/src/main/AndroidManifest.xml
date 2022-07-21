@@ -22,7 +22,7 @@
         </provider>
 
 
-        <activity android:name=".base.activity.NormalFragmentActivity" android:screenOrientation="portrait"/>
+        <activity android:name="com.musongzi.comment.activity.NormalFragmentActivity" android:screenOrientation="portrait"/>
         
     </application>
 

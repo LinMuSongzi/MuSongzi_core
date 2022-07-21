@@ -3,6 +3,7 @@ package com.musongzi.comment.util
 import android.graphics.drawable.Drawable
 import android.media.Image
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -95,6 +96,17 @@ fun imageLoadRect(image: ImageView, uri: Any?) {
         SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
     }
 }
+
+@BindingAdapter("viewVisibility")
+fun viewVisibility(v: View,int:Int){
+    v.visibility = int
+}
+
+@BindingAdapter("viewVisibility")
+fun viewVisibility(v: View,isShow:Boolean){
+    v.visibility = if(isShow) View.VISIBLE else View.GONE
+}
+
 @BindingAdapter("imageLoadNormal")
 fun imageLoadNormal(image: ImageView, uri: Any?) {
     image.showImage(uri)

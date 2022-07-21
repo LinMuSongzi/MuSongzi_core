@@ -6,7 +6,7 @@
     <data>
         <variable
             name="bean"
-            type="com.musongzi.core.base.bean.StyleMessageInfo" />
+            type="com.musongzi.core.base.bean.StyleMessageDescribe" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

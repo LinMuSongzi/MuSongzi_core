@@ -1,4 +1,4 @@
-package com.musongzi.comment.viewmodel
+package com.musongzi.comment.viewmodel.itf
 
 import com.musongzi.comment.bean.MainIndexBean
 import com.musongzi.comment.bean.SimpleCardInfo

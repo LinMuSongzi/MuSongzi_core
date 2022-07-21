@@ -13,4 +13,6 @@ interface Api {
 
     fun getArrayEngine(page:Int): Observable<Array<StringChooseBean>>
 
+    fun searchText(text: CharSequence): Observable<Array<StringChooseBean>>
+
 }
