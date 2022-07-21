@@ -1,4 +1,4 @@
-package com.musongzi.core.base.business
+package com.musongzi.comment.business
 
 import android.app.Activity
 import android.content.Context
@@ -15,8 +15,9 @@ import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
 import com.gyf.immersionbar.ImmersionBar
 import com.musongzi.core.R
-import com.musongzi.core.base.bean.FragmentEventInfo
-import com.musongzi.core.base.bean.StyleMessageInfo
+import com.musongzi.core.base.bean.FragmentDescribe
+import com.musongzi.core.base.bean.StyleMessageDescribe
+import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
 import com.musongzi.core.databinding.ActivityNormalFragmentBinding
 import com.musongzi.core.itf.IClient
@@ -42,24 +43,23 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         h.activity.getHolderContext()?.let { it ->
             if (it is Activity) {
                 dataBinding = DataBindingUtil.setContentView(it, R.layout.activity_normal_fragment)
-                val fragmentEventInfo: FragmentEventInfo? =
-                    h.getArguments()?.getParcelable(INFO_KEY)
-                if (fragmentEventInfo != null) {
-                    handlerBarBusiness(it, fragmentEventInfo.sinfo!!)
+                val fragmentDescribe: FragmentDescribe? = h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
+                if (fragmentDescribe != null) {
+                    handlerBarBusiness(it, fragmentDescribe.sinfo!!)
                     if (it is AppCompatActivity) {
                         var dataBundle: Bundle? = h.getArguments()?.getBundle(BUNDLE_KEY)
-                        if (fragmentEventInfo.businessInfo != null) {
-                            dataBundle = handlerBusinesInstanceInfo(fragmentEventInfo,dataBundle)
+                        if (fragmentDescribe.businessInfo != null) {
+                            dataBundle = handlerBusinesInstanceInfo(fragmentDescribe,dataBundle)
                         }
                         val fragment: Fragment = InjectionHelp.injectFragment(
                             it.classLoader,
-                            fragmentEventInfo.className,
+                            fragmentDescribe.className,
                             dataBundle
                         )
                         it.supportFragmentManager.beginTransaction().replace(
                             R.id.id_content_layout,
                             fragment,
-                            fragmentEventInfo.tag
+                            fragmentDescribe.tag
                         ).commitNow()
                     }
                 } else {
@@ -73,14 +73,14 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
      * 处理business 实例问题
      */
     private fun handlerBusinesInstanceInfo(
-        fragmentEventInfo: FragmentEventInfo,
+        fragmentDescribe: FragmentDescribe,
         dataBundle: Bundle?
     ): Bundle? {
        return if (dataBundle == null) {
             Bundle().let { b ->
                 b.putParcelable(
                     InjectionHelp.BUSINESS_NAME_KEY,
-                    fragmentEventInfo.businessInfo
+                    fragmentDescribe.businessInfo
                 )
                 b
             }
@@ -92,11 +92,11 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
     /**
      * 处理状态栏
      */
-    private fun handlerBarBusiness(it: Activity, info: StyleMessageInfo) {
+    private fun handlerBarBusiness(it: Activity, describe: StyleMessageDescribe) {
         ImmersionBar.with(it).apply {
-            statusBarDarkFont(info.statusTextColorFlag == 1)
-        }.statusBarColor(info.statusColor).fitsSystemWindows(true).init()
-        dataBinding.titleLayout.bean = info
+            statusBarDarkFont(describe.statusTextColorFlag == 1)
+        }.statusBarColor(describe.statusColor).fitsSystemWindows(true).init()
+        dataBinding.titleLayout.bean = describe
     }
 
 
@@ -252,7 +252,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
     companion object {
 
         const val BUNDLE_KEY = "support_bundle_key"
-        const val INFO_KEY = "support_activity_key"
+        const val ACTIVITY_DESCRIBE_INFO_KEY = "support_activity_key"
 
         fun create(bundle: Bundle?, activity: IHolderContext): ISupprotActivityBusiness {
             val impl = HolderLifecycleImpl(bundle, activity)

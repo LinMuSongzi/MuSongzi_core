@@ -41,14 +41,19 @@ fun RequestBuilder<Drawable>.memoryCacheStrategy(): RequestBuilder<Drawable> {
 }
 
 fun RequestManager.loadByAny(res: Any): RequestBuilder<Drawable> {
-    return if (res is Int) {
-        load(res)
-    } else if (res is Uri) {
-        load(res)
-    } else if (res is String) {
-        load(res)
-    } else {
-        load(res)
+    return when (res) {
+        is Int -> {
+            load(res)
+        }
+        is Uri -> {
+            load(res)
+        }
+        is String -> {
+            load(res)
+        }
+        else -> {
+            load(res)
+        }
     }
 }
 
@@ -84,47 +89,13 @@ fun setText(textView: TextView, res: Int) {
     textView.setText(res)
 }
 
-//@BindingAdapter("imageLoadRect")
-//fun imageLoadRect(image: ImageView, uri: Uri?) {
-//    image.showImage(uri) {
-//        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
-//    }
-//}
-
 @BindingAdapter("imageLoadRect")
 fun imageLoadRect(image: ImageView, uri: Any?) {
     image.showImage(uri) {
         SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
     }
 }
-
-//@BindingAdapter("imageLoadRect")
-//fun imageLoadRect(image: ImageView, id: Int) {
-//    image.showImage(id) {
-//        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
-//    }
-//}
-
-//@BindingAdapter("imageLoadRect")
-//fun imageLoadRect(image: ImageView, uri: String?) {
-//    image.showImage(uri) {
-//        SCREEN_1_3_WDITH to SCREEN_1_3_WDITH
-//    }
-//}
-
 @BindingAdapter("imageLoadNormal")
 fun imageLoadNormal(image: ImageView, uri: Any?) {
     image.showImage(uri)
 }
-
-//@BindingAdapter("imageLoadNormal")
-//fun imageLoadNormal(image: ImageView, res: Int) {
-//    image.showImage(res)
-//}
-//
-//@BindingAdapter("imageLoadNormal")
-//fun imageLoadNormal(image: ImageView, uri: String?) {
-//    image.showImage(uri)
-//}
-
-

@@ -1,8 +1,6 @@
 package com.musongzi.comment.business
 
-import android.graphics.Color
 import android.view.View
-import androidx.appcompat.widget.ContentFrameLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.musongzi.comment.ExtensionMethod.getSaveStateValue
@@ -11,16 +9,13 @@ import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.comment.R
 import com.musongzi.comment.bean.ImageLoadBean
 import com.musongzi.comment.bean.SimpleCardInfo
-import com.musongzi.comment.client.IMainIndexViewModel
+import com.musongzi.comment.viewmodel.IMainIndexViewModel
 import com.musongzi.comment.databinding.AdapterMainBottomItemBinding
-import com.musongzi.comment.util.SourceImpl
-import com.musongzi.core.ExtensionCoreMethod
 import com.musongzi.core.ExtensionCoreMethod.adapter
 import com.musongzi.core.ExtensionCoreMethod.linearLayoutManager
 import com.musongzi.core.ExtensionCoreMethod.wantPick
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
-import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ScreenUtil
 import com.musongzi.core.util.ScreenUtil.SCREEN_1_5_WDITH
 
@@ -42,11 +37,9 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>() {
                     i.onClick.invoke(it)
                 }
             }
-            iAgent.getHolderClient()?.getRecycleView()
-                ?.linearLayoutManager(LinearLayoutManager.HORIZONTAL) {
+            iAgent.getHolderClient()?.getRecycleView()?.linearLayoutManager(LinearLayoutManager.HORIZONTAL) {
                     adapter
-                }
-
+            }
             INDEX_CLICK_SAVED_KEY.liveSaveStateObserver<Int>(iAgent) {
                 iAgent.wantPick().pickRun(source.realData()[it])
                 adapter.notifyDataSetChanged()
@@ -60,13 +53,9 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>() {
     private fun handlerViewPageValues() {
         val size = FRAGMENT_SZIE_KEY.getSaveStateValue<Int?>(iAgent)
         if (size == null) {
-           // val fragments = buildFragments()
-
-
+            // val fragments = buildFragments()
             iAgent.getHolderClient()?.apply {
-
 //                getViewpage2().bindAdapter(,iAgent.getThisLifecycle(),fragmentList = fragments)
-
             }
         }
     }

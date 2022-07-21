@@ -1,10 +1,9 @@
-package com.musongzi.core.base.activity
+package com.musongzi.comment.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.musongzi.core.base.business.SupproActivityBusiness
+import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
 import com.musongzi.core.itf.holder.IHolderContext
 

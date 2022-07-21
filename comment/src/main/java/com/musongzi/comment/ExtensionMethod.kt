@@ -2,7 +2,6 @@ package com.musongzi.comment
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -22,11 +21,11 @@ import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.core.base.activity.NormalFragmentActivity
+import com.musongzi.comment.activity.NormalFragmentActivity
 import com.musongzi.core.base.bean.BusinessInfo
-import com.musongzi.core.base.bean.FragmentEventInfo
-import com.musongzi.core.base.bean.StyleMessageInfo
-import com.musongzi.core.base.business.SupproActivityBusiness
+import com.musongzi.core.base.bean.FragmentDescribe
+import com.musongzi.core.base.bean.StyleMessageDescribe
+import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.fragment.CollectionsViewFragment
@@ -109,18 +108,14 @@ object ExtensionMethod {
     @JvmOverloads
     fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
         activity: Class<A>? = null,
-        mStyleMessageInfo:StyleMessageInfo,
+        mStyleMessageDescribe:StyleMessageDescribe,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
     ) {
         ActivityLifeManager.getInstance().getTopActivity()?.let {
             val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
-            val fInfo = FragmentEventInfo(
-                this.name,
-                mStyleMessageInfo,
-                if (businessClassName != null) BusinessInfo(businessClassName) else null
-            )
-            intent.putExtra(SupproActivityBusiness.INFO_KEY, fInfo)
+            val fInfo = FragmentDescribe(this.name, mStyleMessageDescribe, if (businessClassName != null) BusinessInfo(businessClassName) else null)
+            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
             }
@@ -140,12 +135,12 @@ object ExtensionMethod {
     ) {
         ActivityLifeManager.getInstance().getTopActivity()?.let {
             val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
-            val fInfo = FragmentEventInfo(
+            val fInfo = FragmentDescribe(
                 this.name,
-                StyleMessageInfo(title, barColor),
+                StyleMessageDescribe(title, barColor),
                 if (businessClassName != null) BusinessInfo(businessClassName) else null
             )
-            intent.putExtra(SupproActivityBusiness.INFO_KEY, fInfo)
+            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
             }

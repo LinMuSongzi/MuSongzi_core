@@ -2,8 +2,7 @@ package com.musongzi.test.fragment
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.musongzi.comment.IMainIndexClient
-import com.musongzi.comment.business.MainBottomBusiness
+import com.musongzi.comment.client.IMainIndexClient
 import com.musongzi.core.ExtensionCoreMethod.businessSet
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.test.databinding.FragmentMainIndexBinding
