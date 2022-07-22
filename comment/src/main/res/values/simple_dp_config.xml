@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 列表项 头文字 字体大小 -->
+    <dimen name="item_title_dp">15dp</dimen>
+
+    <!-- 列表项 头文字 注解字体大小 -->
+    <dimen name="item_title_describe_dp">12dp</dimen>
+
+    <!-- 列表项 信息文本 字体大小-->
+    <dimen name="item_content_dp">13dp</dimen>
+
+    <!-- 列表项 信息文本 注解字节大小-->
+    <dimen name="item_content_describe_dp">10dp</dimen>
+
+    <!-- 活动顶部信息栏一级头文字 大小-->
+    <dimen name="activity_title_dp">18dp</dimen>
+
+    <!-- 活动顶部信息栏二级头文字大小-->
+    <dimen name="activity_text_dp">@dimen/item_title_dp</dimen>
+
+    <!-- 正常浏览/文本展示等状态下的文本字体大小-->
+    <dimen name="text_normal_dp">13dp</dimen>
+
+</resources>

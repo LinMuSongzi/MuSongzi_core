@@ -28,8 +28,6 @@
             imageLoadRect="@{bean.itemCover}"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            app:civ_border_color="@color/bg_white"
-            app:civ_border_width="20dp"
             tools:src="@mipmap/ic_normal_women_hear" />
 
 
@@ -43,13 +41,13 @@
             android:text="@{bean.itemTitle}"
             tools:text="@string/normal_str"
             android:textColor="@color/text_color_normal"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_title_dp" />
 
         <Switch
             android:id="@+id/id_swich"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="@dimen/righet_left_public_dp"
             android:checked="@{bean.choose}"
             android:thumb="@drawable/switch_custom_thumb_selector"
             android:track="@drawable/switch_custom_track_selector"

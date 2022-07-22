@@ -51,6 +51,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private val observer: Observer<Data> = createObserver()
     private var initFlag = false
 
+    private var TAG = javaClass.simpleName
     final override fun getAdapter(): RecyclerView.Adapter<*> = instanceAdapter
 
     final override fun init(i: IRefreshViewModel<*>) {

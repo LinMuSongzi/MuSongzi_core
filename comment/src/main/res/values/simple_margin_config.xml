@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--一般左右间距-->
+    <dimen name="righet_left_public_dp">10dp</dimen>
+    <!--一般上下间距-->
+    <dimen name="top_bottom_public_dp">10</dimen>
+    <!-- 顶部信息栏的大小 -->
+    <dimen name="activity_bar_dp">44dp</dimen>
+    <!--图片尺寸 L 偏大-->
+    <dimen name="cover_l_dp">80dp</dimen>
+    <!--图片尺寸 m 中-->
+    <dimen name="cover_m_dp">65dp</dimen>
+    <!--图片尺寸 s 偏小 -->
+    <dimen name="cover_s_dp">40dp</dimen>
+    <!--图片尺寸 ss 最小 -->
+    <dimen name="cover_ss_dp">20dp</dimen>
+
+    <!-- app整体一般圆角大小 -->
+    <dimen name="radius_normal">10dp</dimen>
+
+
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data >
+
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.response.BaseItemBeanImpl" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:foreground="?android:selectableItemBackground"
+        app:cardCornerRadius="@dimen/radius_normal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/id_content2_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                imageLoadNormal="@{bean.itemCover}"
+                tools:src="@mipmap/ic_normal_women_hear" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="50dp"
+                android:paddingVertical="10dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="10dp">
+
+
+                <TextView
+                    android:id="@+id/id_status"
+                    android:elevation="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="7dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="@color/bg_white"
+                    android:textSize="@dimen/item_title_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="已结束" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

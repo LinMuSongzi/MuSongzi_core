@@ -1,5 +1,6 @@
 package com.musongzi.core
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,9 +29,30 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Consumer
+import java.text.SimpleDateFormat
+import java.util.*
 
 /*** created by linhui * on 2022/7/20 */
 object ExtensionCoreMethod {
+
+
+    @SuppressLint("SimpleDateFormat")
+    @JvmStatic
+    fun Long.convertCommentTime(): String {
+        if (this == 0L) {
+            return ""
+        }
+        val mCld = Calendar.getInstance();
+        val thisYear = mCld.get(Calendar.YEAR);
+        mCld.time = Date(this)
+        return if (mCld.get(Calendar.YEAR) != thisYear) {
+            SimpleDateFormat("yyyy年MM月dd日 HH:mm").format(this);
+        } else {
+            SimpleDateFormat("MM月dd日 HH:mm").format(this);
+        }
+    }
+
+
     fun <T> T.exceptionRun(run: () -> Unit) {
         try {
             run()

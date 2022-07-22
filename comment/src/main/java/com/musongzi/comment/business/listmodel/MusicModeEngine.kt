@@ -5,7 +5,7 @@ import com.musongzi.comment.bean.response.ModelData
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 
 /*** created by linhui * on 2022/7/21 */
-abstract class MusicModeAdapter : BaseMoreViewEngine<ModelData.TypeBean, ModelData>() {
+abstract class MusicModeEngine : BaseMoreViewEngine<ModelData.TypeBean, ModelData>() {
 
 
 

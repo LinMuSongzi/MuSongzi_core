@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.musongzi.core.util.StringUtil" />
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.response.LikeBean" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/id_cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="1dp"
+        tools:layout_height="400dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivBg"
+                imageLoadNormal="@{bean.itemCover}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_normal_man_hear" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.2"
+                android:background="@color/bg_black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/id_name_layout"
+                android:layout_marginStart="10dp"
+                android:alpha="0.7"
+                android:background="@drawable/shape_gray6"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:textColor="@color/bg_white"
+                android:textSize="11dp"
+                tools:text="创作" />
+
+            <LinearLayout
+                android:id="@+id/id_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    setTextNormal="@{bean.itemTitle}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="@color/bg_white"
+                    android:textSize="@dimen/item_title_dp"
+                    tools:text="壳子" />
+
+                <TextView
+                    setTextNormal="@{bean.livePeopleStr}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/bg_white"
+                    android:textSize="@dimen/item_content_describe_dp"
+                    tools:text="123人在看" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/shape_purple_6"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="5dp">
+
+                <TextView
+                    android:id="@+id/id_voice_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/bg_white"
+                    android:textSize="11dp"
+                    setTextNormal="@{bean.roomStatusStr]"
+                    tools:text="语聊房" />
+
+                <ImageView
+                    viewVisibility="@{bean.lockStatus == 1}"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_toRightOf="@+id/id_voice_tip"
+                    android:src="@mipmap/ic_lock_1" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
