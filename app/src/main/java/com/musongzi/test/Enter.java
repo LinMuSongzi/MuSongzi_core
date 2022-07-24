@@ -14,7 +14,6 @@ public class Enter {
 
     private static final String TAG = "Enter_now";
 
-
 //    public static void jiekai(InputStream inputStream, OutputStream outputStream) throws IOException {
 //        Log.i(TAG, "jiekai: 解密");
 //        int read;

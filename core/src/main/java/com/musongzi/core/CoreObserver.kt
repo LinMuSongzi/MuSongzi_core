@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 
-class MszObserver<T>(var c: Consumer<T>) : Observer<T> {
+class CoreObserver<T>(var c: Consumer<T>) : Observer<T> {
 
     companion object {
         const val TAG = "MszObserver"

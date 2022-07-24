@@ -14,10 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
+import com.musongzi.core.base.manager.RetrofitManager;
 import com.musongzi.core.base.vm.SaveStateHandleWarp;
 import com.musongzi.core.itf.IAgentHolder;
 import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.IViewInstance;
+import com.musongzi.core.itf.IWant;
 import com.musongzi.core.itf.holder.IHolderViewModel;
 import com.musongzi.core.itf.page.IDataEngine;
 import com.musongzi.core.itf.page.IRead;
@@ -32,10 +34,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 
 public class InjectionHelp {
 
-
-    public static class Text<T extends IRead>{
-
-    }
 
 
     @org.jetbrains.annotations.NotNull
@@ -91,6 +89,7 @@ public class InjectionHelp {
     }
 
 
+    @NotNull
     public static <T> Class<T> findGenericClass(@NotNull Class<?> aClass, int actualTypeArgumentsViewModelIndex) {
 //        Class<T> cache = findCache();
         Type type = aClass.getGenericSuperclass();
@@ -149,7 +148,7 @@ public class InjectionHelp {
      */
     @org.jetbrains.annotations.Nullable
     public static <C extends IClient, V extends ViewModel> V injectViewModel(@NonNull C activity, Bundle defaultArgs,
-                                                                             @org.jetbrains.annotations.Nullable Class<V> clazz, SavedStateHandle savedStateHandle) {
+                                                                             @org.jetbrains.annotations.NonNls Class<V> clazz, SavedStateHandle savedStateHandle) {
         try {
             V vmI = clazz.newInstance();
 
@@ -164,6 +163,7 @@ public class InjectionHelp {
                  *             it.handlerArguments()
                  *         }
                  */
+
                 vmInstance.putArguments(defaultArgs);
                 vmInstance.attachNow(activity);
                 vmInstance.setHolderSavedStateHandle(new SaveStateHandleWarp(savedStateHandle));
@@ -197,5 +197,26 @@ public class InjectionHelp {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @org.jetbrains.annotations.Nullable
+    public static <C> C checkClient(@org.jetbrains.annotations.Nullable C client, @NotNull Class<?> vm, @NotNull int index) {
+        if(client == null){
+            return null;
+        }
+        Class<?> aClass =  InjectionHelp.findGenericClass(vm,index);
+        if(aClass.isInstance(client)){
+            return client;
+        }
+        return null;
+    }
+
+    public static <Api> Api injectApi(@NotNull IWant apiViewModel, int indexApiActualTypeArgument) {
+       return RetrofitManager.getInstance().getApi(InjectionHelp.findGenericClass(apiViewModel.getClass(), indexApiActualTypeArgument), apiViewModel);
+    }
+
+    @NotNull
+    public static ClassLoader getClassLoader() {
+        return InjectionHelp.class.getClassLoader();
     }
 }

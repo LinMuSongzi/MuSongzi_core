@@ -1,6 +1,7 @@
 package com.musongzi.comment
 
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -108,13 +110,17 @@ object ExtensionMethod {
     @JvmOverloads
     fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
         activity: Class<A>? = null,
-        mStyleMessageDescribe:StyleMessageDescribe,
+        mStyleMessageDescribe: StyleMessageDescribe,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
     ) {
         ActivityLifeManager.getInstance().getTopActivity()?.let {
             val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
-            val fInfo = FragmentDescribe(this.name, mStyleMessageDescribe, if (businessClassName != null) BusinessInfo(businessClassName) else null)
+            val fInfo = FragmentDescribe(
+                this.name,
+                mStyleMessageDescribe,
+                if (businessClassName != null) BusinessInfo(businessClassName) else null
+            )
             intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
@@ -133,7 +139,7 @@ object ExtensionMethod {
         dataBundle: Bundle? = null,
         businessClassName: String? = null
     ) {
-        ActivityLifeManager.getInstance().getTopActivity()?.let {
+        (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
             val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
             val fInfo = FragmentDescribe(
                 this.name,
@@ -143,6 +149,9 @@ object ExtensionMethod {
             intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
+            }
+            if (it is Application) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             it.startActivity(intent)
         }
@@ -227,6 +236,22 @@ object ExtensionMethod {
     @JvmStatic
     fun <T> String.getSaveStateValue(holder: IHolderSavedStateHandle): T? {
         return holder.getHolderSavedStateHandle()[this]
+    }
+
+    @JvmStatic
+    fun <T> String.savedStateAllLiveChangevalue(values: T) {
+        val r: (IHolderSavedStateHandle?, Activity) -> Unit = { f, activity ->
+            if (!activity.isFinishing) {
+                f?.getHolderSavedStateHandle()?.set(this, values)
+            }
+        }
+        for (activity in ActivityLifeManager.getInstance().getLifeActivityList()) {
+            if (activity is FragmentActivity) {
+                for (f in activity.supportFragmentManager.fragments) {
+                    r.invoke(f as? IHolderSavedStateHandle, activity)
+                }
+            }
+        }
     }
 
 
@@ -349,12 +374,12 @@ object ExtensionMethod {
     @JvmStatic
     fun <Page : ViewPager2> Page.bindAdapter(
         fragmentManager: FragmentManager,
-        lifecycle:LifecycleOwner,
+        lifecycle: LifecycleOwner,
         fragmentList: List<Fragment>,
         offscreen: Int? = null
     ): Page {
         offscreenPageLimit = offscreen ?: fragmentList.size
-        adapter = object : FragmentStateAdapter(fragmentManager,lifecycle.lifecycle) {
+        adapter = object : FragmentStateAdapter(fragmentManager, lifecycle.lifecycle) {
             override fun getItemCount() = fragmentList.size
 
             override fun createFragment(position: Int) = fragmentList[position]

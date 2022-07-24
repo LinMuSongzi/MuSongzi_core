@@ -6,7 +6,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.ExtensionCoreMethod.wantPick
-import com.musongzi.core.MszObserver
+import com.musongzi.core.CoreObserver
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.base.vm.CollectionsViewModel
@@ -51,7 +51,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private val observer: Observer<Data> = createObserver()
     private var initFlag = false
 
-    private var TAG = javaClass.simpleName
+    public var TAG = javaClass.simpleName
     final override fun getAdapter(): RecyclerView.Adapter<*> = instanceAdapter
 
     final override fun init(i: IRefreshViewModel<*>) {
@@ -88,7 +88,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 //    protected open fun laterInit(bundle: Bundle?) {
 //    }
 
-    protected open fun createObserver(): Observer<Data> = MszObserver {
+    protected open fun createObserver(): Observer<Data> = CoreObserver {
 
     }
 

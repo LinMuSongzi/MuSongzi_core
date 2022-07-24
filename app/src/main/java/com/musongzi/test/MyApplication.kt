@@ -20,13 +20,13 @@ import retrofit2.Retrofit
 import java.lang.reflect.Method
 import java.util.*
 
-class MyApplication : MultiDexApplication(){
+class MyApplication : MultiDexApplication() {
     companion object {
         const val TAG = "MyApplication"
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessage(d: DiscoverBannerBean){
+    fun onMessage(d: DiscoverBannerBean) {
 
     }
 
@@ -39,17 +39,17 @@ class MyApplication : MultiDexApplication(){
 //            (it.get(null) as DataBinderMapperImpl).addMapper(com.musongzi.comment.DataBinderMapperImpl())
 //        }
 
-        Thread.setDefaultUncaughtExceptionHandler{t,e->
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
             Log.i(TAG, "message: t = ${e.message}")
-            for(error in e.stackTrace){
+            for (error in e.stackTrace) {
                 Log.i(TAG, "error: $error")
             }
             WriteTxt.exception(e)
         }
 
         EventBus.getDefault().register(this)
-        registerEvent(ILoginEvent::class.java){
-            object:IMusicEvent{
+        registerEvent(ILoginEvent::class.java) {
+            object : IMusicEvent {
                 override fun play() {
                     Log.i(TAG, "initEvent play: MyApplication")
                 }
@@ -71,34 +71,37 @@ class MyApplication : MultiDexApplication(){
         }
         RetrofitManager.getInstance().init(object : RetrofitManager.CallBack {
             override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
-                var cb: Any? = null
-                if (method.name == "getArrayEngine") {
-                    if ((args[0] as Int) > 1) {
-                        cb = ObservableCreate.fromArray(emptyArray<String>())
-                    } else {
-                        cb = ObservableCreate.fromArray(
-                            arrayOf(
-                                "a".bean(),
-                                "1".bean(),
-                                "2".bean(),
-                                "3".bean(),
-                                "4".bean(),
-                                "5".bean(),
-                                "6".bean(),
-                                "ad".bean(),
-                                "1".bean(),
-                                "2".bean(),
-                                "3".bean(),
-                                "4".bean(),
-                                "5".bean(),
-                                "6".bean(),
-                                "ad".bean()
-                            )
+                when (method.name) {
+                    "getArrayEngine" -> {
+                        var cb: Any? = null
+                        if ((args[0] as Int) > 1) {
+                            cb = ObservableCreate.fromArray(emptyArray<String>())
+                        } else {
+                            cb = ObservableCreate.fromArray(
+                                arrayOf(
+                                    "a".bean(),
+                                    "1".bean(),
+                                    "2".bean(),
+                                    "3".bean(),
+                                    "4".bean(),
+                                    "5".bean(),
+                                    "6".bean(),
+                                    "ad".bean(),
+                                    "1".bean(),
+                                    "2".bean(),
+                                    "3".bean(),
+                                    "4".bean(),
+                                    "5".bean(),
+                                    "6".bean(),
+                                    "ad".bean()
+                                )
 
-                        )
+                            )
+                        }
+                        return cb
                     }
                 }
-                return cb
+                return null;
             }
 
             override fun getOkHttpCLient(): OkHttpClient? = null

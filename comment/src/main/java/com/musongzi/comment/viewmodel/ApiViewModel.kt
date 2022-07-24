@@ -9,12 +9,12 @@ import com.musongzi.core.util.InjectionHelp
 
 open class ApiViewModel<C : IClient, B : IBusiness, Api> : EasyViewModel<C, B>(), IHolderApi<Api> {
 
-//    private val apiInstance: Api by lazy {
-//
-//    }
-
     override fun getApi(): Api {
-        return RetrofitManager.getInstance().getApi(InjectionHelp.findGenericClass(this@ApiViewModel.javaClass, 2), this)
+        return InjectionHelp.injectApi(this,indexApiActualTypeArgument())
     }
+
+    fun indexApiActualTypeArgument() = 2
+
+
 
 }

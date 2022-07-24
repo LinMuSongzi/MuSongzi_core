@@ -9,6 +9,7 @@ import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.comment.R
 import com.musongzi.comment.bean.ImageLoadBean
 import com.musongzi.comment.bean.SimpleCardInfo
+import com.musongzi.comment.business.itf.IMainIndexBusiness
 import com.musongzi.comment.viewmodel.itf.IMainIndexViewModel
 import com.musongzi.comment.databinding.AdapterMainBottomItemBinding
 import com.musongzi.core.ExtensionCoreMethod.adapter
@@ -20,9 +21,9 @@ import com.musongzi.core.util.ScreenUtil
 import com.musongzi.core.util.ScreenUtil.SCREEN_1_5_WDITH
 
 /*** created by linhui * on 2022/7/20 */
-abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>() {
+abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMainIndexBusiness {
 
-    fun buildDataBySize() {
+    override fun buildDataBySize() {
         val source = iAgent.getSource();
         if (source.realData().isEmpty()) {
             (source.realData() as ArrayList).addAll(normalMainArrayInfo(iAgent))
@@ -53,7 +54,7 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>() {
     private fun handlerViewPageValues() {
         val size = FRAGMENT_SZIE_KEY.getSaveStateValue<Int?>(iAgent)
         if (size == null) {
-            // val fragments = buildFragments()
+             val fragments = buildFragments()
             iAgent.getHolderClient()?.apply {
 //                getViewpage2().bindAdapter(,iAgent.getThisLifecycle(),fragmentList = fragments)
             }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.widget.Button" />
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.FileBean" />
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+
+        <com.musongzi.comment.view.CustomRoundAngleImageView
+            android:id="@+id/ivBg"
+            imageLoadRect="@{bean.itemCover}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:radius="8dp"
+            tools:ignore="MissingConstraints"
+            tools:src="@mipmap/ic_normal_women_hear" />
+
+
+        <FrameLayout
+            android:id="@+id/id_choose"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:padding="2dp">
+
+            <TextView
+                android:id="@+id/id_choose_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_purple_2"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                tools:text="1"
+                tools:textColor="@color/bg_black" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/id_camera_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_gray10"
+            tools:visibility="gone">
+
+
+            <ImageView
+                android:id="@+id/id_camera"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+
+                android:src="@mipmap/ic_camera_1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/id_camera"
+                android:layout_centerHorizontal="true"
+                android:text="@string/take_photo_str"
+                android:textColor="@color/text_color_unSelect"
+                android:textSize="14dp" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>

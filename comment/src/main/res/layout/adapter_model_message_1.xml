@@ -23,7 +23,7 @@
 
         <com.musongzi.comment.view.CircleImageView
             android:id="@+id/id_image"
-            imageUrlRect="@{bean.itemCover}"
+            imageLoadRect="@{bean.itemCover}"
             android:layout_width="@dimen/cover_s_dp"
             android:layout_height="@dimen/cover_s_dp"
             android:src="@mipmap/ic_normal_women_hear"

@@ -16,6 +16,10 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
 
     protected val TAG = javaClass.simpleName
 
+    override fun <A> holderApiInstance(): IHolderApi<A>? {
+        return this as? IHolderApi<A>;
+    }
+
     private var businessInfo: BusinessInfo? = null
 
     final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
@@ -70,9 +74,15 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
     }
 
     protected fun createBusiness(): B {
-       return businessInfo?.let {
-            BusinessInfo::class.java.classLoader?.loadClass(it.className)?.newInstance() as? B
-        } ?: InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+        return businessInfo?.let {
+            InjectionHelp.getClassLoader().loadClass(it.className)?.newInstance() as? B
+        } ?: (InjectionHelp.findGenericClass<B>(javaClass, indexBusinessActualTypeArgument()).let {
+            if(it.isInterface){
+                createBusiness2()
+            }else{
+                it.newInstance()
+            }
+        })
 
 //       return if(businessInfo == null) {
 //            InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
@@ -84,17 +94,27 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
 //        }
     }
 
+    protected open fun createBusiness2(): B {
+        TODO("Not yet implemented")
+    }
+
+    private fun indexBusinessActualTypeArgument() = 1
+
 
     override fun getHolderBusiness(): B = business
 
-    override fun getHolderClient(): C? = client as? C
+    override fun getHolderClient(): C? {
+        return InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
+    }
+
+    protected fun indexClientActualTypeArgument(): Int = 0;
 
     override fun handlerSavedInstanceState(savedInstanceState: Bundle?) {
         savedInstanceStateRf = WeakReference(savedInstanceState)
     }
 
     override fun isSavedInstanceStateNull(): Boolean {
-        return savedInstanceStateRf == null
+        return savedInstanceStateRf == null || savedInstanceStateRf?.get() == null
     }
 
     override fun putArguments(d: Bundle?) {

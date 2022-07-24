@@ -121,7 +121,7 @@ object ExtensionCoreMethod {
     }
 
     fun <T> Observable<T>.sub(c: Consumer<T>) {
-        subscribe(MszObserver(c))
+        subscribe(CoreObserver(c))
     }
 
     fun Any.toJson(): String {

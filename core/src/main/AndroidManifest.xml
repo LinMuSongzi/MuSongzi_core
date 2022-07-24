@@ -2,28 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.musongzi.core">
 
-<!--    <application-->
-<!--        android:allowBackup="true"-->
-<!--        android:icon="@mipmap/ic_launcher"-->
-<!--        android:label="@string/app_name"-->
-<!--        android:roundIcon="@mipmap/ic_launcher_round"-->
-<!--        android:supportsRtl="true"-->
-<!--        android:theme="@style/AppTheme" />-->
-    <application>
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="com.musongzi.core.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="com.musongzi.core.base.HolderInit"
-                android:value="@string/androidx_startup" />
-        </provider>
-
-
-        <activity android:name="com.musongzi.comment.activity.NormalFragmentActivity" android:screenOrientation="portrait"/>
-        
-    </application>
 
 </manifest>
+
+
+

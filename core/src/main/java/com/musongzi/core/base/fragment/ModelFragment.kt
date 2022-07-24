@@ -29,7 +29,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         savedInstanceState: Bundle?
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
-        savedInstance = savedInstanceState;
+//        savedInstance = savedInstanceState;
         arguments?.let {
             modelProviderEnable = it.getInt(PROVIDER_MODEL_KEY, PROVIDER_NORMAL)
         }
@@ -49,7 +49,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     override fun onDestroy() {
         super.onDestroy()
-        savedInstance = null
+//        savedInstance = null
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
