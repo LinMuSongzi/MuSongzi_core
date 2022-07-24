@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.response.BaseItemBeanImpl" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/id_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="55dp">
+
+                <com.musongzi.comment.view.CircleImageView
+                    android:id="@+id/iv_head"
+                    imageLoadRect="@{bean.itemCover}"
+                    android:layout_width="@dimen/cover_s_dp"
+                    android:layout_height="@dimen/cover_s_dp"
+                    tools:src="@mipmap/ic_normal_man_hear" />
+
+                <ImageView
+                    android:id="@+id/id_attention_IV"
+                    viewVisibility="@{bean.itemFlag != 1}"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_normal_women_hear" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/id_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@{bean.itemTitle}"
+                    android:textColor="@color/text_color_select"
+                    android:textSize="15dp"
+                    tools:text="小克莱尔" />
+
+                <TextView
+                    android:id="@+id/id_content_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@{bean.itemTitleDescribe}"
+                    android:textColor="@color/text_color_normal"
+                    android:textSize="13dp"
+                    tools:text="你是谁?我在哪儿？你是谁?我在..." />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{bean.itemContent}"
+                    android:textColor="@color/text_color_unSelect"
+                    android:textSize="11dp"
+                    tools:text="1889粉丝" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/id_choose_btn"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/shape_purple_2"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:text="@string/choose_str"
+                android:textColor="@color/bg_white"
+                android:textSize="15dp"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_below="@+id/id_layout_1"
+            android:layout_width="match_parent"
+            android:layout_marginStart="55dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/text_color_unSelect"
+            android:layout_height="1px"/>
+
+    </RelativeLayout>
+</layout>

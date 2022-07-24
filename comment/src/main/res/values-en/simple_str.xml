@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="choose_str">choose</string>
+
+    <string name="search_str">search</string>
+    <string name="music_str">music</string>
+    <string name="main_str">index</string>
+    <string name="top_str">Top</string>
+    <string name="take_photo_str">take Photo</string>
+</resources>

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
@@ -52,7 +53,7 @@ dependencies {
     api 'androidx.lifecycle:lifecycle-livedata-ktx:2.1.0'
     api 'io.reactivex.rxjava3:rxjava:3.0.4'
     api 'io.reactivex.rxjava3:rxandroid:3.0.0'
-
+    api 'com.gyf.immersionbar:immersionbar:3.0.0'
     api 'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
     api 'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头
     api 'com.scwang.smart:refresh-header-radar:2.0.3'       //雷达刷新头

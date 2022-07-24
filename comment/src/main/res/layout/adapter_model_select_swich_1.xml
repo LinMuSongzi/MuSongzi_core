@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.widget.Switch" />
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.response.BaseItemBeanImpl" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/bg_white"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp">
+
+        <com.musongzi.comment.view.CircleImageView
+            android:id="@+id/id_icon"
+            imageLoadRect="@{bean.itemCover}"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            tools:src="@mipmap/ic_normal_women_hear" />
+
+
+        <TextView
+            android:id="@+id/id_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@{bean.itemTitle}"
+            tools:text="@string/normal_str"
+            android:textColor="@color/text_color_normal"
+            android:textSize="@dimen/item_title_dp" />
+
+        <Switch
+            android:id="@+id/id_swich"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/righet_left_public_dp"
+            android:checked="@{bean.choose}"
+            android:thumb="@drawable/switch_custom_thumb_selector"
+            android:track="@drawable/switch_custom_track_selector"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    </LinearLayout>
+</layout>

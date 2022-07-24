@@ -18,7 +18,13 @@ public class ScreenUtil {
 
     public static final String TAG = ScreenUtil.class.getSimpleName();
 
-    // ---------------------------------------------------------------------------------
+    public static final int SCREEN_1_2_WDITH = ScreenUtil.getScreenWidth();
+
+    public static final int SCREEN_1_3_WDITH = ScreenUtil.getScreenWidth() / 3;
+
+    public static final int SCREEN_1_4_WDITH = ScreenUtil.getScreenWidth() / 4;
+
+    public static final int SCREEN_1_5_WDITH = ScreenUtil.getScreenWidth() / 5;
 
 
     /**

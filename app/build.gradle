@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -43,6 +44,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-//    implementation project('path:aptlib')
-//    annotationProcessor project(':aptlib')
+    // PictureSelector basic (Necessary)
+    implementation 'io.github.lucksiege:pictureselector:v3.10.5'
+//
+//    // image compress library (Not necessary)
+//    implementation 'io.github.lucksiege:compress:v3.10.4'
+//
+//    // uCrop library (Not necessary)
+//    implementation 'io.github.lucksiege:ucrop:v3.10.4'
+//
+//    // simple camerax library (Not necessary)
+//    implementation 'io.github.lucksiege:camerax:v3.10.4'
 }

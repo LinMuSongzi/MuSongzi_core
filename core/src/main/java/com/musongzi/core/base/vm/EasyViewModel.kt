@@ -4,20 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.SavedStateHandle
+import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
+abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
     IHolderViewModel<C, B> {
 
     protected val TAG = javaClass.simpleName
 
-//    constructor(savedStateHandle: SavedStateHandle) : this() {
-//        setHolderSavedStateHandle(savedStateHandle)
-//    }
+    override fun <A> holderApiInstance(): IHolderApi<A>? {
+        return this as? IHolderApi<A>;
+    }
+
+    private var businessInfo: BusinessInfo? = null
 
     final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
         Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
@@ -70,23 +73,54 @@ abstract class EasyViewModel<C : IClient, B : IBusiness>() : CoreViewModel<IHold
         client = null;
     }
 
-    protected fun createBusiness(): B =
-        InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+    protected fun createBusiness(): B {
+        return businessInfo?.let {
+            InjectionHelp.getClassLoader().loadClass(it.className)?.newInstance() as? B
+        } ?: (InjectionHelp.findGenericClass<B>(javaClass, indexBusinessActualTypeArgument()).let {
+            if(it.isInterface){
+                createBusiness2()
+            }else{
+                it.newInstance()
+            }
+        })
+
+//       return if(businessInfo == null) {
+//            InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+//        }else{
+//           val b =  businessInfo?.let {
+//                BusinessInfo::class.java.classLoader?.loadClass(it.className)?.newInstance() as? B
+//            }
+//           b ?: InjectionHelp.findGenericClass<B>(javaClass, 1).newInstance()
+//        }
+    }
+
+    protected open fun createBusiness2(): B {
+        TODO("Not yet implemented")
+    }
+
+    private fun indexBusinessActualTypeArgument() = 1
+
 
     override fun getHolderBusiness(): B = business
 
-    override fun getHolderClient(): C? = client
+    override fun getHolderClient(): C? {
+        return InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
+    }
+
+    protected fun indexClientActualTypeArgument(): Int = 0;
 
     override fun handlerSavedInstanceState(savedInstanceState: Bundle?) {
         savedInstanceStateRf = WeakReference(savedInstanceState)
     }
 
     override fun isSavedInstanceStateNull(): Boolean {
-        return savedInstanceStateRf == null
+        return savedInstanceStateRf == null || savedInstanceStateRf?.get() == null
     }
 
     override fun putArguments(d: Bundle?) {
-
+        d?.let {
+            businessInfo = d.getParcelable(InjectionHelp.BUSINESS_NAME_KEY)
+        }
     }
 
     override fun getArguments(): Bundle? {

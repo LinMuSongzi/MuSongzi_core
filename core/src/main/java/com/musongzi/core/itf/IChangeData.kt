@@ -1,4 +1,4 @@
-package com.messcat.mclibrary.base
+package com.musongzi.core.itf
 
 interface IChangeData<I> {
 

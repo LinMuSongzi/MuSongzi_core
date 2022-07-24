@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.SimpleCardInfo" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:minHeight="40dp"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+
+        <ImageView
+            imageLoadNormal="@{bean.image}"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            tools:src="@mipmap/ic_empty_data" />
+
+        <TextView
+            android:textColor="@{bean.titleColor}"
+            setTextNormal="@{bean.title}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="15dp"
+            tools:text="哈a啊啊啊哈" />
+
+
+    </LinearLayout>
+</layout>

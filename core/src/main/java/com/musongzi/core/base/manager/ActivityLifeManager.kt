@@ -98,6 +98,9 @@ class ActivityLifeManager private constructor() : ComponentCallbacks,
 
     private val lifeActivityList = ArrayList<Activity>()
 
+    fun getLifeActivityList():List<Activity>{
+        return lifeActivityList.toList()
+    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         Log.i(TAG, "onConfigurationChanged: $newConfig")

@@ -18,7 +18,8 @@ import java.net.URL;
 public class URLUtil {
 
     private static final String TAG = "URLUtil";
-    private static final String PACKAGE_PROVIDER = "com.android.playmusic.provider";
+    @Deprecated
+    private static final String PACKAGE_PROVIDER = "com.musongzi.test.provider";
 
     /**
      * 功能：URL是否合法

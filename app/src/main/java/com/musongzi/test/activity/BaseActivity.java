@@ -1,7 +1,8 @@
 package com.musongzi.test.activity;
 
-import com.musongzi.core.base.activity.NormalFragmentActivity;
+import com.musongzi.comment.activity.NormalFragmentActivity;
 
 /*** created by linhui * on 2022/7/7 */
 public class BaseActivity extends NormalFragmentActivity {
+
 }

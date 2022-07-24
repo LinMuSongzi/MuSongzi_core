@@ -9,8 +9,6 @@ import com.musongzi.core.itf.page.ISource
 
 interface IHandlerChooseViewModel<B : IBusiness> : IHolderLifecycle, IHolderBusiness<B> {
 
-    fun baseDatas(): ISource<IChoose>?
-
     fun updateByPick(pickData: IChoose?);
 
 }

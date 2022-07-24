@@ -3,8 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.musongzi.test">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries package="com.musongzi.test">
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE">
+
+            </action>
+        </intent>
+        <intent>
+            <action android:name="android.media.action.ACTION_VIDEO_CAPTURE">
+
+            </action>
+        </intent>
+    </queries>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -14,12 +39,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:launchMode="singleTask">
+        <activity android:name=".SplashActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.MainIndexActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppNoActionBarLightTheme">
         </activity>
 
         <activity

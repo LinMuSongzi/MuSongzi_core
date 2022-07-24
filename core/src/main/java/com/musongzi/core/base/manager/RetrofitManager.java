@@ -17,17 +17,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableSource;
-import io.reactivex.rxjava3.core.ObservableTransformer;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -49,7 +42,7 @@ public class RetrofitManager {
 
     private Retrofit retrofit;
     private OkHttpClient okHttpClient;
-    private CallBack callBack;
+    private CallBack mCallBack;
 
 
     private RetrofitManager() {
@@ -59,7 +52,7 @@ public class RetrofitManager {
         if (retrofit != null) {
             return;
         }
-        setCallBack(callBack);
+        setmCallBack(callBack);
         if (callBack != null && callBack.getRetrofit() != null) {
             retrofit = callBack.getRetrofit();
         } else {
@@ -70,13 +63,13 @@ public class RetrofitManager {
         }
     }
 
-    public void setCallBack(CallBack callBack) {
-        this.callBack = callBack;
+    public void setmCallBack(CallBack mCallBack) {
+        this.mCallBack = mCallBack;
     }
 
     private OkHttpClient getOkHttpCLient() {
-        if (callBack != null) {
-            okHttpClient = callBack.getOkHttpCLient();
+        if (mCallBack != null) {
+            okHttpClient = mCallBack.getOkHttpCLient();
         }
         if (okHttpClient == null) {
             Cache cache = new Cache(ActivityThreadHelp.getCurrentApplication().getCacheDir(), 1024 * 1024 * 200);
@@ -114,7 +107,7 @@ public class RetrofitManager {
 
         if (t == null) {
             if (want != null && want.getThisLifecycle() != null) {
-                final WeakReference<CallBack> c = new WeakReference<>(callBack);
+                final WeakReference<CallBack> c = new WeakReference<>(mCallBack);
                 final WeakReference<RetrofitManager> r = new WeakReference<>(MANAGER);
                 InvocationHandler invocationHandler = new InvocationHandler() {
                     private final Object[] emptyArgs = new Object[0];

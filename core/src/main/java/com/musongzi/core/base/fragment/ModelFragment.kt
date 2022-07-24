@@ -29,11 +29,11 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         savedInstanceState: Bundle?
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
-        savedInstance = savedInstanceState;
+//        savedInstance = savedInstanceState;
         arguments?.let {
             modelProviderEnable = it.getInt(PROVIDER_MODEL_KEY, PROVIDER_NORMAL)
         }
-        if(CLASS_CACHE[javaClass.name] == null){
+        if (CLASS_CACHE[javaClass.name] == null) {
             val c = arrayOfNulls<Class<*>>(1)
             instanceViewModel(c);
             CLASS_CACHE[javaClass.name] = c[0]
@@ -49,7 +49,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     override fun onDestroy() {
         super.onDestroy()
-        savedInstance = null
+//        savedInstance = null
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
@@ -58,7 +58,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     override fun superDatabindingName() = ModelFragment::class.java.name
 
-    protected open fun instanceViewModel(clazz:Array<Class<*>?>): V? = InjectionHelp.findViewModel(
+    protected open fun instanceViewModel(clazz: Array<Class<*>?>): V? = InjectionHelp.findViewModel(
         javaClass,
         superFragmentName(),
         getProvider(),
@@ -78,7 +78,8 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
                 p = thisViewModelProvider()
             }
             else -> {
-                modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
+                modelProviderEnable =
+                    modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
                 return getProvider()
             }
         }
@@ -145,7 +146,8 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     companion object {
         const val PROVIDER_MODEL_KEY = "provider_model_key"
 
-        val CLASS_CACHE = HashMap<String,Class<*>?>()
+        @Deprecated("暂时不理")
+        val CLASS_CACHE = HashMap<String, Class<*>?>()
 
         /**
          * 1
@@ -163,7 +165,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         const val PROVIDER_MAIN = PROVIDER_NORMAL.shl(2);
 
         fun composeProvider(b: Bundle?, flag: Boolean) {
-            b?.putInt(PROVIDER_MODEL_KEY, if(flag) PROVIDER_MAIN else PROVIDER_SINGLE)
+            b?.putInt(PROVIDER_MODEL_KEY, if (flag) PROVIDER_MAIN else PROVIDER_SINGLE)
         }
 
     }

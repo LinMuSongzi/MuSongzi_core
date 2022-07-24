@@ -1,9 +1,8 @@
-package com.android.playmusic.l.adapter
+package com.musongzi.core.base.adapter
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.messcat.mclibrary.base.IChangeData
-import com.musongzi.core.base.adapter.DataBindingViewHolder
+import com.musongzi.core.itf.IChangeData
 
 abstract class ListAbstacyAdapter<ListItem>(var list: List<ListItem>) : RecyclerView.Adapter<DataBindingViewHolder>(),
     IChangeData<ListItem> {

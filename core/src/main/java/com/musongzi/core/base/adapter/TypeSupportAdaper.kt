@@ -3,9 +3,7 @@ package com.musongzi.core.base.adapter
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import com.android.playmusic.l.adapter.ListSetAdapter
-import com.android.playmusic.l.adapter.beanSet
-import com.musongzi.core.ExtensionMethod.dataBindingInflate
+import com.musongzi.core.ExtensionCoreMethod.dataBindingInflate
 
 /**
  * 一个适配不同item type的适配器

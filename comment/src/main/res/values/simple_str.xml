@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_str">搜索</string>
+    <string name="music_str">音乐</string>
+    <string name="main_str">主页</string>
+    <string name="choose_str">选择</string>
+    <string name="top_str">置顶</string>
+    <string name="take_photo_str">拍摄</string>
+</resources>

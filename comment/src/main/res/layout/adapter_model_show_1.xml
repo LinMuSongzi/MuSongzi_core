@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.widget.Switch" />
+
+        <variable
+            name="bean"
+            type="com.musongzi.comment.bean.response.BaseItemBeanImpl" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/top_bottom_public_dp">
+
+        <com.musongzi.comment.view.CircleImageView
+            android:id="@+id/id_icon"
+            imageLoadRect="@{bean.itemCover}"
+            android:layout_width="@dimen/cover_m_dp"
+            android:layout_height="@dimen/cover_m_dp"
+            tools:src="@mipmap/ic_normal_women_hear" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/id_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{bean.itemTitle}"
+                android:textColor="@color/text_color_select"
+                android:textSize="@dimen/item_title_dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/normal_str" />
+
+
+            <TextView
+                android:id="@+id/id_title_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/top_str"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/item_title_describe_dp"
+                app:layout_constraintBottom_toBottomOf="@+id/id_title"
+                app:layout_constraintLeft_toRightOf="@+id/id_title"
+                app:layout_constraintTop_toTopOf="@+id/id_title" />
+
+            <TextView
+                android:id="@+id/id_title_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@{bean.itemContent}"
+                android:textColor="@color/text_color_normal"
+                android:textSize="@dimen/item_content_dp"
+                app:layout_constraintLeft_toLeftOf="@+id/id_title"
+                app:layout_constraintTop_toBottomOf="@+id/id_title"
+                tools:text="@string/normal_str" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/id_other_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:src="@mipmap/ic_play_1" />
+
+
+    </LinearLayout>
+</layout>

@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include layout="@layout/msz_title_layout"/>
+    <data>
 
+    </data>
 
-    <FrameLayout
-        android:id="@+id/id_content_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <include android:id="@+id/title_layout" layout="@layout/msz_title_layout" />
+
+
+        <FrameLayout
+            android:id="@+id/id_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</layout>
