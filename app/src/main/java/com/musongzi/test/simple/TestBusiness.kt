@@ -7,8 +7,11 @@ import com.musongzi.test.vm.TestViewModel
 
 class TestBusiness : BaseLifeBusiness<TestViewModel>() {
     fun checkBanner() {
-        iAgent.getApi().getBannerList().sub {
-            iAgent.getHolderClient()?.showText(it.toJson())
-        }
+        iAgent.getHolderClient()?.showDialog("正在加载")
+
+//        iAgent.getApi().getBannerList().sub {
+//            iAgent.getHolderClient()?.disimissDialog()
+//            iAgent.getHolderClient()?.showText(it.toJson())
+//        }
     }
 }

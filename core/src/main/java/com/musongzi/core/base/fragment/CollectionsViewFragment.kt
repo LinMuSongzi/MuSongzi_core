@@ -1,5 +1,6 @@
 package com.musongzi.core.base.fragment
 
+import android.os.Bundle
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
@@ -14,10 +15,9 @@ import com.musongzi.core.util.StringUtil
 /**
  * 一个基于集合的基本碎片
  * 核心作用作为view层提供刷新和绑定view功能
+ * 快速构建一个几何数据级
  */
 open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>() {
-
-
 
     override fun getCollectionsViewEngine(): IHolderCollections? = null
 

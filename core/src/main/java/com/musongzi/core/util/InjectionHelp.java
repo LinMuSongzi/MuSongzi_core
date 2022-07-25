@@ -231,6 +231,16 @@ public class InjectionHelp {
         return null;
     }
 
+    @NotNull
+    public static <F extends Fragment> Fragment injectFragment(@NotNull Class<F> clazz, @org.jetbrains.annotations.Nullable Bundle dataBundle) {
+        try {
+            return ExtensionCoreMethod.instance(clazz, dataBundle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @org.jetbrains.annotations.Nullable
     public static <C> C checkClient(@org.jetbrains.annotations.Nullable C client, @NotNull Class<?> vm, @NotNull int index) {
         if (client == null) {

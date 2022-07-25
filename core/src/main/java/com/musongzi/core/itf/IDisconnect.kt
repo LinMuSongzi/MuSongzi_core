@@ -2,6 +2,6 @@ package com.musongzi.core.itf
 
 interface IDisconnect {
 
-    fun disconnect();
+    fun disconnect():Boolean = true
 
 }

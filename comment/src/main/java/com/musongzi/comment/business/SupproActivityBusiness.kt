@@ -43,13 +43,14 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         h.activity.getHolderContext()?.let { it ->
             if (it is Activity) {
                 dataBinding = DataBindingUtil.setContentView(it, R.layout.activity_normal_fragment)
-                val fragmentDescribe: FragmentDescribe? = h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
+                val fragmentDescribe: FragmentDescribe? =
+                    h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
                 if (fragmentDescribe != null) {
                     handlerBarBusiness(it, fragmentDescribe.sinfo!!)
                     if (it is AppCompatActivity) {
                         var dataBundle: Bundle? = h.getArguments()?.getBundle(BUNDLE_KEY)
                         if (fragmentDescribe.businessInfo != null) {
-                            dataBundle = handlerBusinesInstanceInfo(fragmentDescribe,dataBundle)
+                            dataBundle = handlerBusinesInstanceInfo(fragmentDescribe, dataBundle)
                         }
                         val fragment: Fragment = InjectionHelp.injectFragment(
                             it.classLoader,
@@ -76,7 +77,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         fragmentDescribe: FragmentDescribe,
         dataBundle: Bundle?
     ): Bundle? {
-       return if (dataBundle == null) {
+        return if (dataBundle == null) {
             Bundle().let { b ->
                 b.putParcelable(
                     InjectionHelp.BUSINESS_NAME_KEY,
@@ -84,9 +85,9 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
                 )
                 b
             }
-        }else{
+        } else {
             null;
-       }
+        }
     }
 
     /**
@@ -168,9 +169,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             (activity as? INotifyDataSetChanged)?.disimissDialog()
         }
 
-        override fun disconnect() {
-            (activity as? INotifyDataSetChanged)?.disconnect()
-        }
+        override fun disconnect() = (activity as? INotifyDataSetChanged)?.disconnect() ?: true
 
         override fun topViewModelProvider(): ViewModelProvider {
             return (activity as? IHolderViewModelProvider)?.topViewModelProvider()
