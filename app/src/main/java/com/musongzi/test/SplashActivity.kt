@@ -11,11 +11,19 @@ import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.musongzi.GlideEngine
+import com.musongzi.comment.ExtensionMethod.convertFragemnt
+import com.musongzi.comment.ExtensionMethod.startActivity
 import com.musongzi.comment.ExtensionMethod.startActivityNormal
+import com.musongzi.comment.ExtensionMethod.startRecyeleActivity
+import com.musongzi.comment.activity.NormalFragmentActivity
+import com.musongzi.core.base.fragment.CollectionsViewFragment
+import com.musongzi.music.MainActivity
 import com.musongzi.test.activity.BaseActivity
 import com.musongzi.test.activity.MainIndexActivity
 import com.musongzi.test.databinding.ActivityMainBinding
+import com.musongzi.test.engine.ArrayEngine
 import com.musongzi.test.fragment.MainIndexFragment
+import com.musongzi.test.fragment.TowFragment
 import com.musongzi.test.vm.TestMainIndexBusiness
 
 
@@ -41,12 +49,19 @@ class SplashActivity : BaseActivity() {
 //                override fun onResult(result: ArrayList<LocalMedia?>?) {}
 //                override fun onCancel() {}
 //            })
-        MainIndexFragment::class.java.startActivityNormal(
-            MainIndexActivity::class.java,
-            "主页", Color.WHITE,null//, TestMainIndexBusiness::class.java.name
-        )
+//        MainIndexFragment::class.java.startActivityNormal(
+//            "主页",
+//            MainIndexActivity::class.java,
+//            Color.WHITE,
+//            null//, TestMainIndexBusiness::class.java.name
+//        )
 //        MainActivity::class.java.startActivity()
-        //TowFragment::class.java.startActivityNormal("第二个页面")
+//        TowFragment::class.java.startActivityNormal("第二个页面")
+
+//        CollectionsViewFragment.
+
+        ArrayEngine::class.java.startRecyeleActivity("列表")
+
     }
 
 }

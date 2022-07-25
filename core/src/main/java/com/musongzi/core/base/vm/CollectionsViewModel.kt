@@ -39,6 +39,7 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
 
     }
 
+
     override fun buildViewByData(datas: List<Any>) {
         client?.buildViewByData(datas)
     }

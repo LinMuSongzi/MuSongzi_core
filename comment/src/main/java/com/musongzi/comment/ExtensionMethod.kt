@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.musongzi.comment.ExtensionMethod.convertFragemnt
 import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
@@ -59,6 +60,27 @@ object ExtensionMethod {
                 }
             })
         }
+    }
+
+    fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecyeleActivity(
+        title: String? = null,
+        barColor: Int = R.color.bg_white,
+        data: Bundle? = null,
+        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
+    ) {
+        val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(this)
+        val mCollectionsInfo = cAnnotation?.let {
+            CollectionsViewModel.CollectionsInfo(it)
+        } ?: CollectionsViewModel.CollectionsInfo()
+        onInfoObserver?.invoke(mCollectionsInfo)
+        val bundle = Bundle();
+        data?.let {
+            bundle.putBundle(CollecttionsEngine.B, it)
+        }
+        ModelFragment.composeProvider(bundle, false)
+        mCollectionsInfo.engineName = name
+        bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
+        CollectionsViewFragment::class.java.startActivityNormal(title, null, barColor, bundle)
     }
 
 
@@ -132,9 +154,10 @@ object ExtensionMethod {
 
     @JvmStatic
     @JvmOverloads
-    fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
-        activity: Class<A>? = null,
+    fun <F : Fragment> Class<F>.startActivityNormal(
         title: String? = null,
+        //其实必须是NormalFragmentActivity 子类
+        activity: Class<*>? = NormalFragmentActivity::class.java,
         barColor: Int = R.color.bg_white,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
@@ -159,11 +182,15 @@ object ExtensionMethod {
 
 
     fun <A : Activity> Class<A>.startActivity() {
-        ActivityLifeManager.getInstance().getTopActivity()?.let {
+        (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
             try {
-                it.startActivity(Intent(it, this))
+                val i = Intent(it, this);
+                if (it is Application) {
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                it.startActivity(i)
             } catch (e: Exception) {
-                toast("无法打开${this.canonicalName}活动~", it)
+                toast("无法打开${this.canonicalName}活动~", null)
                 e.printStackTrace()
             }
         }

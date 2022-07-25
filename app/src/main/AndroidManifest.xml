@@ -39,6 +39,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.musongzi.comment.activity.NormalFragmentActivity"
+            android:theme="@style/AppNoActionBarLightTheme"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".SplashActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

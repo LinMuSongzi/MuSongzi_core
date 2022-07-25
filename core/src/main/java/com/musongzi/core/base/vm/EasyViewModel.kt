@@ -104,7 +104,7 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
     override fun getHolderBusiness(): B = business
 
     override fun getHolderClient(): C? {
-        return InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
+        return client//InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
     }
 
     protected fun indexClientActualTypeArgument(): Int = 0;

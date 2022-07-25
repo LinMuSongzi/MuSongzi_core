@@ -2,8 +2,6 @@
     package="com.musongzi.comment">
 
     <application>
-        <activity
-            android:name="com.musongzi.comment.activity.NormalFragmentActivity"
-            android:screenOrientation="portrait" />
+
     </application>
 </manifest>
