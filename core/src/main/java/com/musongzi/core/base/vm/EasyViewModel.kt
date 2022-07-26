@@ -73,13 +73,16 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
         client = null;
     }
 
-    protected fun createBusiness(): B {
+    private fun createBusiness(): B {
         return businessInfo?.let {
+            Log.i(TAG, "createBusiness: 1")
             InjectionHelp.getClassLoader().loadClass(it.className)?.newInstance() as? B
         } ?: (InjectionHelp.findGenericClass<B>(javaClass, indexBusinessActualTypeArgument()).let {
             if(it.isInterface){
+                Log.i(TAG, "createBusiness: 2")
                 createBusiness2()
             }else{
+                Log.i(TAG, "createBusiness: 3")
                 it.newInstance()
             }
         })
@@ -104,7 +107,7 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
     override fun getHolderBusiness(): B = business
 
     override fun getHolderClient(): C? {
-        return client//InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
+        return InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
     }
 
     protected fun indexClientActualTypeArgument(): Int = 0;

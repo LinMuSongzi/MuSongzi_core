@@ -49,9 +49,9 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
                     handlerBarBusiness(it, fragmentDescribe.sinfo!!)
                     if (it is AppCompatActivity) {
                         var dataBundle: Bundle? = h.getArguments()?.getBundle(BUNDLE_KEY)
-                        if (fragmentDescribe.businessInfo != null) {
-                            dataBundle = handlerBusinesInstanceInfo(fragmentDescribe, dataBundle)
-                        }
+                        dataBundle = fragmentDescribe.businessInfo?.let {
+                            handlerBusinesInstanceInfo(fragmentDescribe, dataBundle)
+                        } ?: dataBundle
                         val fragment: Fragment = InjectionHelp.injectFragment(
                             it.classLoader,
                             fragmentDescribe.className,
@@ -76,19 +76,13 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
     private fun handlerBusinesInstanceInfo(
         fragmentDescribe: FragmentDescribe,
         dataBundle: Bundle?
-    ): Bundle? {
-        return if (dataBundle == null) {
-            Bundle().let { b ->
-                b.putParcelable(
-                    InjectionHelp.BUSINESS_NAME_KEY,
-                    fragmentDescribe.businessInfo
-                )
-                b
-            }
-        } else {
-            null;
+    ): Bundle =
+        (dataBundle ?: Bundle()).apply {
+            putParcelable(
+                InjectionHelp.BUSINESS_NAME_KEY,
+                fragmentDescribe.businessInfo
+            )
         }
-    }
 
     /**
      * 处理状态栏

@@ -19,6 +19,7 @@ import com.musongzi.test.engine.ArrayEngine
 import com.musongzi.test.fragment.MainIndexFragment
 import com.musongzi.test.fragment.TowFragment
 import com.musongzi.test.simple.TestMainFragment
+import com.musongzi.test.vm.TestMainIndexBusiness
 
 
 class SplashActivity : BaseActivity() {
@@ -43,15 +44,15 @@ class SplashActivity : BaseActivity() {
 //                override fun onResult(result: ArrayList<LocalMedia?>?) {}
 //                override fun onCancel() {}
 //            })
-//        MainIndexFragment::class.java.startActivityNormal(
-//            "主页",
-//            MainIndexActivity::class.java,
-//            Color.WHITE,
-//            null//, TestMainIndexBusiness::class.java.name
-//        )
+        MainIndexFragment::class.java.startActivityNormal(
+            "主页",
+            MainIndexActivity::class.java,
+            Color.WHITE,
+            null, TestMainIndexBusiness::class.java.name
+        )
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
-        TestMainFragment::class.java.startActivityNormal()
+//        TestMainFragment::class.java.startActivityNormal()
 //        CollectionsViewFragment.
 
 //        ArrayEngine::class.java.startRecyeleActivity("列表")

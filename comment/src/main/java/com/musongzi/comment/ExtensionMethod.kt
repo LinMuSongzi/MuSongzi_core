@@ -30,6 +30,7 @@ import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
+import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
@@ -79,7 +80,7 @@ object ExtensionMethod {
         CollectionsViewFragment::class.java.startActivityNormal(
             null,
             StyleMessageDescribe(title, barColor),
-            getColletionInfoBundle(data, onInfoObserver)
+            getColletionInfoBundle(data, onInfoObserver)//,CollectionsBusiness::class.java.name
         )
     }
 

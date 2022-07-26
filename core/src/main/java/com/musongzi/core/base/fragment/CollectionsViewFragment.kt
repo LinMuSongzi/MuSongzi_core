@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.IHolderCollections
+import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.databinding.FragmentRecycleListBinding
 import com.musongzi.core.itf.page.IPageEngine
@@ -72,6 +73,10 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
 
     override fun transformDataToList(entity: Any): List<BaseChooseBean> {
         return ArrayList()
+    }
+
+    override fun <I> getRefreshClient(): IRefreshClient<I> {
+       return this as IRefreshClient<I>
     }
 
 
