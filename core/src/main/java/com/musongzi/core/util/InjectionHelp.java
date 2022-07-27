@@ -16,14 +16,13 @@ import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
 import com.musongzi.core.base.manager.RetrofitManager;
-import com.musongzi.core.base.vm.SaveStateHandleWarp;
+import com.musongzi.core.base.map.SaveStateHandleWarp;
 import com.musongzi.core.itf.IAgentHolder;
+import com.musongzi.core.itf.IBusiness;
 import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.IWant;
 import com.musongzi.core.itf.holder.IHolderViewModel;
-import com.musongzi.core.itf.page.IDataEngine;
-import com.musongzi.core.itf.page.IRead;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,10 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import kotlin.Function;
-import kotlin.jvm.functions.Function0;
+import kotlin.Deprecated;
 import kotlin.jvm.functions.Function1;
-
+@Deprecated(message = "将会被Kclass替代")
 public class InjectionHelp {
 
 
@@ -156,11 +154,13 @@ public class InjectionHelp {
 
 
     @org.jetbrains.annotations.Nullable
-    public static <A extends IViewInstance, B extends IAgentHolder<A>> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
+    public static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
         B instance = null;
         try {
             instance = targetClass.newInstance();
-            instance.setAgentModel(agent);
+            if(instance instanceof IAgentHolder){
+                ((IAgentHolder) instance).setAgentModel(agent);
+            }
             instance.afterHandlerBusiness();
         } catch (Exception e) {
             e.printStackTrace();

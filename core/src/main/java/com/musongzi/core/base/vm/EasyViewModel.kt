@@ -24,11 +24,11 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
 
     final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
         Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
-        super.mSavedStateHandle = savedStateHandle
+        super.mSavedStateHandles[REMOTE_SAVED_INDEX] = savedStateHandle
     }
 
     final override fun getHolderSavedStateHandle(): ISaveStateHandle {
-        return mSavedStateHandle
+        return mSavedStateHandles[REMOTE_SAVED_INDEX]!!
     }
 
     private var savedInstanceStateRf: WeakReference<Bundle?>? = null

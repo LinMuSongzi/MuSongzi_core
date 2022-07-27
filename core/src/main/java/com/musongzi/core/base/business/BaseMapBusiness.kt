@@ -5,6 +5,7 @@ import com.musongzi.core.itf.IAgentHolder
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IViewInstance
 import com.musongzi.core.itf.holder.IHolderLifecycle
+import com.musongzi.core.util.InjectionHelp
 import java.lang.Exception
 import kotlin.jvm.Throws
 
@@ -35,23 +36,20 @@ abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> {
         searchString: String,
         searchClass: Class<Next>
     ): Next? {
+
         var business: Next? = cacheBusinessMaps[searchString] as? Next
         if (business == null) {
             if(!searchClass.isInterface) {
-                business = searchClass.newInstance()
-                (business as? IAgentHolder<L>)?.let {
-                    try {
-                        it.setAgentModel(iAgent)
-                        it.afterHandlerBusiness();
-                        cacheBusinessMaps[searchString] = it
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        business = null
-                    }
+                InjectionHelp.injectBusiness(searchClass,iAgent)?.apply {
+                    business = this
+                    Log.i(TAG, "getNext instance: $business")
+                    cacheBusinessMaps[searchString] = business!!
                 }
             }
+        }else{
+            Log.i(TAG, "getNext: $business")
         }
-        Log.i(TAG, "getNext: $business")
+
         return business
     }
 }

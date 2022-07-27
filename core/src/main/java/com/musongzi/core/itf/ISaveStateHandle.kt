@@ -14,7 +14,7 @@ interface ISaveStateHandle {
     fun contains(key: String): Boolean
 
     @MainThread
-    fun <T> getLiveData(key: String, @SuppressLint("UnknownNullness") initialValue: T): MutableLiveData<T>
+    fun <T> getLiveData(key: String, @SuppressLint("UnknownNullness") initialValue: T?): MutableLiveData<T>
 
     @MainThread
     fun keys(): Set<String?>
