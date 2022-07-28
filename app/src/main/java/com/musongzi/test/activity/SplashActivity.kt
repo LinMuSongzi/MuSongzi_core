@@ -52,7 +52,7 @@ class SplashActivity : BaseActivity() {
         )
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
-//        TestMainFragment::class.java.startActivityNormal()
+//        TestMainFragment::class.java.startActivityNormal("TestMainFragment")
 //        CollectionsViewFragment.
 
 //        ArrayEngine::class.java.startRecyeleActivity("列表")

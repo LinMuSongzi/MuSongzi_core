@@ -29,6 +29,7 @@ import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.comment.business.SupproActivityBusiness
+import com.musongzi.core.base.bean.ActivityDescribe
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
@@ -91,7 +92,10 @@ object ExtensionMethod {
         data: Bundle? = null,
         onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
     ): Fragment {
-        return InjectionHelp.injectFragment(CollectionsViewFragment::class.java, getColletionInfoBundle(data, onInfoObserver))
+        return InjectionHelp.injectFragment(
+            CollectionsViewFragment::class.java,
+            getColletionInfoBundle(data, onInfoObserver)
+        )
     }
 
     private fun <E : BaseMoreViewEngine<*, *>> Class<E>.getColletionInfoBundle(
@@ -143,13 +147,14 @@ object ExtensionMethod {
         businessClassName: String? = null
     ) {
         (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
-            val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
+            val activityClass = activity ?: NormalFragmentActivity::class.java;
+            val intent = Intent(it, activityClass)
             val fInfo = FragmentDescribe(
                 this.name,
                 mStyleMessageDescribe,
                 if (businessClassName != null) BusinessInfo(businessClassName) else null
             )
-            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
+            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, ActivityDescribe(activityClass.name, fInfo))
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
             }
@@ -193,7 +198,6 @@ object ExtensionMethod {
                 e.printStackTrace()
             }
         }
-
     }
 
     fun toast(msg: String?, activity: Activity? = null) {

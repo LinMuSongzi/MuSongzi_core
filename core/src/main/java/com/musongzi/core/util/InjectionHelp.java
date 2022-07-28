@@ -38,10 +38,11 @@ import kotlin.jvm.functions.Function1;
 @Deprecated(message = "将会被Kclass替代")
 public class InjectionHelp {
 
-
+    static Map<String, Class<?>> CACHE_CALSS = new HashMap<>();
     @org.jetbrains.annotations.NotNull
     public static final String BUSINESS_NAME_KEY = "BUSINESS_NAME_KEY";
     private static final String TAG = "InjectionHelp";
+    public static final ClassLoader CLASS_LOADER = InjectionHelp.class.getClassLoader();
 
     public static CollecttionsEngine findAnnotation(Class<?> thisClazz) {
 //        if(thisClazz.getName().equals("java.lang.Object")){
@@ -157,7 +158,7 @@ public class InjectionHelp {
     public static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
         B instance = null;
         try {
-            instance = targetClass.newInstance();
+            instance = (B) targetClass.newInstance();
             if(instance instanceof IAgentHolder){
                 ((IAgentHolder) instance).setAgentModel(agent);
             }
@@ -259,11 +260,19 @@ public class InjectionHelp {
 
     @NotNull
     public static ClassLoader getClassLoader() {
-        return InjectionHelp.class.getClassLoader();
+        if(CLASS_LOADER != null) {
+            return CLASS_LOADER;
+        }else{
+            return findLoader();
+        }
+    }
+
+    private static ClassLoader findLoader() {
+       return InjectionHelp.class.getClassLoader();
     }
 
 
-    static Map<String, Class<?>> CACHE_CALSS = new HashMap<>();
+
 
 
 }

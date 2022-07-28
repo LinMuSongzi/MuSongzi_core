@@ -2,11 +2,15 @@ package com.musongzi.test.vm
 
 import android.media.MediaCodec
 import android.media.MediaExtractor
+import android.os.Handler
 import android.util.Log
 import android.view.SurfaceView
+import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.ExtensionMethod.saveStateChange
+import com.musongzi.comment.ExtensionMethod.startActivity
+import com.musongzi.comment.activity.NormalFragmentActivity
 import com.musongzi.comment.business.MainIndexBusiness
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.ExtensionCoreMethod.toJson
@@ -27,9 +31,16 @@ class TestMainIndexBusiness : MainIndexBusiness() {
 
     override fun afterHandlerBusiness() {
         super.afterHandlerBusiness()
-        "haha".liveSaveStateObserver<Int>(iAgent){
-            Log.i(TAG, "buildFragments: test remote value = $it")
-        }
+
+//        NormalFragmentActivity::class.java.startActivity()
+
+//        Handler().post {
+//            "haha".liveSaveStateObserver<Int>(iAgent){
+//                Log.i(TAG, "buildFragments: test remote value = $it")
+//            }
+//        }
+
+
     }
 
     override fun buildFragments(): List<Fragment> {
