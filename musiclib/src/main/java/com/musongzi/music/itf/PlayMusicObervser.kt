@@ -1,10 +1,10 @@
 package com.musongzi.music.itf
 
-import com.musongzi.music.bean.MusicPlayInfo
+import com.musongzi.music.bean.MusicPlayInfoImpl
 
 /*** created by linhui * on 2022/7/28 */
 interface PlayMusicObervser {
 
-    fun onStateChange(state:String,info: MusicPlayInfo)
+    fun onStateChange(state:String,info: IMediaPlayInfo)
 
 }

@@ -6,6 +6,7 @@ import com.musongzi.core.itf.holder.IHolderLifecycle
 /*** created by linhui * on 2022/7/28 */
 interface IPlayController : IPlayObsavable {
 
+    fun playMusicByInfo(entity: IMediaPlayInfo)
 
     fun playMusic(stringUrl: String)
 
@@ -21,7 +22,6 @@ interface IPlayController : IPlayObsavable {
         const val ON_STOP = "ON_STOP"
         const val ON_BUFFER = "ON_BUFFER"
         const val ON_PLAYING = "ON_PLAYING"
-
     }
 
 

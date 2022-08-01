@@ -3,9 +3,9 @@ package com.musongzi.music.impl
 import androidx.lifecycle.LifecycleObserver
 import com.musongzi.core.ExtensionCoreMethod.exceptionRun
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.music.bean.MusicPlayInfo
+import com.musongzi.music.bean.MusicPlayInfoImpl
+import com.musongzi.music.itf.IMediaPlayInfo
 import com.musongzi.music.itf.IPlayController
-import com.musongzi.music.itf.IPlayObsavable
 import com.musongzi.music.itf.IPlayQueueManager
 import com.musongzi.music.itf.PlayMusicObervser
 import com.musongzi.music.itf.small.*
@@ -55,7 +55,7 @@ class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervse
         } ?: false
     }
 
-    override fun onStateChange(state: String, info: MusicPlayInfo) {
+    override fun onStateChange(state: String, info: IMediaPlayInfo) {
         when (state) {
             IPlayController.ON_COMPLETE -> {
                 for (listener in mOnPlayCompleteListeners) {
