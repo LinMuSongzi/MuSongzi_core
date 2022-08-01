@@ -4,19 +4,12 @@ import com.musongzi.comment.util.SourceImpl
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
-import com.musongzi.music.Factory
 import com.musongzi.music.bean.MusicPlayInfo
-import com.musongzi.music.itf.AttributeArray
-import com.musongzi.music.itf.IHolderPlayController
-import com.musongzi.music.itf.IPlayController
-import com.musongzi.music.itf.IPlayQueueManager
+import com.musongzi.music.itf.*
 import io.reactivex.rxjava3.core.Observable
 
 /*** created by linhui * on 2022/7/28 */
-abstract class MusicArrayImpl(
-    val dataProxy: MusicDataProxy<Any>,
-    private val manager: IPlayQueueManager
-) : AttributeArray<MusicPlayInfo, Any>, IHolderPlayController {
+internal abstract class MusicArrayImpl(private val dataProxy: MusicDataProxy<Any>) : IMusicArray {
     private var id: String = "" + hashCode()
     private val sourceImpl: ISource<MusicPlayInfo> = SourceImpl()
     private var playIndex = 0

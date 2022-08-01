@@ -4,7 +4,7 @@ import com.musongzi.music.bean.MediaPlayInfo
 import com.musongzi.music.bean.MusicPlayInfo
 
 /*** created by linhui * on 2022/7/28 */
-interface OnPlayChangeListener :OnPlayLifeListener{
+interface OnPlayChangeListener {
 
 
     fun onBuffer(info: MediaPlayInfo)

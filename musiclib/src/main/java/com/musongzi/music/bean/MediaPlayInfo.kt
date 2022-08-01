@@ -11,21 +11,18 @@ open class MediaPlayInfo() : IAttribute {
         if(mediaId.isEmpty() && value!=null){
             mediaId = value
         }
+        field = value
     }
     var name: String? = null
     var mediaId: String = ""
 
-    constructor(mediaId: String) : this() {
-        this.mediaId = mediaId
+    constructor(uri: String) : this() {
+        this.stringUrl = uri
     }
 
 
     override fun getAttributeId(): String {
-        return if (mediaId.isEmpty()) {
-            ("" + hashCode());
-        } else {
-            mediaId
-        }
+        return mediaId
     }
 
 
