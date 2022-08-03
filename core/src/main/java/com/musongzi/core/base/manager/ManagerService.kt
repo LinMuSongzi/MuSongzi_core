@@ -38,7 +38,7 @@ internal class ManagerService : IManagerService {
      * 通过类名的方式
      */
     @Synchronized
-    override fun loadManagers(managers: Array<ManagerInstanceHelp>, classLoader: ClassLoader) {
+    override fun loadManagers(managers: Collection<ManagerInstanceHelp>, classLoader: ClassLoader) {
         if (isReady) {
             return
         }

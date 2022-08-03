@@ -9,7 +9,7 @@ import com.musongzi.music.itf.*
 import io.reactivex.rxjava3.core.Observable
 
 /*** created by linhui * on 2022/7/28 */
-internal abstract class MusicArrayImpl(private val dataProxy: MusicDataProxy<Any>) : IMusicArray {
+abstract class MusicArrayImpl(private val dataProxy: MusicDataProxy<Any>) : IMusicArray {
     private var id: String = "" + hashCode()
     private val sourceImpl: ISource<MusicPlayInfoImpl> = SourceImpl()
     private var playIndex = 0

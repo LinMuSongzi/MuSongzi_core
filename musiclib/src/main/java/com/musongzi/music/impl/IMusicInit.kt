@@ -12,12 +12,12 @@ interface IMusicInit {
     /**
      * 创建底层播放器
      */
-    fun createPlayerManager(type:Int):IPlayerManager
+    fun createPlayerManager(type:Int):IPlayerManager {TODO("Not yet implemented")}
 
     /**
      * 创建播放器方式,根据业务情况 。会在方法 [createPlayerManager]中返回type
      */
-    fun buildPlayerManagerType():Int
+    fun buildPlayerManagerType():Int = 0
 
     /**
      * 当框架创建成功时

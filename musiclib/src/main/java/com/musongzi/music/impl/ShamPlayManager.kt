@@ -10,7 +10,7 @@ import com.musongzi.music.itf.IPlayerManager
 import com.musongzi.music.itf.PlayMusicObervser
 
 /*** created by linhui * on 2022/8/1 */
-class FakerPlayManager : IPlayerManager {
+class ShamPlayManager : IPlayerManager {
 
     companion object {
         const val TAG = "FakerPlayManager"

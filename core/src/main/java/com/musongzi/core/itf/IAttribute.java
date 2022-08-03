@@ -1,7 +1,7 @@
 package com.musongzi.core.itf;
 
 /*** created by linhui * on 2022/7/28 */
-public interface IAttribute extends IHolderUri{
+public interface IAttribute{
 
    String getAttributeId();
 

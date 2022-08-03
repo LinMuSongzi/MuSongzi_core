@@ -3,7 +3,7 @@ package com.musongzi.core.base.manager
 /*** created by linhui * on 2022/8/1 */
 object ManagerUtil {
 
-    fun init(managers: Array<ManagerInstanceHelp>, classLoader: ClassLoader) {
+    fun init(managers: Collection<ManagerInstanceHelp>, classLoader: ClassLoader) {
         ManagerService.getInstance().loadManagers(managers, classLoader)
     }
 

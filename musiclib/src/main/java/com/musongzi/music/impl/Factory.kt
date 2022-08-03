@@ -1,9 +1,8 @@
 package com.musongzi.music.impl
 
-import android.database.Observable
 import com.musongzi.core.base.manager.InstanceManager
+import com.musongzi.core.base.manager.ManagerInstanceHelp
 import com.musongzi.core.base.manager.ManagerUtil
-import com.musongzi.core.itf.IAttribute
 import com.musongzi.music.itf.*
 
 /*** created by linhui * on 2022/7/28  */
@@ -16,7 +15,7 @@ object Factory {
 
 
     fun createNativePlayer(): IPlayerManager {
-        return FakerPlayManager()
+        return ShamPlayManager()
     }
 
     //
@@ -29,9 +28,9 @@ object Factory {
     }
 
 
-    fun buildInstanceManagerHelp(readyNow: () -> IMusicInit): ManagerUtil.ManagerInstanceHelp {
+    fun buildInstanceManagerHelp(readyNow: () -> IMusicInit): ManagerInstanceHelp {
 
-        return object : ManagerUtil.ManagerInstanceHelp {
+        return object : ManagerInstanceHelp {
             override fun instance(): InstanceManager {
                 return PlayQueueManagerImpl()
             }

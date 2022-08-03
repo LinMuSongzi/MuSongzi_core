@@ -40,6 +40,10 @@ internal class PlayQueueManagerImpl() :
         }
     }
 
+    override fun playMusic(info: IMediaPlayInfo, musicArray: IMusicArray) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun playMusic(stringUrl: String, musicArray: IMusicArray) {
         if (thsPlayingArray.second != musicArray) {
@@ -112,9 +116,19 @@ internal class PlayQueueManagerImpl() :
     override fun managerId() = IPlayQueueManager.MANAGER_ID
 
     override fun onReady(a: Any) {
-        partnerInstance = a as IMusicInit
+        partnerInstance = when (a) {
+            is IMusicInit -> {
+                a
+            }
+            is String -> {
+                Factory.getMusicClassLoader().loadClass(a).newInstance() as IMusicInit
+            }
+            else -> {
+                throw Exception("onReady error")
+            }
+        }
         playerManager.observerState(this)
-        val obsaverble = partnerInstance.onGeneratedConfigPlayQueues(0)
+        val obsaverble = partnerInstance.onGeneratedConfigPlayQueues(-1)
         if (obsaverble == null) {
             generatedConfigPlayQueues()
         } else {
@@ -122,6 +136,7 @@ internal class PlayQueueManagerImpl() :
                 generatedConfigPlayQueues(it)
             }
         }
+        partnerInstance.onInit(this)
     }
 
     override fun getPlayController(): IPlayController {
