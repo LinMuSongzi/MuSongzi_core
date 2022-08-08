@@ -73,7 +73,7 @@ internal class PlayQueueManagerImpl() :
     }
 
     override fun joinHistory(playInfoNow: IMediaPlayInfo?) {
-        partnerInstance.observerOnPlayJoinHistory(playInfoNow)
+        partnerInstance.onPlayJoinHistory(playInfoNow)
     }
 
     override fun generatedConfigPlayQueues(config: Set<String>?) {

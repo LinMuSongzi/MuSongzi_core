@@ -1,20 +1,83 @@
 package com.musongzi.music.impl
 
+import android.os.Looper
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.musongzi.comment.util.SourceImpl
+import com.musongzi.core.base.page.PageSupport
 import com.musongzi.core.itf.IAttribute
+import com.musongzi.core.itf.page.IAdMessage
+import com.musongzi.core.itf.page.ILimitOnLoaderState
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
+import com.musongzi.music.bean.Container
 import com.musongzi.music.bean.MusicPlayInfoImpl
 import com.musongzi.music.itf.*
+import com.musongzi.music.itf.IMusicArray.Companion.INDEX_NORMAL
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
 
-/*** created by linhui * on 2022/7/28 */
-abstract class MusicArrayImpl(private val dataProxy: MusicDataProxy<Any>) : IMusicArray {
-    private var id: String = "" + hashCode()
-    private val sourceImpl: ISource<MusicPlayInfoImpl> = SourceImpl()
-    private var playIndex = 0
+/*** created by linhui * on 2022/7/28
+ *
+ * 一个队列管理
+ *
+ * */
+abstract class MusicArrayImpl<I : IMediaPlayInfo, D>(dataProxy: MusicDataProxy<I, D>) :
+    Container<ISource<I>>(), IMusicArray<I, D> {
+
+
     private val controller: IPlayController by lazy {
         Factory.createPlayMusicController(this)
+    }
+    private val musicPageEngine: IPageEngine<I> by lazy {
+        PageSupport(callBack)
+    }
+    private var callBack: PageSupport.CallBack<I, D>
+
+
+    private var playindexLiveData: MutableLiveData<Int> = object : MutableLiveData<Int>(0) {
+        override fun setValue(value: Int) {
+            if (Thread.currentThread() != Looper.getMainLooper().thread) {
+                postValue(value)
+            } else {
+                super.setValue(value)
+            }
+        }
+    }
+
+
+    override fun thisPlayIndex(): Int {
+        return playindexLiveData.value!!
+    }
+
+    override fun changeThisPlayIndex(index: Int) {
+        playindexLiveData.value = index
+    }
+
+    override fun changeThisPlayIndexAndAdd(stringUrl: String) {
+        val info = PlayQueueManagerImpl.getInstance().partnerInstance.createMusicInfo(stringUrl)
+        (realData() as ArrayList).add(0,info as I)
+    }
+
+    override fun enableRefreshLimit(enable: Boolean) {
+        (getHolderPageEngine() as? ILimitOnLoaderState)?.enableRefreshLimit(enable)
+    }
+
+    override fun enableMoreLoadLimit(enable: Boolean) {
+        (getHolderPageEngine() as? ILimitOnLoaderState)?.enableMoreLoadLimit(enable)
+    }
+
+
+    init {
+        child = SourceImpl();
+        callBack = MusicPageCallBack(dataProxy)
+        playindexLiveData.observeForever{
+            if(it.and(INDEX_NORMAL) > 0){
+                return@observeForever
+            }
+            getPlayController().playMusicByInfo(realData()[it])
+        }
     }
 
     override fun getPlayController(): IPlayController {
@@ -37,27 +100,9 @@ abstract class MusicArrayImpl(private val dataProxy: MusicDataProxy<Any>) : IMus
         }
     }
 
-    override fun getPageEngine(): IPageEngine<MusicPlayInfoImpl> {
-        TODO("Not yet implemented")
+    override fun getHolderPageEngine(): IPageEngine<I> {
+        return musicPageEngine
     }
 
-    override fun getAttributeId(): String = id
-
-    override fun transformDataToList(entity: Any): List<MusicPlayInfoImpl> {
-        return dataProxy.transformDataToList(entity)
-    }
-
-    override fun getRemoteData(page: Int): Observable<Any>? {
-        return dataProxy.getRemoteData(page)
-    }
-
-    override fun pageSize(): Int = IPageEngine.PAGE_SIZE
-
-    override fun thisStartPage(): Int = 0;
-
-    override fun handlerData(t: MutableList<MusicPlayInfoImpl>?, action: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun realData(): List<MusicPlayInfoImpl> = sourceImpl.realData()
+    override fun realData(): List<I> = child!!.realData()
 }

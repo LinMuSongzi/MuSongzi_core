@@ -11,6 +11,6 @@ interface IMediaPlayInfo : IAttribute, IHolderRes {
 
     fun setRes(res:Int)
 
-    fun setDataString(dataString: String)
+    fun setUriString(dataString: String)
 
 }

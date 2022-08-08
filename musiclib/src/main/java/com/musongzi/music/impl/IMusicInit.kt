@@ -44,7 +44,7 @@ interface IMusicInit {
      */
     fun createMusicInfo(url:String): IMediaPlayInfo
 
-    fun observerOnPlayJoinHistory(playInfoNow: IMediaPlayInfo?)
+    fun onPlayJoinHistory(playInfoNow: IMediaPlayInfo?)
 
 
 }

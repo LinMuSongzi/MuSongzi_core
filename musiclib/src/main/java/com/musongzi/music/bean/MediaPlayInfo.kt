@@ -19,7 +19,7 @@ open class MediaPlayInfo() : IMediaPlayInfo {
             }
             field = value
         }
-    private var name: String? = null
+    var musicName: String? = null
     private var mediaId: String = ""
 
     private var androidRes = 0
@@ -36,7 +36,7 @@ open class MediaPlayInfo() : IMediaPlayInfo {
         stringUrl = uri.toString()
     }
 
-    override fun setDataString(dataString: String) {
+    override fun setUriString(dataString: String) {
         stringUrl = dataString
     }
 

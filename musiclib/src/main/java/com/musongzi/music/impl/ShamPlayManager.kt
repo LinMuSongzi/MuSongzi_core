@@ -26,26 +26,7 @@ class ShamPlayManager : IPlayerManager {
     val info = LockInfo()
     var playInfoNow: IMediaPlayInfo? = null
     var lastPlayInfo = playInfoNow
-    val thread = Thread {
-        var _10_000 = 0
-        while (isStateFlag(START_FLAG)) {
-            val p = playInfoNow;
-            if (p != null) {
-                playMusicObervser.onStateChange(IPlayController.ON_BUFFER, p)
-                playMusicObervser.onStateChange(IPlayController.ON_BUFFER, p)
-                playMusicObervser.onStateChange(IPlayController.ON_START, p)
-                _10_000 += 250
-                Thread.sleep(250)
-                if(_10_000 == 10_000){
-                    playMusicObervser.onStateChange(IPlayController.ON_COMPLETE, lastPlayInfo!!)
-                    stopMusic()
-                }
-            }else{
-                break
-            }
-        }
-        playMusicObervser.onStateChange(IPlayController.ON_STOP, lastPlayInfo!!)
-    }
+
 
     override fun observerState(p: PlayMusicObervser) {
         playMusicObervser = object : PlayMusicObervser {
@@ -70,13 +51,13 @@ class ShamPlayManager : IPlayerManager {
     }
 
     override fun playMusicByInfo(entity: IMediaPlayInfo) {
-        Log.i(TAG, "playMusic: 开始播放")
-        if (!isStateFlag(START_FLAG)) {
-            PlayQueueManagerImpl.getInstance().joinHistory(playInfoNow)
-            thread.start()
-        } else {
-
-        }
+//        Log.i(TAG, "playMusic: 开始播放")
+//        if (!isStateFlag(START_FLAG)) {
+//            PlayQueueManagerImpl.getInstance().joinHistory(playInfoNow)
+//            thread.start()
+//        } else {
+//
+//        }
     }
 
     override fun pauseMusic() {
