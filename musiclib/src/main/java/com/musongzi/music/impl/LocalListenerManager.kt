@@ -3,7 +3,6 @@ package com.musongzi.music.impl
 import androidx.lifecycle.LifecycleObserver
 import com.musongzi.core.ExtensionCoreMethod.exceptionRun
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.music.bean.MusicPlayInfoImpl
 import com.musongzi.music.itf.IMediaPlayInfo
 import com.musongzi.music.itf.IPlayController
 import com.musongzi.music.itf.IPlayQueueManager
@@ -17,7 +16,7 @@ class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervse
     val mOnPlayCountListeners = HashSet<OnPlayCountListener>()
     val mOnPlayLifeListeners = HashSet<OnPlayLifeListener>()
     val mOnReadyListeners = HashSet<OnReadyListener>()
-    val mOnPlayChangeListeners = HashSet<OnPlayChangeListener>()
+    val mOnPlayChangeListeners = HashSet<OnPlayMomentListener>()
 
     override fun addOnPlayCompleteListener(
         life: ILifeObject?,
@@ -41,11 +40,11 @@ class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervse
         observer(life, PlayQueueManagerImpl.MusicObserver(onReadyListener))
     }
 
-    override fun addOnPlayChangeListener(
+    override fun addOnPlayMomentListener(
         life: ILifeObject?,
-        onPlayChangeListener: OnPlayChangeListener
+        onPlayMomentListener: OnPlayMomentListener
     ) {
-        observer(life, PlayQueueManagerImpl.MusicObserver(onPlayChangeListener))
+        observer(life, PlayQueueManagerImpl.MusicObserver(onPlayMomentListener))
     }
 
     private fun observer(life: ILifeObject?, musicObserver: LifecycleObserver): Boolean {
@@ -93,7 +92,7 @@ class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervse
             IPlayController.ON_BUFFER -> {
                 for (listener in mOnPlayChangeListeners) {
                     exceptionRun {
-                        listener.onBuffer(info = info)
+                        listener.onBuffer(info = info,0,null)
                     }
                 }
             }

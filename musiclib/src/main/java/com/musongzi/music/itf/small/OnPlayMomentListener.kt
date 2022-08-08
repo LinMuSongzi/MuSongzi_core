@@ -4,10 +4,10 @@ import com.musongzi.music.bean.MediaPlayInfo
 import com.musongzi.music.itf.IMediaPlayInfo
 
 /*** created by linhui * on 2022/7/28 */
-interface OnPlayChangeListener {
+interface OnPlayMomentListener {
 
 
-    fun onBuffer(info: IMediaPlayInfo)
+    fun onBuffer(info: IMediaPlayInfo,byte: Byte,any: Any?)
 
     fun onPlaying(info: IMediaPlayInfo)
 

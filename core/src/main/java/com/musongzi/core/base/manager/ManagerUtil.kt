@@ -11,7 +11,12 @@ object ManagerUtil {
         return ManagerService.getInstance()
     }
 
-    fun <T> getHolderManager(id: Int): T? {
-        return ManagerService.getInstance().getManager(id)
+    fun <T> getHolderManager(id: Int): T {
+        return ManagerService.getInstance().getManager(id)!!
     }
+
+    fun <T> Int.manager():T{
+       return getHolderManager<T>(this)
+    }
+
 }

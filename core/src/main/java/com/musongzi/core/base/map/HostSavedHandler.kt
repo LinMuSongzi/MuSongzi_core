@@ -81,7 +81,7 @@ class HostSavedHandler : ISaveStateHandle {
     }
 
 
-    class SavingStateLiveData<T> : MutableLiveData<T> {
+    internal class SavingStateLiveData<T> : MutableLiveData<T> {
         private var mKey: String
         private var mHandle: HashMap<String,Any?>? = null
 

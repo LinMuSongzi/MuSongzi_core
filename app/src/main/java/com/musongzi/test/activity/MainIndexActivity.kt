@@ -22,15 +22,4 @@ import com.musongzi.test.business.MusicConfigHelpBusines
 class MainIndexActivity : NormalFragmentActivity() {
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
-            MusicConfigHelpBusines().apply {
-                afterHandlerBusiness()
-            }
-        }), classLoader)
-
-
-    }
-
 }

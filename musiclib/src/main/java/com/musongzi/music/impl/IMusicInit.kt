@@ -37,7 +37,7 @@ interface IMusicInit {
     /**
      * 创建音乐队里管理对象
      */
-    fun createMusicArray(name: Any): IMusicArray
+    fun createMusicArray(name: Any): IMusicArray<IAttribute>
 
     /**
      * 创建音乐实体

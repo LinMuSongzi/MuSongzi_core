@@ -8,7 +8,7 @@ import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 
 /*** created by linhui * on 2022/7/28 */
-interface IAttributeArray<I:IAttribute, D> : IAttribute, ISource<I>,IHolderPageEngine<I> {
+interface IAttributeArray<I:IAttribute> : IAttribute, ISource<I>,IHolderPageEngine<I> {
 
     fun contains(att:IAttribute,find: ((IAttribute) -> Boolean)? = null):Boolean
 

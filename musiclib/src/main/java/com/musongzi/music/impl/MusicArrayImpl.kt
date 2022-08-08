@@ -12,6 +12,7 @@ import com.musongzi.core.itf.page.ILimitOnLoaderState
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.music.bean.Container
+import com.musongzi.music.bean.MusicInfoContainer
 import com.musongzi.music.bean.MusicPlayInfoImpl
 import com.musongzi.music.itf.*
 import com.musongzi.music.itf.IMusicArray.Companion.INDEX_NORMAL
@@ -23,8 +24,8 @@ import io.reactivex.rxjava3.core.Observer
  * 一个队列管理
  *
  * */
-abstract class MusicArrayImpl<I : IMediaPlayInfo, D>(dataProxy: MusicDataProxy<I, D>) :
-    Container<ISource<I>>(), IMusicArray<I, D> {
+class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataProxy: MusicDataProxy<I, D>) :
+    Container<ISource<I>>(name), IMusicArray<I> {
 
 
     private val controller: IPlayController by lazy {
@@ -57,23 +58,15 @@ abstract class MusicArrayImpl<I : IMediaPlayInfo, D>(dataProxy: MusicDataProxy<I
 
     override fun changeThisPlayIndexAndAdd(stringUrl: String) {
         val info = PlayQueueManagerImpl.getInstance().partnerInstance.createMusicInfo(stringUrl)
-        (realData() as ArrayList).add(0,info as I)
-    }
-
-    override fun enableRefreshLimit(enable: Boolean) {
-        (getHolderPageEngine() as? ILimitOnLoaderState)?.enableRefreshLimit(enable)
-    }
-
-    override fun enableMoreLoadLimit(enable: Boolean) {
-        (getHolderPageEngine() as? ILimitOnLoaderState)?.enableMoreLoadLimit(enable)
+        (realData() as ArrayList).add(0, MusicInfoContainer(info) as I)
     }
 
 
     init {
         child = SourceImpl();
         callBack = MusicPageCallBack(dataProxy)
-        playindexLiveData.observeForever{
-            if(it.and(INDEX_NORMAL) > 0){
+        playindexLiveData.observeForever {
+            if (it.and(INDEX_NORMAL) > 0) {
                 return@observeForever
             }
             getPlayController().playMusicByInfo(realData()[it])

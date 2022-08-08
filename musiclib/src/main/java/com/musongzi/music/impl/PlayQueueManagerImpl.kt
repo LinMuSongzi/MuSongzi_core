@@ -7,18 +7,17 @@ import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.manager.ManagerUtil.getHolderManager
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.music.bean.MediaPlayInfo
 import com.musongzi.music.bean.MusicPlayInfoImpl
 import com.musongzi.music.itf.*
 import com.musongzi.music.itf.small.*
 
 /*** created by linhui * on 2022/7/28 */
-internal class PlayQueueManagerImpl() :
-    ISmartPlayQueueManager, PlayMusicObervser {
+internal class PlayQueueManagerImpl :
+    ISmartPlayQueueManager<MusicPlayInfoImpl>, PlayMusicObervser {
 
 
     private var observerStates = HashSet<PlayMusicObervser>()
-    private lateinit var thsPlayingArray: Pair<IAttribute, IMusicArray>
+    private lateinit var thsPlayingArray: Pair<IAttribute, IMusicArray<IAttribute>>
 
     /**
      *  HashMap<String, Pair<IAttribute, IMusicArray>>
@@ -26,7 +25,7 @@ internal class PlayQueueManagerImpl() :
      *      Pair<IAttribute, IMusicArray> IAttribute  描述当前队列的信息的属性
      *                                    IMusicArray 音乐队列信息管理
      */
-    private val holderMusicArrays = HashMap<String, Pair<IAttribute, IMusicArray>>()
+    private val holderMusicArrays = HashMap<String, Pair<IAttribute, IMusicArray<IAttribute>>>()
     private val mLocalListenerManager = LocalListenerManager()
     lateinit var partnerInstance: IMusicInit
     private val playerManager: IPlayerManager by lazy {
@@ -40,12 +39,12 @@ internal class PlayQueueManagerImpl() :
         }
     }
 
-    override fun playMusic(info: IMediaPlayInfo, musicArray: IMusicArray) {
+    override fun playMusic(info: IMediaPlayInfo, musicArray: IMusicArray<MusicPlayInfoImpl>) {
         TODO("Not yet implemented")
     }
 
 
-    override fun playMusic(stringUrl: String, musicArray: IMusicArray) {
+    override fun playMusic(stringUrl: String, musicArray: IMusicArray<MusicPlayInfoImpl>) {
         if (thsPlayingArray.second != musicArray) {
             changePlayArray(stringUrl, musicArray);
         } else {
@@ -58,17 +57,17 @@ internal class PlayQueueManagerImpl() :
         }
     }
 
-    private fun changePlayArray(stringUrl: String, musicArray: IMusicArray) {
+    private fun changePlayArray(stringUrl: String, musicArray: IMusicArray<MusicPlayInfoImpl>) {
         holderMusicArrays[musicArray.attributeId]?.apply {
             thsPlayingArray = this
         }
     }
 
-    override fun pauseMusic(musicArray: IMusicArray) {
+    override fun pauseMusic(musicArray: IMusicArray<MusicPlayInfoImpl>) {
         playerManager.pauseMusic()
     }
 
-    override fun stopMusic(musicArray: IMusicArray) {
+    override fun stopMusic(musicArray: IMusicArray<MusicPlayInfoImpl>) {
         playerManager.stopMusic()
     }
 
@@ -94,22 +93,22 @@ internal class PlayQueueManagerImpl() :
         }
     }
 
-    override fun getPlayingQueue(): IMusicArray? {
-        return thsPlayingArray?.second
+    override fun getPlayingQueue(): IMusicArray<IAttribute>? {
+        return thsPlayingArray.second
     }
 
-    override fun getMusicQueueByMusicItem(info: MusicPlayInfoImpl): Set<IMusicArray> {
+    override fun getMusicQueueByMusicItem(info: IMediaPlayInfo): Set<IMusicArray<IAttribute>> {
         TODO("Not yet implemented")
     }
 
     override fun getPlayingQueueName(): String? = thsPlayingArray?.first?.attributeId
 
-    override fun getPlayingInfo(): MediaPlayInfo {
+    override fun getPlayingInfo(): IAttribute {
         val i = thsPlayingArray.second;
         return i.realData()[i.thisPlayIndex()]
     }
 
-    override fun getListenerManager(onComplete: String): IPlayQueueManager.ListenerManager {
+    override fun getListenerManager(): IPlayQueueManager.ListenerManager {
         return mLocalListenerManager
     }
 
@@ -158,7 +157,7 @@ internal class PlayQueueManagerImpl() :
                 is OnPlayCompleteListener -> {
                     getInstance().mLocalListenerManager.mOnPlayCompleteListeners.add(p)
                 }
-                is OnPlayChangeListener -> {
+                is OnPlayMomentListener -> {
                     getInstance().mLocalListenerManager.mOnPlayChangeListeners.add(p)
                 }
                 is OnPlayCountListener -> {
@@ -181,7 +180,7 @@ internal class PlayQueueManagerImpl() :
                 is OnPlayCompleteListener -> {
                     getInstance().mLocalListenerManager.mOnPlayCompleteListeners.remove(p)
                 }
-                is OnPlayChangeListener -> {
+                is OnPlayMomentListener -> {
                     getInstance().mLocalListenerManager.mOnPlayChangeListeners.remove(p)
                 }
                 is OnPlayCountListener -> {

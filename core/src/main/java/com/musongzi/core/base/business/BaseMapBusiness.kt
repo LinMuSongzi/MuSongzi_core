@@ -1,20 +1,29 @@
 package com.musongzi.core.base.business
 
 import android.util.Log
-import com.musongzi.core.itf.IAgentHolder
-import com.musongzi.core.itf.IBusiness
-import com.musongzi.core.itf.IViewInstance
+import com.musongzi.core.base.map.HostSavedHandler
+import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.util.InjectionHelp
 import java.lang.Exception
 import kotlin.jvm.Throws
 
 /*** created by linhui * on 2022/7/6 */
-abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> {
+abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> ,IHolderSavedStateHandle{
     @JvmField
     protected val TAG = javaClass.simpleName
 
     private var cacheBusinessMaps = HashMap<String, IBusiness>()
+    private var hostSavedHandler:ISaveStateHandle = HostSavedHandler()
+
+    override fun getHolderSavedStateHandle(): ISaveStateHandle {
+       return hostSavedHandler
+    }
+
+//    @Deprecated("过期")
+    override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
+       this.hostSavedHandler = savedStateHandle;
+    }
 
     protected lateinit var iAgent: L
 

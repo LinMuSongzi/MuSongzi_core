@@ -1,6 +1,7 @@
 package com.musongzi.music.impl
 
 import androidx.lifecycle.LifecycleOwner
+import com.musongzi.core.base.page.AbstractCallBack
 import com.musongzi.core.base.page.PageSupport
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.page.IAdMessage
@@ -10,7 +11,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 
 /*** created by linhui * on 2022/8/3 */
-class MusicPageCallBack<I : IAttribute, D>(var proxy: MusicDataProxy<I, D>) : PageSupport.CallBack<I, D> {
+class MusicPageCallBack<I : IAttribute, D>(var proxy: MusicDataProxy<I, D>) : AbstractCallBack<I, D>() {
 
     override fun pageSize() = IPageEngine.PAGE_SIZE
 
@@ -36,19 +37,9 @@ class MusicPageCallBack<I : IAttribute, D>(var proxy: MusicDataProxy<I, D>) : Pa
         return 0;
     }
 
-    override fun createPostEvent(): Any? {
-        return null
-    }
-
-    override fun getObserver(): Observer<D>? {
-       return null
-    }
 
     override fun handlerState(integer: Int?) {
 //        impl.han
     }
 
-    override fun getAdMessage(): IAdMessage<I>? {
-        return null
-    }
 }
