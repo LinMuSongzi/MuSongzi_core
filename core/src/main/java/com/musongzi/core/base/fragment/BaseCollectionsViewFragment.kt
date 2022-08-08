@@ -16,7 +16,7 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
-abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient<ITEM>,
+abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient,
     CollectionsViewSupport {
 
     var totalLiveData = MutableLiveData(0)

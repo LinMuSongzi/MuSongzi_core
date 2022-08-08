@@ -1,6 +1,7 @@
 package com.musongzi.core.util;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,29 +16,33 @@ import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
 import com.musongzi.core.base.manager.RetrofitManager;
-import com.musongzi.core.base.vm.SaveStateHandleWarp;
+import com.musongzi.core.base.map.SaveStateHandleWarp;
 import com.musongzi.core.itf.IAgentHolder;
+import com.musongzi.core.itf.IBusiness;
 import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.IWant;
 import com.musongzi.core.itf.holder.IHolderViewModel;
-import com.musongzi.core.itf.page.IDataEngine;
-import com.musongzi.core.itf.page.IRead;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-
+import kotlin.Deprecated;
+import kotlin.jvm.functions.Function1;
+@Deprecated(message = "将会被Kclass替代")
 public class InjectionHelp {
 
-
-
+    static Map<String, Class<?>> CACHE_CALSS = new HashMap<>();
     @org.jetbrains.annotations.NotNull
     public static final String BUSINESS_NAME_KEY = "BUSINESS_NAME_KEY";
+    private static final String TAG = "InjectionHelp";
+    public static final ClassLoader CLASS_LOADER = InjectionHelp.class.getClassLoader();
 
     public static CollecttionsEngine findAnnotation(Class<?> thisClazz) {
 //        if(thisClazz.getName().equals("java.lang.Object")){
@@ -90,17 +95,43 @@ public class InjectionHelp {
 
 
     @NotNull
-    public static <T> Class<T> findGenericClass(@NotNull Class<?> aClass, int actualTypeArgumentsViewModelIndex) {
-//        Class<T> cache = findCache();
-        Type type = aClass.getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            Type[] types = ((ParameterizedType) type).getActualTypeArguments();
-            if (types.length > actualTypeArgumentsViewModelIndex) {
-                return (Class<T>) types[actualTypeArgumentsViewModelIndex];
-            }
+    public static <T> Class<T> findGenericClass(@NotNull Class<?> topClass, int actualTypeArgumentsViewModelIndex) {
+        Class<T> cache = findCacheClass(topClass, actualTypeArgumentsViewModelIndex);
+        if (cache == null) {
+            Function1<Class, Class> function0 = new Function1<Class, Class>() {
+                @Override
+                public Class invoke(Class aClass) {
+                    Type type = aClass.getGenericSuperclass();
+                    if (type instanceof ParameterizedType) {
+                        Type[] types = ((ParameterizedType) type).getActualTypeArguments();
+                        if (types.length > actualTypeArgumentsViewModelIndex) {
+                            Class<T> findClass = (Class<T>) types[actualTypeArgumentsViewModelIndex];
+                            cacheClass(topClass, findClass, actualTypeArgumentsViewModelIndex);
+                            return findClass;
+                        }
+                    }
+                    return invoke(aClass.getSuperclass());
+                }
+            };
+            return function0.invoke(topClass);
+        } else {
+            return cache;
         }
-        return findGenericClass(aClass.getSuperclass(), actualTypeArgumentsViewModelIndex);
     }
+
+    private static <T> void cacheClass(Class<?> c, Class<T> findClass, int actualTypeArgumentsViewModelIndex) {
+        String k = c.getCanonicalName() + actualTypeArgumentsViewModelIndex;
+        Log.i(TAG, "cacheClass: key = " + k + " , findClass = " + findClass);
+        CACHE_CALSS.put(k, findClass);
+    }
+
+    private static <T> Class<T> findCacheClass(Class<?> aClass, int actualTypeArgumentsViewModelIndex) {
+        String k = aClass.getCanonicalName() + actualTypeArgumentsViewModelIndex;
+        Class<T> cache = (Class<T>) CACHE_CALSS.get(aClass.getCanonicalName() + actualTypeArgumentsViewModelIndex);
+        Log.i(TAG, "findCacheClass: key = " + k + " , find cache = " + cache);
+        return cache;
+    }
+
 
     @org.jetbrains.annotations.Nullable
     public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
@@ -124,11 +155,13 @@ public class InjectionHelp {
 
 
     @org.jetbrains.annotations.Nullable
-    public static <A extends IViewInstance, B extends IAgentHolder<A>> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
+    public static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
         B instance = null;
         try {
-            instance = targetClass.newInstance();
-            instance.setAgentModel(agent);
+            instance = (B) targetClass.newInstance();
+            if(instance instanceof IAgentHolder){
+                ((IAgentHolder) instance).setAgentModel(agent);
+            }
             instance.afterHandlerBusiness();
         } catch (Exception e) {
             e.printStackTrace();
@@ -192,7 +225,17 @@ public class InjectionHelp {
     public static Fragment injectFragment(@org.jetbrains.annotations.NotNull ClassLoader classLoader, @NotNull String className, @org.jetbrains.annotations.Nullable Bundle dataBundle) {
         try {
             Class c = classLoader.loadClass(className);
-            return ExtensionCoreMethod.instance(c,dataBundle);
+            return ExtensionCoreMethod.instance(c, dataBundle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @NotNull
+    public static <F extends Fragment> Fragment injectFragment(@NotNull Class<F> clazz, @org.jetbrains.annotations.Nullable Bundle dataBundle) {
+        try {
+            return ExtensionCoreMethod.instance(clazz, dataBundle);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,22 +244,35 @@ public class InjectionHelp {
 
     @org.jetbrains.annotations.Nullable
     public static <C> C checkClient(@org.jetbrains.annotations.Nullable C client, @NotNull Class<?> vm, @NotNull int index) {
-        if(client == null){
+        if (client == null) {
             return null;
         }
-        Class<?> aClass =  InjectionHelp.findGenericClass(vm,index);
-        if(aClass.isInstance(client)){
+        Class<?> aClass = InjectionHelp.findGenericClass(vm, index);
+        if (aClass.isInstance(client)) {
             return client;
         }
         return null;
     }
 
     public static <Api> Api injectApi(@NotNull IWant apiViewModel, int indexApiActualTypeArgument) {
-       return RetrofitManager.getInstance().getApi(InjectionHelp.findGenericClass(apiViewModel.getClass(), indexApiActualTypeArgument), apiViewModel);
+        return RetrofitManager.getInstance().getApi(InjectionHelp.findGenericClass(apiViewModel.getClass(), indexApiActualTypeArgument), apiViewModel);
     }
 
     @NotNull
     public static ClassLoader getClassLoader() {
-        return InjectionHelp.class.getClassLoader();
+        if(CLASS_LOADER != null) {
+            return CLASS_LOADER;
+        }else{
+            return findLoader();
+        }
     }
+
+    private static ClassLoader findLoader() {
+       return InjectionHelp.class.getClassLoader();
+    }
+
+
+
+
+
 }

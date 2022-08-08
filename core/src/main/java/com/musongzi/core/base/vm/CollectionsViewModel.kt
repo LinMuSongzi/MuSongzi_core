@@ -21,7 +21,7 @@ import com.musongzi.core.itf.page.ISource
  *
  *
  */
-class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, CollectionsBusiness>(),
+class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBusiness>(),
     IHandlerChooseViewModel<CollectionsBusiness>, IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
@@ -39,21 +39,22 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
 
     }
 
+
     override fun buildViewByData(datas: List<Any>) {
-        client?.buildViewByData(datas)
+        client?.getRefreshClient<Any>()?.buildViewByData(datas)
     }
 
     override fun setRefresh(b: Boolean) {
-        client?.setRefresh(b)
+        client?.getRefreshClient<Any>()?.setRefresh(b)
     }
 
 
     override fun disimissDialog() {
-        client?.disimissDialog()
+        client?.getRefreshClient<Any>()?.disimissDialog()
     }
 
     override fun notifyDataSetChangedItem(postiont: Int) {
-        client?.notifyDataSetChangedItem(postiont)
+        client?.getRefreshClient<Any>()?.notifyDataSetChangedItem(postiont)
     }
 
     override fun getHolderContext(): Context? {
@@ -66,7 +67,7 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient<Any>, Collectio
 
 
     override fun notifyDataSetChanged() {
-        client?.notifyDataSetChanged()
+        client?.getRefreshClient<Any>()?.notifyDataSetChanged()
     }
 
     override fun getBundle(): Bundle? = getArguments()

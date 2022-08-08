@@ -17,6 +17,8 @@ import java.net.URL;
  */
 public class URLUtil {
 
+     
+
     private static final String TAG = "URLUtil";
     @Deprecated
     private static final String PACKAGE_PROVIDER = "com.musongzi.test.provider";

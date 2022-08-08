@@ -1,19 +1,29 @@
 package com.musongzi.core.base.business
 
 import android.util.Log
-import com.musongzi.core.itf.IAgentHolder
-import com.musongzi.core.itf.IBusiness
-import com.musongzi.core.itf.IViewInstance
+import com.musongzi.core.base.map.HostSavedHandler
+import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.IHolderLifecycle
+import com.musongzi.core.util.InjectionHelp
 import java.lang.Exception
 import kotlin.jvm.Throws
 
 /*** created by linhui * on 2022/7/6 */
-abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> {
+abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> ,IHolderSavedStateHandle{
     @JvmField
     protected val TAG = javaClass.simpleName
 
     private var cacheBusinessMaps = HashMap<String, IBusiness>()
+    private var hostSavedHandler:ISaveStateHandle = HostSavedHandler()
+
+    override fun getHolderSavedStateHandle(): ISaveStateHandle {
+       return hostSavedHandler
+    }
+
+//    @Deprecated("过期")
+    override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
+       this.hostSavedHandler = savedStateHandle;
+    }
 
     protected lateinit var iAgent: L
 
@@ -35,23 +45,20 @@ abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> {
         searchString: String,
         searchClass: Class<Next>
     ): Next? {
+
         var business: Next? = cacheBusinessMaps[searchString] as? Next
         if (business == null) {
             if(!searchClass.isInterface) {
-                business = searchClass.newInstance()
-                (business as? IAgentHolder<L>)?.let {
-                    try {
-                        it.setAgentModel(iAgent)
-                        it.afterHandlerBusiness();
-                        cacheBusinessMaps[searchString] = it
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        business = null
-                    }
+                InjectionHelp.injectBusiness(searchClass,iAgent)?.apply {
+                    business = this
+                    Log.i(TAG, "getNext instance: $business")
+                    cacheBusinessMaps[searchString] = business!!
                 }
             }
+        }else{
+            Log.i(TAG, "getNext: $business")
         }
-        Log.i(TAG, "getNext: $business")
+
         return business
     }
 }

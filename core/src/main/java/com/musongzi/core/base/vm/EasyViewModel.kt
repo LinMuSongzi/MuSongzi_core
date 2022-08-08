@@ -24,11 +24,11 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
 
     final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
         Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
-        super.mSavedStateHandle = savedStateHandle
+        super.mSavedStateHandles[REMOTE_SAVED_INDEX] = savedStateHandle
     }
 
     final override fun getHolderSavedStateHandle(): ISaveStateHandle {
-        return mSavedStateHandle
+        return mSavedStateHandles[REMOTE_SAVED_INDEX]!!
     }
 
     private var savedInstanceStateRf: WeakReference<Bundle?>? = null
@@ -73,13 +73,16 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
         client = null;
     }
 
-    protected fun createBusiness(): B {
+    private fun createBusiness(): B {
         return businessInfo?.let {
+            Log.i(TAG, "createBusiness: 1")
             InjectionHelp.getClassLoader().loadClass(it.className)?.newInstance() as? B
         } ?: (InjectionHelp.findGenericClass<B>(javaClass, indexBusinessActualTypeArgument()).let {
             if(it.isInterface){
+                Log.i(TAG, "createBusiness: 2")
                 createBusiness2()
             }else{
+                Log.i(TAG, "createBusiness: 3")
                 it.newInstance()
             }
         })

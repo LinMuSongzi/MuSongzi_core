@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +14,7 @@ import androidx.lifecycle.*
 import androidx.savedstate.SavedStateRegistryOwner
 import com.gyf.immersionbar.ImmersionBar
 import com.musongzi.core.R
+import com.musongzi.core.base.bean.ActivityDescribe
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.core.base.business.BaseMapBusiness
@@ -40,33 +40,41 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
 
     override fun checkEvent() {
         val h = iAgent as HolderLifecycleImpl;
-        h.activity.getHolderContext()?.let { it ->
-            if (it is Activity) {
-                dataBinding = DataBindingUtil.setContentView(it, R.layout.activity_normal_fragment)
-                val fragmentDescribe: FragmentDescribe? = h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
-                if (fragmentDescribe != null) {
-                    handlerBarBusiness(it, fragmentDescribe.sinfo!!)
-                    if (it is AppCompatActivity) {
-                        var dataBundle: Bundle? = h.getArguments()?.getBundle(BUNDLE_KEY)
-                        if (fragmentDescribe.businessInfo != null) {
-                            dataBundle = handlerBusinesInstanceInfo(fragmentDescribe,dataBundle)
+        h.activity.getHolderContext()?.let { context ->
+            if (context is Activity) {
+                dataBinding =
+                    DataBindingUtil.setContentView(context, R.layout.activity_normal_fragment)
+                val activityDescribe: ActivityDescribe? =
+                    h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
+                activityDescribe?.let { a ->
+                    handlerWindowFlag(a)
+                    (a.parcelable as? FragmentDescribe)?.let { fragmentDescribe ->
+                        handlerBarBusiness(context, fragmentDescribe.sinfo!!)
+                        if (context is AppCompatActivity) {
+                            var dataBundle: Bundle? = h.getArguments()?.getBundle(BUNDLE_KEY)
+                            dataBundle = fragmentDescribe.businessInfo?.let {
+                                handlerBusinesInstanceInfo(fragmentDescribe, dataBundle)
+                            } ?: dataBundle
+                            val fragment: Fragment = InjectionHelp.injectFragment(
+                                context.classLoader,
+                                fragmentDescribe.className,
+                                dataBundle
+                            )
+                            context.supportFragmentManager.beginTransaction().replace(
+                                R.id.id_content_layout,
+                                fragment,
+                                fragmentDescribe.tag
+                            ).commitNow()
                         }
-                        val fragment: Fragment = InjectionHelp.injectFragment(
-                            it.classLoader,
-                            fragmentDescribe.className,
-                            dataBundle
-                        )
-                        it.supportFragmentManager.beginTransaction().replace(
-                            R.id.id_content_layout,
-                            fragment,
-                            fragmentDescribe.tag
-                        ).commitNow()
+                        true
                     }
-                } else {
-                    dataBinding.titleLayout.root.visibility = View.GONE
                 }
             }
         }
+    }
+
+    private fun handlerWindowFlag(a: ActivityDescribe) {
+
     }
 
     /**
@@ -75,19 +83,13 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
     private fun handlerBusinesInstanceInfo(
         fragmentDescribe: FragmentDescribe,
         dataBundle: Bundle?
-    ): Bundle? {
-       return if (dataBundle == null) {
-            Bundle().let { b ->
-                b.putParcelable(
-                    InjectionHelp.BUSINESS_NAME_KEY,
-                    fragmentDescribe.businessInfo
-                )
-                b
-            }
-        }else{
-            null;
-       }
-    }
+    ): Bundle =
+        (dataBundle ?: Bundle()).apply {
+            putParcelable(
+                InjectionHelp.BUSINESS_NAME_KEY,
+                fragmentDescribe.businessInfo
+            )
+        }
 
     /**
      * 处理状态栏
@@ -168,9 +170,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             (activity as? INotifyDataSetChanged)?.disimissDialog()
         }
 
-        override fun disconnect() {
-            (activity as? INotifyDataSetChanged)?.disconnect()
-        }
+        override fun disconnect() = (activity as? INotifyDataSetChanged)?.disconnect() ?: true
 
         override fun topViewModelProvider(): ViewModelProvider {
             return (activity as? IHolderViewModelProvider)?.topViewModelProvider()
@@ -254,16 +254,39 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         const val BUNDLE_KEY = "support_bundle_key"
         const val ACTIVITY_DESCRIBE_INFO_KEY = "support_activity_key"
 
-        fun create(bundle: Bundle?, activity: IHolderContext): ISupprotActivityBusiness {
+        fun <B:ISupprotActivityBusiness> create(
+            bundle: Bundle?,
+            activity: IHolderContext
+        ): B? {
+
+
+            val checkBusinessClass: (ActivityDescribe) -> Class<B> = {
+                InjectionHelp.getClassLoader().loadClass(it.businessName)!! as Class<B>
+            }
             val impl = HolderLifecycleImpl(bundle, activity)
-            val business: SupproActivityBusiness = injectBusiness(
+
+            return impl.getArguments()?.let {
+                val activityDescribe = it.getParcelable<ActivityDescribe>(ACTIVITY_DESCRIBE_INFO_KEY);
+                if (activityDescribe?.businessName != null) {
+                    val clazz = checkBusinessClass.invoke(activityDescribe)
+                    injectBusiness(clazz, impl).apply {
+                        Log.i("SupprotActivityBusiness", "create11: 初始化成功 $this")
+                    }
+                } else {
+                    null
+                }
+            }
+        }
+
+        fun create2(bundle: Bundle?, activity: IHolderContext): ISupprotActivityBusiness {
+            val impl = HolderLifecycleImpl(bundle, activity)
+            return injectBusiness(
                 SupproActivityBusiness::class.java,
                 impl
-            )!!
-//            if (business.holderLifecycleImpl == impl) {
-            Log.i(business.TAG, "create: 初始化成功 $impl")
-//            }
-            return business
+            ).let {
+                Log.i("SupprotActivityBusiness", "create22: 初始化成功 $it")
+                it
+            }!!
         }
 
     }

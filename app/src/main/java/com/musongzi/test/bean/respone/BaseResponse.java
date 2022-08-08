@@ -1,4 +1,4 @@
-package com.musongzi.test.bean;
+package com.musongzi.test.bean.respone;
 
 public class BaseResponse {
 

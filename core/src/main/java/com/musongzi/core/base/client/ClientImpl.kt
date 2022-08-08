@@ -11,9 +11,7 @@ open class ClientImpl<T : IClient>(var base: T) : IClient {
         base.disimissDialog()
     }
 
-    override fun disconnect() {
-        base.disconnect()
-    }
+    override fun disconnect() = base.disconnect()
 
 //    override fun getNextByClass(nextClass: Class<*>): IClient? = base.getNextByClass(nextClass)
 }

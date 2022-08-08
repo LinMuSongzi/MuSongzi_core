@@ -99,8 +99,9 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     }
 
-    override fun disconnect() {
+    override fun disconnect():Boolean {
         requireActivity().finish()
+        return true
     }
 
     override fun onCreateView(

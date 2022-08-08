@@ -4,10 +4,10 @@ import java.util.List;
 
 /**
  * 处理数据
- * @param <ENTITY>
+ * @param <I>
  */
-public interface DataBusiness<ENTITY> {
+public interface DataBusiness<I> {
 
-    void handlerData(List<ENTITY> t, int action);
+    void handlerData(List<I> t, int action);
 
 }

@@ -6,9 +6,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.multidex.MultiDexApplication
 import com.musongzi.core.ExtensionCoreMethod.bean
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
+import com.musongzi.core.base.manager.ManagerUtil
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.util.WriteTxt
+import com.musongzi.music.impl.Factory
 import com.musongzi.test.bean.DiscoverBannerBean
+import com.musongzi.test.business.MusicConfigHelpBusines
 import com.musongzi.test.event.ILoginEvent
 import com.musongzi.test.event.IMusicEvent
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
@@ -32,12 +35,6 @@ class MyApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        //com.musongzi.comment.DataBinderMapperImpl()
-//        val dClass = DataBindingUtil::class.java
-//        dClass.getDeclaredField("sMapper").let {
-//            it.isAccessible = true
-//            (it.get(null) as DataBinderMapperImpl).addMapper(com.musongzi.comment.DataBinderMapperImpl())
-//        }
 
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             Log.i(TAG, "message: t = ${e.message}")
@@ -46,6 +43,12 @@ class MyApplication : MultiDexApplication() {
             }
             WriteTxt.exception(e)
         }
+
+        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
+            MusicConfigHelpBusines().apply {
+                afterHandlerBusiness()
+            }
+        }), classLoader)
 
         EventBus.getDefault().register(this)
         registerEvent(ILoginEvent::class.java) {

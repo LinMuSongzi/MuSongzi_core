@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.musongzi.comment.ExtensionMethod.convertFragemnt
 import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
@@ -28,7 +29,9 @@ import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.comment.business.SupproActivityBusiness
+import com.musongzi.core.base.bean.ActivityDescribe
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
+import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
@@ -44,9 +47,17 @@ import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.ScreenUtil
 import io.reactivex.rxjava3.core.Observable
 
+/**
+ * 一个提供扩展方法的地方
+ */
 object ExtensionMethod {
 
 
+    /**
+     * 获取到集合数据集<CollectionsViewFragment>组件当前的 IPageEngine业务
+     * [IPageEngine]
+     * [CollectionsViewFragment]
+     */
     @JvmStatic
     fun CollectionsViewFragment.asInterfaceByEngine(runOnResume: (page: IPageEngine<*>?) -> Unit) {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
@@ -61,6 +72,19 @@ object ExtensionMethod {
         }
     }
 
+    fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecyeleActivity(
+        title: String? = null,
+        barColor: Int = R.color.bg_white,
+        data: Bundle? = null,
+        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
+    ) {
+        CollectionsViewFragment::class.java.startActivityNormal(
+            null,
+            StyleMessageDescribe(title, barColor),
+            getColletionInfoBundle(data, onInfoObserver)//,CollectionsBusiness::class.java.name
+        )
+    }
+
 
     @JvmStatic
     @JvmOverloads
@@ -68,6 +92,16 @@ object ExtensionMethod {
         data: Bundle? = null,
         onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
     ): Fragment {
+        return InjectionHelp.injectFragment(
+            CollectionsViewFragment::class.java,
+            getColletionInfoBundle(data, onInfoObserver)
+        )
+    }
+
+    private fun <E : BaseMoreViewEngine<*, *>> Class<E>.getColletionInfoBundle(
+        data: Bundle?,
+        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)?
+    ): Bundle {
         val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(this)
         val mCollectionsInfo = cAnnotation?.let {
             CollectionsViewModel.CollectionsInfo(it)
@@ -80,9 +114,7 @@ object ExtensionMethod {
         ModelFragment.composeProvider(bundle, false)
         mCollectionsInfo.engineName = name
         bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
-        val collectionsFragment = CollectionsViewFragment();
-        collectionsFragment.arguments = bundle
-        return collectionsFragment
+        return bundle
     }
 
     @JvmStatic
@@ -108,45 +140,21 @@ object ExtensionMethod {
 
     @JvmStatic
     @JvmOverloads
-    fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
-        activity: Class<A>? = null,
+    fun <F : Fragment> Class<F>.startActivityNormal(
+        activity: Class<*>? = null,
         mStyleMessageDescribe: StyleMessageDescribe,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
     ) {
-        ActivityLifeManager.getInstance().getTopActivity()?.let {
-            val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
+        (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
+            val activityClass = activity ?: NormalFragmentActivity::class.java;
+            val intent = Intent(it, activityClass)
             val fInfo = FragmentDescribe(
                 this.name,
                 mStyleMessageDescribe,
                 if (businessClassName != null) BusinessInfo(businessClassName) else null
             )
-            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
-            dataBundle?.let { b ->
-                intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
-            }
-            it.startActivity(intent)
-        }
-    }
-
-
-    @JvmStatic
-    @JvmOverloads
-    fun <F : Fragment, A : NormalFragmentActivity> Class<F>.startActivityNormal(
-        activity: Class<A>? = null,
-        title: String? = null,
-        barColor: Int = R.color.bg_white,
-        dataBundle: Bundle? = null,
-        businessClassName: String? = null
-    ) {
-        (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
-            val intent = Intent(it, activity ?: NormalFragmentActivity::class.java)
-            val fInfo = FragmentDescribe(
-                this.name,
-                StyleMessageDescribe(title, barColor),
-                if (businessClassName != null) BusinessInfo(businessClassName) else null
-            )
-            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, fInfo)
+            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, ActivityDescribe(activityClass.name, fInfo))
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
             }
@@ -158,16 +166,38 @@ object ExtensionMethod {
     }
 
 
+    @JvmStatic
+    @JvmOverloads
+    fun <F : Fragment> Class<F>.startActivityNormal(
+        title: String? = null,
+        //其实必须是NormalFragmentActivity 子类
+        activity: Class<*>? = NormalFragmentActivity::class.java,
+        barColor: Int = R.color.bg_white,
+        dataBundle: Bundle? = null,
+        businessClassName: String? = null
+    ) {
+        startActivityNormal(
+            activity,
+            StyleMessageDescribe(title, barColor),
+            dataBundle,
+            businessClassName
+        )
+    }
+
+
     fun <A : Activity> Class<A>.startActivity() {
-        ActivityLifeManager.getInstance().getTopActivity()?.let {
+        (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
             try {
-                it.startActivity(Intent(it, this))
+                val i = Intent(it, this);
+                if (it is Application) {
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                it.startActivity(i)
             } catch (e: Exception) {
-                toast("无法打开${this.canonicalName}活动~", it)
+                toast("无法打开${this.canonicalName}活动~", null)
                 e.printStackTrace()
             }
         }
-
     }
 
     fun toast(msg: String?, activity: Activity? = null) {

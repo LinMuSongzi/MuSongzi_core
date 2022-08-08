@@ -15,6 +15,9 @@ import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
 
+/**
+ * 有videmodel
+ */
 abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     DataBindingFragment<D>() {
 
@@ -45,11 +48,6 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     fun getViewModel(): V {
         return InjectionHelp.getViewModel(getProvider(), CLASS_CACHE[javaClass.name])
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-//        savedInstance = null
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1

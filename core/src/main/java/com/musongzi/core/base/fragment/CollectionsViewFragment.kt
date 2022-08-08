@@ -1,11 +1,13 @@
 package com.musongzi.core.base.fragment
 
+import android.os.Bundle
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.IHolderCollections
+import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.databinding.FragmentRecycleListBinding
 import com.musongzi.core.itf.page.IPageEngine
@@ -14,10 +16,9 @@ import com.musongzi.core.util.StringUtil
 /**
  * 一个基于集合的基本碎片
  * 核心作用作为view层提供刷新和绑定view功能
+ * 快速构建一个几何数据级
  */
 open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>() {
-
-
 
     override fun getCollectionsViewEngine(): IHolderCollections? = null
 
@@ -72,6 +73,10 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
 
     override fun transformDataToList(entity: Any): List<BaseChooseBean> {
         return ArrayList()
+    }
+
+    override fun <I> getRefreshClient(): IRefreshClient<I> {
+       return this as IRefreshClient<I>
     }
 
 

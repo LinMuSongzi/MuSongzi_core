@@ -13,7 +13,7 @@ open class ApiViewModel<C : IClient, B : IBusiness, Api> : EasyViewModel<C, B>()
         return InjectionHelp.injectApi(this,indexApiActualTypeArgument())
     }
 
-    fun indexApiActualTypeArgument() = 2
+    protected open fun indexApiActualTypeArgument() = 2
 
 
 

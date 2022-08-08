@@ -150,11 +150,6 @@ class TestMainFragment : ModelFragment<TestViewModel, FragmentTestMainBinding>()
         dataBinding.idMainContentTv.text = msg
     }
 
-    override fun showDialog(msg: String?) {
-//        super.showDialog(msg)
-//        Log.i(TAG, "EventManger showDialog: msg = $msg ")
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)

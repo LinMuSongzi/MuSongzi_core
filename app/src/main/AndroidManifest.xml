@@ -30,6 +30,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -39,7 +41,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity" android:launchMode="singleTask">
+
+        <activity
+            android:name="com.musongzi.comment.activity.NormalFragmentActivity"
+            android:theme="@style/AppNoActionBarLightTheme"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.SplashActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +61,7 @@
         </activity>
 
         <activity
-            android:name=".TowActivity"
+            android:name=".activity.TowActivity"
             android:launchMode="singleTask" />
 
 
