@@ -2,13 +2,10 @@ package com.musongzi.music.impl
 
 import androidx.lifecycle.LifecycleOwner
 import com.musongzi.core.base.page.AbstractCallBack
-import com.musongzi.core.base.page.PageSupport
 import com.musongzi.core.itf.IAttribute
-import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IPageEngine
-import com.musongzi.music.itf.IMusicArray
+import com.musongzi.music.itf.MusicDataProxy
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observer
 
 /*** created by linhui * on 2022/8/3 */
 class MusicPageCallBack<I : IAttribute, D>(var proxy: MusicDataProxy<I, D>) : AbstractCallBack<I, D>() {

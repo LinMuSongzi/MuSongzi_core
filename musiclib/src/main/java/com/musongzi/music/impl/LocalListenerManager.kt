@@ -1,5 +1,6 @@
 package com.musongzi.music.impl
 
+import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import com.musongzi.core.ExtensionCoreMethod.exceptionRun
 import com.musongzi.core.itf.ILifeObject
@@ -11,6 +12,11 @@ import com.musongzi.music.itf.small.*
 
 /*** created by linhui * on 2022/7/29 */
 class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervser {
+
+
+    companion object{
+        const val TAG = "LocalListenerManager"
+    }
 
     val mOnPlayCompleteListeners = HashSet<OnPlayCompleteListener>()
     val mOnPlayCountListeners = HashSet<OnPlayCountListener>()
@@ -54,53 +60,56 @@ class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervse
         } ?: false
     }
 
-    override fun onStateChange(state: String, info: IMediaPlayInfo) {
-        when (state) {
-            IPlayController.ON_COMPLETE -> {
-                for (listener in mOnPlayCompleteListeners) {
-                    exceptionRun {
-                        listener.onComplete(info = info)
+    override fun onStateChange(state: String, i: IMediaPlayInfo?, player: Any?, other: Any?) {
+        Log.i(TAG, "onStateChange: $i")
+        i?.let { info ->
+            when (state) {
+                IPlayController.ON_COMPLETE -> {
+                    for (listener in mOnPlayCompleteListeners) {
+                        exceptionRun {
+                            listener.onComplete(info = info)
+                        }
                     }
                 }
-            }
 
-            IPlayController.ON_START -> {
-                for (listener in mOnPlayLifeListeners) {
-                    exceptionRun {
-                        listener.onStart(info = info)
-                    }
+                IPlayController.ON_START -> {
+                    for (listener in mOnPlayLifeListeners) {
+                        exceptionRun {
+                            listener.onStart(info = info)
+                        }
 
-                }
-            }
-
-            IPlayController.ON_PAUSE -> {
-                for (listener in mOnPlayLifeListeners) {
-                    exceptionRun {
-                        listener.onPause(info = info)
                     }
                 }
-            }
 
-            IPlayController.ON_STOP -> {
-                for (listener in mOnPlayLifeListeners) {
-                    exceptionRun {
-                        listener.onStop(info = info)
+                IPlayController.ON_PAUSE -> {
+                    for (listener in mOnPlayLifeListeners) {
+                        exceptionRun {
+                            listener.onPause(info = info)
+                        }
                     }
                 }
-            }
 
-            IPlayController.ON_BUFFER -> {
-                for (listener in mOnPlayChangeListeners) {
-                    exceptionRun {
-                        listener.onBuffer(info = info,0,null)
+                IPlayController.ON_STOP -> {
+                    for (listener in mOnPlayLifeListeners) {
+                        exceptionRun {
+                            listener.onStop(info = info)
+                        }
                     }
                 }
-            }
 
-            IPlayController.ON_PLAYING -> {
-                for (listener in mOnPlayChangeListeners) {
-                    exceptionRun {
-                        listener.onPlaying(info = info)
+                IPlayController.ON_BUFFER -> {
+                    for (listener in mOnPlayChangeListeners) {
+                        exceptionRun {
+                            listener.onBuffer(info = info, 0, null)
+                        }
+                    }
+                }
+
+                IPlayController.ON_PLAYING -> {
+                    for (listener in mOnPlayChangeListeners) {
+                        exceptionRun {
+                            listener.onPlaying(info = info)
+                        }
                     }
                 }
             }

@@ -5,7 +5,6 @@ import com.musongzi.core.base.manager.ManagerUtil.manager
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.ILifeObject
 import com.musongzi.music.bean.MusicPlayInfoImpl
-import com.musongzi.music.impl.ISmartPlayQueueManager
 import com.musongzi.music.itf.small.*
 import kotlin.reflect.KClass
 
@@ -22,7 +21,7 @@ interface IPlayQueueManager : IHolderPlayController, InstanceManager {
     /**
      * 获取当前播放的音乐队列列表
      */
-    fun getPlayingQueue(): IMusicArray<IAttribute>?
+    fun getPlayingQueue(): IMusicArray<IMediaPlayInfo>?
 
     /**
      * 根据当前的音乐信息获取所属队列

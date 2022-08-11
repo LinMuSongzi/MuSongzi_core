@@ -15,7 +15,7 @@ interface IPlayController : IPlayObsavable {
     fun stopMusic()
 
     companion object {
-
+        const val ON_INFO = "ON_INFO"
         const val ON_START = "ON_START"
         const val ON_COMPLETE = "ON_COMPLETE";
         const val ON_PAUSE = "ON_PAUSE"

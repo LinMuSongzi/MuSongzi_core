@@ -1,43 +1,33 @@
 package com.musongzi.music.impl
 
 import android.os.Looper
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.musongzi.comment.util.SourceImpl
 import com.musongzi.core.base.page.PageSupport
 import com.musongzi.core.itf.IAttribute
-import com.musongzi.core.itf.page.IAdMessage
-import com.musongzi.core.itf.page.ILimitOnLoaderState
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.music.bean.Container
 import com.musongzi.music.bean.MusicInfoContainer
-import com.musongzi.music.bean.MusicPlayInfoImpl
 import com.musongzi.music.itf.*
 import com.musongzi.music.itf.IMusicArray.Companion.INDEX_NORMAL
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observer
 
 /*** created by linhui * on 2022/7/28
- *
- * 一个队列管理
+ * 音乐队列
+ *  管理队列播放
  *
  * */
 class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataProxy: MusicDataProxy<I, D>) :
     Container<ISource<I>>(name), IMusicArray<I> {
 
-
     private val controller: IPlayController by lazy {
-        Factory.createPlayMusicController(this)
+        Factory.createProxyPlayMusicController(this@MusicArrayImpl)
     }
     private val musicPageEngine: IPageEngine<I> by lazy {
         PageSupport(callBack)
     }
-    private var callBack: PageSupport.CallBack<I, D>
 
-
-    private var playindexLiveData: MutableLiveData<Int> = object : MutableLiveData<Int>(0) {
+    private var playIndexLiveData: MutableLiveData<Int> = object : MutableLiveData<Int>(0) {
         override fun setValue(value: Int) {
             if (Thread.currentThread() != Looper.getMainLooper().thread) {
                 postValue(value)
@@ -46,14 +36,26 @@ class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataProxy: MusicDataPr
             }
         }
     }
+    private var callBack: PageSupport.CallBack<I, D>
+    init {
+        child = SourceImpl();
+        callBack = MusicPageCallBack(dataProxy)
+        playIndexLiveData.observeForever {
+            if (it.and(INDEX_NORMAL) > 0) {
+                return@observeForever
+            }
+            getPlayController().playMusicByInfo(realData()[it])
+        }
+    }
+
 
 
     override fun thisPlayIndex(): Int {
-        return playindexLiveData.value!!
+        return playIndexLiveData.value!!
     }
 
     override fun changeThisPlayIndex(index: Int) {
-        playindexLiveData.value = index
+        playIndexLiveData.value = index
     }
 
     override fun changeThisPlayIndexAndAdd(stringUrl: String) {
@@ -62,16 +64,7 @@ class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataProxy: MusicDataPr
     }
 
 
-    init {
-        child = SourceImpl();
-        callBack = MusicPageCallBack(dataProxy)
-        playindexLiveData.observeForever {
-            if (it.and(INDEX_NORMAL) > 0) {
-                return@observeForever
-            }
-            getPlayController().playMusicByInfo(realData()[it])
-        }
-    }
+
 
     override fun getPlayController(): IPlayController {
         return controller;

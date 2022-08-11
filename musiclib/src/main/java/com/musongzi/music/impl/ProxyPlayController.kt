@@ -1,12 +1,10 @@
 package com.musongzi.music.impl
 
-import com.musongzi.comment.util.SourceImpl
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.core.itf.page.ISource
 import com.musongzi.music.itf.*
 
 /*** created by linhui * on 2022/7/28 */
-internal class ProxyPlayController(val manager:ISmartPlayQueueManager, private val musicArray: IMusicArray) :IPlayController {
+internal class ProxyPlayController(val manager: ISmartPlayQueueManager, private val musicArray: IMusicArray<IMediaPlayInfo>) :IPlayController {
 
     override fun playMusicByInfo(entity: IMediaPlayInfo) {
         manager.playMusic(entity,musicArray)

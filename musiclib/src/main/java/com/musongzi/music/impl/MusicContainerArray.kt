@@ -1,0 +1,66 @@
+package com.musongzi.music.impl
+
+import android.util.Log
+import com.musongzi.core.base.business.BaseMapBusiness
+import com.musongzi.core.itf.IAttribute
+import com.musongzi.core.itf.IViewInstance
+import com.musongzi.core.itf.page.IPageEngine
+import com.musongzi.music.itf.IMediaPlayInfo
+import com.musongzi.music.itf.IMusicArray
+import com.musongzi.music.itf.IPlayController
+import com.musongzi.music.itf.MusicDataProxy
+
+/*** created by linhui * on 2022/8/11 */
+internal class MusicContainerArray<I:IMediaPlayInfo,D>(
+    private val name: String,
+    proxy: MusicDataProxy<I, D>, private val trace:IMusicArray<I>? = null
+) : BaseMapBusiness<IViewInstance>(), IMusicArray<I> {
+
+    val impl:IMusicArray<I> = MusicArrayImpl(name,proxy)
+
+    override fun afterHandlerBusiness() {
+        Log.i(TAG, "afterHandlerBusiness: ")
+    }
+
+    override fun thisPlayIndex(): Int {
+        trace?.thisPlayIndex()
+        return impl.thisPlayIndex()
+    }
+
+    override fun changeThisPlayIndex(index: Int) {
+        trace?.changeThisPlayIndex(index)
+        impl.changeThisPlayIndex(index)
+    }
+
+    override fun changeThisPlayIndexAndAdd(stringUrl: String) {
+        trace?.changeThisPlayIndexAndAdd(stringUrl)
+        impl.changeThisPlayIndexAndAdd(stringUrl)
+    }
+
+    override fun getHolderPageEngine(): IPageEngine<I> {
+        trace?.getPlayController();
+        return impl.getHolderPageEngine()
+    }
+
+    override fun contains(att: IAttribute, find: ((IAttribute) -> Boolean)?): Boolean {
+        trace?.contains(att, null)
+        return impl.contains(att, find)
+    }
+
+    override fun getAttributeId(): String {
+        trace?.attributeId
+        return impl.attributeId
+    }
+
+    override fun realData(): List<I> {
+        trace?.realData()
+        return impl.realData()
+    }
+
+    override fun getPlayController(): IPlayController? {
+        trace?.getPlayController()
+        return impl.getPlayController()
+    }
+
+
+}
