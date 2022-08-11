@@ -3,8 +3,10 @@ package com.musongzi.music.impl
 import android.util.Log
 import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.itf.IAttribute
+import com.musongzi.core.itf.IHolderRead
 import com.musongzi.core.itf.IViewInstance
 import com.musongzi.core.itf.page.IPageEngine
+import com.musongzi.core.itf.page.IRead2
 import com.musongzi.music.itf.IMediaPlayInfo
 import com.musongzi.music.itf.IMusicArray
 import com.musongzi.music.itf.IPlayController
@@ -60,6 +62,10 @@ internal class MusicContainerArray<I:IMediaPlayInfo,D>(
     override fun getPlayController(): IPlayController? {
         trace?.getPlayController()
         return impl.getPlayController()
+    }
+
+    override fun getHolderRead(): IRead2 {
+        return impl.getHolderRead()
     }
 
 

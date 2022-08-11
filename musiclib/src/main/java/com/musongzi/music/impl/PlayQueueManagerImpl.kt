@@ -3,6 +3,8 @@ package com.musongzi.music.impl
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.manager.ManagerUtil.getHolderManager
 import com.musongzi.core.itf.IAttribute
@@ -14,10 +16,8 @@ import com.musongzi.music.itf.small.*
 internal class PlayQueueManagerImpl :
     ISmartPlayQueueManager, PlayMusicObervser {
 
-
     private var observerStates = HashSet<PlayMusicObervser>()
-    private lateinit var thsPlayingArray: Pair<IAttribute, IMusicArray<IMediaPlayInfo>>
-
+    private lateinit var thsPlayingArray:Pair<IAttribute, IMusicArray<IMediaPlayInfo>>
     /**
      *  HashMap<String, Pair<IAttribute, IMusicArray>>
      *      String key
@@ -56,9 +56,12 @@ internal class PlayQueueManagerImpl :
 //        }
     }
 
-    private fun changePlayArray(stringUrl: String, musicArray: IMusicArray<IMediaPlayInfo>) {
-        holderMusicArrays[musicArray.attributeId]?.apply {
-            thsPlayingArray = this
+    private fun changePlayArray(stringUrl: String?, musicArray: IMusicArray<IMediaPlayInfo>) {
+        stringUrl?.apply {
+            musicArray.changeThisPlayIndexAndAdd(this)
+            holderMusicArrays[musicArray.attributeId]?.apply {
+                thsPlayingArray = this
+            }
         }
     }
 
@@ -86,8 +89,9 @@ internal class PlayQueueManagerImpl :
         val info = partnerInstance;
         val normalMumusicArray = map[NORMAL_NAME]
         if (normalMumusicArray == null) {
-            map[NORMAL_NAME] =
-                info.createArrayParent(NORMAL_NAME) to convertRun.invoke(NORMAL_NAME, info)
+            val array = info.createArrayParent(NORMAL_NAME) to convertRun.invoke(NORMAL_NAME, info)
+            map[NORMAL_NAME] = array
+            thsPlayingArray = array
         }
         config?.let {
             for (v in it) {
@@ -99,7 +103,7 @@ internal class PlayQueueManagerImpl :
     }
 
     override fun getPlayingQueue(): IMusicArray<IMediaPlayInfo>? {
-        return thsPlayingArray.second
+        return thsPlayingArray?.second
     }
 
     override fun getMusicQueueByMusicItem(info: IMediaPlayInfo): Set<IMusicArray<IAttribute>> {
@@ -108,9 +112,13 @@ internal class PlayQueueManagerImpl :
 
     override fun getPlayingQueueName(): String? = thsPlayingArray?.first?.attributeId
 
-    override fun getPlayingInfo(): IMediaPlayInfo {
-        val i = thsPlayingArray.second;
-        return i.realData()[i.thisPlayIndex()]
+    override fun getPlayingInfo(): IMediaPlayInfo? {
+        val i = thsPlayingArray?.second;
+        return if (i != null) {
+            i.realData()[i.thisPlayIndex()]
+        } else {
+            null
+        }
     }
 
     override fun getListenerManager(): IPlayQueueManager.ListenerManager {
@@ -144,7 +152,7 @@ internal class PlayQueueManagerImpl :
     }
 
     override fun getPlayController(): IPlayController {
-        return thsPlayingArray.second.getPlayController()!!
+        return thsPlayingArray!!.second.getPlayController()!!
     }
 
     override fun observerState(life: ILifeObject?, p: PlayMusicObervser) {
