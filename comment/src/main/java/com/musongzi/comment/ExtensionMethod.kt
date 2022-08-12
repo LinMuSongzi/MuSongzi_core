@@ -269,7 +269,7 @@ object ExtensionMethod {
     }
 
     @JvmStatic
-    fun <T> String.savedStateAllLiveChangevalue(values: T) {
+    fun <T> String.savedStateAllLiveChangeValue(values: T) {
         val r: (IHolderSavedStateHandle?, Activity) -> Unit = { f, activity ->
             if (!activity.isFinishing) {
                 f?.getHolderSavedStateHandle()?.set(this, values)

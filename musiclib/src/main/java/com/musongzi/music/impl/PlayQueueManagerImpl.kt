@@ -8,6 +8,7 @@ import com.musongzi.core.base.manager.ManagerUtil.getHolderManager
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.ILifeObject
 import com.musongzi.music.itf.*
+import com.musongzi.music.itf.IPlayQueueManager.Companion.NORMAL_NAME
 import com.musongzi.music.itf.small.*
 
 /*** created by linhui
@@ -83,6 +84,7 @@ internal class PlayQueueManagerImpl :
             val array = info.createArrayParent(NORMAL_NAME) to convertRun.invoke(NORMAL_NAME, info)
             map[NORMAL_NAME] = array
             thsPlayingArray = array
+            thsPlayingArray.second.getHolderPageEngine().refresh()
         }
         config?.let {
             for (v in it) {
@@ -203,9 +205,6 @@ internal class PlayQueueManagerImpl :
     }
 
     companion object {
-
-        const val NORMAL_NAME = "NORMAL_NAME"
-
         internal fun getInstance(): PlayQueueManagerImpl {
             return getHolderManager<IPlayQueueManager>(IPlayQueueManager.MANAGER_ID) as PlayQueueManagerImpl
         }

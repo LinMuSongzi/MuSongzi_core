@@ -1,6 +1,8 @@
 package com.musongzi.test.business
 
 import android.util.Log
+import com.musongzi.comment.ExtensionMethod.saveStateChange
+import com.musongzi.comment.ExtensionMethod.savedStateAllLiveChangeValue
 import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.IViewInstance
@@ -19,7 +21,7 @@ import io.reactivex.rxjava3.core.Observable
 class MusicConfigHelpBusines : BaseMapBusiness<IViewInstance>(), IMusicInit {
 
     companion object {
-        const val SIMPLE_ARRAY = "simple_music_array"
+        const val SIMPLE_ARRAY = IPlayQueueManager.NORMAL_NAME
     }
 
     private val observableArray = Observable.create<Set<String>> {
@@ -92,7 +94,8 @@ class MusicConfigHelpBusines : BaseMapBusiness<IViewInstance>(), IMusicInit {
                         val o = Observable.create<ObservableMusicArrayEntity> {
                             it.onNext(ObservableMusicArrayEntity(n,t,action))
                         }
-                        getHolderSavedStateHandle().getLiveData<Observable<ObservableMusicArrayEntity>>(n).value = o
+                    n.saveStateChange(this@MusicConfigHelpBusines,o)
+                    //getHolderSavedStateHandle().getLiveData<Observable<ObservableMusicArrayEntity>>(n).value = o
                     }
 
                     override fun transformDataToList(entity: AlbumMusicsRemoteBean): List<IMediaPlayInfo> {

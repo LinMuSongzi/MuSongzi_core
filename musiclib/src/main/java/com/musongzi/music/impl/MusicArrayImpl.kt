@@ -27,13 +27,23 @@ import com.musongzi.music.itf.IMusicArray.Companion.INDEX_NORMAL
 class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataPacket: RemoteDataPacket<I, D>) :
     Container<ISource<I>>(name), IMusicArray<I>, IRead2 {
 
+    /**
+     * 当前队列的播放器
+     */
     private val controller: IPlayController by lazy {
         Factory.createProxyPlayMusicController(this@MusicArrayImpl)
     }
+
+    /**
+     * 音乐队列数据引擎
+     */
     private val musicPageEngine: IPageEngine<I> by lazy {
         PageSupport(callBack)
     }
 
+    /**
+     * 当前播放的下标
+     */
     private var playIndexLiveData: MutableLiveData<Int> =
         object : MutableLiveData<Int>(mixIndexState(0, INDEX_NORMAL)) {
             override fun setValue(value: Int) {
@@ -44,8 +54,17 @@ class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataPacket: RemoteData
                 }
             }
         }
+
+    /**
+     * 数据引擎的注入回调
+     */
     private var callBack: PageSupport.CallBack<I, D>
 
+    /**
+     * 初始化了数据集合
+     * 构建一个基本的音乐队列数据引擎
+     * 新增一个音乐下标观察者，观察者用来观察下标来达到，音乐的播放
+     */
     init {
         child = SourceImpl();
         callBack = MusicPageCallBack(dataPacket)
@@ -56,7 +75,6 @@ class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataPacket: RemoteData
             getPlayController().playMusicByInfo(realData()[it])
         }
     }
-
 
     override fun thisPlayIndex(): Int {
         return playIndexLiveData.value!!

@@ -21,18 +21,38 @@ import com.musongzi.music.bean.MusicPlayInfoImpl
  *
  * */
 interface IMusicArray<I : IAttribute> : IAttributeArray<I>, IHolderPlayController, IHolderRead<IRead2>{
+
+    /**
+     * 当前的播放的基于当前音乐集合的下标
+     */
     fun thisPlayIndex(): Int
+
+    /**
+     * 切换音乐集合的播放下标，会触发音乐播放
+     */
     fun changeThisPlayIndex(index: Int)
+
+    /**
+     * 新增一个播放地址，并且添加到当前音乐队列
+     *  @param stringUrl 注意：如果当前此播放器的地址与队列的音乐信息某个id相同时或者则不会去扩展音乐队列
+     */
     fun changeThisPlayIndexAndAdd(stringUrl: String)
 
+    /**
+     * 省略
+     */
     override fun enableRefreshLimit(enable: Boolean) {
         (getHolderPageEngine() as? ILimitOnLoaderState)?.enableRefreshLimit(enable)
     }
-
+    /**
+     * 省略
+     */
     override fun enableMoreLoadLimit(enable: Boolean) {
         (getHolderPageEngine() as? ILimitOnLoaderState)?.enableMoreLoadLimit(enable)
     }
-
+    /**
+     * 获取当前的音乐队列/专辑的远端数据引擎
+     */
     override fun getHolderPageEngine(): IPageEngine<I>
 
     companion object {
