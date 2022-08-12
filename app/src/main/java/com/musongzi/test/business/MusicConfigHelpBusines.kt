@@ -4,14 +4,10 @@ import android.util.Log
 import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.IViewInstance
-import com.musongzi.core.itf.page.IPageEngine
-import com.musongzi.music.bean.Container
 import com.musongzi.music.itf.IMusicInit
-import com.musongzi.music.impl.MusicArrayImpl
-import com.musongzi.music.itf.MusicDataProxy
+import com.musongzi.music.itf.RemoteDataPacket
 import com.musongzi.music.itf.IMediaPlayInfo
 import com.musongzi.music.itf.IMusicArray
-import com.musongzi.music.itf.IPlayController
 import com.musongzi.music.itf.IPlayQueueManager
 import com.musongzi.test.bean.SongArrayInfo
 import com.musongzi.test.bean.SongInfo
@@ -48,8 +44,8 @@ class MusicConfigHelpBusines : BaseMapBusiness<IViewInstance>(), IMusicInit {
         }
     }
 
-    override fun <I : IMediaPlayInfo, D> createMusicDataProxy(name: String): MusicDataProxy<I, D> {
-        return createDataProxy(name) as MusicDataProxy<I, D>
+    override fun <I : IMediaPlayInfo, D> createMusicDataProxy(name: String): RemoteDataPacket<I, D> {
+        return createDataProxy(name) as RemoteDataPacket<I, D>
     }
 
     override fun <I : IMediaPlayInfo> createTrackImpl(name: String): IMusicArray<I>? {
@@ -64,10 +60,10 @@ class MusicConfigHelpBusines : BaseMapBusiness<IViewInstance>(), IMusicInit {
 //        } as IMusicArray<IAttribute>
 //    }
 
-    private fun createDataProxy(n: String): MusicDataProxy<IMediaPlayInfo, AlbumMusicsRemoteBean> {
+    private fun createDataProxy(n: String): RemoteDataPacket<IMediaPlayInfo, AlbumMusicsRemoteBean> {
         when (n) {
             SIMPLE_ARRAY -> {
-                return object : MusicDataProxy<IMediaPlayInfo, AlbumMusicsRemoteBean> {
+                return object : RemoteDataPacket<IMediaPlayInfo, AlbumMusicsRemoteBean> {
                     override fun getRemoteData(page: Int): Observable<AlbumMusicsRemoteBean>? {
 //                        getHolderSavedStateHandle()
                         return Observable.create<AlbumMusicsRemoteBean> {

@@ -7,11 +7,11 @@ import com.musongzi.core.itf.ILifeObject
 import com.musongzi.music.itf.IMediaPlayInfo
 import com.musongzi.music.itf.IPlayController
 import com.musongzi.music.itf.IPlayQueueManager
-import com.musongzi.music.itf.PlayMusicObervser
+import com.musongzi.music.itf.PlayMediaObervser
 import com.musongzi.music.itf.small.*
 
 /*** created by linhui * on 2022/7/29 */
-class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMusicObervser {
+class LocalListenerManager : IPlayQueueManager.ListenerManager, PlayMediaObervser {
 
 
     companion object{

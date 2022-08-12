@@ -3,8 +3,6 @@ package com.musongzi.music.impl
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.manager.ManagerUtil.getHolderManager
 import com.musongzi.core.itf.IAttribute
@@ -12,11 +10,13 @@ import com.musongzi.core.itf.ILifeObject
 import com.musongzi.music.itf.*
 import com.musongzi.music.itf.small.*
 
-/*** created by linhui * on 2022/7/28 */
+/*** created by linhui
+ *管理一个播放队列
+ * * on 2022/7/28 */
 internal class PlayQueueManagerImpl :
-    ISmartPlayQueueManager, PlayMusicObervser {
+    ISmartPlayQueueManager, PlayMediaObervser {
 
-    private var observerStates = HashSet<PlayMusicObervser>()
+    private var observerStates = HashSet<PlayMediaObervser>()
     private lateinit var thsPlayingArray:Pair<IAttribute, IMusicArray<IMediaPlayInfo>>
     /**
      *  HashMap<String, Pair<IAttribute, IMusicArray>>
@@ -39,21 +39,12 @@ internal class PlayQueueManagerImpl :
     }
 
     override fun playMusic(info: IMediaPlayInfo, musicArray: IMusicArray<IMediaPlayInfo>) {
-        TODO("Not yet implemented")
+        playerManager.playMusicByInfo(info)
     }
 
 
     override fun playMusic(stringUrl: String, musicArray: IMusicArray<IMediaPlayInfo>) {
-//        if (thsPlayingArray.second != musicArray) {
-//            changePlayArray(stringUrl, musicArray);
-//        } else {
-//            val index = musicArray.realData().indexOf(stringUrl)
-//            if (index > 0) {
-//                musicArray.changeThisPlayIndex(index)
-//            } else {
-//                musicArray.changeThisPlayIndexAndAdd(stringUrl)
-//            }
-//        }
+        playerManager.playMusic(stringUrl)
     }
 
     private fun changePlayArray(stringUrl: String?, musicArray: IMusicArray<IMediaPlayInfo>) {
@@ -152,10 +143,10 @@ internal class PlayQueueManagerImpl :
     }
 
     override fun getPlayController(): IPlayController {
-        return thsPlayingArray!!.second.getPlayController()!!
+        return thsPlayingArray.second.getPlayController()!!
     }
 
-    override fun observerState(life: ILifeObject?, p: PlayMusicObervser) {
+    override fun observerState(life: ILifeObject?, p: PlayMediaObervser) {
         life?.getThisLifecycle()?.let {
             it.lifecycle.addObserver(MusicObserver(p))
         }
@@ -164,7 +155,7 @@ internal class PlayQueueManagerImpl :
     internal class MusicObserver(private val p: Any) : DefaultLifecycleObserver {
         override fun onCreate(owner: LifecycleOwner) {
             when (p) {
-                is PlayMusicObervser -> {
+                is PlayMediaObervser -> {
                     getInstance().observerStates.add(p)
                 }
                 is OnPlayCompleteListener -> {
@@ -187,7 +178,7 @@ internal class PlayQueueManagerImpl :
 
         override fun onDestroy(owner: LifecycleOwner) {
             val flag = when (p) {
-                is PlayMusicObervser -> {
+                is PlayMediaObervser -> {
                     getInstance().observerStates.remove(p)
                 }
                 is OnPlayCompleteListener -> {

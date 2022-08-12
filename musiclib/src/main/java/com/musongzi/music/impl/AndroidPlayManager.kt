@@ -3,19 +3,17 @@ package com.musongzi.music.impl
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.Looper
-import android.util.Log
 import com.musongzi.core.itf.ILifeObject
 import com.musongzi.music.itf.IMediaPlayInfo
 import com.musongzi.music.itf.IPlayController
 import com.musongzi.music.itf.IPlayerManager
-import com.musongzi.music.itf.PlayMusicObervser
+import com.musongzi.music.itf.PlayMediaObervser
 
 /*** created by linhui * on 2022/8/1 */
 internal class AndroidPlayManager : IPlayerManager, MediaPlayer.OnInfoListener,
     MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener {
 
-    lateinit var corePlayMusicObervser: PlayMusicObervser
+    lateinit var corePlayMusicObervser: PlayMediaObervser
 
     val dalayMillis = 500L
 
@@ -45,11 +43,11 @@ internal class AndroidPlayManager : IPlayerManager, MediaPlayer.OnInfoListener,
 
     }
 
-    override fun observerState(p: PlayMusicObervser) {
+    override fun observerState(p: PlayMediaObervser) {
         corePlayMusicObervser = p;
     }
 
-    override fun observerState(life: ILifeObject?, p: PlayMusicObervser) {
+    override fun observerState(life: ILifeObject?, p: PlayMediaObervser) {
 //        TODO("Not yet implemented")
 
     }

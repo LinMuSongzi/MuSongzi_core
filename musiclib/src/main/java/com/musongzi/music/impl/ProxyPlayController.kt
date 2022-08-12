@@ -22,7 +22,7 @@ internal class ProxyPlayController(val manager: ISmartPlayQueueManager, private 
         manager.stopMusic(musicArray)
     }
 
-    override fun observerState(life:ILifeObject?,p: PlayMusicObervser) {
+    override fun observerState(life:ILifeObject?,p: PlayMediaObervser) {
         manager.observerState(life,p)
     }
 

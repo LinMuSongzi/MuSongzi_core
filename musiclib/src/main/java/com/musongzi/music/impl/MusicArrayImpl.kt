@@ -14,11 +14,17 @@ import com.musongzi.music.itf.*
 import com.musongzi.music.itf.IMusicArray.Companion.INDEX_NORMAL
 
 /*** created by linhui * on 2022/7/28
- * 音乐队列
- *  管理队列播放
+ * 音乐队列[IMusicArray] 具体业务实现类
+ * 管理队列播放下标[MusicArrayImpl.playIndexLiveData]
+ * 管理数据加载[MusicArrayImpl.callBack] [MusicArrayImpl.musicPageEngine]
+ *
+ * 初始化时候获取到注入的数据加载模型和被观察者[RemoteDataPacket]
+ *
+ * 实现了[IRead2] 左右切换和更新歌曲
+ * [IRead2.pre]上一首  ;  [IRead2.refresh]刷新   ;  [IRead2.next]下一首
  *
  * */
-class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataProxy: MusicDataProxy<I, D>) :
+class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataPacket: RemoteDataPacket<I, D>) :
     Container<ISource<I>>(name), IMusicArray<I>, IRead2 {
 
     private val controller: IPlayController by lazy {
@@ -42,7 +48,7 @@ class MusicArrayImpl<I : IMediaPlayInfo, D>(name: String, dataProxy: MusicDataPr
 
     init {
         child = SourceImpl();
-        callBack = MusicPageCallBack(dataProxy)
+        callBack = MusicPageCallBack(dataPacket)
         playIndexLiveData.observeForever {
             if (it.and(INDEX_NORMAL) > 0) {
                 return@observeForever

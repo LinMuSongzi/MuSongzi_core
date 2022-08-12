@@ -2,7 +2,6 @@ package com.musongzi.music.impl
 
 import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.base.manager.ManagerInstanceHelp
-import com.musongzi.core.itf.IAttribute
 import com.musongzi.music.itf.*
 
 /*** created by linhui * on 2022/7/28  */
@@ -46,10 +45,10 @@ object Factory {
 
     fun <I : IMediaPlayInfo, D> createNativeMusicArray(
         name: String,
-        dataProxy: MusicDataProxy<I, D>,
+        dataPacket: RemoteDataPacket<I, D>,
         trackImpl: IMusicArray<I>?
     ): IMusicArray<I> {
-        return MusicContainerArray(name, dataProxy, trackImpl)
+        return MusicContainerArray(name, dataPacket, trackImpl)
     }
 
 }

@@ -2,7 +2,6 @@ package com.musongzi.music.itf
 
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.music.impl.Factory
-import com.musongzi.music.impl.MusicContainerArray
 
 /*** created by linhui * on 2022/8/1 */
 interface IMusicInit {
@@ -34,7 +33,7 @@ interface IMusicInit {
      */
     fun createArrayParent(info: Any): IAttribute
 
-    fun <I : IMediaPlayInfo, D> createMusicDataProxy(name: String): MusicDataProxy<I, D>
+    fun <I : IMediaPlayInfo, D> createMusicDataProxy(name: String): RemoteDataPacket<I, D>
 
     fun <I : IMediaPlayInfo> createTrackImpl(name: String): IMusicArray<I>?
 
@@ -43,9 +42,9 @@ interface IMusicInit {
      */
     fun <I : IMediaPlayInfo, D> createMusicArray(
         name: String,
-        dataProxy: MusicDataProxy<I, D>,
+        dataPacket: RemoteDataPacket<I, D>,
         trackImpl: IMusicArray<I>? = null
-    ) = Factory.createNativeMusicArray(name, dataProxy, trackImpl)
+    ) = Factory.createNativeMusicArray(name, dataPacket, trackImpl)
 
     /**
      * 创建音乐实体
