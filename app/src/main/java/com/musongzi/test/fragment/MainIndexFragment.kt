@@ -1,8 +1,12 @@
 package com.musongzi.test.fragment
 
+import android.os.AsyncTask
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.musongzi.comment.client.IMainIndexClient
+import com.musongzi.core.StringChooseBean
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.test.databinding.FragmentMainIndexBinding
 import com.musongzi.test.vm.MainIndexViewModel
@@ -13,10 +17,37 @@ class MainIndexFragment : ModelFragment<MainIndexViewModel, FragmentMainIndexBin
 
     override fun initView() {
         getViewModel().business.buildDataBySize()
+        (getRecycleView().itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
     }
 
     override fun initEvent() {
-
+//        id_title = findViewById(R.id.id_title)
+//        object : AsyncTask<String, Int, StringChooseBean>() {
+//            override fun doInBackground(vararg params: String?): StringChooseBean {
+//                var time = 10_000
+//                while (time >= 0) {
+//                    publishProgress(time)
+//                    time -= 50
+//                    Thread.sleep(50)
+//                }
+//                return StringChooseBean().apply {
+//                    title = "完成"
+//                    id_ = time.toString() + "_ok"
+//                }
+//            }
+//
+//            override fun onPostExecute(result: StringChooseBean?) {
+//                Log.i("AsyncTask", "onPostExecute: $result")
+//            }
+//
+//            override fun onProgressUpdate(vararg values: Int?) {
+//                getViewModel().getSource().realData()[0].title = "v:"+values[0]
+//                getRecycleView().adapter?.notifyItemChanged(0)
+////                toast()
+//                Log.i("AsyncTask", "onProgressUpdate: ${values[0]}")
+//            }
+//
+//        }.execute("haha")
     }
 
     override fun initData() {

@@ -129,8 +129,7 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun <T> T.layoutInflater(p: ViewGroup, res: Int) =
-        LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(res, p, false);
+    fun Int.layoutInflater(p: ViewGroup?) = LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(this, p, false);
 
     @JvmStatic
     fun SmartRefreshLayout.refreshLayoutInit(

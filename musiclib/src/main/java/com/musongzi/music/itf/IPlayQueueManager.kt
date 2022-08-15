@@ -17,7 +17,6 @@ import kotlin.reflect.KClass
  * 控制器通过 [IPlayQueueManager.getPlayController] 获取
  * 获得的控制器是基于当前[IMusicArray]音乐队列的(实现类[MusicArrayImpl])
  * [com.musongzi.music.impl.MusicArrayImpl] 实现了 [com.musongzi.core.itf.page.IRead2]
- * 具备当前音乐队列/专辑的，
  * 上一首[com.musongzi.core.itf.page.IRead2.pre] ,
  * 下一首[com.musongzi.core.itf.page.IRead2.next],
  * 重新播放[com.musongzi.core.itf.page.IRead2.refresh] 基本功能

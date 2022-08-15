@@ -44,11 +44,11 @@ class MyApplication : MultiDexApplication() {
             WriteTxt.exception(e)
         }
 
-        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
-            MusicConfigHelpBusines().apply {
-                afterHandlerBusiness()
-            }
-        }), classLoader)
+//        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
+//            MusicConfigHelpBusines().apply {
+//                afterHandlerBusiness()
+//            }
+//        }), classLoader)
 
         EventBus.getDefault().register(this)
         registerEvent(ILoginEvent::class.java) {

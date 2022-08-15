@@ -2,12 +2,14 @@ package com.musongzi.comment
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -33,6 +35,7 @@ import com.musongzi.core.base.bean.ActivityDescribe
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
+import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
@@ -154,7 +157,10 @@ object ExtensionMethod {
                 mStyleMessageDescribe,
                 if (businessClassName != null) BusinessInfo(businessClassName) else null
             )
-            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, ActivityDescribe(activityClass.name, fInfo))
+            intent.putExtra(
+                SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY,
+                ActivityDescribe(activityClass.name, fInfo)
+            )
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
             }
@@ -200,19 +206,39 @@ object ExtensionMethod {
         }
     }
 
-    fun toast(msg: String?, activity: Activity? = null) {
-        msg?.let {
+    fun toast(msg: String?, activity: Activity? = null, cacheKey: String? = "TOAST_KEY") {
+        if (msg != null) {
             if (Thread.currentThread() != Looper.getMainLooper().thread) {
+                Log.i("AsyncTask", "toast: change")
                 Handler(Looper.getMainLooper()).post {
-                    toast(it)
+                    toast(msg)
                 }
                 return
             }
-            val c = activity ?: ActivityLifeManager.getInstance().getTopActivity()
-            if (c != null && !c.isFinishing) {
-                Toast.makeText(c, it, Toast.LENGTH_SHORT).show()
+            val context = activity ?: ActivityLifeManager.getInstance().getTopActivity()
+
+            val runnable: (Activity?, String) -> Toast = { c, str ->
+                val toast = if (c != null && !c.isFinishing) {
+                    Toast.makeText(c, str, Toast.LENGTH_SHORT)
+                } else {
+                    Toast.makeText(getCurrentApplication(), str, Toast.LENGTH_SHORT)
+                }
+                toast
+            }
+
+            if (context is IHolderSupportActivityBusiness && cacheKey != null
+                && context is LifecycleOwner && context.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
+            ) {
+                val mISaveStateHandle =
+                    context.getHolderSupprotActivityBusiness().getLocalHolderSavedStateHandle()
+                val cacheToast: Toast? = mISaveStateHandle[cacheKey]
+                (cacheToast ?: runnable.invoke(context, msg).apply {
+                    mISaveStateHandle[cacheKey] = this
+                }).apply {
+                    setText(msg)
+                }.show()
             } else {
-                Toast.makeText(getCurrentApplication(), it, Toast.LENGTH_SHORT).show()
+                runnable.invoke(context, msg).show()
             }
         }
     }

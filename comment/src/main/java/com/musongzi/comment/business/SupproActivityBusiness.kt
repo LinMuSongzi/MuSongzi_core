@@ -8,6 +8,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
@@ -19,9 +20,11 @@ import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
+import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.databinding.ActivityNormalFragmentBinding
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.INotifyDataSetChanged
+import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
@@ -36,6 +39,9 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 /*** created by linhui * on 2022/7/6 */
 class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActivityBusiness {
 
+    private val mLocalSavedHandler: ISaveStateHandle by lazy {
+        LocalSavedHandler()
+    }
     lateinit var dataBinding: ActivityNormalFragmentBinding
 
     override fun checkEvent() {
@@ -73,6 +79,10 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         }
     }
 
+    override fun getLocalHolderSavedStateHandle(): ISaveStateHandle {
+      return  mLocalSavedHandler
+    }
+
     private fun handlerWindowFlag(a: ActivityDescribe) {
 
     }
@@ -104,6 +114,10 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
 
     override fun getHolderContext(): Context? {
         return (iAgent as IHolderActivity).getHolderContext()
+    }
+
+    override fun getHolderDataBinding(): ViewDataBinding {
+        return dataBinding
     }
 
     class HolderLifecycleImpl(private val savedInstance: Bundle?, var activity: IHolderContext) :

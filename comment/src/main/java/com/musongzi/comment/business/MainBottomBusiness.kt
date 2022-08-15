@@ -47,7 +47,9 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
             }
             handlerViewPageValues()
         }
-
+        /**
+         * 默认选择第一个
+         */
         INDEX_CLICK_SAVED_KEY.saveStateChange(iAgent, 0)
     }
 
@@ -90,6 +92,9 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
                 colorPair,
                 imageArray[index]
             ) {
+                /**
+                 * 点击事件触发
+                 */
                 INDEX_CLICK_SAVED_KEY.saveStateChange(holderSavedStateHandle, index)
             }
         }

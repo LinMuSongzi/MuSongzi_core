@@ -1,9 +1,8 @@
 package com.musongzi.core.base.business
 
 import android.util.Log
-import com.musongzi.core.base.map.HostSavedHandler
+import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.itf.*
-import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.util.InjectionHelp
 import java.lang.Exception
 import kotlin.jvm.Throws
@@ -14,7 +13,7 @@ abstract class BaseMapBusiness<L: IViewInstance> : IAgentHolder<L> ,IHolderSaved
     protected val TAG = javaClass.simpleName
 
     private var cacheBusinessMaps = HashMap<String, IBusiness>()
-    private var hostSavedHandler:ISaveStateHandle = HostSavedHandler()
+    private var hostSavedHandler:ISaveStateHandle = LocalSavedHandler()
 
     override fun getHolderSavedStateHandle(): ISaveStateHandle {
        return hostSavedHandler
