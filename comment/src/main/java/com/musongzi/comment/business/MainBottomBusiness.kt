@@ -1,14 +1,22 @@
 package com.musongzi.comment.business
 
+import android.Manifest
+import android.util.Log
 import android.view.View
+import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.musongzi.comment.ExtensionMethod.getNextBusiness
 import com.musongzi.comment.ExtensionMethod.getSaveStateValue
 import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.ExtensionMethod.saveStateChange
+import com.musongzi.comment.ExtensionMethod.toast
 import com.musongzi.comment.R
 import com.musongzi.comment.bean.ImageLoadBean
 import com.musongzi.comment.bean.SimpleCardInfo
+import com.musongzi.comment.business.PermissionHelpBusiness.Companion.getNext
+import com.musongzi.comment.business.PermissionHelpBusiness.Companion.quickRequestPermission
 import com.musongzi.comment.business.itf.IMainIndexBusiness
 import com.musongzi.comment.viewmodel.itf.IMainIndexViewModel
 import com.musongzi.comment.databinding.AdapterMainBottomItemBinding
@@ -19,6 +27,8 @@ import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.util.ScreenUtil
 import com.musongzi.core.util.ScreenUtil.SCREEN_1_5_WDITH
+import java.util.*
+import kotlin.collections.ArrayList
 
 /*** created by linhui * on 2022/7/20 */
 abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMainIndexBusiness {
@@ -38,9 +48,10 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
                     i.onClick.invoke(it)
                 }
             }
-            iAgent.getHolderClient()?.getRecycleView()?.linearLayoutManager(LinearLayoutManager.HORIZONTAL) {
+            iAgent.getHolderClient()?.getRecycleView()
+                ?.linearLayoutManager(LinearLayoutManager.HORIZONTAL) {
                     adapter
-            }
+                }
             INDEX_CLICK_SAVED_KEY.liveSaveStateObserver<Int>(iAgent) {
                 iAgent.wantPick().pickRun(source.realData()[it])
                 adapter.notifyDataSetChanged()
@@ -51,12 +62,37 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
          * 默认选择第一个
          */
         INDEX_CLICK_SAVED_KEY.saveStateChange(iAgent, 0)
+
+        val a = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        quickRequestPermission(a, {
+//            Log.i(TAG, "buildDataBySize: 申请权限成功的集合 ， ${it.keys.toTypedArray().contentToString()}")
+//        }) {
+//            Log.i(TAG, "buildDataBySize: 申请权限失败的集合 ， ${it.keys.toTypedArray().contentToString()}")
+//        }
+
+        iAgent.getHolderClient()?.getHolderContext()?.let {
+
+            if (it is AppCompatActivity) {
+                it.getNext()?.quickRequestPermission(a, {
+                    Log.i(
+                        TAG,
+                        "buildDataBySize: 申请权限成功的集合 ， ${it.keys.toTypedArray().contentToString()}"
+                    )
+                }) {
+                    Log.i(
+                        TAG,
+                        "buildDataBySize: 申请权限失败的集合 ， ${it.keys.toTypedArray().contentToString()}"
+                    )
+                }
+            }
+
+        }
     }
 
     private fun handlerViewPageValues() {
         val size = FRAGMENT_SZIE_KEY.getSaveStateValue<Int?>(iAgent)
         if (size == null) {
-             val fragments = buildFragments()
+            val fragments = buildFragments()
             iAgent.getHolderClient()?.apply {
 //                getViewpage2().bindAdapter(,iAgent.getThisLifecycle(),fragmentList = fragments)
             }

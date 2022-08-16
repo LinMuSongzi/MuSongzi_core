@@ -31,7 +31,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitManager {
 
-    private static final String URL = "";
+    private static final String URL = "http://shange.musiccz.net:6060/";
+
 
     static RetrofitManager MANAGER;
     private Map<String, Object> apis = new HashMap<>();

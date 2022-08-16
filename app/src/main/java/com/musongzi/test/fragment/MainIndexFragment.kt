@@ -1,5 +1,6 @@
 package com.musongzi.test.fragment
 
+import android.app.Activity
 import android.os.AsyncTask
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,9 @@ class MainIndexFragment : ModelFragment<MainIndexViewModel, FragmentMainIndexBin
     override fun initView() {
         getViewModel().business.buildDataBySize()
         (getRecycleView().itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+    }
+    override fun getHolderContext(): Activity {
+        return requireActivity()
     }
 
     override fun initEvent() {

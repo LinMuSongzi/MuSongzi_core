@@ -120,7 +120,7 @@ object ExtensionCoreMethod {
 //        ThreadUtil.startThread(r)
     }
 
-    fun <T> Observable<T>.sub(c: Consumer<T>) {
+    inline fun <T> Observable<T>.sub(c: Consumer<T>) {
         subscribe(CoreObserver(c))
     }
 

@@ -40,6 +40,7 @@ import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
+import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.INeed
@@ -49,6 +50,7 @@ import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.ScreenUtil
 import io.reactivex.rxjava3.core.Observable
+import kotlin.reflect.KClass
 
 /**
  * 一个提供扩展方法的地方
@@ -333,6 +335,9 @@ object ExtensionMethod {
         }
     }
 
+    fun <N : IBusiness> Class<N>.getNextBusiness(next: INeed): N? {
+        return next.getNext(this)
+    }
 
     @JvmStatic
     fun INeed.doubleLimiter(k: String, run: Runnable) {
