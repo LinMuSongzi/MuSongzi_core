@@ -10,6 +10,7 @@ import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
+import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.itf.data.IChoose
 import com.musongzi.core.itf.page.ISource
 
@@ -39,23 +40,26 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
 
     }
 
-
-    override fun buildViewByData(datas: List<Any>) {
-        client?.getRefreshClient<Any>()?.buildViewByData(datas)
+    override fun getHolderClient(): CollectionsViewClient? {
+        return super.getHolderClient()
     }
 
-    override fun setRefresh(b: Boolean) {
-        client?.getRefreshClient<Any>()?.setRefresh(b)
-    }
+//    override fun buildViewByData(datas: List<Any>) {
+//        client?.getRefreshClient<Any>()?.buildViewByData(datas)
+//    }
+//
+//    override fun setRefresh(b: Boolean) {
+//        client?.getRefreshClient<Any>()?.setRefresh(b)
+//    }
 
 
     override fun disimissDialog() {
         client?.getRefreshClient<Any>()?.disimissDialog()
     }
 
-    override fun notifyDataSetChangedItem(postiont: Int) {
-        client?.getRefreshClient<Any>()?.notifyDataSetChangedItem(postiont)
-    }
+//    override fun notifyDataSetChangedItem(postiont: Int) {
+//        client?.getRefreshClient<Any>()?.notifyDataSetChangedItem(postiont)
+//    }
 
     override fun getHolderContext(): Context? {
         return super.holderActivity?.getHolderContext()
@@ -66,9 +70,9 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
     }
 
 
-    override fun notifyDataSetChanged() {
-        client?.getRefreshClient<Any>()?.notifyDataSetChanged()
-    }
+//    override fun notifyDataSetChanged() {
+//        client?.getRefreshClient<Any>()?.notifyDataSetChanged()
+//    }
 
     override fun getBundle(): Bundle? = getArguments()
 
@@ -138,7 +142,8 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
     }
 
     override fun updateByPick(info: IChoose?) {
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
+        refreshHolderClient()?.notifyDataSetChanged()
     }
 
     fun joinLazyLoad() {
@@ -150,6 +155,10 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
         const val LAZY_LOAD_OPEN_FLAG = 0x101
         const val LAZY_LOAD_CLOSE_FLAG = 0x102
 
+    }
+
+    override fun refreshHolderClient(): IRefreshClient<Any>? {
+        return client?.getRefreshClient()
     }
 
 }

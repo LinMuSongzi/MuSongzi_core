@@ -8,7 +8,7 @@ import com.musongzi.core.itf.holder.IHolderDataBinding
 /*** created by linhui * on 2022/7/6
  *
  * 提供给activity的一个封装类
- * 
+ *
  * 里面包含基于livedata的了 [IHolderSavedStateHandle] 和本地数据访问[getLocalHolderSavedStateHandle]
  * 提供了基本的视图[getHolderDataBinding]
  *

@@ -11,6 +11,7 @@ import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.musongzi.GlideEngine
+import com.musongzi.comment.ExtensionMethod.convertFragemnt
 import com.musongzi.comment.ExtensionMethod.startActivityNormal
 import com.musongzi.comment.ExtensionMethod.startRecyeleActivity
 import com.musongzi.test.R
@@ -44,18 +45,22 @@ class SplashActivity : BaseActivity() {
 //                override fun onResult(result: ArrayList<LocalMedia?>?) {}
 //                override fun onCancel() {}
 //            })
-        MainIndexFragment::class.java.startActivityNormal(
-            "主页",
-            MainIndexActivity::class.java,
-            Color.WHITE,
-            null, TestMainIndexBusiness::class.java.name
-        )
+//        MainIndexFragment::class.java.startActivityNormal(
+//            "主页",
+//            MainIndexActivity::class.java,
+//            Color.WHITE,
+//            null, TestMainIndexBusiness::class.java.name
+//        )
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
 //        TestMainFragment::class.java.startActivityNormal("TestMainFragment")
 //        CollectionsViewFragment.
 
-//        ArrayEngine::class.java.startRecyeleActivity("列表")
+//        ArrayEngine::class.java.convertFragemnt{
+//
+//        }
+
+        ArrayEngine::class.java.startRecyeleActivity("测试列表")
 
     }
 

@@ -396,7 +396,7 @@ object ExtensionCoreMethod {
 
     @JvmStatic
     fun <T> ICollectionsViewEngine<*>.getApi(c: Class<T>): T {
-        return RetrofitManager.getInstance().getApi(c, getRefreshViewModel())
+        return RetrofitManager.getInstance().getApi(c, getRefreshViewModel()?.refreshHolderClient())
     }
 
 

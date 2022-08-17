@@ -32,6 +32,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
+import java.util.jar.Manifest
 
 /*** created by linhui * on 2022/8/16
  *
@@ -145,10 +146,28 @@ class PermissionHelpBusiness @JvmOverloads constructor(actvity: ComponentActivit
         }
 
         @JvmStatic
+        fun INeed.quickRequestCamera(onGrantedAll: () -> Unit) {
+            quickRequestPermission(arrayOf(android.Manifest.permission.CAMERA),onGrantedAll)
+        }
+
+        @JvmStatic
+        fun INeed.quickRequestCamera(
+            notAuthorized: (Map<String, Boolean>) -> Unit,
+            granted: (Map<String, Boolean>) -> Unit
+        ) {
+            quickRequestPermission(
+                arrayOf(android.Manifest.permission.CAMERA),
+                notAuthorized,
+                granted
+            )
+        }
+
+
+        @JvmStatic
         fun INeed.quickRequestPermission(
             array: Array<String>,
-            granted: (Map<String, Boolean>) -> Unit,
-            notAuthorized: (Map<String, Boolean>) -> Unit
+            notAuthorized: (Map<String, Boolean>) -> Unit,
+            granted: (Map<String, Boolean>) -> Unit
         ) {
             getNext(PermissionHelpBusiness::class.java)!!.observablePermission(array)
                 ?.onGranted(granted)?.onNotAuthorizedArray(notAuthorized)?.subscribe()

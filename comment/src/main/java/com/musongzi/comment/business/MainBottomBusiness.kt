@@ -74,14 +74,17 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
 
             if (it is AppCompatActivity) {
                 it.getNext()?.quickRequestPermission(a, {
+                        Log.i(
+                            TAG,
+                            "buildDataBySize: 申请权限失败的集合 ， ${
+                                it.keys.toTypedArray().contentToString()
+                            }"
+                        )
+                    }
+                ) {
                     Log.i(
                         TAG,
                         "buildDataBySize: 申请权限成功的集合 ， ${it.keys.toTypedArray().contentToString()}"
-                    )
-                }) {
-                    Log.i(
-                        TAG,
-                        "buildDataBySize: 申请权限失败的集合 ， ${it.keys.toTypedArray().contentToString()}"
                     )
                 }
             }

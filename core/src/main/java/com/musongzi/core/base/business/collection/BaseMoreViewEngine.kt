@@ -17,6 +17,7 @@ import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.base.page.PageSupport
+import com.musongzi.core.base.vm.IHandlerChooseViewModel
 import com.musongzi.core.itf.data.IChoose
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -129,7 +130,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun handlerState(integer: Int) {}
 
     override fun handlerData(items: List<Item>, action: Int) {
-        callBack.buildViewByData(items)
+        callBack.refreshHolderClient()?.buildViewByData(items)
     }
 
     final override fun getRemoteData(page: Int) =
@@ -163,17 +164,17 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     override fun getTag(): String = javaClass.name
 
-    fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
+    fun getMainLifecycle(): IHolderLifecycle? = callBack.refreshHolderClient()?.getMainLifecycle()
 
-    override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
+    override fun getThisLifecycle(): LifecycleOwner? = callBack.refreshHolderClient()?.getThisLifecycle()
 
     fun <C : IChoose> pickSingle(pick: C) {
-        (callBack as CollectionsViewModel).wantPick().pickRun(pick)
+        (callBack as? IHandlerChooseViewModel<*>)?.wantPick()?.pickRun(pick)
     }
 
     fun <C : IChoose> pickSingle(view: View, pick: C) {
         view.setOnClickListener {
-            (callBack as CollectionsViewModel).wantPick().pickRun(pick)
+            (callBack as? IHandlerChooseViewModel<*>)?.wantPick()?.pickRun(pick)
         }
     }
 
