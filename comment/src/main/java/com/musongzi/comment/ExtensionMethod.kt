@@ -2,7 +2,6 @@ package com.musongzi.comment
 
 import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -21,7 +20,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.musongzi.comment.ExtensionMethod.convertFragemnt
 import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
@@ -33,24 +31,25 @@ import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.base.bean.ActivityDescribe
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
-import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
+import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
+import com.musongzi.core.base.vm.EasyViewModel
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.INeed
+import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.ScreenUtil
 import io.reactivex.rxjava3.core.Observable
-import kotlin.reflect.KClass
 
 /**
  * 一个提供扩展方法的地方
@@ -133,9 +132,22 @@ object ExtensionMethod {
         return this;
     }
 
+    fun <V : ViewModel> Class<V>.instacne(
+        provider: ViewModelProvider?,
+        ifEsayViewModelInjectRun: ((EasyViewModel<*, *>) -> Unit)? = null
+    ): V? {
+        return provider?.let {
+            val vm = InjectionHelp.getViewModel(it, this) as V
+            (vm as? EasyViewModel<*, *>)?.apply {
+                ifEsayViewModelInjectRun?.invoke(this)
+            }
+            vm
+        }
+    }
+
     @JvmStatic
     fun CollectionsViewFragment.bindTotalSize(l: LifecycleOwner, run: Observer<Int>) {
-        totalLiveData.observe(l, run);
+        BaseCollectionsViewFragment.TOTAL_KEY.liveSaveStateObserverOnOwner(getViewModel(), run, l)
     }
 
     fun String.bean() = StringChooseBean().let {
@@ -253,13 +265,12 @@ object ExtensionMethod {
         holder.getHolderSavedStateHandle()[this] = v
     }
 
-
     /**
      * 观察数据基于“key”的livedate，
      * isRemove 是否此次监听仅为一次
      */
-    @JvmOverloads
     @JvmStatic
+    @JvmOverloads
     fun <T> String.liveSaveStateObserver(
         holder: ILifeSaveStateHandle,
         isRemove: Boolean = false,
@@ -279,6 +290,36 @@ object ExtensionMethod {
             }
         }
     }
+
+
+
+    /**
+     * 观察数据基于“key”的livedate，
+     * isRemove 是否此次监听仅为一次
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun <T> String.liveSaveStateObserverOnOwner(
+        holder: ILifeSaveStateHandle,
+        observer: Observer<T>,
+        l: LifecycleOwner,
+        isRemove: Boolean = false,
+    ) {
+        holder.getThisLifecycle()?.let {
+            val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+            if (isRemove) {
+                liveData.observe(l, object : Observer<T> {
+                    override fun onChanged(t: T) {
+                        observer.onChanged(t)
+                        liveData.removeObserver(this)
+                    }
+                })
+            } else {
+                liveData.observe(it, observer)
+            }
+        }
+    }
+
 
     /**
      * 获取基于“key”的可观察的livedata

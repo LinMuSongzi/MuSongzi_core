@@ -149,7 +149,7 @@ public class InjectionHelp {
         return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex, findClass);
     }
 
-    public static <V> V getViewModel(@NotNull ViewModelProvider provider, @org.jetbrains.annotations.Nullable Class clazz) {
+    public static <V extends ViewModel> V getViewModel(@NotNull ViewModelProvider provider, @org.jetbrains.annotations.Nullable Class clazz) {
         return (V) provider.get(clazz);
     }
 

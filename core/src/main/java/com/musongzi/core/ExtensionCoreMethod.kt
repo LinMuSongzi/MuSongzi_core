@@ -19,6 +19,7 @@ import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
+import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
@@ -395,8 +396,11 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun <T> ICollectionsViewEngine<*>.getApi(c: Class<T>): T {
-        return RetrofitManager.getInstance().getApi(c, getRefreshViewModel()?.refreshHolderClient())
+    fun <T> Class<T>.getApi(want: IWant? = null): T? {
+        if(!this.isInterface){
+            return null
+        }
+        return RetrofitManager.getInstance().getApi(this, want)
     }
 
 

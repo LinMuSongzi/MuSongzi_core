@@ -12,6 +12,7 @@ import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.itf.data.IChoose
+import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.ISource
 
 /**
@@ -65,9 +66,9 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
         return super.holderActivity?.getHolderContext()
     }
 
-    override fun getViewModelProvider(thisOrTopProvider: Boolean): ViewModelProvider {
-        return client?.getViewModelProvider(thisOrTopProvider)!!
-    }
+//    override fun getViewModelProvider(thisOrTopProvider: Boolean): ViewModelProvider {
+//        return client?.getViewModelProvider(thisOrTopProvider)!!
+//    }
 
 
 //    override fun notifyDataSetChanged() {
@@ -159,6 +160,10 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
 
     override fun refreshHolderClient(): IRefreshClient<Any>? {
         return client?.getRefreshClient()
+    }
+
+    override fun getHolderViewModelProvider(): IHolderViewModelProvider? {
+        return client
     }
 
 }

@@ -55,9 +55,6 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
 
     }
 
-    override fun getViewModelProvider(thisOrTopProvider: Boolean) =
-        if (thisOrTopProvider) ViewModelProvider(this) else ViewModelProvider(requireActivity());
-
     override fun createRecycleViewClient(): IRefreshViewClient {
         return object : IRefreshViewClient {
             override fun normalView() = dataBinding.layoutEmptyDataShow.root
