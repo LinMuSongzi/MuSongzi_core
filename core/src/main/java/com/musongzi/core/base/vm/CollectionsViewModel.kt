@@ -4,16 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.client.CollectionsViewClient
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.itf.data.IChoose
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
-import com.musongzi.core.itf.page.ISource
 
 /**
  * 构建一个自动填充的集合viewmode
@@ -23,7 +20,7 @@ import com.musongzi.core.itf.page.ISource
  *
  *
  */
-class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBusiness>(),
+class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusiness>(),
     IHandlerChooseViewModel<CollectionsBusiness>, IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
@@ -77,6 +74,9 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
 
     override fun getBundle(): Bundle? = getArguments()
 
+    /**
+     * 一个集合引擎参数信息
+     */
     class CollectionsInfo() : Parcelable {
 
         constructor(c: CollecttionsEngine?) : this() {
@@ -92,14 +92,54 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
             }
         }
 
+        /**
+         * 是否开启下拉刷新
+         */
         var isEnableReFresh = true
+
+        /**
+         * 是否开启加载更多
+         */
         var isEnableLoadMore = true
+
+        /**
+         * 是否注册eventbus
+         */
         var isEnableEventBus = true
+
+        /**
+         * 标题
+         */
         var title: String = ""
+
+        /**
+         * 无数据加载时要显示的布局提（有默认）
+         */
         var emptyLoadRes = 0
+
+        /**
+         * 制定当前的 viewmodel 的 key
+         */
         var modelKey: String = ""
+
+        /**
+         * 无数据时默认情况下ui提示的语言
+         */
         var emptyString: String = ""
+
+        /**
+         * 最核心的注入对象
+         * 继承于 [com.musongzi.core.base.business.collection.BaseMoreViewEngine]
+         */
         var engineName: String = ""
+
+        /**
+         * 是否开启懒加载
+         * 默认不是
+         * 开启懒加载后，第一次打开不会自动加载数据
+         * [LAZY_LOAD_OPEN_FLAG]
+         * [LAZY_LOAD_CLOSE_FLAG]
+         */
         var openLazyLoad = LAZY_LOAD_CLOSE_FLAG
 
 
@@ -152,8 +192,14 @@ class CollectionsViewModel : EasyViewModel<CollectionsViewClient, CollectionsBus
     }
 
     companion object {
-
+        /**
+         * 集合引擎，懒加载开启
+         */
         const val LAZY_LOAD_OPEN_FLAG = 0x101
+
+        /**
+         * 集合引擎，懒加载关闭
+         */
         const val LAZY_LOAD_CLOSE_FLAG = 0x102
 
     }

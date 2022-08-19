@@ -1,19 +1,16 @@
 package com.musongzi.test.fragment
 
 import android.app.Activity
-import android.os.AsyncTask
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.musongzi.comment.client.IMainIndexClient
-import com.musongzi.core.StringChooseBean
-import com.musongzi.core.base.fragment.ModelFragment
+import com.musongzi.core.base.fragment.MszFragment
 import com.musongzi.test.databinding.FragmentMainIndexBinding
 import com.musongzi.test.vm.MainIndexViewModel
 
 /*** created by linhui * on 2022/7/20 */
-class MainIndexFragment : ModelFragment<MainIndexViewModel, FragmentMainIndexBinding>(),
+class MainIndexFragment : MszFragment<MainIndexViewModel, FragmentMainIndexBinding>(),
     IMainIndexClient {
 
     override fun initView() {

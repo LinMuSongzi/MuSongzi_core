@@ -2,18 +2,10 @@ package com.musongzi.music
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
-import com.musongzi.comment.activity.NormalFragmentActivity
+import com.musongzi.comment.activity.MszFragmentActivity
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.music.itf.IMediaPlayInfo
-import com.musongzi.music.itf.IPlayQueueManager
-import com.musongzi.music.itf.IPlayQueueManager.Companion.addOnPlayMomentListener
-import com.musongzi.music.itf.IPlayQueueManager.Companion.addOnPlayCountListener
-import com.musongzi.music.itf.IPlayQueueManager.Companion.addOnPlayLifeListener
-import com.musongzi.music.itf.small.OnPlayCountListener
-import com.musongzi.music.itf.small.OnPlayLifeListener
-import com.musongzi.music.itf.small.OnPlayMomentListener
 
-class MainActivity : NormalFragmentActivity(), ILifeObject {
+class MainActivity : MszFragmentActivity(), ILifeObject {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

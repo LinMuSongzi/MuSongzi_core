@@ -9,8 +9,8 @@ ext {
     ]
 
     lib = [
-            appcompatV7       : '1.3.0',
-            recyclerviewV7    : '1.2.0-alpha02',
+            appcompatx       : '1.3.1',
+            recyclerviewx    : '1.2.1',
             glide             : '4.11.0',
             lifecycle_livedata: '2.1.0',
             rxjava            : '3.0.4',

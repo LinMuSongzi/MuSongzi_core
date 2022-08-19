@@ -1,38 +1,19 @@
 package com.musongzi.comment.business
 
-import android.app.Activity
 import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelStoreOwner
-import com.musongzi.comment.activity.NormalFragmentActivity
-import com.musongzi.core.CoreObserver
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
-import com.musongzi.core.base.fragment.EmployeeEasyFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
-import com.musongzi.core.base.vm.EmployeeEsayViewModel
 import com.musongzi.core.itf.INeed
 import com.musongzi.core.itf.IViewInstance
-import com.musongzi.core.util.ActivityThreadHelp
-import com.musongzi.core.util.InjectionHelp
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.*
-import io.reactivex.rxjava3.functions.Consumer
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
-import java.util.concurrent.BlockingQueue
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.jar.Manifest
 
 /*** created by linhui * on 2022/8/16
  *

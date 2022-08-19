@@ -37,8 +37,22 @@ android {
 }
 
 dependencies {
-
+//    api 'com.github.jenly1314:zxing-lite:2.1.1'
     api project(path: ':core')
+
+
+
+//    // CameraX 核心库使用 camera2 实现
+//    api "androidx.camera:camera-camera2:1.2.0-alpha01"
+//    // 可以使用CameraView
+//    api "androidx.camera:camera-view:1.2.0-alpha01"
+//    // 可以使用供应商扩展
+//    implementation "androidx.camera:camera-extensions:1.0.0-alpha10"
+//    //camerax的生命周期库
+//    implementation "androidx.camera:camera-lifecycle:1.2.0-alpha01"
+
+
+
 //    implementation fileTree(dir: "libs", include: ["*.jar"])
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 //    implementation 'androidx.core:core-ktx:1.1.0'

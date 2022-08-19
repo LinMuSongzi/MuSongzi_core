@@ -11,7 +11,7 @@ import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
+abstract class MszViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
     IHolderViewModel<C, B> {
 
     protected val TAG = javaClass.simpleName

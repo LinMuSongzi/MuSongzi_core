@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.*
 import com.musongzi.core.itf.IClient
-import com.musongzi.core.itf.IHolderSavedStateHandle
-import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
@@ -18,7 +16,7 @@ import com.musongzi.core.view.TipDialog
 /**
  * 有videmodel
  */
-abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
+abstract class MszFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     DataBindingFragment<D>() {
 
     private var mVp: ViewModelProvider? = null
@@ -54,7 +52,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
 
     protected open fun actualTypeArgumentsViewModelIndex(): Int = 0
 
-    override fun superDatabindingName() = ModelFragment::class.java.name
+    override fun superDatabindingName() = MszFragment::class.java.name
 
     protected open fun instanceViewModel(clazz: Array<Class<*>?>): V? = InjectionHelp.findViewModel(
         javaClass,
@@ -64,7 +62,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
         clazz
     )
 
-    protected open fun superFragmentName(): String = ModelFragment::class.java.name
+    protected open fun superFragmentName(): String = MszFragment::class.java.name
 
     private fun getProvider(): ViewModelProvider {
         val p: ViewModelProvider
@@ -76,8 +74,7 @@ abstract class ModelFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
                 p = thisViewModelProvider()
             }
             else -> {
-                modelProviderEnable =
-                    modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
+                modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
                 return getProvider()
             }
         }

@@ -9,7 +9,7 @@ import com.musongzi.core.base.bean.BaseChooseBean
 class SimpleCardInfo(
     var title: String,
     var titleColor: Pair<Int, Int>,
-    val imageBeans: Pair<ImageLoadBean, ImageLoadBean>,
+    private val imageBeans: Pair<ImageLoadBean, ImageLoadBean>,
     val onClick: (View) -> Unit,
 ) : BaseChooseBean() {
 

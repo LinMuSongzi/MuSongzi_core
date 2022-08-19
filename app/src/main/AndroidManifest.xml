@@ -43,7 +43,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.musongzi.comment.activity.NormalFragmentActivity"
+            android:name="com.musongzi.comment.activity.MszFragmentActivity"
             android:theme="@style/AppNoActionBarLightTheme"
             android:screenOrientation="portrait" />
 

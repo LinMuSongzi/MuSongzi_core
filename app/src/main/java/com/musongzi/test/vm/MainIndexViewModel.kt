@@ -2,7 +2,6 @@ package com.musongzi.test.vm
 
 import com.musongzi.comment.bean.MainIndexBean
 import com.musongzi.comment.bean.SimpleCardInfo
-import com.musongzi.core.base.vm.EasyViewModel
 import com.musongzi.comment.business.MainIndexBusiness
 import com.musongzi.comment.business.itf.IMainIndexBusiness
 import com.musongzi.comment.client.IMainIndexClient

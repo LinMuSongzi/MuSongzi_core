@@ -24,7 +24,7 @@ import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.comment.activity.NormalFragmentActivity
+import com.musongzi.comment.activity.MszFragmentActivity
 import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
@@ -35,15 +35,14 @@ import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
 import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.CollectionsViewFragment
-import com.musongzi.core.base.fragment.ModelFragment
+import com.musongzi.core.base.fragment.MszFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
-import com.musongzi.core.base.vm.EasyViewModel
+import com.musongzi.core.base.vm.MszViewModel
 import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.INeed
-import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
@@ -76,6 +75,14 @@ object ExtensionMethod {
         }
     }
 
+    /**
+     * 基于集合引擎 继承于 [BaseMoreViewEngine]
+     * 快速打开一个已经构建好的集合列表
+     * @param title 新的activity的标题
+     * @param barColor 状态栏颜色
+     * @param data 要传递的数据
+     * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
+     */
     fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecyeleActivity(
         title: String? = null,
         barColor: Int = R.color.bg_white,
@@ -89,17 +96,22 @@ object ExtensionMethod {
         )
     }
 
-
+    /**
+     * 基于集合引擎 继承于 [BaseMoreViewEngine]
+     * 快速构建一个集合fragment
+     * @param data 要传递的数据
+     * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
+     */
     @JvmStatic
     @JvmOverloads
     fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragemnt(
         data: Bundle? = null,
         onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
-    ): Fragment {
+    ): CollectionsViewFragment {
         return InjectionHelp.injectFragment(
             CollectionsViewFragment::class.java,
             getColletionInfoBundle(data, onInfoObserver)
-        )
+        ) as CollectionsViewFragment
     }
 
     private fun <E : BaseMoreViewEngine<*, *>> Class<E>.getColletionInfoBundle(
@@ -115,7 +127,7 @@ object ExtensionMethod {
         data?.let {
             bundle.putBundle(CollecttionsEngine.B, it)
         }
-        ModelFragment.composeProvider(bundle, false)
+        MszFragment.composeProvider(bundle, false)
         mCollectionsInfo.engineName = name
         bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
         return bundle
@@ -134,11 +146,11 @@ object ExtensionMethod {
 
     fun <V : ViewModel> Class<V>.instacne(
         provider: ViewModelProvider?,
-        ifEsayViewModelInjectRun: ((EasyViewModel<*, *>) -> Unit)? = null
+        ifEsayViewModelInjectRun: ((MszViewModel<*, *>) -> Unit)? = null
     ): V? {
         return provider?.let {
             val vm = InjectionHelp.getViewModel(it, this) as V
-            (vm as? EasyViewModel<*, *>)?.apply {
+            (vm as? MszViewModel<*, *>)?.apply {
                 ifEsayViewModelInjectRun?.invoke(this)
             }
             vm
@@ -155,6 +167,14 @@ object ExtensionMethod {
         it
     }
 
+    /**
+     * 通过fragment直接打开一个activity
+     * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
+     * @param mStyleMessageDescribe 控制样式一些信息，比如标题，状态栏颜色
+     * @param dataBundle 传递的数据
+     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     *                          请注意，一定要是相关的继承关系
+     */
     @JvmStatic
     @JvmOverloads
     fun <F : Fragment> Class<F>.startActivityNormal(
@@ -164,7 +184,7 @@ object ExtensionMethod {
         businessClassName: String? = null
     ) {
         (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
-            val activityClass = activity ?: NormalFragmentActivity::class.java;
+            val activityClass = activity ?: MszFragmentActivity::class.java;
             val intent = Intent(it, activityClass)
             val fInfo = FragmentDescribe(
                 this.name,
@@ -186,12 +206,21 @@ object ExtensionMethod {
     }
 
 
+    /**
+     * 通过fragment直接打开一个activity
+     * @param title 标题
+     * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
+     * @param barColor 状态栏颜色
+     * @param dataBundle 传递的数据
+     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     *                          请注意，一定要是相关的继承关系
+     */
     @JvmStatic
     @JvmOverloads
     fun <F : Fragment> Class<F>.startActivityNormal(
         title: String? = null,
         //其实必须是NormalFragmentActivity 子类
-        activity: Class<*>? = NormalFragmentActivity::class.java,
+        activity: Class<*>? = MszFragmentActivity::class.java,
         barColor: Int = R.color.bg_white,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
@@ -204,7 +233,9 @@ object ExtensionMethod {
         )
     }
 
-
+    /**
+     * 打开一个activity
+     */
     fun <A : Activity> Class<A>.startActivity() {
         (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
             try {

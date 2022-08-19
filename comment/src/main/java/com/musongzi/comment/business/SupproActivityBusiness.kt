@@ -22,13 +22,12 @@ import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
 import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.databinding.ActivityNormalFragmentBinding
-import com.musongzi.core.itf.IClient
-import com.musongzi.core.itf.INotifyDataSetChanged
-import com.musongzi.core.itf.ISaveStateHandle
-import com.musongzi.core.itf.IWant
+import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.InjectionHelp.injectBusiness
+import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
+import com.trello.rxlifecycle4.LifecycleProvider
 import com.trello.rxlifecycle4.LifecycleTransformer
 import com.trello.rxlifecycle4.RxLifecycle
 import com.trello.rxlifecycle4.android.ActivityEvent
@@ -48,8 +47,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         val h = iAgent as HolderLifecycleImpl;
         h.activity.getHolderContext()?.let { context ->
             if (context is Activity) {
-                dataBinding =
-                    DataBindingUtil.setContentView(context, R.layout.activity_normal_fragment)
+                dataBinding = DataBindingUtil.setContentView(context, R.layout.activity_normal_fragment)
                 val activityDescribe: ActivityDescribe? =
                     h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
                 activityDescribe?.let { a ->
@@ -120,12 +118,10 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         return dataBinding
     }
 
-    class HolderLifecycleImpl(private val savedInstance: Bundle?, var activity: IHolderContext) :
-        IHolderActivity, IHolderLifecycle, DefaultLifecycleObserver {
+    internal class HolderLifecycleImpl(private val savedInstance: Bundle?, var activity: IHolderContext) :
+        IHolderActivity, IHolderLifecycle ,IWant {
 
-        init {
-            (activity as LifecycleOwner).lifecycle.addObserver(this)
-        }
+        private var androidLife: LifecycleProvider<Lifecycle.Event> = AndroidLifecycle.createLifecycleProvider(activity as LifecycleOwner)
 
         private val activityViewModelProvider: ViewModelProvider by lazy {
             ViewModelProvider(
@@ -196,51 +192,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         }
 
         override fun <T> bindToLifecycle(): LifecycleTransformer<T> {
-            return (activity as? IWant)?.bindToLifecycle() ?: RxLifecycleAndroid.bindActivity(
-                lifecycleSubject
-            )
-        }
-
-        private val lifecycleSubject = BehaviorSubject.create<ActivityEvent>()
-
-        @CheckResult
-        fun lifecycle(): Observable<ActivityEvent> {
-            return lifecycleSubject.hide()
-        }
-
-        @CheckResult
-        fun <T> bindUntilEvent(event: ActivityEvent): LifecycleTransformer<T> {
-            return RxLifecycle.bindUntilEvent(lifecycleSubject, event)
-        }
-
-        @CallSuper
-        protected fun onCreate(savedInstanceState: Bundle?) {
-            lifecycleSubject.onNext(ActivityEvent.CREATE)
-        }
-
-        @CallSuper
-        protected fun onStart() {
-            lifecycleSubject.onNext(ActivityEvent.START)
-        }
-
-        @CallSuper
-        protected fun onResume() {
-            lifecycleSubject.onNext(ActivityEvent.RESUME)
-        }
-
-        @CallSuper
-        protected fun onPause() {
-            lifecycleSubject.onNext(ActivityEvent.PAUSE)
-        }
-
-        @CallSuper
-        protected fun onStop() {
-            lifecycleSubject.onNext(ActivityEvent.STOP)
-        }
-
-        @CallSuper
-        protected fun onDestroy() {
-            lifecycleSubject.onNext(ActivityEvent.DESTROY)
+            return (activity as? IWant)?.bindToLifecycle() ?: androidLife.bindToLifecycle()
         }
 
     }

@@ -12,7 +12,7 @@ import com.musongzi.core.itf.holder.IHolderArguments
 import com.musongzi.core.itf.holder.IHolderContext
 
 /*** created by linhui * on 2022/7/6 */
-open class NormalFragmentActivity : AppCompatActivity(), IHolderContext,
+open class MszFragmentActivity : AppCompatActivity(), IHolderContext,
     IHolderSupportActivityBusiness {
 
     lateinit var business: ISupprotActivityBusiness
