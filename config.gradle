@@ -1,11 +1,11 @@
 ext {
     android = [
-            compileSdkVersion: 30,
+            compileSdkVersion: 31,
             targetSdkVersion : 30,
             minSdkVersion    : 23,
             versionCode      : 20220716,
             versionName      : '1.0.0',
-            kotlinVersion    : '1.4.21'
+            kotlinVersion    : '1.6.10'
     ]
 
     lib = [

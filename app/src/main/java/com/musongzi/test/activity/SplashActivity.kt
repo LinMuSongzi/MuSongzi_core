@@ -47,17 +47,17 @@ class SplashActivity : BaseActivity() {
 //                override fun onResult(result: ArrayList<LocalMedia?>?) {}
 //                override fun onCancel() {}
 //            })
-//        MainIndexFragment::class.java.startActivityNormal(
-//            "主页",
-//            MainIndexActivity::class.java,
-//            Color.WHITE,
-//            null, TestMainIndexBusiness::class.java.name
-//        )
+        MainIndexFragment::class.java.startActivityNormal(
+            "主页",
+            MainIndexActivity::class.java,
+            Color.WHITE,
+            null, //TestMainIndexBusiness::class.java.name
+        )
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
 //        TestMainFragment::class.java.startActivityNormal("TestMainFragment")
 
-        Camra2Fragment::class.java.startActivityNormal("TestMainFragment")
+//        Camra2Fragment::class.java.startActivityNormal("TestMainFragment")
 //        CollectionsViewFragment.
 
 //        ArrayEngine::class.java.convertFragemnt().asInterfaceByEngine {

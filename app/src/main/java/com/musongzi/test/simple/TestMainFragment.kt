@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.ThreadMode
 import java.lang.Math.abs
 import java.text.SimpleDateFormat
 
-class TestMainFragment : MszFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient{
+open class TestMainFragment : MszFragment<TestViewModel, FragmentTestMainBinding>(), ITestClient{
 
     companion object {
         const val MAX_OUNT = 100_000

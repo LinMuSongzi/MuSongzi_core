@@ -26,7 +26,7 @@
             tools:src="@mipmap/ic_empty_data" />
 
         <TextView
-            android:textColor="@{bean.titleColor}"
+            setTextColorRes2="@{bean.titleColor}"
             setTextNormal="@{bean.title}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

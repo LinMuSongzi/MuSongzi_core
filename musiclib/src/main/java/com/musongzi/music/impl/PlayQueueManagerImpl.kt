@@ -120,13 +120,11 @@ internal class PlayQueueManagerImpl :
 
     override fun managerId() = IPlayQueueManager.MANAGER_ID
 
-    override fun onReady(a: Any) {
-        partnerInstance = when (a) {
-            is IMusicInit -> {
-                a
-            }
+    override fun onReady(a: Any?) {
+        partnerInstance = when (a!!) {
+            is IMusicInit -> a as IMusicInit
             is String -> {
-                Factory.getMusicClassLoader().loadClass(a).newInstance() as IMusicInit
+                Factory.getMusicClassLoader().loadClass(a as String).newInstance() as IMusicInit
             }
             else -> {
                 throw Exception("onReady error")

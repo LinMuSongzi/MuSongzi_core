@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/comment/src/main/java/com/musongzi/comment/bean/response/MusicSimpleData.kt" />
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/musongzi_project/app/src/main/res/layout/fragment_camera2.xml" value="0.12037037037037036" />
+        <entry key="..\:/musongzi_project/comment/src/main/res/layout/adapter_main_bottom_item.xml" value="0.1" />
+      </map>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

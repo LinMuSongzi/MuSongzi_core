@@ -79,6 +79,11 @@ fun setTextColorRes(textView: TextView, res: Int) {
     textView.setTextColor(res.androidColorGet())
 }
 
+@BindingAdapter("setTextColorRes2")
+fun setTextColorRes2(textView: TextView, res: Int) {
+    textView.setTextColor(res)
+}
+
 
 @BindingAdapter("setTextNormal")
 fun setText(textView: TextView, str: CharSequence?) {

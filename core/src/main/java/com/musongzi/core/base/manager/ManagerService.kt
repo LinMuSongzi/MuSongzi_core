@@ -23,7 +23,7 @@ internal class ManagerService : IManagerService {
 
     override fun managerId() = ID
 
-    override fun onReady(any: Any) {
+    override fun onReady(any: Any?) {
         if (!isReady && any is Int && any.and(InstanceManager.COMPLETE) > 0) {
             isReady = true
         }

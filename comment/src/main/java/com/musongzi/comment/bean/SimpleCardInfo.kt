@@ -8,7 +8,7 @@ import com.musongzi.core.base.bean.BaseChooseBean
 /*** created by linhui * on 2022/7/20  */
 class SimpleCardInfo(
     var title: String,
-    var titleColor: Pair<Int, Int>,
+    var titleColorPair: Pair<Int, Int>,
     private val imageBeans: Pair<ImageLoadBean, ImageLoadBean>,
     val onClick: (View) -> Unit,
 ) : BaseChooseBean() {
@@ -23,9 +23,9 @@ class SimpleCardInfo(
 
     fun getTitleColor(): Int {
         return if (isChoose()) {
-            titleColor.second.androidColorGet()
+            titleColorPair.second.androidColorGet()
         } else {
-            titleColor.first.androidColorGet()
+            titleColorPair.first.androidColorGet()
         }
     }
 
