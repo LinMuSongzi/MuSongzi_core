@@ -19,7 +19,8 @@ interface IMainIndexViewModel: ILifeSaveStateHandle,IAgent, IHandlerChooseViewMo
 
     fun getSource(): ISource<SimpleCardInfo>
 
-    fun getRemoteMainIndexBean():Observable<MainIndexBean>
+    fun getRemoteMainIndexBean():Observable<Array<SimpleCardInfo>>
+
 
 //    fun getHolder
 

@@ -22,6 +22,7 @@ import com.musongzi.comment.viewmodel.itf.IMainIndexViewModel
 import com.musongzi.comment.databinding.AdapterMainBottomItemBinding
 import com.musongzi.core.ExtensionCoreMethod.adapter
 import com.musongzi.core.ExtensionCoreMethod.linearLayoutManager
+import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.ExtensionCoreMethod.wantPick
 import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
@@ -34,9 +35,13 @@ import kotlin.collections.ArrayList
 abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMainIndexBusiness {
 
     override fun buildDataBySize() {
-        val source = iAgent.getSource();
-        if (source.realData().isEmpty()) {
-            (source.realData() as ArrayList).addAll(normalMainArrayInfo(iAgent))
+        iAgent.getRemoteMainIndexBean().sub {
+            val source = iAgent.getSource()
+            (source.realData() as ArrayList<SimpleCardInfo>).apply {
+                clear()
+                addAll(it)
+            }
+
             val adapter = source.adapter(AdapterMainBottomItemBinding::class.java, { d, _ ->
                 if (source.realData().size > sizeMax()) {
                     d.root.layoutParams.width = SCREEN_1_5_WDITH
@@ -63,33 +68,37 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
          */
         INDEX_CLICK_SAVED_KEY.saveStateChange(iAgent, 0)
 
-        val a = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        val a = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //        quickRequestPermission(a, {
 //            Log.i(TAG, "buildDataBySize: 申请权限成功的集合 ， ${it.keys.toTypedArray().contentToString()}")
 //        }) {
 //            Log.i(TAG, "buildDataBySize: 申请权限失败的集合 ， ${it.keys.toTypedArray().contentToString()}")
 //        }
 
-        iAgent.getHolderClient()?.getHolderContext()?.let {
+//        iAgent.getHolderClient()?.getHolderContext()?.let {
+//
+//            if (it is AppCompatActivity) {
+//                it.getNext()?.quickRequestPermission(a, {
+//                    Log.i(
+//                        TAG,
+//                        "buildDataBySize: 申请权限失败的集合 ， ${
+//                            it.keys.toTypedArray().contentToString()
+//                        }"
+//                    )
+//                }
+//                ) {
+//                    Log.i(
+//                        TAG,
+//                        "buildDataBySize: 申请权限成功的集合 ， ${it.keys.toTypedArray().contentToString()}"
+//                    )
+//                }
+//            }
+//
+//        }
+    }
 
-            if (it is AppCompatActivity) {
-                it.getNext()?.quickRequestPermission(a, {
-                        Log.i(
-                            TAG,
-                            "buildDataBySize: 申请权限失败的集合 ， ${
-                                it.keys.toTypedArray().contentToString()
-                            }"
-                        )
-                    }
-                ) {
-                    Log.i(
-                        TAG,
-                        "buildDataBySize: 申请权限成功的集合 ， ${it.keys.toTypedArray().contentToString()}"
-                    )
-                }
-            }
-
-        }
+    override fun sizeMax(): Byte {
+        return 4
     }
 
     private fun handlerViewPageValues() {
@@ -104,59 +113,6 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
 
     protected abstract fun buildFragments(): List<Fragment>
 
-    private fun sizeMax(): Byte {
-        return 4
-    }
-
-    private fun String.buildInfo(
-        colors: Pair<Int, Int>,
-        images: Pair<Any, Any>,
-        onClick: (View) -> Unit,
-    ): SimpleCardInfo {
-        return SimpleCardInfo(
-            this,
-            colors,
-            ImageLoadBean(images.first) to ImageLoadBean(images.second),
-            onClick
-        )
-    }
-
-    protected open fun normalMainArrayInfo(holderSavedStateHandle: IHolderSavedStateHandle): Array<SimpleCardInfo> {
-        val titleArray: Array<String> = buildTitle();
-        val imageArray: Array<Pair<Any, Any>> = buildImage()
-        val colorPair: Pair<Int, Int> = buildColorPair();
-        val t = tatol()
-        return Array(t) { index ->
-            titleArray[index].buildInfo(
-                colorPair,
-                imageArray[index]
-            ) {
-                /**
-                 * 点击事件触发
-                 */
-                INDEX_CLICK_SAVED_KEY.saveStateChange(holderSavedStateHandle, index)
-            }
-        }
-    }
-
-    protected open fun buildImage(): Array<Pair<Any, Any>> {
-        return arrayOf(
-            R.mipmap.ic_empty_data to R.mipmap.ic_launcher,
-            R.mipmap.ic_empty_data to R.mipmap.ic_launcher,
-            R.mipmap.ic_empty_data to R.mipmap.ic_launcher,
-            R.mipmap.ic_empty_data to R.mipmap.ic_launcher
-        )
-    }
-
-    protected open fun buildColorPair(): Pair<Int, Int> {
-        return R.color.text_color_unSelect to R.color.text_color_select
-    }
-
-    protected open fun buildTitle(): Array<String> {
-        return arrayOf("推荐", "关注", "活动", "我的")
-    }
-
-    protected open fun tatol() = 4
 
     companion object {
 

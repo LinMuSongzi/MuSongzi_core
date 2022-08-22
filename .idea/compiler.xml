@@ -25,6 +25,7 @@
       <module name="My_Application.core" target="11" />
       <module name="My_Application.musiclib" target="11" />
       <module name="My_Application.spi" target="11" />
+      <module name="My_Application.videoplay" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

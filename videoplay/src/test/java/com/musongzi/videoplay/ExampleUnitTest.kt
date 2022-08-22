@@ -1,4 +1,4 @@
-package com.musongzi.spi
+package com.musongzi.videoplay
 
 import org.junit.Test
 

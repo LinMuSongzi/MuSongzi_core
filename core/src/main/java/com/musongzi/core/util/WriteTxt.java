@@ -23,7 +23,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public final class WriteTxt {
 
 
-    public static final File PARENT_FILE = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),
+    public static final File PARENT_FILE = new File(ActivityThreadHelp.getCurrentApplication().getFilesDir(),
             ActivityThreadHelp.getCurrentApplication().getPackageName() + "_dir");
 
     private static final File FILE = new File(PARENT_FILE, "defualt.txt");
