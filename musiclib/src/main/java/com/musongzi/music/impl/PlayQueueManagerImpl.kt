@@ -7,25 +7,25 @@ import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.manager.ManagerUtil.getHolderManager
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.music.bean.MusicPlayInfoImpl
 import com.musongzi.music.itf.*
+import com.musongzi.music.itf.IPlayQueueManager.Companion.NORMAL_NAME
 import com.musongzi.music.itf.small.*
 
-/*** created by linhui * on 2022/7/28 */
+/*** created by linhui
+ *管理一个播放队列
+ * * on 2022/7/28 */
 internal class PlayQueueManagerImpl :
-    ISmartPlayQueueManager<MusicPlayInfoImpl>, PlayMusicObervser {
+    ISmartPlayQueueManager, PlayMediaObervser {
 
-
-    private var observerStates = HashSet<PlayMusicObervser>()
-    private lateinit var thsPlayingArray: Pair<IAttribute, IMusicArray<IAttribute>>
-
+    private var observerStates = HashSet<PlayMediaObervser>()
+    private lateinit var thsPlayingArray:Pair<IAttribute, IMusicArray<IMediaPlayInfo>>
     /**
      *  HashMap<String, Pair<IAttribute, IMusicArray>>
      *      String key
      *      Pair<IAttribute, IMusicArray> IAttribute  描述当前队列的信息的属性
      *                                    IMusicArray 音乐队列信息管理
      */
-    private val holderMusicArrays = HashMap<String, Pair<IAttribute, IMusicArray<IAttribute>>>()
+    private val holderMusicArrays = HashMap<String, Pair<IAttribute, IMusicArray<IMediaPlayInfo>>>()
     private val mLocalListenerManager = LocalListenerManager()
     lateinit var partnerInstance: IMusicInit
     private val playerManager: IPlayerManager by lazy {
@@ -39,35 +39,29 @@ internal class PlayQueueManagerImpl :
         }
     }
 
-    override fun playMusic(info: IMediaPlayInfo, musicArray: IMusicArray<MusicPlayInfoImpl>) {
-        TODO("Not yet implemented")
+    override fun playMusic(info: IMediaPlayInfo, musicArray: IMusicArray<IMediaPlayInfo>) {
+        playerManager.playMusicByInfo(info)
     }
 
 
-    override fun playMusic(stringUrl: String, musicArray: IMusicArray<MusicPlayInfoImpl>) {
-        if (thsPlayingArray.second != musicArray) {
-            changePlayArray(stringUrl, musicArray);
-        } else {
-            val index = musicArray.realData().indexOf(stringUrl)
-            if (index > 0) {
-                musicArray.changeThisPlayIndex(index)
-            } else {
-                musicArray.changeThisPlayIndexAndAdd(stringUrl)
+    override fun playMusic(stringUrl: String, musicArray: IMusicArray<IMediaPlayInfo>) {
+        playerManager.playMusic(stringUrl)
+    }
+
+    private fun changePlayArray(stringUrl: String?, musicArray: IMusicArray<IMediaPlayInfo>) {
+        stringUrl?.apply {
+            musicArray.changeThisPlayIndexAndAdd(this)
+            holderMusicArrays[musicArray.attributeId]?.apply {
+                thsPlayingArray = this
             }
         }
     }
 
-    private fun changePlayArray(stringUrl: String, musicArray: IMusicArray<MusicPlayInfoImpl>) {
-        holderMusicArrays[musicArray.attributeId]?.apply {
-            thsPlayingArray = this
-        }
-    }
-
-    override fun pauseMusic(musicArray: IMusicArray<MusicPlayInfoImpl>) {
+    override fun pauseMusic(musicArray: IMusicArray<IMediaPlayInfo>) {
         playerManager.pauseMusic()
     }
 
-    override fun stopMusic(musicArray: IMusicArray<MusicPlayInfoImpl>) {
+    override fun stopMusic(musicArray: IMusicArray<IMediaPlayInfo>) {
         playerManager.stopMusic()
     }
 
@@ -76,25 +70,33 @@ internal class PlayQueueManagerImpl :
     }
 
     override fun generatedConfigPlayQueues(config: Set<String>?) {
+
+        val convertRun: (String, IMusicInit) -> IMusicArray<IMediaPlayInfo> = { name, info ->
+            val dataProxy = info.createMusicDataProxy<IMediaPlayInfo, Any>(name)
+            val traceImpl = info.createTrackImpl<IMediaPlayInfo>(name)
+            info.createMusicArray(NORMAL_NAME, dataProxy, traceImpl)
+        }
+
         val map = holderMusicArrays;
         val info = partnerInstance;
-        val intstance = map[NORMAL_NAME]
-        if (intstance == null) {
-            val top = info.createArrayParent(NORMAL_NAME)
-            val musicArray = info.createMusicArray(NORMAL_NAME)
-            map[NORMAL_NAME] = top to musicArray
+        val normalMumusicArray = map[NORMAL_NAME]
+        if (normalMumusicArray == null) {
+            val array = info.createArrayParent(NORMAL_NAME) to convertRun.invoke(NORMAL_NAME, info)
+            map[NORMAL_NAME] = array
+            thsPlayingArray = array
+            thsPlayingArray.second.getHolderPageEngine().refresh()
         }
         config?.let {
             for (v in it) {
                 if (!it.contains(v)) {
-                    map[v] = info.createArrayParent(v) to info.createMusicArray(NORMAL_NAME)
+                    map[v] = info.createArrayParent(v) to convertRun.invoke(v, info)
                 }
             }
         }
     }
 
-    override fun getPlayingQueue(): IMusicArray<IAttribute>? {
-        return thsPlayingArray.second
+    override fun getPlayingQueue(): IMusicArray<IMediaPlayInfo>? {
+        return thsPlayingArray?.second
     }
 
     override fun getMusicQueueByMusicItem(info: IMediaPlayInfo): Set<IMusicArray<IAttribute>> {
@@ -103,9 +105,13 @@ internal class PlayQueueManagerImpl :
 
     override fun getPlayingQueueName(): String? = thsPlayingArray?.first?.attributeId
 
-    override fun getPlayingInfo(): IAttribute {
-        val i = thsPlayingArray.second;
-        return i.realData()[i.thisPlayIndex()]
+    override fun getPlayingInfo(): IMediaPlayInfo? {
+        val i = thsPlayingArray?.second;
+        return if (i != null) {
+            i.realData()[i.thisPlayIndex()]
+        } else {
+            null
+        }
     }
 
     override fun getListenerManager(): IPlayQueueManager.ListenerManager {
@@ -114,13 +120,11 @@ internal class PlayQueueManagerImpl :
 
     override fun managerId() = IPlayQueueManager.MANAGER_ID
 
-    override fun onReady(a: Any) {
-        partnerInstance = when (a) {
-            is IMusicInit -> {
-                a
-            }
+    override fun onReady(a: Any?) {
+        partnerInstance = when (a!!) {
+            is IMusicInit -> a as IMusicInit
             is String -> {
-                Factory.getMusicClassLoader().loadClass(a).newInstance() as IMusicInit
+                Factory.getMusicClassLoader().loadClass(a as String).newInstance() as IMusicInit
             }
             else -> {
                 throw Exception("onReady error")
@@ -142,7 +146,7 @@ internal class PlayQueueManagerImpl :
         return thsPlayingArray.second.getPlayController()!!
     }
 
-    override fun observerState(life: ILifeObject?, p: PlayMusicObervser) {
+    override fun observerState(life: ILifeObject?, p: PlayMediaObervser) {
         life?.getThisLifecycle()?.let {
             it.lifecycle.addObserver(MusicObserver(p))
         }
@@ -151,7 +155,7 @@ internal class PlayQueueManagerImpl :
     internal class MusicObserver(private val p: Any) : DefaultLifecycleObserver {
         override fun onCreate(owner: LifecycleOwner) {
             when (p) {
-                is PlayMusicObervser -> {
+                is PlayMediaObervser -> {
                     getInstance().observerStates.add(p)
                 }
                 is OnPlayCompleteListener -> {
@@ -174,7 +178,7 @@ internal class PlayQueueManagerImpl :
 
         override fun onDestroy(owner: LifecycleOwner) {
             val flag = when (p) {
-                is PlayMusicObervser -> {
+                is PlayMediaObervser -> {
                     getInstance().observerStates.remove(p)
                 }
                 is OnPlayCompleteListener -> {
@@ -199,16 +203,14 @@ internal class PlayQueueManagerImpl :
     }
 
     companion object {
-
-        const val NORMAL_NAME = "NORMAL_NAME"
-
         internal fun getInstance(): PlayQueueManagerImpl {
             return getHolderManager<IPlayQueueManager>(IPlayQueueManager.MANAGER_ID) as PlayQueueManagerImpl
         }
     }
 
-    override fun onStateChange(state: String, info: IMediaPlayInfo) {
-        mLocalListenerManager.onStateChange(state, info)
+
+    override fun onStateChange(state: String, info: IMediaPlayInfo?, player: Any?, other: Any?) {
+        mLocalListenerManager.onStateChange(state, info, player, other)
     }
 
 }

@@ -1,17 +1,13 @@
 package com.musongzi.test
 
 import android.util.Log
-import androidx.databinding.DataBinderMapperImpl
-import androidx.databinding.DataBindingUtil
 import androidx.multidex.MultiDexApplication
 import com.musongzi.core.ExtensionCoreMethod.bean
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.ManagerUtil
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.util.WriteTxt
-import com.musongzi.music.impl.Factory
 import com.musongzi.test.bean.DiscoverBannerBean
-import com.musongzi.test.business.MusicConfigHelpBusines
 import com.musongzi.test.event.ILoginEvent
 import com.musongzi.test.event.IMusicEvent
 import io.reactivex.rxjava3.internal.operators.observable.ObservableCreate
@@ -44,11 +40,12 @@ class MyApplication : MultiDexApplication() {
             WriteTxt.exception(e)
         }
 
-        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
-            MusicConfigHelpBusines().apply {
-                afterHandlerBusiness()
-            }
-        }), classLoader)
+//        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
+//            MusicConfigHelpBusines().apply {
+//                afterHandlerBusiness()
+//            }
+//        }), classLoader)
+        ManagerUtil.init(arrayListOf(com.musongzi.spi.Factory.spiManagerHelp(MyRuleProxy::class.java)),classLoader)
 
         EventBus.getDefault().register(this)
         registerEvent(ILoginEvent::class.java) {

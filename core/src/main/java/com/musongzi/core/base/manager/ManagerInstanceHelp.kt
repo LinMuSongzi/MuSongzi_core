@@ -7,5 +7,5 @@ interface ManagerInstanceHelp {
 
     fun name(): String? = null
 
-    fun readyNow(my: InstanceManager): Any
+    fun readyNow(my: InstanceManager): Any?
 }

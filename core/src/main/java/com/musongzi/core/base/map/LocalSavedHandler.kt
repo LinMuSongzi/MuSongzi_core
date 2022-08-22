@@ -8,7 +8,7 @@ import kotlin.collections.HashMap
 import kotlin.collections.set
 
 /*** created by linhui * on 2022/7/27 */
-class HostSavedHandler : ISaveStateHandle {
+class LocalSavedHandler : ISaveStateHandle {
 
     private val mRegular : HashMap<String, Any?> = HashMap()
     private val mLiveDatas : HashMap<String, SavingStateLiveData<Any>> = HashMap()

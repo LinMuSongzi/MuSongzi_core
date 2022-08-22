@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 
-class CoreObserver<T>(var c: Consumer<T>) : Observer<T> {
+class CoreObserver<T>(var c: Consumer<T>? = null) : Observer<T> {
 
     companion object {
         const val TAG = "MszObserver"
@@ -17,7 +17,7 @@ class CoreObserver<T>(var c: Consumer<T>) : Observer<T> {
 
     override fun onNext(t: T) {
 //        Log.i(TAG, "onNext: Thread = " + Thread.currentThread() + " : " + t)
-        c.accept(t)
+        c?.accept(t)
     }
 
     override fun onError(e: Throwable?) {

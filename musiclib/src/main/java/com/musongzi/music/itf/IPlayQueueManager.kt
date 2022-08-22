@@ -4,16 +4,31 @@ import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.base.manager.ManagerUtil.manager
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.ILifeObject
-import com.musongzi.music.bean.MusicPlayInfoImpl
-import com.musongzi.music.impl.ISmartPlayQueueManager
 import com.musongzi.music.itf.small.*
 import kotlin.reflect.KClass
 
-/*** created by linhui * on 2022/7/28  */
+/*** created by linhui   * on 2022/7/28
+ * 一个音乐队列管理者
+ *
+ * 可以管理一组音乐队列/专辑
+ * 拥有队列的信息[IMusicArray] ， 和基于音乐信息[IMediaPlayInfo]的一组数据
+ *
+ * note：音乐播放逻辑;通过控制器来进行音乐播放和控制，并且会把音乐添加进去当前的音乐集合/专辑[IPlayController]
+ * 控制器通过 [IPlayQueueManager.getPlayController] 获取
+ * 获得的控制器是基于当前[IMusicArray]音乐队列的(实现类[MusicArrayImpl])
+ * [com.musongzi.music.impl.MusicArrayImpl] 实现了 [com.musongzi.core.itf.page.IRead2]
+ * 上一首[com.musongzi.core.itf.page.IRead2.pre] ,
+ * 下一首[com.musongzi.core.itf.page.IRead2.next],
+ * 重新播放[com.musongzi.core.itf.page.IRead2.refresh] 基本功能
+ *
+ * 监听回调通过[IPlayQueueManager.getListenerManager] 添加基于状态的监听
+ *
+ *  */
 interface IPlayQueueManager : IHolderPlayController, InstanceManager {
 
     /**
-     * 获取播放器播放
+     * 获取当前播放器控制器
+     * @return 返回的是基于当前音乐队列的控制器
      */
     override fun getPlayController(): IPlayController
 
@@ -22,7 +37,7 @@ interface IPlayQueueManager : IHolderPlayController, InstanceManager {
     /**
      * 获取当前播放的音乐队列列表
      */
-    fun getPlayingQueue(): IMusicArray<IAttribute>?
+    fun getPlayingQueue(): IMusicArray<IMediaPlayInfo>?
 
     /**
      * 根据当前的音乐信息获取所属队列
@@ -41,6 +56,14 @@ interface IPlayQueueManager : IHolderPlayController, InstanceManager {
 
     companion object {
         const val MANAGER_ID = 100
+        const val NORMAL_NAME = "NORMAL_NAME"
+        fun KClass<IPlayQueueManager>.pauseMusic(){
+            MANAGER_ID.manager<IPlayQueueManager>().getPlayController().pauseMusic()
+        }
+
+        fun KClass<IPlayQueueManager>.stopMusic(){
+            MANAGER_ID.manager<IPlayQueueManager>().getPlayController().stopMusic()
+        }
 
         fun KClass<IPlayQueueManager>.playMusic(info:IMediaPlayInfo){
             MANAGER_ID.manager<IPlayQueueManager>().getPlayController().playMusicByInfo(info)
@@ -58,8 +81,8 @@ interface IPlayQueueManager : IHolderPlayController, InstanceManager {
             return MANAGER_ID.manager<IPlayQueueManager>().getPlayController()
         }
 
-        fun KClass<IPlayQueueManager>.playObsavable():IPlayObsavable{
-            return MANAGER_ID.manager<ISmartPlayQueueManager<MusicPlayInfoImpl>>()
+        fun KClass<IPlayQueueManager>.playObsavable():IPlayObservable{
+            return MANAGER_ID.manager<ISmartPlayQueueManager>()
         }
 
         fun KClass<IPlayQueueManager>.listenerManager():ListenerManager{

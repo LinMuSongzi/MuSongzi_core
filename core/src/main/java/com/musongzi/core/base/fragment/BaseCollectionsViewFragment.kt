@@ -19,12 +19,12 @@ import io.reactivex.rxjava3.core.Observable
 abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient,
     CollectionsViewSupport {
 
-    var totalLiveData = MutableLiveData(0)
+//    var totalLiveData = MutableLiveData(0)
 
     override fun actualTypeArgumentsViewModelIndex() = 0
     override fun actualTypeArgumentsDatabindinIndex(): Int = 0
-    override fun superFragmentName() = RefreshFrament::class.java.name
-    override fun superDatabindingName() = BaseCollectionsViewFragment::class.java.name
+    override fun superFragmentName() :String = RefreshFrament::class.java.name
+    override fun superDatabindingName() :String = BaseCollectionsViewFragment::class.java.name
 
     private lateinit var mRecycleViewClient: IRefreshViewClient
 
@@ -55,7 +55,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : Re
 
     override fun setRefresh(b: Boolean) {}
 
-    override fun engineName() = null
+    override fun engineName() :String? = null
 
     override fun recycleView(): RecyclerView? {
         return mRecycleViewClient.recycleView()
@@ -70,7 +70,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : Re
     }
 
     override fun emptyView(): ViewGroup? {
-        return mRecycleViewClient.recycleView()
+        return mRecycleViewClient.emptyView()
     }
 
     override fun getCollectionsViewEngine(): IHolderCollections? {
@@ -100,5 +100,11 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : Re
     fun createDataEngine(): IDataEngine<DATA>? = null
 
     override fun getLayoutManger(): RecyclerView.LayoutManager? = null
+
+
+    companion object{
+        const val TOTAL_KEY = "vcvf_TOTAL_KEY"
+    }
+
 
 }

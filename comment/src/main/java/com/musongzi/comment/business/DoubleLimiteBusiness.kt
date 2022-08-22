@@ -5,6 +5,9 @@ import com.musongzi.core.base.business.BaseMapBusiness
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import kotlin.math.abs
 
+/**
+ * 防止重复点击
+ */
 class DoubleLimiteBusiness : BaseMapBusiness<IHolderLifecycle>() {
 
     var map = HashMap<String, Long>()

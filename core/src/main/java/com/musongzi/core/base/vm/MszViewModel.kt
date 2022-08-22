@@ -11,7 +11,7 @@ import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
+abstract class MszViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHolderActivity>(),
     IHolderViewModel<C, B> {
 
     protected val TAG = javaClass.simpleName
@@ -34,6 +34,7 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
     private var savedInstanceStateRf: WeakReference<Bundle?>? = null
     val business: B by lazy {
         createBusiness()
+
     }
     protected var client: C? = null
 
@@ -60,7 +61,16 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
             client = t?.getClient() as? C
             (business as? IAgentHolder<IAgent>)?.setAgentModel(this)
             business.afterHandlerBusiness()
+            handlerAnnotion(business)
         }
+    }
+
+    private fun handlerAnnotion(business: B) {
+
+
+//        val type = business::javaClass.parameters//[indexBusinessActualTypeArgument()]
+//        Log.i(TAG, "handlerAnnotion: ${type}")
+
     }
 
     @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
@@ -78,10 +88,10 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
             Log.i(TAG, "createBusiness: 1")
             InjectionHelp.getClassLoader().loadClass(it.className)?.newInstance() as? B
         } ?: (InjectionHelp.findGenericClass<B>(javaClass, indexBusinessActualTypeArgument()).let {
-            if(it.isInterface){
+            if (it.isInterface) {
                 Log.i(TAG, "createBusiness: 2")
                 createBusiness2()
-            }else{
+            } else {
                 Log.i(TAG, "createBusiness: 3")
                 it.newInstance()
             }
@@ -107,7 +117,7 @@ abstract class EasyViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHol
     override fun getHolderBusiness(): B = business
 
     override fun getHolderClient(): C? {
-        return InjectionHelp.checkClient(client, javaClass,indexClientActualTypeArgument())
+        return InjectionHelp.checkClient(client, javaClass, indexClientActualTypeArgument())
     }
 
     protected fun indexClientActualTypeArgument(): Int = 0;

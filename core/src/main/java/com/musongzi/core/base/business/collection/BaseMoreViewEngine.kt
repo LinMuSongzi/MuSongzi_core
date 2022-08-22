@@ -9,6 +9,7 @@ import com.musongzi.core.ExtensionCoreMethod.wantPick
 import com.musongzi.core.CoreObserver
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.client.IRefreshViewClient
+import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.IRefreshViewModel
 import com.musongzi.core.itf.holder.IHolderContext
@@ -17,6 +18,9 @@ import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.base.page.PageSupport
+import com.musongzi.core.base.vm.IHandlerChooseViewModel
+import com.musongzi.core.itf.IHolderSavedStateHandle
+import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.data.IChoose
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -47,9 +51,10 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
      */
     private lateinit var callBack: IRefreshViewModel<Item>
     private lateinit var instanceAdapter: RecyclerView.Adapter<*>
-    var supportDataEngine: IDataEngine<Data>? = null
-    private val observer: Observer<Data> = createObserver()
+    private var supportDataEngine: IDataEngine<Data>? = null
+    private var observer: Observer<Data>? = null
     private var initFlag = false
+    private var localSavedStateHandle:ISaveStateHandle? = null
 
     public var TAG = javaClass.simpleName
     final override fun getAdapter(): RecyclerView.Adapter<*> = instanceAdapter
@@ -85,11 +90,12 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     }
 
-//    protected open fun laterInit(bundle: Bundle?) {
-//    }
+    protected open fun changeRemoteDataEngin(data: IDataEngine<Data>?){
+        this.supportDataEngine = data
+    }
 
-    protected open fun createObserver(): Observer<Data> = CoreObserver {
-
+    protected open fun changeObserver(observer: Observer<Data>?){
+        this.observer = observer
     }
 
     override fun getHolderContext(): Context? = callBack.getHolderContext()
@@ -98,7 +104,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     override fun getCode(): Int = 0
 
-    override fun getObserver(): Observer<Data> = observer
+    override fun getObserver(): Observer<Data>? = observer
 
     override fun refresh() {
         dataPageSupport.refresh()
@@ -116,24 +122,23 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun page(): Int = dataPageSupport.page()
     override fun lastSize(): Int = dataPageSupport.lastSize()
     override fun realData(): List<Item> = dataPageSupport.realData()
-    override fun pageSize(): Int = IPageEngine.PAGE_SIZE
+    override fun pageSize(): Int = supportDataEngine?.pageSize() ?: IPageEngine.PAGE_SIZE
 
     /**
      * 这里是代表开始页数，具体你要看自己的接口
      * @return Int
      */
-    override fun thisStartPage(): Int = 1
+    override fun thisStartPage(): Int = supportDataEngine?.thisStartPage() ?:1
 
     override fun createPostEvent(): Nothing? = null
 
     override fun handlerState(integer: Int) {}
 
     override fun handlerData(items: List<Item>, action: Int) {
-        callBack.buildViewByData(items)
+        callBack.refreshHolderClient()?.buildViewByData(items)
     }
 
-    final override fun getRemoteData(page: Int) =
-        supportDataEngine?.getRemoteData(page) ?: getRemoteDataReal(page)
+    final override fun getRemoteData(page: Int) = supportDataEngine?.getRemoteData(page) ?: getRemoteDataReal(page)
 
     protected abstract fun getRemoteDataReal(page: Int): Observable<Data>?
 
@@ -163,21 +168,33 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     override fun getTag(): String = javaClass.name
 
-    fun getMainLifecycle(): IHolderLifecycle? = callBack.getMainLifecycle()
+    fun getMainLifecycle(): IHolderLifecycle? = callBack.refreshHolderClient()?.getMainLifecycle()
 
-    override fun getThisLifecycle(): LifecycleOwner? = callBack.getThisLifecycle()
+    override fun getThisLifecycle(): LifecycleOwner? = callBack.refreshHolderClient()?.getThisLifecycle()
 
     fun <C : IChoose> pickSingle(pick: C) {
-        (callBack as CollectionsViewModel).wantPick().pickRun(pick)
+        (callBack as? IHandlerChooseViewModel<*>)?.wantPick()?.pickRun(pick)
     }
 
     fun <C : IChoose> pickSingle(view: View, pick: C) {
         view.setOnClickListener {
-            (callBack as CollectionsViewModel).wantPick().pickRun(pick)
+            (callBack as? IHandlerChooseViewModel<*>)?.wantPick()?.pickRun(pick)
         }
     }
 
     override fun useSpanner(data: Data): List<Item>? {
         return null
+    }
+
+
+    override fun getHolderSavedStateHandle(): ISaveStateHandle {
+        if(localSavedStateHandle == null){
+            localSavedStateHandle = LocalSavedHandler()
+        }
+       return localSavedStateHandle!!
+    }
+
+    override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
+        localSavedStateHandle = savedStateHandle
     }
 }

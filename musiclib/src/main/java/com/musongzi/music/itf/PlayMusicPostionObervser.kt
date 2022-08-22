@@ -8,5 +8,4 @@ interface PlayMusicPostionObervser : OnReadyListener {
 
     fun onMusicPostionChange(musicPlayInfo: MusicPlayInfoImpl, postion: Long)
 
-
 }

@@ -19,6 +19,7 @@ import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
+import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
@@ -120,7 +121,7 @@ object ExtensionCoreMethod {
 //        ThreadUtil.startThread(r)
     }
 
-    fun <T> Observable<T>.sub(c: Consumer<T>) {
+    inline fun <T> Observable<T>.sub(c: Consumer<T>) {
         subscribe(CoreObserver(c))
     }
 
@@ -129,8 +130,7 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun <T> T.layoutInflater(p: ViewGroup, res: Int) =
-        LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(res, p, false);
+    fun Int.layoutInflater(p: ViewGroup?) = LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(this, p, false);
 
     @JvmStatic
     fun SmartRefreshLayout.refreshLayoutInit(
@@ -396,8 +396,11 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun <T> ICollectionsViewEngine<*>.getApi(c: Class<T>): T {
-        return RetrofitManager.getInstance().getApi(c, getRefreshViewModel())
+    fun <T> Class<T>.getApi(want: IWant? = null): T? {
+        if(!this.isInterface){
+            return null
+        }
+        return RetrofitManager.getInstance().getApi(this, want)
     }
 
 

@@ -1,9 +1,7 @@
 package com.musongzi.core.base.vm
 
 import androidx.lifecycle.ViewModel
-import com.musongzi.core.base.map.HolderSavedStateHandleImpl
-import com.musongzi.core.base.map.HostSavedHandler
-import com.musongzi.core.base.map.SaveStateHandleWarp
+import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.trello.rxlifecycle4.LifecycleTransformer
@@ -23,7 +21,7 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
     }
 
     fun localSavedStateHandle(): ISaveStateHandle {
-        return mSavedStateHandles[LOCAL_SAVED_INDEX] ?: HostSavedHandler().apply {
+        return mSavedStateHandles[LOCAL_SAVED_INDEX] ?: LocalSavedHandler().apply {
             mSavedStateHandles[LOCAL_SAVED_INDEX] = this
         }
     }

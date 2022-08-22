@@ -5,7 +5,7 @@ interface InstanceManager {
 
     fun managerId():Int
 
-    fun onReady(a:Any)
+    fun onReady(a:Any?)
 
     companion object
     {

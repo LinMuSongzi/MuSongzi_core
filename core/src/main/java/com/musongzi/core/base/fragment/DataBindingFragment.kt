@@ -46,7 +46,12 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
                 modelClass: Class<T>,
                 handle: SavedStateHandle
             ): T {
-                return InjectionHelp.injectViewModel(this@DataBindingFragment,arguments,modelClass,handle)!!
+                return InjectionHelp.injectViewModel(
+                    this@DataBindingFragment,
+                    arguments,
+                    modelClass,
+                    handle
+                )!!
             }
         }
 
@@ -99,7 +104,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     }
 
-    override fun disconnect():Boolean {
+    override fun disconnect(): Boolean {
         requireActivity().finish()
         return true
     }
@@ -114,7 +119,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         return instanceView(layoutInflater, container!!)
     }
 
-    private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View {
+    private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View? {
         return if (getLayoutId() == 0) {
             Log.i(TAG, "FragmentState:instanceView findDataBinding")
             if (view == null) {
@@ -127,6 +132,8 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
             }
             dataBinding.root
 
+        } else if (getLayoutId() == View.NO_ID) {
+            null
         } else {
             Log.i(TAG, "FragmentState:instanceView inflate layout")
             inflater.inflate(getLayoutId(), container, false);
@@ -134,7 +141,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
 
     @Deprecated("已过时", ReplaceWith("ViewDataBinding"))
-    protected fun getLayoutId(): Int = 0
+    protected open fun getLayoutId(): Int = 0
 
     protected open fun superDatabindingName(): String = DataBindingFragment::class.java.name
 
@@ -250,7 +257,6 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
 
 //    on
-
 
 
 //    open class NativeSimpleFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle?) :

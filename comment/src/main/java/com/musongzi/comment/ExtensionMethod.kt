@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -19,24 +20,26 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.*
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.musongzi.comment.ExtensionMethod.convertFragemnt
 import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.comment.activity.NormalFragmentActivity
+import com.musongzi.comment.activity.MszFragmentActivity
 import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
 import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.base.bean.ActivityDescribe
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
-import com.musongzi.core.base.business.collection.CollectionsBusiness
 import com.musongzi.core.base.business.collection.ViewListPageFactory
+import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
+import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.CollectionsViewFragment
-import com.musongzi.core.base.fragment.ModelFragment
+import com.musongzi.core.base.fragment.MszFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
+import com.musongzi.core.base.vm.MszViewModel
+import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.INeed
@@ -72,6 +75,14 @@ object ExtensionMethod {
         }
     }
 
+    /**
+     * 基于集合引擎 继承于 [BaseMoreViewEngine]
+     * 快速打开一个已经构建好的集合列表
+     * @param title 新的activity的标题
+     * @param barColor 状态栏颜色
+     * @param data 要传递的数据
+     * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
+     */
     fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecyeleActivity(
         title: String? = null,
         barColor: Int = R.color.bg_white,
@@ -85,17 +96,22 @@ object ExtensionMethod {
         )
     }
 
-
+    /**
+     * 基于集合引擎 继承于 [BaseMoreViewEngine]
+     * 快速构建一个集合fragment
+     * @param data 要传递的数据
+     * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
+     */
     @JvmStatic
     @JvmOverloads
     fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragemnt(
         data: Bundle? = null,
         onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
-    ): Fragment {
+    ): CollectionsViewFragment {
         return InjectionHelp.injectFragment(
             CollectionsViewFragment::class.java,
             getColletionInfoBundle(data, onInfoObserver)
-        )
+        ) as CollectionsViewFragment
     }
 
     private fun <E : BaseMoreViewEngine<*, *>> Class<E>.getColletionInfoBundle(
@@ -111,7 +127,7 @@ object ExtensionMethod {
         data?.let {
             bundle.putBundle(CollecttionsEngine.B, it)
         }
-        ModelFragment.composeProvider(bundle, false)
+        MszFragment.composeProvider(bundle, false)
         mCollectionsInfo.engineName = name
         bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
         return bundle
@@ -128,9 +144,22 @@ object ExtensionMethod {
         return this;
     }
 
+    fun <V : ViewModel> Class<V>.instacne(
+        provider: ViewModelProvider?,
+        ifEsayViewModelInjectRun: ((MszViewModel<*, *>) -> Unit)? = null
+    ): V? {
+        return provider?.let {
+            val vm = InjectionHelp.getViewModel(it, this) as V
+            (vm as? MszViewModel<*, *>)?.apply {
+                ifEsayViewModelInjectRun?.invoke(this)
+            }
+            vm
+        }
+    }
+
     @JvmStatic
     fun CollectionsViewFragment.bindTotalSize(l: LifecycleOwner, run: Observer<Int>) {
-        totalLiveData.observe(l, run);
+        BaseCollectionsViewFragment.TOTAL_KEY.liveSaveStateObserverOnOwner(getViewModel(), run, l)
     }
 
     fun String.bean() = StringChooseBean().let {
@@ -138,6 +167,14 @@ object ExtensionMethod {
         it
     }
 
+    /**
+     * 通过fragment直接打开一个activity
+     * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
+     * @param mStyleMessageDescribe 控制样式一些信息，比如标题，状态栏颜色
+     * @param dataBundle 传递的数据
+     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     *                          请注意，一定要是相关的继承关系
+     */
     @JvmStatic
     @JvmOverloads
     fun <F : Fragment> Class<F>.startActivityNormal(
@@ -147,14 +184,17 @@ object ExtensionMethod {
         businessClassName: String? = null
     ) {
         (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
-            val activityClass = activity ?: NormalFragmentActivity::class.java;
+            val activityClass = activity ?: MszFragmentActivity::class.java;
             val intent = Intent(it, activityClass)
             val fInfo = FragmentDescribe(
                 this.name,
                 mStyleMessageDescribe,
                 if (businessClassName != null) BusinessInfo(businessClassName) else null
             )
-            intent.putExtra(SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY, ActivityDescribe(activityClass.name, fInfo))
+            intent.putExtra(
+                SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY,
+                ActivityDescribe(activityClass.name, fInfo)
+            )
             dataBundle?.let { b ->
                 intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
             }
@@ -166,12 +206,21 @@ object ExtensionMethod {
     }
 
 
+    /**
+     * 通过fragment直接打开一个activity
+     * @param title 标题
+     * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
+     * @param barColor 状态栏颜色
+     * @param dataBundle 传递的数据
+     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     *                          请注意，一定要是相关的继承关系
+     */
     @JvmStatic
     @JvmOverloads
     fun <F : Fragment> Class<F>.startActivityNormal(
         title: String? = null,
         //其实必须是NormalFragmentActivity 子类
-        activity: Class<*>? = NormalFragmentActivity::class.java,
+        activity: Class<*>? = MszFragmentActivity::class.java,
         barColor: Int = R.color.bg_white,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
@@ -184,7 +233,9 @@ object ExtensionMethod {
         )
     }
 
-
+    /**
+     * 打开一个activity
+     */
     fun <A : Activity> Class<A>.startActivity() {
         (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
             try {
@@ -200,19 +251,39 @@ object ExtensionMethod {
         }
     }
 
-    fun toast(msg: String?, activity: Activity? = null) {
-        msg?.let {
+    fun toast(msg: String?, activity: Activity? = null, cacheKey: String? = "TOAST_KEY") {
+        if (msg != null) {
             if (Thread.currentThread() != Looper.getMainLooper().thread) {
+                Log.i("AsyncTask", "toast: change")
                 Handler(Looper.getMainLooper()).post {
-                    toast(it)
+                    toast(msg)
                 }
                 return
             }
-            val c = activity ?: ActivityLifeManager.getInstance().getTopActivity()
-            if (c != null && !c.isFinishing) {
-                Toast.makeText(c, it, Toast.LENGTH_SHORT).show()
+            val context = activity ?: ActivityLifeManager.getInstance().getTopActivity()
+
+            val runnable: (Activity?, String) -> Toast = { c, str ->
+                val toast = if (c != null && !c.isFinishing) {
+                    Toast.makeText(c, str, Toast.LENGTH_SHORT)
+                } else {
+                    Toast.makeText(getCurrentApplication(), str, Toast.LENGTH_SHORT)
+                }
+                toast
+            }
+
+            if (context is IHolderSupportActivityBusiness && cacheKey != null
+                && context is LifecycleOwner && context.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
+            ) {
+                val mISaveStateHandle =
+                    context.getHolderSupprotActivityBusiness().getLocalHolderSavedStateHandle()
+                val cacheToast: Toast? = mISaveStateHandle[cacheKey]
+                (cacheToast ?: runnable.invoke(context, msg).apply {
+                    mISaveStateHandle[cacheKey] = this
+                }).apply {
+                    setText(msg)
+                }.show()
             } else {
-                Toast.makeText(getCurrentApplication(), it, Toast.LENGTH_SHORT).show()
+                runnable.invoke(context, msg).show()
             }
         }
     }
@@ -225,13 +296,12 @@ object ExtensionMethod {
         holder.getHolderSavedStateHandle()[this] = v
     }
 
-
     /**
      * 观察数据基于“key”的livedate，
      * isRemove 是否此次监听仅为一次
      */
-    @JvmOverloads
     @JvmStatic
+    @JvmOverloads
     fun <T> String.liveSaveStateObserver(
         holder: ILifeSaveStateHandle,
         isRemove: Boolean = false,
@@ -252,6 +322,36 @@ object ExtensionMethod {
         }
     }
 
+
+
+    /**
+     * 观察数据基于“key”的livedate，
+     * isRemove 是否此次监听仅为一次
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun <T> String.liveSaveStateObserverOnOwner(
+        holder: ILifeSaveStateHandle,
+        observer: Observer<T>,
+        l: LifecycleOwner,
+        isRemove: Boolean = false,
+    ) {
+        holder.getThisLifecycle()?.let {
+            val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+            if (isRemove) {
+                liveData.observe(l, object : Observer<T> {
+                    override fun onChanged(t: T) {
+                        observer.onChanged(t)
+                        liveData.removeObserver(this)
+                    }
+                })
+            } else {
+                liveData.observe(it, observer)
+            }
+        }
+    }
+
+
     /**
      * 获取基于“key”的可观察的livedata
      */
@@ -269,7 +369,7 @@ object ExtensionMethod {
     }
 
     @JvmStatic
-    fun <T> String.savedStateAllLiveChangevalue(values: T) {
+    fun <T> String.savedStateAllLiveChangeValue(values: T) {
         val r: (IHolderSavedStateHandle?, Activity) -> Unit = { f, activity ->
             if (!activity.isFinishing) {
                 f?.getHolderSavedStateHandle()?.set(this, values)
@@ -307,6 +407,9 @@ object ExtensionMethod {
         }
     }
 
+    fun <N : IBusiness> Class<N>.getNextBusiness(next: INeed): N? {
+        return next.getNext(this)
+    }
 
     @JvmStatic
     fun INeed.doubleLimiter(k: String, run: Runnable) {

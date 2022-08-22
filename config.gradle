@@ -1,16 +1,16 @@
 ext {
     android = [
-            compileSdkVersion: 30,
+            compileSdkVersion: 31,
             targetSdkVersion : 30,
             minSdkVersion    : 23,
             versionCode      : 20220716,
             versionName      : '1.0.0',
-            kotlinVersion    : '1.4.21'
+            kotlinVersion    : '1.6.10'
     ]
 
     lib = [
-            appcompatV7       : '1.3.0',
-            recyclerviewV7    : '1.2.0-alpha02',
+            appcompatx       : '1.3.1',
+            recyclerviewx    : '1.2.1',
             glide             : '4.11.0',
             lifecycle_livedata: '2.1.0',
             rxjava            : '3.0.4',

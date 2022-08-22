@@ -29,6 +29,7 @@ open class BaseLifeBusiness<L : IHolderLifecycle> : BaseMapBusiness<L>(), Defaul
     override fun onDestroy(owner: LifecycleOwner) {
         if (isEnableEventBus()) {
             EventBus.getDefault().unregister(this)
+            iAgent.getThisLifecycle()?.lifecycle?.removeObserver(this)
         }
     }
 

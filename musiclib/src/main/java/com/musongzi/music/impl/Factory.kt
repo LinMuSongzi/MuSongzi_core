@@ -2,21 +2,19 @@ package com.musongzi.music.impl
 
 import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.base.manager.ManagerInstanceHelp
-import com.musongzi.core.base.manager.ManagerUtil
-import com.musongzi.core.itf.IAttribute
 import com.musongzi.music.itf.*
 
 /*** created by linhui * on 2022/7/28  */
 object Factory {
 
 
-    internal fun <A:IAttribute> createPlayMusicController(any: IMusicArray<A>): IPlayController {
-        return ProxyPlayController(PlayQueueManagerImpl.getInstance(), any)
+    internal fun <I : IMediaPlayInfo> createProxyPlayMusicController(array: IMusicArray<I>): IPlayController {
+        return ProxyPlayController(PlayQueueManagerImpl.getInstance(), array as IMusicArray<IMediaPlayInfo>)
     }
 
 
     fun createNativePlayer(): IPlayerManager {
-        return ShamPlayManager()
+        return AndroidPlayManager()
     }
 
     //
@@ -43,6 +41,14 @@ object Factory {
         }
 
 
+    }
+
+    fun <I : IMediaPlayInfo, D> createNativeMusicArray(
+        name: String,
+        dataPacket: RemoteDataPacket<I, D>,
+        trackImpl: IMusicArray<I>?
+    ): IMusicArray<I> {
+        return MusicContainerArray(name, dataPacket, trackImpl)
     }
 
 }

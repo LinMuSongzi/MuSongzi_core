@@ -2,7 +2,6 @@ package com.musongzi.comment.viewmodel
 
 import com.musongzi.comment.ExtensionMethod.getSaveStateValue
 import com.musongzi.comment.business.SearchBusiness
-import com.musongzi.core.base.vm.EasyViewModel
 import com.musongzi.core.itf.client.ISearchClient
 import com.musongzi.core.itf.vm.ISearchViewModel
 

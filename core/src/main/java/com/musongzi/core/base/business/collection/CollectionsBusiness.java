@@ -154,9 +154,11 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
 //            res = iAgent.getArguments().getInt(ViewListPageFactory.ENGINE_EMPTY_LAYOUT, 0);
             if (res != 0) {
                 try {
-                    View view = ExtensionCoreMethod.INSTANCE.layoutInflater(this, llEmpty, res);
-                    llEmpty.removeAllViews();
-                    llEmpty.addView(view);
+                    View view = ExtensionCoreMethod.layoutInflater(res, llEmpty);
+                    if (llEmpty != null) {
+                        llEmpty.removeAllViews();
+                        llEmpty.addView(view);
+                    }
                     collectionsViewEngine.onEmptyViewCreate(view);
                     isOtherEmptyRes = true;
                     return;
