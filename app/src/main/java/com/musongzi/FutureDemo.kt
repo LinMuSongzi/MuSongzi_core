@@ -3,12 +3,13 @@ package com.musongzi
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import java.util.concurrent.AbstractExecutorService
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
-val mExecutor: ExecutorService = Executors.newFixedThreadPool(10)
+val mExecutor: AbstractExecutorService = Executors.newFixedThreadPool(10) as AbstractExecutorService
 const val TAG: String = "FutureDemo"
 
 /*** created by linhui * on 2022/8/22 */

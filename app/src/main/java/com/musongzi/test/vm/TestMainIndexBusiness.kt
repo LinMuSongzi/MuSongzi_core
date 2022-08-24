@@ -9,25 +9,20 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.musongzi.FutureDemo
 import com.musongzi.FutureDemo.acceptEither
+import com.musongzi.comment.ExtensionMethod.getSaveStateLiveData
 import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.comment.business.MainIndexBusiness
-import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.ExtensionCoreMethod.sub
-import com.musongzi.core.URLUtil
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CoreViewModel
 import com.musongzi.mExecutor
 import com.musongzi.test.Api
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStreamReader
-import java.io.RandomAccessFile
-import java.nio.charset.Charset
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.ForkJoinPool
+import com.musongzi.test.business.SimpleDataBusiness
+import java.util.concurrent.TimeUnit
 
 @RequiresApi(Build.VERSION_CODES.N)
 /*** created by linhui * on 2022/7/25 */
@@ -35,61 +30,9 @@ class TestMainIndexBusiness : MainIndexBusiness() {
 
 
     override fun afterHandlerBusiness() {
-        mExecutor.execute {
-            ActivityLifeManager.getInstance().getTopActivity()?.also {
-
-//                if (Build.VERSION.SDK_INT > 28) {
-//                    val c = it.contentResolver.query(
-//                        MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-//                        arrayOf(
-//                            MediaStore.Files.FileColumns.TITLE,
-//                            MediaStore.Files.FileColumns.DISPLAY_NAME
-//                        ),
-//                        "${MediaStore.Files.FileColumns.TITLE} = ?", arrayOf("linhui_text"), null
-//                    )
-//                    if (c?.count == 0) {
-//
-//                        val contentValues = ContentValues()
-//                        contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, "linhui.txt")
-//                        contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, "linhui.text")
-//                        contentValues.put(MediaStore.Files.FileColumns.TITLE, "linhui_text")
-//                        val uri = it.contentResolver.insert(
-//                            MediaStore.Files.getContentUri("external"),
-//                            contentValues
-//                        )
-//                        uri?.apply {
-//                            val outputStream = it.contentResolver.openOutputStream(uri)
-//                            outputStream?.write("你好吗".toByteArray(Charset.defaultCharset()))
-//                            outputStream?.close()
-//                        }
-//
-//                    } else {
-//                        c?.let { cn ->
-//                            if (cn.moveToNext()) {
-//                                val data =
-//                                    cn.getString(cn.getColumnIndexOrThrow(MediaStore.Files.FileColumns.RELATIVE_PATH))
-//                                it.contentResolver.openInputStream(Uri.parse(data))?.apply {
-////                                    var read = Inpu(this)
-//                                    val values = ByteArray(1024)
-//                                    var length = 0
-//                                    do {
-//                                        length = read(values)
-//                                        Log.i(
-//                                            TAG,
-//                                            "afterHandlerBusiness: values = " + String(values)
-//                                        )
-//                                    } while (length != 1)
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//                }
-//                Log.i(TAG, "afterHandlerBusiness: ${f.absolutePath}")
-            }
-        }
+//        mExecutor.n
     }
-
+    var livedata:LiveData<String>? = null
 
     override fun buildFragments(): List<Fragment> {
 
@@ -109,26 +52,33 @@ class TestMainIndexBusiness : MainIndexBusiness() {
 
         "haha".saveStateChange(iAgent, 998777)
 
+        livedata = liveData{
+            val data = loadData()
+            emit(data)
 
-//        ArrayList<String>().toArray()
+        }
 
-//        val clazz :KClass<ArrayEngine> = ArrayEngine::class
-//        Log.i(TAG, "buildFragments: "+clazz.supertypes)
-//        Log.i(TAG, "buildFragments: "+(clazz.annotations[0] as com.musongzi.core.annotation.CollecttionsEngine).emptyString)
-//        for(vc in clazz.supertypes){
-//
-//            Log.i(TAG, "buildFragments: "+vc.arguments.let {
-//                if(it.isNotEmpty()){
-//                    (it[0].type?.classifier as KClass<*>)
-//                }else{
-//                    it
-//                }
-//            })
-//
-//        }
+
+        iAgent.getThisLifecycle()?.let {
+            if(business.getTabs() == null){
+                Log.i(TAG, "buildFragments: 还没有初始化")
+            }
+            business.observer(it){
+                Log.i(TAG, "buildFragments: 我绑定啦~~~~~~")
+            }
+        }
+
 
 
         return ArrayList()
     }
+
+    suspend fun loadData():String{
+        TimeUnit.SECONDS.sleep(3)
+        return "你好"
+    }
+
+
+    var business = SimpleDataBusiness()
 
 }
