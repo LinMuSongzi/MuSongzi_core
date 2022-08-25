@@ -1,31 +1,15 @@
-package com.musongzi.videoplay;
+package com.musongzi.videoplay
 
-import android.view.Surface;
-import android.view.SurfaceHolder;
+import com.musongzi.core.base.business.BaseLifeBusiness
+import com.musongzi.core.itf.holder.IHolderLifecycle
+import com.musongzi.videoplay.IShowSurfaceHandler
 
-import androidx.annotation.NonNull;
+/*** created by linhui * on 2022/8/24  */
+class PlayVideoBusiness : BaseLifeBusiness<IHolderLifecycle>(),IPlayVideoBusiness {
 
-/*** created by linhui * on 2022/8/24 */
-public class PlayVideoBusiness implements SurfaceHolder.Callback2 {
+    var surfaceHandler: IShowSurfaceHandler? = null
 
 
-    @Override
-    public void surfaceRedrawNeeded(@NonNull SurfaceHolder holder) {
 
-    }
 
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder holder) {
-
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-
-    }
 }

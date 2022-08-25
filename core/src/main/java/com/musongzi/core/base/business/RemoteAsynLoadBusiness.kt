@@ -1,19 +1,38 @@
-package com.musongzi.test.business
+package com.musongzi.core.base.business
 
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.*
+import com.musongzi.core.itf.ILifeObject
+import com.musongzi.core.itf.holder.IHolderLifecycle
 import java.lang.ref.WeakReference
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
 
-/*** created by linhui * on 2022/8/24 */
-abstract class DataBusiness<T> {
+/*** created by linhui * on 2022/8/24
+ *
+ * 耗时任务的一个业务
+ *
+ * 实现[loadData]方法，装载耗时任务，自动关联生命周期
+ *
+ * */
+abstract class RemoteAsynLoadBusiness<T>: BaseLifeBusiness<IHolderLifecycle>() {
 
     companion object {
         const val NORMAL_FLAG = 0
         const val HAD_LOADED = 1
+    }
+
+    override fun afterHandlerBusiness() {
+        super.afterHandlerBusiness()
+        iAgent.getThisLifecycle()?.also {
+            it.lifecycle.addObserver(object :DefaultLifecycleObserver{
+                override fun onDestroy(owner: LifecycleOwner) {
+                    mExecutor.shutdown()
+                }
+            })
+        }
     }
 
     private val mExecutor: ExecutorService = Executors.newCachedThreadPool()
@@ -85,7 +104,7 @@ abstract class DataBusiness<T> {
      */
     protected abstract fun loadData(): T
 
-    fun runOnUiThread(run: Runnable) {
+    protected fun runOnUiThread(run: Runnable) {
         Handler(Looper.getMainLooper()).post(run)
     }
 
