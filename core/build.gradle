@@ -93,7 +93,7 @@ dependencies {
 
 // If you want to use Kotlin syntax with Android Lifecycle
     api 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle-kotlin:4.0.2'
-    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha01'
+//    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha01'
     api "androidx.startup:startup-runtime:1.1.0-beta01"
     //noinspection GradleDependency
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"

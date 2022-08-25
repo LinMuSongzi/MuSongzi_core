@@ -16,7 +16,7 @@ object ManagerUtil {
     }
 
     fun <T> Int.manager():T{
-       return getHolderManager<T>(this)
+       return getHolderManager(this)
     }
 
 }

@@ -24,7 +24,7 @@ import com.musongzi.test.Api
 import com.musongzi.test.business.SimpleDataBusiness
 import java.util.concurrent.TimeUnit
 
-@RequiresApi(Build.VERSION_CODES.N)
+//@RequiresApi(Build.VERSION_CODES.N)
 /*** created by linhui * on 2022/7/25 */
 class TestMainIndexBusiness : MainIndexBusiness() {
 

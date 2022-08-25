@@ -2,8 +2,14 @@ package com.musongzi.test
 
 import android.util.Log
 import androidx.multidex.MultiDexApplication
+import com.musongzi.ConfigManager
 import com.musongzi.core.ExtensionCoreMethod.bean
+import com.musongzi.core.base.MszApplicaton
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
+import com.musongzi.core.base.manager.InstanceManager
+import com.musongzi.core.base.manager.ManagerInstanceHelp
+import com.musongzi.core.base.manager.ManagerInstanceHelp.Companion.instanceHelp
+import com.musongzi.core.base.manager.ManagerInstanceHelp.Companion.instanceOnReady
 import com.musongzi.core.base.manager.ManagerUtil
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.util.WriteTxt
@@ -18,8 +24,9 @@ import org.greenrobot.eventbus.ThreadMode
 import retrofit2.Retrofit
 import java.lang.reflect.Method
 import java.util.*
+import kotlin.collections.HashSet
 
-class MyApplication : MultiDexApplication() {
+class MyApplication : MszApplicaton() {
     companion object {
         const val TAG = "MyApplication"
     }
@@ -29,87 +36,80 @@ class MyApplication : MultiDexApplication() {
 
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    override fun getManagers(): Array<ManagerInstanceHelp> {
 
-        Thread.setDefaultUncaughtExceptionHandler { t, e ->
-            Log.i(TAG, "message: t = ${e.message}")
-            for (error in e.stackTrace) {
-                Log.i(TAG, "error: $error")
+        return arrayOf(
+            com.musongzi.spi.Factory.spiManagerHelp(MyRuleProxy::class.java),
+            ConfigManager.ManagerInstanceHelpImpl(),
+            instanceHelp {
+                RetrofitCallBackInstance()
+            },
+            instanceOnReady{
+                EventBus.getDefault().register(this@MyApplication)
             }
-            WriteTxt.exception(e)
-        }
-
-//        ManagerUtil.init(arrayListOf(Factory.buildInstanceManagerHelp {
-//            MusicConfigHelpBusines().apply {
-//                afterHandlerBusiness()
-//            }
-//        }), classLoader)
-        ManagerUtil.init(arrayListOf(com.musongzi.spi.Factory.spiManagerHelp(MyRuleProxy::class.java)),classLoader)
-
-        EventBus.getDefault().register(this)
-        registerEvent(ILoginEvent::class.java) {
-            object : IMusicEvent {
-                override fun play() {
-                    Log.i(TAG, "initEvent play: MyApplication")
-                }
-
-                override fun onLogin() {
-                    Log.i(TAG, "initEvent onLogin: MyApplication")
-//                    Log.i(TAG, "onLogin: MyApplication ")
-                }
-
-                override fun onLogout() {
-                    Log.i(TAG, "initEvent onLogout: MyApplication ")
-                }
-
-            }
-        }
-
-        Thread.UncaughtExceptionHandler { _, e ->
-            Log.i(TAG, "onCreate: " + e.message + " , " + Arrays.toString(e.stackTrace) + "\n");
-        }
-        RetrofitManager.getInstance().init(object : RetrofitManager.CallBack {
-            override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
-                when (method.name) {
-                    "getArrayEngine" -> {
-                        var cb: Any? = null
-                        if ((args[0] as Int) > 1) {
-                            cb = ObservableCreate.fromArray(emptyArray<String>())
-                        } else {
-                            cb = ObservableCreate.fromArray(
-                                arrayOf(
-                                    "a".bean(),
-                                    "1".bean(),
-                                    "2".bean(),
-                                    "3".bean(),
-                                    "4".bean(),
-                                    "5".bean(),
-                                    "6".bean(),
-                                    "ad".bean(),
-                                    "1".bean(),
-                                    "2".bean(),
-                                    "3".bean(),
-                                    "4".bean(),
-                                    "5".bean(),
-                                    "6".bean(),
-                                    "ad".bean()
-                                )
-
-                            )
-                        }
-                        return cb
-                    }
-                }
-                return null;
-            }
-
-            override fun getOkHttpCLient(): OkHttpClient? = null
-
-            override fun getRetrofit(): Retrofit? = null
-
-        })
+        )
     }
 
+    class RetrofitCallBackInstance : InstanceManager {
+
+        override fun onReady(a: Any?) {
+            RetrofitManager.getInstance().init(object : RetrofitManager.CallBack {
+                override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
+                    when (method.name) {
+                        "getArrayEngine" -> {
+                            var cb: Any? = null
+                            if ((args[0] as Int) > 1) {
+                                cb = ObservableCreate.fromArray(emptyArray<String>())
+                            } else {
+                                cb = ObservableCreate.fromArray(
+                                    arrayOf(
+                                        "a".bean(),
+                                        "1".bean(),
+                                        "2".bean(),
+                                        "3".bean(),
+                                        "4".bean(),
+                                        "5".bean(),
+                                        "6".bean(),
+                                        "ad".bean(),
+                                        "1".bean(),
+                                        "2".bean(),
+                                        "3".bean(),
+                                        "4".bean(),
+                                        "5".bean(),
+                                        "6".bean(),
+                                        "ad".bean(),
+                                        "1".bean(),
+                                        "2".bean(),
+                                        "3".bean(),
+                                        "4".bean(),
+                                        "5".bean(),
+                                        "6".bean(),
+                                        "ad".bean(),
+                                        "1".bean(),
+                                        "2".bean(),
+                                        "3".bean(),
+                                        "4".bean(),
+                                        "5".bean(),
+                                        "6".bean(),
+                                        "ad".bean()
+                                    )
+
+                                )
+                            }
+                            return cb
+                        }
+                    }
+                    return null;
+                }
+
+                override fun getOkHttpCLient(): OkHttpClient? = null
+
+                override fun getRetrofit(): Retrofit? = null
+
+            })
+        }
+
+
+    }
 
 }

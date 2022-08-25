@@ -7,5 +7,30 @@ interface ManagerInstanceHelp {
 
     fun name(): String? = null
 
-    fun readyNow(my: InstanceManager): Any?
+    fun readyNow(my: InstanceManager): Any? = null
+
+
+    companion object {
+
+        fun instanceHelp(instance: () -> InstanceManager): ManagerInstanceHelp {
+            return object : ManagerInstanceHelp {
+                override fun instance(): InstanceManager? {
+                    return instance.invoke()
+                }
+
+            }
+        }
+
+
+        fun instanceOnReady(runnable: Runnable): ManagerInstanceHelp {
+            return object : ManagerInstanceHelp {
+                override fun instance(): InstanceManager? {
+                    return InstanceManagerSimple(runnable)
+                }
+            }
+        }
+
+    }
+
+
 }
