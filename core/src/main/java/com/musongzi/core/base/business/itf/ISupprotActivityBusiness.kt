@@ -4,6 +4,7 @@ import androidx.databinding.ViewDataBinding
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.IHolderContext
 import com.musongzi.core.itf.holder.IHolderDataBinding
+import com.musongzi.core.itf.holder.IHolderViewModelProvider
 
 /*** created by linhui * on 2022/7/6
  *
@@ -13,7 +14,8 @@ import com.musongzi.core.itf.holder.IHolderDataBinding
  * 提供了基本的视图[getHolderDataBinding]
  *
  * */
-interface ISupprotActivityBusiness :IBusiness,IHolderContext,IDisconnect,IHolderSavedStateHandle,IHolderDataBinding<ViewDataBinding>{
+interface ISupprotActivityBusiness :IBusiness,IHolderContext,IDisconnect,IHolderSavedStateHandle,IHolderDataBinding<ViewDataBinding>
+    ,IHolderViewModelProvider{
     fun checkEvent()
     fun getLocalHolderSavedStateHandle():ISaveStateHandle
     override fun getHolderDataBinding():ViewDataBinding

@@ -19,10 +19,7 @@ import com.musongzi.core.base.client.imp.FragmentBusinessControlClientImpl
 import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.IDisconnect
 import com.musongzi.core.itf.IWant
-import com.musongzi.core.itf.holder.IHolderActivity
-import com.musongzi.core.itf.holder.IHolderDataBinding
-import com.musongzi.core.itf.holder.IHolderFragmentManager
-import com.musongzi.core.itf.holder.IHolderViewModel
+import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import com.trello.rxlifecycle4.components.support.RxFragment
 
@@ -37,11 +34,11 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     private lateinit var fControl: FragmentControlClient
 
-    private var mMainModelProvider: ViewModelProvider? = null
+//    private var mMainModelProvider: ViewModelProvider? = null
 
     private fun newFactory(owner: SavedStateRegistryOwner): ViewModelProvider.Factory =
         object : AbstractSavedStateViewModelFactory(owner, getFactoryDefaultArgs()) {
-            override fun <T : ViewModel?> create(
+            override fun <T : ViewModel> create(
                 key: String,
                 modelClass: Class<T>,
                 handle: SavedStateHandle
@@ -59,23 +56,19 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         return arguments;
     }
 
-    override fun topViewModelProvider(): ViewModelProvider {
-        val m: ViewModelProvider
-        if (this.mMainModelProvider == null) {
-            m = ViewModelProvider(requireActivity(), newFactory(requireActivity()))
-            this.mMainModelProvider = m;
-            lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onDestroy(owner: LifecycleOwner) {
-                    mMainModelProvider = null
-                }
-            })
+    override fun topViewModelProvider(): ViewModelProvider? {
+        return if (requireActivity() is IHolderViewModelProvider) {
+            (requireActivity() as IHolderViewModelProvider).topViewModelProvider()
         } else {
-            m = this.mMainModelProvider!!
+            val factory = requireActivity() as? IHolderViewModelFactory
+            ViewModelProvider(
+                requireActivity(),
+                (factory?.getHolderFactory() ?: newFactory(requireActivity()))
+            )
         }
-        return m
     }
 
-    override fun thisViewModelProvider(): ViewModelProvider {
+    override fun thisViewModelProvider(): ViewModelProvider? {
         return ViewModelProvider(this, newFactory(this))
     }
 
@@ -130,6 +123,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
                     actualTypeArgumentsDatabindinIndex()
                 )!!
             }
+            dataBinding.lifecycleOwner = this
             dataBinding.root
 
         } else if (getLayoutId() == View.NO_ID) {
@@ -228,6 +222,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     override fun onDestroyView() {
         super.onDestroyView()
+        dataBinding.unbind()
         Log.i(TAG, "FragmentState:onDestoryView")
     }
 

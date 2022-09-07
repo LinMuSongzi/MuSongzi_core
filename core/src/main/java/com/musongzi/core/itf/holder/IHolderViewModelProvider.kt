@@ -8,8 +8,8 @@ interface IHolderViewModelProvider {
 
     fun isRootProvider() = topViewModelProvider() == thisViewModelProvider();
 
-    fun topViewModelProvider(): ViewModelProvider
+    fun topViewModelProvider(): ViewModelProvider?
 
-    fun thisViewModelProvider(): ViewModelProvider
+    fun thisViewModelProvider(): ViewModelProvider?
 
 }

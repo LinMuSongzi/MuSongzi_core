@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Consumer
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.reflect.KClass
 
 /*** created by linhui * on 2022/7/20 */
 object ExtensionCoreMethod {
@@ -79,7 +81,12 @@ object ExtensionCoreMethod {
                 ViewGroup::class.java,
                 Boolean::class.java
             )
-            method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), view, false) as? D
+            method.invoke(
+                null,
+                LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()),
+                view,
+                false
+            ) as? D
         }
     }
 
@@ -89,6 +96,7 @@ object ExtensionCoreMethod {
             Log.i("businessSet", ": succeed " + business.javaClass.simpleName)
         }
     }
+
     fun <T> ViewDataBinding.entitySet(entity: String, clazz: Class<T>, entityObject: T?) {
         exceptionRun {
             javaClass.getMethod("set${TextUtil.capitalizationText(entity)}", clazz)
@@ -96,6 +104,7 @@ object ExtensionCoreMethod {
             Log.i("businessSet", ": succeed " + entity.javaClass.simpleName)
         }
     }
+
     /**
      * 注意如果当前的IHandlerChooseViewModel 子类不是
      */
@@ -130,7 +139,8 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun Int.layoutInflater(p: ViewGroup?) = LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(this, p, false);
+    fun Int.layoutInflater(p: ViewGroup?) =
+        LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(this, p, false);
 
     @JvmStatic
     fun SmartRefreshLayout.refreshLayoutInit(
@@ -192,7 +202,6 @@ object ExtensionCoreMethod {
 //        }
 //
 //    }
-
 
 
     @JvmStatic
@@ -308,7 +317,10 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun RecyclerView.linearLayoutManager(or: Int, adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+    fun RecyclerView.linearLayoutManager(
+        or: Int,
+        adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>
+    ) {
         val mLayoutManager = LinearLayoutManager(null, or, false)
         val a = adapterMethod(mLayoutManager)
         layoutManager = mLayoutManager
@@ -316,12 +328,19 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun RecyclerView.gridLayoutManager(span: Int, adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+    fun RecyclerView.gridLayoutManager(
+        span: Int,
+        adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>
+    ) {
         gridLayoutManager(span, GridLayoutManager.VERTICAL, adapterMethod)
     }
 
     @JvmStatic
-    fun RecyclerView.gridLayoutManager(span: Int, or: Int, adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>) {
+    fun RecyclerView.gridLayoutManager(
+        span: Int,
+        or: Int,
+        adapterMethod: (LinearLayoutManager) -> RecyclerView.Adapter<*>
+    ) {
         val mLayoutManager = GridLayoutManager(null, span, or, false)
         val a = adapterMethod(mLayoutManager)
         layoutManager = mLayoutManager
@@ -376,8 +395,10 @@ object ExtensionCoreMethod {
             adaper
         )
     }
+
     @JvmStatic
-    fun Int.androidColorGet() = ActivityCompat.getColor(ActivityThreadHelp.getCurrentApplication(),this)
+    fun Int.androidColorGet() =
+        ActivityCompat.getColor(ActivityThreadHelp.getCurrentApplication(), this)
 
     @JvmStatic
     fun IRecycleViewClient<*>.buildInitRecycleView(
@@ -397,7 +418,7 @@ object ExtensionCoreMethod {
 
     @JvmStatic
     fun <T> Class<T>.getApi(want: IWant? = null): T? {
-        if(!this.isInterface){
+        if (!this.isInterface) {
             return null
         }
         return RetrofitManager.getInstance().getApi(this, want)
@@ -407,11 +428,15 @@ object ExtensionCoreMethod {
     @JvmStatic
     fun <F : Fragment> Class<F>.instance(bundle: Bundle? = null): F {
         return bundle?.let {
-            newInstance().let { f->
+            newInstance().let { f ->
                 f.arguments = bundle
                 f
             }
-        } ?:newInstance()
+        } ?: newInstance()
+    }
+
+    fun <V : ViewModel> Class<V>.getViewModel(vp: ViewModelProvider): V {
+        return vp.get(this)
     }
 
 }

@@ -45,7 +45,16 @@ abstract class MszFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     }
 
     fun getViewModel(): V {
-        return InjectionHelp.getViewModel(getProvider(), CLASS_CACHE[javaClass.name])
+        return InjectionHelp.getViewModel(getProvider()!!, CLASS_CACHE[javaClass.name])
+    }
+
+    fun getViewModelOrNull(): V? {
+        val p = getProvider()
+        return if (p == null) {
+            null
+        } else {
+            InjectionHelp.getViewModel(p, CLASS_CACHE[javaClass.name])
+        }
     }
 
     override fun actualTypeArgumentsDatabindinIndex() = 1
@@ -57,15 +66,15 @@ abstract class MszFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
     protected open fun instanceViewModel(clazz: Array<Class<*>?>): V? = InjectionHelp.findViewModel(
         javaClass,
         superFragmentName(),
-        getProvider(),
+        getProvider()!!,
         actualTypeArgumentsViewModelIndex(),
         clazz
     )
 
     protected open fun superFragmentName(): String = MszFragment::class.java.name
 
-    private fun getProvider(): ViewModelProvider {
-        val p: ViewModelProvider
+    private fun getProvider(): ViewModelProvider? {
+        val p: ViewModelProvider?
         when {
             modelProviderEnable.and(PROVIDER_MAIN) > 0 -> {
                 p = topViewModelProvider()
@@ -74,7 +83,8 @@ abstract class MszFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
                 p = thisViewModelProvider()
             }
             else -> {
-                modelProviderEnable = modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
+                modelProviderEnable =
+                    modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
                 return getProvider()
             }
         }

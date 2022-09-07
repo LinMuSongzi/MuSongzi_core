@@ -114,6 +114,14 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         return (iAgent as IHolderActivity).getHolderContext()
     }
 
+    override fun topViewModelProvider(): ViewModelProvider? {
+       return (iAgent as? IHolderViewModelProvider)?.topViewModelProvider()
+    }
+
+    override fun thisViewModelProvider(): ViewModelProvider? {
+        return (iAgent as? IHolderViewModelProvider)?.thisViewModelProvider()
+    }
+
     override fun getHolderDataBinding(): ViewDataBinding {
         return dataBinding
     }
@@ -183,8 +191,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         override fun disconnect() = (activity as? INotifyDataSetChanged)?.disconnect() ?: true
 
         override fun topViewModelProvider(): ViewModelProvider {
-            return (activity as? IHolderViewModelProvider)?.topViewModelProvider()
-                ?: activityViewModelProvider
+            return activityViewModelProvider
         }
 
         override fun thisViewModelProvider(): ViewModelProvider {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.ExtensionCoreMethod.layoutInflater
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
@@ -72,5 +73,13 @@ open class MszFragmentActivity : AppCompatActivity(), IHolderContext,
     }
 
     override fun getHolderSupprotActivityBusiness() = business
+
+    override fun topViewModelProvider(): ViewModelProvider? {
+        return business.topViewModelProvider()
+    }
+
+    override fun thisViewModelProvider(): ViewModelProvider? {
+        return business.thisViewModelProvider()
+    }
 
 }

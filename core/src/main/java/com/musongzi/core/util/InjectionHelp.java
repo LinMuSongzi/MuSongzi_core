@@ -134,7 +134,7 @@ public class InjectionHelp {
 
 
     @org.jetbrains.annotations.Nullable
-    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
+    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name,@NotNull ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
         if (javaClass.getSuperclass().getName().equals(name)) {
             Type type = javaClass.getGenericSuperclass();
             if (type instanceof ParameterizedType) {

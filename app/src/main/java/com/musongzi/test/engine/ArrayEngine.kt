@@ -1,12 +1,17 @@
 package com.musongzi.test.engine
 
+import android.util.Log
 import com.musongzi.comment.ExtensionMethod.instacne
+import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.core.ExtensionCoreMethod.adapter
 import com.musongzi.core.ExtensionCoreMethod.getApi
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
+import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
+import com.musongzi.core.base.fragment.BaseCollectionsViewFragment.Companion.TOTAL_KEY
+import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.vm.IRefreshViewModel
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.test.Api
@@ -23,6 +28,9 @@ class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>
 //        InjectionHelp.getViewModel<>()
 //        getRefreshViewModel().getHolderViewModelProvider()?.topViewModelProvider().ine
 //        "haha".saveStateChange(getRefreshViewModel(),1)
+        TOTAL_KEY.liveSaveStateObserver<Int>(getRefreshViewModel()){
+            Log.i(TAG, "onInitAfter: 最大值是 $it")
+        }
     }
 
     override fun getRemoteDataReal(page: Int): Observable<Array<StringChooseBean>>? =
@@ -35,6 +43,7 @@ class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>
     override fun transformDataToList(entity: Array<StringChooseBean>) =
         ArrayList<StringChooseBean>().let {
             it.addAll(entity)
+            BaseCollectionsViewFragment.TOTAL_KEY.saveStateChange(getRefreshViewModel(),entity.size)
             it
         }
 

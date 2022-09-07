@@ -10,6 +10,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
+/**
+ * 加解密测试
+ * 字节码替换
+ */
 public class Enter {
 
     private static final String TAG = "Enter_now";

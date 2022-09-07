@@ -12,14 +12,22 @@
         android:layout_height="match_parent"
         tools:context=".activity.SplashActivity">
 
-        <FrameLayout
-            android:id="@+id/id_content_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/id_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="你好哈哈哈哈"/>
+
+<!--        <FrameLayout-->
+<!--            android:id="@+id/id_content_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

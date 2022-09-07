@@ -4,11 +4,12 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.itf.IHolderSavedStateHandle
+import com.musongzi.core.itf.ILifeSaveStateHandle
 import com.musongzi.core.itf.holder.IHolderClient
 import com.musongzi.core.itf.holder.IHolderContext
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 
-interface IRefreshViewModel<Item> : IHolderContext ,IHolderSavedStateHandle{
+interface IRefreshViewModel<Item> : IHolderContext ,ILifeSaveStateHandle{
     fun getBundle(): Bundle?
     fun getHolderViewModelProvider():IHolderViewModelProvider?
     fun refreshHolderClient(): IRefreshClient<Item>?
