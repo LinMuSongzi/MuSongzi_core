@@ -3,6 +3,7 @@ package com.musongzi.core.util;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
@@ -14,12 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
+import com.musongzi.core.base.business.BaseOnClickAction;
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
 import com.musongzi.core.base.manager.RetrofitManager;
 import com.musongzi.core.base.map.SaveStateHandleWarp;
 import com.musongzi.core.itf.IAgentHolder;
 import com.musongzi.core.itf.IBusiness;
 import com.musongzi.core.itf.IClient;
+import com.musongzi.core.itf.IOnClickAction;
 import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.IWant;
 import com.musongzi.core.itf.holder.IHolderViewModel;
@@ -35,6 +38,7 @@ import java.util.Map;
 import io.reactivex.rxjava3.annotations.NonNull;
 import kotlin.Deprecated;
 import kotlin.jvm.functions.Function1;
+
 @Deprecated(message = "将会被Kclass替代")
 public class InjectionHelp {
 
@@ -134,7 +138,7 @@ public class InjectionHelp {
 
 
     @org.jetbrains.annotations.Nullable
-    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name,@NotNull ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
+    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, @NotNull ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
         if (javaClass.getSuperclass().getName().equals(name)) {
             Type type = javaClass.getGenericSuperclass();
             if (type instanceof ParameterizedType) {
@@ -159,7 +163,7 @@ public class InjectionHelp {
         B instance = null;
         try {
             instance = (B) targetClass.newInstance();
-            if(instance instanceof IAgentHolder){
+            if (instance instanceof IAgentHolder) {
                 ((IAgentHolder) instance).setAgentModel(agent);
             }
             instance.afterHandlerBusiness();
@@ -260,19 +264,30 @@ public class InjectionHelp {
 
     @NotNull
     public static ClassLoader getClassLoader() {
-        if(CLASS_LOADER != null) {
+        if (CLASS_LOADER != null) {
             return CLASS_LOADER;
-        }else{
+        } else {
             return findLoader();
         }
     }
 
     private static ClassLoader findLoader() {
-       return InjectionHelp.class.getClassLoader();
+        return InjectionHelp.class.getClassLoader();
     }
 
 
-
-
-
+    @org.jetbrains.annotations.Nullable
+    public static View.OnClickListener injectOnClick(@NotNull String click, @org.jetbrains.annotations.Nullable String action) {
+        try {
+            Class<?> clazz = ActivityThreadHelp.getCurrentApplication().getClassLoader().loadClass(click);
+            if(clazz.isAssignableFrom(BaseOnClickAction.class)){
+                return (IOnClickAction) clazz.getConstructor(Integer.class).newInstance(action);
+            }else{
+                throw new IllegalArgumentException("不是 BaseOnClickAction 类型");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

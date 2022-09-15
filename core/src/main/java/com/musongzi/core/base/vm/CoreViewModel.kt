@@ -1,9 +1,11 @@
 package com.musongzi.core.base.vm
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.IHolderActivity
+import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.trello.rxlifecycle4.LifecycleTransformer
 
 abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWant, IDisconnect {
@@ -26,6 +28,7 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
         }
     }
 
+    @Deprecated("已过期", replaceWith = ReplaceWith("建议使用,ISaveStateHandle 来观察"))
     override fun attachNow(t: H?) {
         holderActivity = t;
     }
@@ -34,15 +37,19 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
         holderActivity = null;
     }
 
-    override fun disconnect(): Boolean {
+    final override fun disconnect(): Boolean {
         return holderActivity?.getClient()?.disconnect() ?: true
     }
 
-    override fun isAttachNow(): Boolean = holderActivity != null
+    final override fun isAttachNow(): Boolean = holderActivity != null
 
     override fun <T> bindToLifecycle(): LifecycleTransformer<T>? {
         return holderActivity?.bindToLifecycle()
     }
+
+    final override fun getMainLifecycle(): IHolderLifecycle? = holderActivity?.getMainLifecycle()
+
+    final override fun getThisLifecycle(): LifecycleOwner? = holderActivity?.getThisLifecycle()
 
 //    companion object{
 //        const val

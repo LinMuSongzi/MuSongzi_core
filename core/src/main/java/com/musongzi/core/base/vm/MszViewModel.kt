@@ -38,9 +38,7 @@ abstract class MszViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHold
     }
     protected var client: C? = null
 
-    override fun getMainLifecycle(): IHolderLifecycle? = super.holderActivity?.getMainLifecycle()
 
-    override fun getThisLifecycle(): LifecycleOwner? = super.holderActivity?.getThisLifecycle()
 
 
     override fun showDialog(msg: String?) {
@@ -74,13 +72,13 @@ abstract class MszViewModel<C : IClient?, B : IBusiness>() : CoreViewModel<IHold
     }
 
     @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
-    fun setHolderClient(client: C) {
+    final fun setHolderClient(client: C) {
         this.client = client;
     }
 
     override fun clear() {
-        super.clear()
         client = null;
+        super.clear()
     }
 
     private fun createBusiness(): B {

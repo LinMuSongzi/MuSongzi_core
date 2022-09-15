@@ -12,6 +12,8 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.target.ViewTarget
 import com.musongzi.core.ExtensionCoreMethod.androidColorGet
+import com.musongzi.core.util.ActivityThreadHelp
+import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.util.ScreenUtil.SCREEN_1_3_WDITH
 
 /*** created by linhui * on 2022/7/20 */
@@ -103,16 +105,26 @@ fun imageLoadRect(image: ImageView, uri: Any?) {
 }
 
 @BindingAdapter("viewVisibility")
-fun viewVisibility(v: View,int:Int){
+fun viewVisibility(v: View, int: Int) {
     v.visibility = int
 }
 
 @BindingAdapter("viewVisibility")
-fun viewVisibility(v: View,isShow:Boolean){
-    v.visibility = if(isShow) View.VISIBLE else View.GONE
+fun viewVisibility(v: View, isShow: Boolean) {
+    v.visibility = if (isShow) View.VISIBLE else View.GONE
 }
 
 @BindingAdapter("imageLoadNormal")
 fun imageLoadNormal(image: ImageView, uri: Any?) {
     image.showImage(uri)
 }
+
+
+//@BindingAdapter(value = ["onClickClass", "onClickAction"])
+//fun viewVisibility(v: View, click: String, action: String?) {
+//    val click:View.OnClickListener? = InjectionHelp.injectOnClick(click,action)
+//    v.setOnClickListener(click)
+//}
+
+
+
