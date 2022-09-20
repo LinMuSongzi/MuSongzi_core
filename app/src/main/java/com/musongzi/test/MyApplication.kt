@@ -2,6 +2,7 @@ package com.musongzi.test
 
 import android.util.Log
 import androidx.multidex.MultiDexApplication
+import com.bumptech.glide.RequestManager
 import com.musongzi.ConfigManager
 import com.musongzi.core.ExtensionCoreMethod.bean
 import com.musongzi.core.base.MszApplicaton
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.ThreadMode
 import retrofit2.Retrofit
 import java.lang.reflect.Method
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.HashSet
 
 class MyApplication : MszApplicaton() {
@@ -57,7 +59,7 @@ class MyApplication : MszApplicaton() {
                 override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
                     when (method.name) {
                         "getArrayEngine" -> {
-                            var cb: Any? = null
+                            var cb: Any?
                             if ((args[0] as Int) > 1) {
                                 cb = ObservableCreate.fromArray(emptyArray<String>())
                             } else {
@@ -97,6 +99,12 @@ class MyApplication : MszApplicaton() {
                                 )
                             }
                             return cb
+
+                        }
+                        "grilPic"->{
+                           return RetrofitManager.getInstance().getApi(Api::class.java).grilPic().delay(5,TimeUnit.SECONDS).doOnDispose {
+                               Log.i(TAG, "grilPic: 取消")
+                           }
                         }
                     }
                     return null;

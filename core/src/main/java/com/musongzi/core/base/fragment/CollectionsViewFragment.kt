@@ -31,7 +31,7 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
 
     override fun getPageEngine(): IPageEngine<Any>? {
         return if(lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)){
-            getViewModel().business.base as? IPageEngine<Any>?
+            getViewModel().getHolderBusiness().base as? IPageEngine<Any>?
         }else{
             null
         }

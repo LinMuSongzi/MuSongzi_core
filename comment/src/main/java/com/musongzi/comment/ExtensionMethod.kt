@@ -39,10 +39,7 @@ import com.musongzi.core.base.fragment.MszFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.MszViewModel
-import com.musongzi.core.itf.IBusiness
-import com.musongzi.core.itf.IHolderSavedStateHandle
-import com.musongzi.core.itf.ILifeSaveStateHandle
-import com.musongzi.core.itf.INeed
+import com.musongzi.core.itf.*
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
@@ -104,7 +101,7 @@ object ExtensionMethod {
      */
     @JvmStatic
     @JvmOverloads
-    fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragemnt(
+    fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragment(
         data: Bundle? = null,
         onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
     ): CollectionsViewFragment {
@@ -297,56 +294,78 @@ object ExtensionMethod {
     }
 
     /**
-     * 观察数据基于“key”的livedate，
-     * isRemove 是否此次监听仅为一次
+     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
      */
     @JvmStatic
-    @JvmOverloads
+    fun <T> String.saveStateChange(saveStateHandle: ISaveStateHandle, v: T) {
+        saveStateHandle[this] = v
+    }
+
+
+    /**
+     * 观察数据基于“key”的livedate，
+     */
+    @JvmStatic
     fun <T> String.liveSaveStateObserver(
         holder: ILifeSaveStateHandle,
-        isRemove: Boolean = false,
         observer: Observer<T>
     ) {
         holder.getThisLifecycle()?.let {
-            val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
-            if (isRemove) {
-                liveData.observe(it, object : Observer<T> {
-                    override fun onChanged(t: T) {
-                        observer.onChanged(t)
-                        liveData.removeObserver(this)
-                    }
-                })
-            } else {
-                liveData.observe(it, observer)
-            }
+            liveSaveStateObserver(it, holder.getHolderSavedStateHandle(), observer)
         }
     }
 
+    @JvmStatic
+    fun <T> String.liveSaveStateObserver(
+        lifecycle: LifecycleOwner,
+        saveStateHandle: ISaveStateHandle,
+        observer: Observer<T>
+    ) {
+        saveStateHandle.getLiveData<T>(this).observe(lifecycle, observer)
+    }
 
 
     /**
      * 观察数据基于“key”的livedate，
      * isRemove 是否此次监听仅为一次
      */
-    @JvmOverloads
     @JvmStatic
+    @JvmOverloads
     fun <T> String.liveSaveStateObserverOnOwner(
         holder: ILifeSaveStateHandle,
         observer: Observer<T>,
         l: LifecycleOwner,
         isRemove: Boolean = false,
     ) {
-        holder.getThisLifecycle()?.let {
-            val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
+        liveSaveStateObserverOnOwner(
+            holder.getHolderSavedStateHandle(),
+            holder.getThisLifecycle(),
+            observer,
+            l,
+            isRemove
+        )
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun <T> String.liveSaveStateObserverOnOwner(
+        holder: ISaveStateHandle,
+        myLifecycleOwner: LifecycleOwner?,
+        observer: Observer<T>,
+        otherLifecycleOwner: LifecycleOwner,
+        isRemove: Boolean = false,
+    ) {
+        if (myLifecycleOwner != null) {
+            val liveData = holder.getLiveData<T>(this);
             if (isRemove) {
-                liveData.observe(l, object : Observer<T> {
+                liveData.observe(otherLifecycleOwner, object : Observer<T> {
                     override fun onChanged(t: T) {
                         observer.onChanged(t)
                         liveData.removeObserver(this)
                     }
                 })
             } else {
-                liveData.observe(it, observer)
+                liveData.observe(otherLifecycleOwner, observer)
             }
         }
     }
@@ -360,12 +379,22 @@ object ExtensionMethod {
         return holder.getHolderSavedStateHandle().getLiveData(this);
     }
 
+    @JvmStatic
+    fun <T> String.getSaveStateLiveData(saveStateHandle: ISaveStateHandle): LiveData<T> {
+        return saveStateHandle.getLiveData(this);
+    }
+
     /**
      * 获取基于“key”的可观察的value
      */
     @JvmStatic
     fun <T> String.getSaveStateValue(holder: IHolderSavedStateHandle): T? {
         return holder.getHolderSavedStateHandle()[this]
+    }
+
+    @JvmStatic
+    fun <T> String.getSaveStateValue(saveStateHandle: ISaveStateHandle): T? {
+        return saveStateHandle[this]
     }
 
     @JvmStatic

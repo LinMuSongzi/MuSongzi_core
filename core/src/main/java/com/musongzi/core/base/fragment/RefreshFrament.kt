@@ -34,7 +34,7 @@ abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> :
         Log.i(TAG, "setRefresh: 6")
     }
 
-    override fun isSingleViewModelProvider(): Boolean {
+    override fun isNeedTopViewModelProvider(): Boolean {
         return true
     }
 

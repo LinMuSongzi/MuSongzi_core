@@ -1,22 +1,15 @@
 package com.musongzi.test.fragment
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import com.musongzi.core.ExtensionCoreMethod.getViewModel
 import com.musongzi.core.base.fragment.MszFragment
-import com.musongzi.core.base.vm.ActivityHelpViewModel
+import com.musongzi.core.base.vm.SimpleHelpClientViewModel
 import com.musongzi.core.base.vm.EmployeeEsayViewModel
+import com.musongzi.core.base.vm.SimpleViewModel
 import com.musongzi.test.databinding.ActivityTowBinding
-import com.musongzi.test.vm.TestViewModel
-import kotlinx.android.synthetic.main.activity_tow.view.*
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 
 /*** created by linhui * on 2022/7/7 */
-class TowFragment : MszFragment<ActivityHelpViewModel, ActivityTowBinding>() {
+class TowFragment : MszFragment<SimpleViewModel, ActivityTowBinding>() {
 
 
 
@@ -30,7 +23,7 @@ class TowFragment : MszFragment<ActivityHelpViewModel, ActivityTowBinding>() {
 
         EmployeeEsayViewModel::class.java.getViewModel(topViewModelProvider()!!).apply {
 //            isAttachNow()
-            Log.i(TAG, "initView2: ${isAttachNow()} , business = $business")
+            Log.i(TAG, "initView2: ${isAttachNow()} , business = ${getHolderBusiness()}")
             Log.i(TAG, "initView2: ${getThisLifecycle()}")
         }
 

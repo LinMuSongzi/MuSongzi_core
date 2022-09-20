@@ -1,21 +1,16 @@
 package com.musongzi.test.fragment
 
-import android.media.ImageReader
-import android.net.Uri
 import android.util.Log
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.musongzi.core.base.fragment.MszFragment
 import com.musongzi.test.databinding.FragmentCamera2Binding
-import com.musongzi.test.databinding.FragmentMainIndexBinding
-import com.musongzi.test.vm.TestViewModel
+import com.musongzi.test.vm.BannerViewModel
 import java.util.concurrent.Executor
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 /*** created by linhui * on 2022/8/18 */
-class Camra2Fragment: MszFragment<TestViewModel, FragmentCamera2Binding>() {
+class Camra2Fragment: MszFragment<BannerViewModel, FragmentCamera2Binding>() {
 
     var flag = 0
     var executor = Executor {

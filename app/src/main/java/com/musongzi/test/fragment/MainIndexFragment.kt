@@ -14,7 +14,7 @@ class MainIndexFragment : MszFragment<MainIndexViewModel, FragmentMainIndexBindi
     IMainIndexClient {
 
     override fun initView() {
-        getViewModel().business.buildDataBySize()
+        getViewModel().getHolderBusiness().buildDataBySize()
         (getRecycleView().itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
     }
     override fun getHolderContext(): Activity {

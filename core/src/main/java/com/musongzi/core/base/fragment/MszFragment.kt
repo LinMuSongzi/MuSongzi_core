@@ -16,7 +16,7 @@ import com.musongzi.core.view.TipDialog
 /**
  * 有videmodel
  */
-abstract class MszFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
+abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
     DataBindingFragment<D>() {
 
     private var mVp: ViewModelProvider? = null
@@ -83,16 +83,15 @@ abstract class MszFragment<V : IHolderViewModel<*, *>, D : ViewDataBinding> :
                 p = thisViewModelProvider()
             }
             else -> {
-                modelProviderEnable =
-                    modelProviderEnable.or(if (isSingleViewModelProvider()) PROVIDER_SINGLE else PROVIDER_MAIN)
+                modelProviderEnable = modelProviderEnable.or(if (isNeedTopViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
                 return getProvider()
             }
         }
-
+        Log.i(TAG, "getProvider: $modelProviderEnable")
         return p
     }
 
-    protected open fun isSingleViewModelProvider(): Boolean {
+    protected open fun isNeedTopViewModelProvider(): Boolean {
         return false
     }
 

@@ -1,7 +1,6 @@
 package com.musongzi.test.engine
 
 import android.util.Log
-import com.musongzi.comment.ExtensionMethod.instacne
 import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.core.ExtensionCoreMethod.adapter
@@ -11,12 +10,9 @@ import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.BaseCollectionsViewFragment.Companion.TOTAL_KEY
-import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.vm.IRefreshViewModel
-import com.musongzi.core.util.InjectionHelp
 import com.musongzi.test.Api
 import com.musongzi.test.databinding.AdapterStringBinding
-import com.musongzi.test.vm.TestViewModel
 import io.reactivex.rxjava3.core.Observable
 
 @CollecttionsEngine(isEnableReFresh = true, isEnableLoadMore = true, isEnableEventBus = true)

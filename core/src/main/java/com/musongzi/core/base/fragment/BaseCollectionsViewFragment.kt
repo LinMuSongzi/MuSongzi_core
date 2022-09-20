@@ -31,7 +31,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : Re
     abstract fun createRecycleViewClient(): IRefreshViewClient
 
     override fun initView() {
-        getViewModel().business.handlerArguments(arguments)
+        getViewModel().getHolderBusiness().handlerArguments(arguments)
     }
 
     override fun handlerArguments() {

@@ -10,7 +10,9 @@
         <entry key="..\:/musongzi_project/app/src/main/res/layout/fragment_main_index.xml" value="0.35833333333333334" />
         <entry key="..\:/musongzi_project/comment/src/main/res/layout/adapter_file.xml" value="0.20606884057971014" />
         <entry key="..\:/musongzi_project/comment/src/main/res/layout/adapter_main_bottom_item.xml" value="0.1" />
+        <entry key="..\:/musongzi_project/comment/src/main/res/layout/adapter_model_show_1.xml" value="0.35833333333333334" />
         <entry key="..\:/musongzi_project/core/src/main/res/layout/activity_normal_fragment.xml" value="0.35833333333333334" />
+        <entry key="..\:/musongzi_project/core/src/main/res/layout/fragment_test_main.xml" value="0.25" />
       </map>
     </option>
   </component>

@@ -2,10 +2,10 @@ package com.musongzi.test.activity
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.musongzi.comment.ExtensionMethod.convertFragemnt
+import com.musongzi.comment.ExtensionMethod.convertFragment
 import com.musongzi.test.R
 import com.musongzi.test.engine.ArrayEngine
-import com.musongzi.test.simple.TestMainFragment
+import com.musongzi.test.simple.BannerAndRetrofitMainFragment
 
 class TowActivity : BaseActivity() {
 
@@ -38,11 +38,11 @@ class TowActivity : BaseActivity() {
     }
 
     private fun createFragment1(): Fragment {
-        return TestMainFragment()
+        return BannerAndRetrofitMainFragment()
     }
 
     private fun createFragment2(): Fragment {
-        return ArrayEngine::class.java.convertFragemnt{
+        return ArrayEngine::class.java.convertFragment{
             it.title = "修改了哈哈哈哈"
         }
     }

@@ -53,7 +53,7 @@ public class RetrofitManager {
         if (retrofit != null) {
             return;
         }
-        setmCallBack(callBack);
+        setCallBack(callBack);
         if (callBack != null && callBack.getRetrofit() != null) {
             retrofit = callBack.getRetrofit();
         } else {
@@ -64,7 +64,7 @@ public class RetrofitManager {
         }
     }
 
-    public void setmCallBack(CallBack mCallBack) {
+    public void setCallBack(CallBack mCallBack) {
         this.mCallBack = mCallBack;
     }
 

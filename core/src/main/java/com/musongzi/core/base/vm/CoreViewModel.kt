@@ -1,5 +1,6 @@
 package com.musongzi.core.base.vm
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.musongzi.core.base.map.LocalSavedHandler
@@ -9,7 +10,7 @@ import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.trello.rxlifecycle4.LifecycleTransformer
 
 abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWant, IDisconnect {
-
+    protected val TAG = javaClass.simpleName
     companion object {
         const val LOCAL_SAVED_INDEX = 1;
         const val REMOTE_SAVED_INDEX = 0;
@@ -30,6 +31,7 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
 
     @Deprecated("已过期", replaceWith = ReplaceWith("建议使用,ISaveStateHandle 来观察"))
     override fun attachNow(t: H?) {
+        Log.i(TAG, "attachNow: = $t")
         holderActivity = t;
     }
 

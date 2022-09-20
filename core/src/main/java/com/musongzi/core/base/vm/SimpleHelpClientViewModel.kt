@@ -4,5 +4,5 @@ import com.musongzi.core.base.business.EmptyBusiness
 import com.musongzi.core.itf.IClient
 
 /*** created by linhui * on 2022/7/5 */
-class ActivityHelpViewModel : MszViewModel<IClient, EmptyBusiness>() {
+class SimpleHelpClientViewModel : MszViewModel<IClient, EmptyBusiness>() {
 }

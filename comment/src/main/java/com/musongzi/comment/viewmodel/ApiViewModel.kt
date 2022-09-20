@@ -12,8 +12,11 @@ open class ApiViewModel<C : IClient, B : IBusiness, Api> : MszViewModel<C, B>(),
         return InjectionHelp.injectApi(this,indexApiActualTypeArgument())
     }
 
-    protected open fun indexApiActualTypeArgument() = 2
+    protected open fun indexApiActualTypeArgument() = API_TYPE_INDEX
 
 
+    companion object{
+        const val API_TYPE_INDEX = 2
+    }
 
 }
