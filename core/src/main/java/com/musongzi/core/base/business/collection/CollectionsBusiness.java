@@ -77,9 +77,11 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
     }
 
     @Override
-    public void handlerView(RecyclerView r, SmartRefreshLayout s) {
+    public void handlerView(@NotNull RecyclerView r, @org.jetbrains.annotations.Nullable SmartRefreshLayout refreshLayout) {
         Log.i(TAG, "handlerView: mIDictionaryClass = " + mIDictionaryClass);
-        refreshLayoutInit(s, this, iAgent.collectionsInfo.isEnableReFresh(), iAgent.collectionsInfo.isEnableLoadMore());
+//        if(refreshLayout!=null) {
+            refreshLayoutInit(refreshLayout, this, iAgent.collectionsInfo.isEnableReFresh(), iAgent.collectionsInfo.isEnableLoadMore());
+//        }
         final RecyclerView.LayoutManager l = collectionsViewEngine.getLayoutManger();
         if (l == null) {
             r.setLayoutManager(new LinearLayoutManager(null, LinearLayoutManager.VERTICAL, false));

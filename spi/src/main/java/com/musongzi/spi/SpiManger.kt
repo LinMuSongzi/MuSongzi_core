@@ -13,13 +13,16 @@ import java.lang.ref.WeakReference
 
 /*** created by linhui * on 2022/8/21
  *
- * 注入框架，测试
+ * 缓存注入服务管理者
  *
  * */
 class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle {
 
     lateinit var mISaveStateHandle: ISaveStateHandle
 
+    /**
+     * 加载规则
+     */
     private var rulre: IStrategyRule? = null
 
 
@@ -72,7 +75,7 @@ class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle
     }
 
 
-    class ManagerInstanceHelpImpl(private var rule: WeakReference<Class<*>>) : ManagerInstanceHelp {
+    internal class ManagerInstanceHelpImpl(private var rule: WeakReference<Class<*>>) : ManagerInstanceHelp {
         override fun instance(): InstanceManager? {
             if (MANAGER == null) {
                 synchronized(SpiManger::class.java) {
@@ -98,8 +101,13 @@ class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle
         const val CACHE_PARIE_KEY = "CACHE_PARIE_KEY"
 
         var MANAGER: SpiManger? = null
-        fun loadInstance(request: ISpiRequest): Any? {
-            return MANAGER!!.load(request)
+
+        /**
+         * 加载需要的实体,基于[ISpiRequest.orderName].
+         * 通过,[IStrategyRule.onLoadRule] 策略去实例化;需要提前配置好
+         */
+        fun <T> loadInstance(request: ISpiRequest): T? {
+            return MANAGER?.load(request)
         }
     }
 }

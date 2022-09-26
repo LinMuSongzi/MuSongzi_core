@@ -19,6 +19,7 @@ interface Api {
     @GET("banner/bannerList")
     fun getBannerList(): Observable<ListDataBean<DiscoverBannerBean>>
 
+    @GET("")
     fun getArrayEngine(page: Int): Observable<Array<StringChooseBean>>
 
     fun searchText(text: CharSequence): Observable<Array<StringChooseBean>>

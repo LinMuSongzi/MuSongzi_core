@@ -28,9 +28,9 @@ class MainIndexViewModel : ApiViewModel<IMainIndexClient, IMainIndexBusiness, Ap
     IMainIndexViewModel, ISpiRequest {
 
     override fun createBusiness2(): IMainIndexBusiness {
-        val l =  (SpiManger.loadInstance(this) as? IMainIndexBusiness)!!
-//        Log.i(TAG, "createBusiness2: ")
-        return l;
+        val business:IMainIndexBusiness =  SpiManger.loadInstance(this)!!
+        Log.i(TAG, "createBusiness2: $business")
+        return business;
     }
 
     private val s: ISource<SimpleCardInfo> by lazy {

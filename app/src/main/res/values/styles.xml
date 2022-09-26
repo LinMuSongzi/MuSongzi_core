@@ -16,6 +16,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppMet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="backgroundColor">@color/bg_color</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/bg_black</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="AppNoActionBarDayNightTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="backgroundColor">@color/bg_white</item>
         <item name="colorPrimary">@color/colorPrimary</item>

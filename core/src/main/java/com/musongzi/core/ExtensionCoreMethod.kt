@@ -1,11 +1,14 @@
 package com.musongzi.core
 
 import android.annotation.SuppressLint
+import android.icu.util.Measure
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -20,7 +23,9 @@ import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
+import com.musongzi.core.itf.IBusiness
 import com.musongzi.core.itf.IWant
+import com.musongzi.core.itf.holder.IHolderNeed
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
@@ -37,7 +42,6 @@ import kotlin.reflect.KClass
 
 /*** created by linhui * on 2022/7/20 */
 object ExtensionCoreMethod {
-
 
     @SuppressLint("SimpleDateFormat")
     @JvmStatic
@@ -105,6 +109,11 @@ object ExtensionCoreMethod {
         }
     }
 
+
+    fun <B : IBusiness> Class<B>.getNeedNext(holder:IHolderNeed?):B?{
+        return holder?.getHolderNeed()?.getNext(this)
+    }
+
     /**
      * 注意如果当前的IHandlerChooseViewModel 子类不是
      */
@@ -143,12 +152,14 @@ object ExtensionCoreMethod {
         LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(this, p, false);
 
     @JvmStatic
-    fun SmartRefreshLayout.refreshLayoutInit(
+    fun SmartRefreshLayout?.refreshLayoutInit(
         p: IPageEngine<*>?,
         isEnableRefresh: Boolean,
         isEnableLoadMore: Boolean
     ) {
-        refreshLayoutInit(this, p, isEnableRefresh, isEnableLoadMore, 500)
+        if (this != null) {
+            refreshLayoutInit(this, p, isEnableRefresh, isEnableLoadMore, 500)
+        }
     }
 
     @JvmStatic

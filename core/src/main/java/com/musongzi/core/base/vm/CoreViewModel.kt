@@ -7,6 +7,7 @@ import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.holder.IHolderLifecycle
+import com.musongzi.core.util.UiUtil
 import com.trello.rxlifecycle4.LifecycleTransformer
 
 abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWant, IDisconnect {
@@ -15,6 +16,10 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
         const val LOCAL_SAVED_INDEX = 1;
         const val REMOTE_SAVED_INDEX = 0;
         const val SAVEDS_MAX = LOCAL_SAVED_INDEX + REMOTE_SAVED_INDEX + 1
+    }
+
+    override fun runOnUiThread(runnable: Runnable) {
+        UiUtil.post(runnable)
     }
 
     protected var holderActivity: IHolderActivity? = null

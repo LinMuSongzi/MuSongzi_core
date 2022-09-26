@@ -5,6 +5,7 @@ import androidx.multidex.MultiDexApplication
 import com.bumptech.glide.RequestManager
 import com.musongzi.ConfigManager
 import com.musongzi.core.ExtensionCoreMethod.bean
+import com.musongzi.core.StringChooseBean
 import com.musongzi.core.base.MszApplicaton
 import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.InstanceManager
@@ -46,7 +47,7 @@ class MyApplication : MszApplicaton() {
             instanceHelp {
                 RetrofitCallBackInstance()
             },
-            instanceOnReady{
+            instanceOnReady {
                 EventBus.getDefault().register(this@MyApplication)
             }
         )
@@ -60,8 +61,22 @@ class MyApplication : MszApplicaton() {
                     when (method.name) {
                         "getArrayEngine" -> {
                             var cb: Any?
-                            if ((args[0] as Int) > 1) {
-                                cb = ObservableCreate.fromArray(emptyArray<String>())
+                            if ((args[0] as Int) > 2) {
+                                cb = ObservableCreate.fromArray(emptyArray<StringChooseBean>())
+                            } else if ((args[0] as Int) == 2) {
+                                cb = ObservableCreate.fromArray(
+                                    arrayOf(
+                                    "20".bean(),
+                                    "21".bean(),
+                                    "22".bean(),
+                                    "23".bean(),
+                                    "24".bean(),
+                                    "25".bean(),
+                                    "26".bean(),
+                                    "27".bean(),
+                                    "28".bean()
+                                    )
+                                )
                             } else {
                                 cb = ObservableCreate.fromArray(
                                     arrayOf(
@@ -72,28 +87,19 @@ class MyApplication : MszApplicaton() {
                                         "4".bean(),
                                         "5".bean(),
                                         "6".bean(),
-                                        "ad".bean(),
-                                        "1".bean(),
-                                        "2".bean(),
-                                        "3".bean(),
-                                        "4".bean(),
-                                        "5".bean(),
-                                        "6".bean(),
-                                        "ad".bean(),
-                                        "1".bean(),
-                                        "2".bean(),
-                                        "3".bean(),
-                                        "4".bean(),
-                                        "5".bean(),
-                                        "6".bean(),
-                                        "ad".bean(),
-                                        "1".bean(),
-                                        "2".bean(),
-                                        "3".bean(),
-                                        "4".bean(),
-                                        "5".bean(),
-                                        "6".bean(),
-                                        "ad".bean()
+                                        "7".bean(),
+                                        "8".bean(),
+                                        "9".bean(),
+                                        "10".bean(),
+                                        "11".bean(),
+                                        "12".bean(),
+                                        "13".bean(),
+                                        "14".bean(),
+                                        "15".bean(),
+                                        "16".bean(),
+                                        "17".bean(),
+                                        "18".bean(),
+                                        "19".bean(),
                                     )
 
                                 )
@@ -101,10 +107,11 @@ class MyApplication : MszApplicaton() {
                             return cb
 
                         }
-                        "grilPic"->{
-                           return RetrofitManager.getInstance().getApi(Api::class.java).grilPic().delay(5,TimeUnit.SECONDS).doOnDispose {
-                               Log.i(TAG, "grilPic: 取消")
-                           }
+                        "grilPic" -> {
+                            return RetrofitManager.getInstance().getApi(Api::class.java).grilPic()
+                                .delay(5, TimeUnit.SECONDS).doOnDispose {
+                                Log.i(TAG, "grilPic: 取消")
+                            }
                         }
                     }
                     return null;

@@ -9,12 +9,13 @@ import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.ExtensionCoreMethod.layoutInflater
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness
+import com.musongzi.core.itf.IViewInstance
 import com.musongzi.core.itf.holder.IHolderArguments
 import com.musongzi.core.itf.holder.IHolderContext
 
 /*** created by linhui * on 2022/7/6 */
 open class MszFragmentActivity : AppCompatActivity(), IHolderContext,
-    IHolderSupportActivityBusiness {
+    IHolderSupportActivityBusiness,IViewInstance {
 
     lateinit var business: ISupprotActivityBusiness
 

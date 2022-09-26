@@ -1,6 +1,7 @@
 package com.musongzi.core.base.fragment
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -21,11 +22,52 @@ import com.musongzi.core.itf.IDisconnect
 import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
+import com.musongzi.core.view.TipDialog
 import com.trello.rxlifecycle4.components.support.RxFragment
 
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
 
+    override fun runOnUiThread(runnable: Runnable) {
+        requireActivity().runOnUiThread(runnable)
+    }
+    private var tipDialog: Dialog? = null
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        handlerOnViewCreateSaveInstanceState(savedInstanceState)
+        initView()
+        initData();
+        initEvent()
+    }
+
+    protected open fun handlerOnViewCreateSaveInstanceState(savedInstanceState: Bundle?){
+        Log.i(TAG, "handlerOnViewCreateSaveInstanceState: bundle = $savedInstanceState")
+    }
+
+    abstract fun initView()
+    abstract fun initEvent()
+    abstract fun initData()
+
+    protected open fun createDialog() = TipDialog(requireActivity())
+
+    override fun showDialog(msg: String?) {
+        (tipDialog ?: let {
+            val t = createDialog()
+            tipDialog = t;
+            t
+        }).show()
+    }
+
+    override fun disimissDialog() {
+        tipDialog?.apply {
+            dismiss()
+        }
+    }
+
+
+    override fun getClient(): IClient = this
 //    protected var savedInstance :Bundle? = null
 
     protected val TAG = javaClass.name

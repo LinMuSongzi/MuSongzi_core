@@ -22,6 +22,7 @@ import com.musongzi.core.base.vm.IHandlerChooseViewModel
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.data.IChoose
+import com.musongzi.core.util.UiUtil
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import org.greenrobot.eventbus.Subscribe
@@ -55,6 +56,11 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private var observer: Observer<Data>? = null
     private var initFlag = false
     private var localSavedStateHandle:ISaveStateHandle? = null
+
+
+    override fun runOnUiThread(runnable: Runnable) {
+        UiUtil.post(runnable)
+    }
 
     public var TAG = javaClass.simpleName
     final override fun getAdapter(): RecyclerView.Adapter<*> = instanceAdapter

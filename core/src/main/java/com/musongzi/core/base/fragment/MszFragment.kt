@@ -21,7 +21,7 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
 
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
-    private var tipDialog: Dialog? = null
+
     private var modelProviderEnable = PROVIDER_NORMAL;
 
     final override fun onCreateView(
@@ -95,57 +95,12 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
         return false
     }
 
-//    private fun getMainViewProvider(): ViewModelProvider {
-//        if (mVp == null) {
-//            mVp = ViewModelProvider(getMainViewModelProvider(), this)
-//        }
-//        return mVp!!
-//    }
-//
-//    private fun getThisViewProvider(): ViewModelProvider {
-//        if (vp == null) {
-//            vp = ViewModelProvider(this, this)
-//        }
-//        return vp!!
-//    }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun handlerOnViewCreateSaveInstanceState(savedInstanceState: Bundle?) {
+        super.handlerOnViewCreateSaveInstanceState(savedInstanceState)
         getViewModel().handlerSavedInstanceState(savedInstanceState)
-        initView()
-        initData();
-        initEvent()
     }
 
-    abstract fun initView()
-    abstract fun initEvent()
-    abstract fun initData()
-
-
-//    override fun create(vm: IHolderViewModel<*, *>?) {
-//        InjectionHelp.injectViewModel(this,savedInstance,vm)
-//    }
-
-
-    override fun getClient(): IClient = this
-
-
-    override fun showDialog(msg: String?) {
-        (tipDialog ?: let {
-            val t = createDialog()
-            tipDialog = t;
-            t
-        }).show()
-    }
-
-    override fun disimissDialog() {
-        tipDialog?.apply {
-            dismiss()
-        }
-    }
-
-    protected open fun createDialog() = TipDialog(requireActivity())
 
     companion object {
         const val PROVIDER_MODEL_KEY = "provider_model_key"

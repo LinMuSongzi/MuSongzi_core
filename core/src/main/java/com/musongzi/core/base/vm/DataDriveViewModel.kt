@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.util.Log
 import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.itf.*
-import com.musongzi.core.itf.holder.IHolderActivity
-import com.musongzi.core.itf.holder.IHolderApi
-import com.musongzi.core.itf.holder.IHolderBusiness
-import com.musongzi.core.itf.holder.IHolderViewModel
+import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-/*** created by linhui * on 2022/9/15 */
-abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>() ,IHolderViewModel<B>{
+/*** created by linhui * on 2022/9/15
+ *
+ * */
+abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>() ,IHolderViewModel<B>,IHolderNeed{
+
+
+    override fun getHolderNeed(): INeed? {
+        return getHolderBusiness()
+    }
 
 
     override fun showDialog(msg: String?) {
@@ -33,11 +37,11 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
     }
 
     override fun handlerSavedInstanceState(savedInstanceState: Bundle?) {
-        savedInstanceStateRf = WeakReference(savedInstanceState)
+        sourceBundle = WeakReference(savedInstanceState)
     }
 
     override fun isSavedInstanceStateNull(): Boolean {
-        return savedInstanceStateRf == null || savedInstanceStateRf?.get() == null
+        return sourceBundle == null || sourceBundle?.get() == null
     }
 
 
@@ -52,7 +56,7 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
 
 
 
-    private var savedInstanceStateRf: WeakReference<Bundle?>? = null
+    private var sourceBundle: WeakReference<Bundle?>? = null
 
 
 

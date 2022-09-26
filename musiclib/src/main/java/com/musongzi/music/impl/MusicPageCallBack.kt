@@ -22,6 +22,10 @@ class MusicPageCallBack<I : IAttribute, D>(var packet: RemoteDataPacket<I, D>) :
         return null;
     }
 
+    override fun runOnUiThread(runnable: Runnable) {
+
+    }
+
     override fun handlerData(t: MutableList<I>?, action: Int) {
         packet.handlerData(t,action)
     }

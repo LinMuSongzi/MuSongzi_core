@@ -44,7 +44,6 @@
 
         <activity
             android:name="com.musongzi.comment.activity.MszFragmentActivity"
-            android:theme="@style/AppNoActionBarLightTheme"
             android:screenOrientation="portrait" />
 
         <activity android:name=".activity.SplashActivity" android:launchMode="singleTask">

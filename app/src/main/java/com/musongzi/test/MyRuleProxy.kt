@@ -6,7 +6,11 @@ import com.musongzi.spi.IStrategyRule
 import com.musongzi.test.vm.MainIndexViewModel
 import com.musongzi.test.vm.TestMainIndexBusiness
 
-/*** created by linhui * on 2022/8/21 */
+/*** created by linhui * on 2022/8/21
+ *
+ * 动态加载配置，配合
+ *
+ * */
 class MyRuleProxy : IStrategyRule {
 
     //val instance: IStrategyRule = Factory.createDefualtStrategyRule()

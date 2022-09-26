@@ -4,7 +4,6 @@ package com.musongzi.spi
 interface ISpiRequest {
 
    fun getRequestLoaderClass():Class<*>
-
    fun orderName():String
    fun letMeInstance(second: Class<*>?): Any? = null
 

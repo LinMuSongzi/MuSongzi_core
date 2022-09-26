@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/id_nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:text="哈哈哈哈我是头部"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/id_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
+                tools:listitem="@layout/adapter_string" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+<!--    <androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <com.google.android.material.appbar.CollapsingToolbarLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:contentScrim="@color/bg_white"-->
+<!--                app:expandedTitleMarginEnd="48dp"-->
+<!--                app:expandedTitleMarginStart="48dp"-->
+<!--                app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="500dp"-->
+<!--                        android:background="#882CA0ED"-->
+<!--                        android:gravity="center"-->
+<!--                        android:paddingVertical="20dp"-->
+<!--                        android:text="哈哈哈哈我是头部"-->
+<!--                        android:textColor="@color/bg_white"-->
+<!--                        android:textSize="18dp"-->
+<!--                        android:textStyle="bold" />-->
+
+
+<!--                </LinearLayout>-->
+<!--            </com.google.android.material.appbar.CollapsingToolbarLayout>-->
+
+
+<!--&lt;!&ndash;            <androidx.appcompat.widget.Toolbar&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_collapseMode="pin"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:contentInsetLeft="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:contentInsetStart="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:contentInsetEnd="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:maxButtonHeight="20dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:titleMargin="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>&ndash;&gt;-->
+
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
+
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/id_recyclerView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:nestedScrollingEnabled="true"-->
+<!--            app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--            tools:listitem="@layout/adapter_string" />-->
+
+<!--    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+</layout>

@@ -8,10 +8,10 @@ import com.musongzi.core.base.manager.ManagerInstanceHelp
 class ConfigManager :InstanceManager {
 
 
-    override fun onReady(a: Any?) {
-        super.onReady(a)
-
-    }
+//    override fun onReady(a: Any?) {
+//        super.onReady(a)
+//
+//    }
 
 
     class ManagerInstanceHelpImpl :ManagerInstanceHelp{

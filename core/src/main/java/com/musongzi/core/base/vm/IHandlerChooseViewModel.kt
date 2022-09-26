@@ -7,6 +7,9 @@ import com.musongzi.core.itf.holder.IHolderBusiness
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.page.ISource
 
+/**
+ * 一个允许挑选的，viewmodel
+ */
 interface IHandlerChooseViewModel<B : IBusiness> : IHolderLifecycle, IHolderBusiness<B> {
 
     fun updateByPick(pickData: IChoose?);

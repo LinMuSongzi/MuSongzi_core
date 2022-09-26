@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.musongzi.core.ExtensionCoreMethod;
 import com.musongzi.core.annotation.CollecttionsEngine;
 import com.musongzi.core.base.business.BaseOnClickAction;
+import com.musongzi.core.base.business.itf.ILightWeightBus;
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
 import com.musongzi.core.base.manager.RetrofitManager;
 import com.musongzi.core.base.map.SaveStateHandleWarp;
@@ -29,6 +30,7 @@ import com.musongzi.core.itf.holder.IHolderViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -157,14 +159,45 @@ public class InjectionHelp {
         return (V) provider.get(clazz);
     }
 
+    @org.jetbrains.annotations.Nullable
+    public static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Class<B> targetClass, A agent) {
+        return injectBusiness(targetClass, agent, null);
+    }
 
     @org.jetbrains.annotations.Nullable
-    public static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Class<B> targetClass, @NotNull A agent) {
+    public static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Class<B> targetClass,
+                                                                                  @NotNull A agent, @Nullable IBusiness businessWrapInstance) {
+        try {
+            Constructor<B> constructor;
+            if (businessWrapInstance == null) {
+                constructor = targetClass.getConstructor();
+            } else {
+                constructor = targetClass.getConstructor(IBusiness.class);
+            }
+            return injectBusiness(constructor, agent, businessWrapInstance);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @org.jetbrains.annotations.Nullable
+    private static <A extends IViewInstance, B extends IBusiness> B injectBusiness(@NotNull Constructor<B> constructor, @NotNull A agent, @Nullable IBusiness businessWrapInstance) {
         B instance = null;
         try {
-            instance = (B) targetClass.newInstance();
+            if (businessWrapInstance == null) {
+                instance = constructor.newInstance();
+            } else {
+                instance = constructor.newInstance(businessWrapInstance);
+            }
             if (instance instanceof IAgentHolder) {
-                ((IAgentHolder) instance).setAgentModel(agent);
+                try {
+                    ((IAgentHolder) instance).setAgentModel(agent);
+                }catch (Exception ex){
+                    Log.i(TAG, "injectBusiness: setAgent error in instance");
+                    ex.printStackTrace();
+                }
             }
             instance.afterHandlerBusiness();
         } catch (Exception e) {
@@ -172,6 +205,7 @@ public class InjectionHelp {
         }
         return instance;
     }
+
 
     /**
      * @param activity         或许是activity，或许是fragment
@@ -280,9 +314,9 @@ public class InjectionHelp {
     public static View.OnClickListener injectOnClick(@NotNull String click, @org.jetbrains.annotations.Nullable String action) {
         try {
             Class<?> clazz = ActivityThreadHelp.getCurrentApplication().getClassLoader().loadClass(click);
-            if(clazz.isAssignableFrom(BaseOnClickAction.class)){
+            if (clazz.isAssignableFrom(BaseOnClickAction.class)) {
                 return (IOnClickAction) clazz.getConstructor(Integer.class).newInstance(action);
-            }else{
+            } else {
                 throw new IllegalArgumentException("不是 BaseOnClickAction 类型");
             }
         } catch (Exception ex) {

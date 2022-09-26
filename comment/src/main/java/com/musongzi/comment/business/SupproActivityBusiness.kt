@@ -25,7 +25,6 @@ import com.musongzi.core.databinding.ActivityNormalFragmentBinding
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
-import com.musongzi.core.util.InjectionHelp.injectBusiness
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import com.trello.rxlifecycle4.LifecycleProvider
 import com.trello.rxlifecycle4.LifecycleTransformer
@@ -35,7 +34,12 @@ import com.trello.rxlifecycle4.android.RxLifecycleAndroid
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
-/*** created by linhui * on 2022/7/6 */
+/*** created by linhui * on 2022/7/6
+ *
+ * 一个辅助activity嵌入fragment的辅助类
+ *
+ *
+ * */
 class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActivityBusiness {
 
     private val mLocalSavedHandler: ISaveStateHandle by lazy {
@@ -48,8 +52,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
         h.activity.getHolderContext()?.let { context ->
             if (context is Activity) {
                 dataBinding = DataBindingUtil.setContentView(context, R.layout.activity_normal_fragment)
-                val activityDescribe: ActivityDescribe? =
-                    h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
+                val activityDescribe: ActivityDescribe? = h.getArguments()?.getParcelable(ACTIVITY_DESCRIBE_INFO_KEY)
                 activityDescribe?.let { a ->
                     handlerWindowFlag(a)
                     (a.parcelable as? FragmentDescribe)?.let { fragmentDescribe ->
@@ -150,6 +153,10 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             return activity as? LifecycleOwner
         }
 
+        override fun runOnUiThread(runnable: Runnable) {
+            (activity as? IViewInstance)?.runOnUiThread(runnable)
+        }
+
         override fun getHolderActivity(): FragmentActivity? =
             activity.getHolderContext() as? FragmentActivity
 
@@ -205,7 +212,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
     }
 
 
-    class SupportViewModelFactory(
+    internal class SupportViewModelFactory(
         val activity: IHolderActivity,
         owner: SavedStateRegistryOwner,
         private val defaultArgs: Bundle?
@@ -216,6 +223,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             modelClass: Class<T>,
             handle: SavedStateHandle
         ): T {
+            Log.i("SupportViewModelFactory", "create:   = ${modelClass.name} , activity = ${activity.getHolderActivity()}")
             return InjectionHelp.injectViewModel(activity, defaultArgs, modelClass, handle)!!
         }
 
@@ -242,7 +250,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
                 val activityDescribe = it.getParcelable<ActivityDescribe>(ACTIVITY_DESCRIBE_INFO_KEY);
                 if (activityDescribe?.businessName != null) {
                     val clazz = checkBusinessClass.invoke(activityDescribe)
-                    injectBusiness(clazz, impl).apply {
+                    InjectionHelp.injectBusiness(clazz, impl).apply {
                         Log.i("SupprotActivityBusiness", "create11: 初始化成功 $this")
                     }
                 } else {
@@ -253,7 +261,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
 
         fun create2(bundle: Bundle?, activity: IHolderContext): ISupprotActivityBusiness {
             val impl = HolderLifecycleImpl(bundle, activity)
-            return injectBusiness(
+            return InjectionHelp.injectBusiness(
                 SupproActivityBusiness::class.java,
                 impl
             ).let {
