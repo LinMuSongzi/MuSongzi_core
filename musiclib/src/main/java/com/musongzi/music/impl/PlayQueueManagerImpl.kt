@@ -5,6 +5,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.manager.ManagerUtil.getHolderManager
+import com.musongzi.core.base.manager.ManagerUtil.manager
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.ILifeObject
 import com.musongzi.music.itf.*
@@ -118,7 +119,7 @@ internal class PlayQueueManagerImpl :
         return mLocalListenerManager
     }
 
-    override fun managerId() = IPlayQueueManager.MANAGER_ID
+//    override fun managerId() = IPlayQueueManager.MANAGER_ID
 
     override fun onReady(a: Any?) {
         partnerInstance = when (a!!) {
@@ -204,7 +205,7 @@ internal class PlayQueueManagerImpl :
 
     companion object {
         internal fun getInstance(): PlayQueueManagerImpl {
-            return getHolderManager<IPlayQueueManager>(IPlayQueueManager.MANAGER_ID) as PlayQueueManagerImpl
+            return IPlayQueueManager.MANAGER_ID.manager()
         }
     }
 

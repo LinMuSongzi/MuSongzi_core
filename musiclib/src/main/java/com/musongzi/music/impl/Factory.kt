@@ -27,21 +27,25 @@ object Factory {
     }
 
 
-    fun buildInstanceManagerHelp(readyNow: () -> IMusicInit): ManagerInstanceHelp {
-
-        return object : ManagerInstanceHelp {
-            override fun instance(): InstanceManager {
-                return PlayQueueManagerImpl()
-            }
-
-            override fun readyNow(my: InstanceManager): Any {
-                return readyNow.invoke()
-            }
-
-        }
-
-
-    }
+//    fun buildInstanceManagerHelp(readyNow: () -> IMusicInit): ManagerInstanceHelp {
+//
+//        return object : ManagerInstanceHelp {
+//            override fun instance(): InstanceManager {
+//                return PlayQueueManagerImpl()
+//            }
+//
+//            override fun readyNow(my: InstanceManager): Any {
+//                return readyNow.invoke()
+//            }
+//
+//            override fun key(): String {
+//                return IPlayQueueManager.MANAGER_ID
+//            }
+//
+//        }
+//
+//
+//    }
 
     fun <I : IMediaPlayInfo, D> createNativeMusicArray(
         name: String,

@@ -1,6 +1,11 @@
 package com.musongzi.core.base.manager
 
+import android.content.res.Resources
+import android.util.Log
 import android.util.SparseArray
+import com.musongzi.core.ExtensionCoreMethod.exceptionRun
+import com.musongzi.core.R
+import com.musongzi.core.util.ActivityThreadHelp
 
 /*** created by linhui
  * 管理 单例的一个管理者服务集合
@@ -9,27 +14,29 @@ import android.util.SparseArray
 internal class ManagerService : IManagerService {
 
     private var isReady = false
-    private var managers = SparseArray<InstanceManager>();
+    private var managers = HashMap<String, InstanceManager>();
 
     companion object {
+        private const val MANAGER_ARRAY_NAME = "manager_instance"
         private val MANAGER = ManagerService()
-
+        const val TAG = "InstanceManager"
         fun getInstance(): IManagerService {
             return MANAGER
         }
 
-        const val ID = 0
+//        const val ID = 0
     }
 
-    override fun managerId() = ID
+//    override fun managerId() = ID
 
     override fun onReady(any: Any?) {
-        if (!isReady && any is Int && any.and(InstanceManager.COMPLETE) > 0) {
+        if (!isReady) {
             isReady = true
         }
     }
 
-    override fun <I> getManager(id: Int): I? {
+
+    override fun <I> getManager(id: String): I? {
         return managers[id] as? I
     }
 
@@ -42,20 +49,51 @@ internal class ManagerService : IManagerService {
         if (isReady) {
             return
         }
-        val instanceManagers = SparseArray<InstanceManager>()
-        for (m in managers) {
+//        val instanceManagers = SparseArray<InstanceManager>()
+        val set: HashSet<ManagerInstanceHelp> = if (managers is HashSet) {
+            managers;
+        } else {
+            HashSet<ManagerInstanceHelp>().apply {
+                addAll(managers)
+            }
+        }
+
+        exceptionRun {
+            loadXmlStringManager(set, classLoader)
+        }
+        for (m in set) {
             val instanceManager = if (m.name() != null) {
                 classLoader.loadClass(m.name()).newInstance() as InstanceManager
             } else {
                 m.instance() as InstanceManager
             }
             instanceManager.onReady(m.readyNow(instanceManager))
-            instanceManagers.put(instanceManager.managerId(), instanceManager)
+            this.managers[m.key()] = instanceManager
         }
-        onReady(ID.or(InstanceManager.COMPLETE))
+        onReady(null)
     }
 
+    private fun loadXmlStringManager(set: HashSet<ManagerInstanceHelp>, classLoader: ClassLoader) {
+        val packageName = ActivityThreadHelp.getCurrentApplication().packageName
 
+        val id = ActivityThreadHelp.getCurrentApplication().resources.getIdentifier(MANAGER_ARRAY_NAME,"array",packageName)
+//        Log.i(TAG, "loadXmlStringManager: err id = $id , $packageName")
+//        val clazzR = Class.forName("$packageName.R${'$'}array")
+//        val field = clazzR.getDeclaredField(MANAGER_ARRAY_NAME)
+//        val id = field.get(null) as Int
+        val array = ActivityThreadHelp.getCurrentApplication().resources.getStringArray(id)
+        for (clazzName in array) {
+            try {
+
+                val instance = classLoader.loadClass(clazzName).newInstance()
+                set.add(instance as ManagerInstanceHelp)
+                Log.i(TAG, "loadXmlStringManager: succed $clazzName")
+            } catch (e: Exception) {
+                Log.i(TAG, "loadXmlStringManager:  err   $clazzName")
+                e.printStackTrace()
+            }
+        }
+    }
 
 
 }

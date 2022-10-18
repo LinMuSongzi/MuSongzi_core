@@ -9,6 +9,8 @@ interface ManagerInstanceHelp {
 
     fun readyNow(my: InstanceManager): Any? = null
 
+    fun key():String
+
 
     companion object {
 
@@ -16,6 +18,10 @@ interface ManagerInstanceHelp {
             return object : ManagerInstanceHelp {
                 override fun instance(): InstanceManager? {
                     return instance.invoke()
+                }
+
+                override fun key(): String {
+                   return this.hashCode().toString()
                 }
 
             }
@@ -26,6 +32,10 @@ interface ManagerInstanceHelp {
             return object : ManagerInstanceHelp {
                 override fun instance(): InstanceManager? {
                     return InstanceManagerSimple(runnable)
+                }
+
+                override fun key(): String {
+                    return this.hashCode().toString()
                 }
             }
         }

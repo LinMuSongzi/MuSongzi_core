@@ -8,9 +8,9 @@ class InstanceManagerSimple constructor(
 
     constructor(ready: Runnable):this(0,ready)
 
-    override fun managerId(): Int {
-        return if (id == InstanceManager.NO_ID) super.managerId() else id
-    }
+//    override fun managerId(): Int {
+//        return if (id == InstanceManager.NO_ID) super.managerId() else id
+//    }
 
     override fun onReady(a: Any?) {
         super.onReady(a)

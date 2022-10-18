@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.functions.Consumer
 class CoreObserver<T>(var c: Consumer<T>? = null) : Observer<T> {
 
     companion object {
-        const val TAG = "MszObserver"
+        const val TAG = "CoreObserver"
     }
 
     override fun onSubscribe(d: Disposable?) {
@@ -16,7 +16,7 @@ class CoreObserver<T>(var c: Consumer<T>? = null) : Observer<T> {
     }
 
     override fun onNext(t: T) {
-//        Log.i(TAG, "onNext: Thread = " + Thread.currentThread() + " : " + t)
+        Log.i(TAG, "onNext: Thread = " + Thread.currentThread() + " : " + t)
         c?.accept(t)
     }
 

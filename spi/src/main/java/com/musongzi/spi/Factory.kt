@@ -1,6 +1,5 @@
 package com.musongzi.spi
 
-import android.text.Spannable
 import com.musongzi.core.base.manager.ManagerInstanceHelp
 import java.lang.ref.WeakReference
 
@@ -9,7 +8,7 @@ object Factory {
 
 
     fun <T : IStrategyRule> spiManagerHelp(spiRule: Class<T>): ManagerInstanceHelp {
-        return SpiManger.ManagerInstanceHelpImpl(WeakReference(spiRule))
+        return SpiManager.ManagerInstanceHelpImpl(WeakReference(spiRule))
     }
 
     fun createDefualtStrategyRule(): IStrategyRule {

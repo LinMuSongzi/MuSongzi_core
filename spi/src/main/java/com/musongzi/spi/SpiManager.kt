@@ -4,11 +4,9 @@ import com.musongzi.comment.ExtensionMethod.getSaveStateValue
 import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.itf.IHolderSavedStateHandle
-import com.musongzi.spi.ISpiRequest
 import com.musongzi.core.base.map.LocalSavedHandler
 import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.base.manager.ManagerInstanceHelp
-import com.musongzi.spi.SpiManger
 import java.lang.ref.WeakReference
 
 /*** created by linhui * on 2022/8/21
@@ -16,7 +14,8 @@ import java.lang.ref.WeakReference
  * 缓存注入服务管理者
  *
  * */
-class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle {
+class SpiManager private constructor() : InstanceManager, IHolderSavedStateHandle {
+
 
     lateinit var mISaveStateHandle: ISaveStateHandle
 
@@ -57,9 +56,9 @@ class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle
         sets[request.orderName()] = request.getRequestLoaderClass() to clazz
     }
 
-    override fun managerId(): Int {
-        return hashCode()
-    }
+//    override fun managerId(): Int {
+//        return hashCode()
+//    }
 
     override fun onReady(a: Any?) {
         rulre = a as? IStrategyRule
@@ -78,9 +77,9 @@ class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle
     internal class ManagerInstanceHelpImpl(private var rule: WeakReference<Class<*>>) : ManagerInstanceHelp {
         override fun instance(): InstanceManager? {
             if (MANAGER == null) {
-                synchronized(SpiManger::class.java) {
+                synchronized(SpiManager::class.java) {
                     if (MANAGER == null) {
-                        return SpiManger().also { MANAGER = it }
+                        return SpiManager().also { MANAGER = it }
                     }
                 }
             }
@@ -91,16 +90,20 @@ class SpiManger private constructor() : InstanceManager, IHolderSavedStateHandle
             return rule.get()?.newInstance()
         }
 
+        override fun key(): String {
+            return SPI_MANAGER
+        }
+
         override fun name(): String? {
             return null
         }
     }
 
     companion object {
-
+        const val SPI_MANAGER = "SpiManager"
         const val CACHE_PARIE_KEY = "CACHE_PARIE_KEY"
 
-        var MANAGER: SpiManger? = null
+        var MANAGER: SpiManager? = null
 
         /**
          * 加载需要的实体,基于[ISpiRequest.orderName].

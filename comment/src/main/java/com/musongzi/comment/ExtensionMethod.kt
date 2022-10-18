@@ -80,7 +80,7 @@ object ExtensionMethod {
      * @param data 要传递的数据
      * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
      */
-    fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecyeleActivity(
+    fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecycleActivity(
         title: String? = null,
         barColor: Int = R.color.bg_white,
         data: Bundle? = null,

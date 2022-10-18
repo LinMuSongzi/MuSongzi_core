@@ -30,24 +30,24 @@ public class HeadSupportByRecycleBusiness extends BaseWrapBusiness<IViewInstance
     }
 
 
-    @NotNull
-    public <D extends ViewDataBinding, I extends ISource<I>> RecyclerView.Adapter<?> instanceAdapter(@NotNull ISource<I> source, @NotNull Class<D> dataBindingClass
-            , Function3<ViewDataBinding, I, Integer, Unit> function3) {
-        Function1<Integer, Unit> function = new Function1<Integer, Unit>() {
-            @Override
-            public Unit invoke(Integer integer) {
-
-
-                return null;
-            }
-        };
-        RecyclerView.Adapter<?> adapter = ExtensionCoreMethod.adapter(source, , dataBindingClass,
-                (d, integer) -> {
-
-
-                    return null;
-                }
-                , function3);
-        return adapter;
-    }
+//    @NotNull
+//    public <D extends ViewDataBinding, I extends ISource<I>> RecyclerView.Adapter<?> instanceAdapter(@NotNull ISource<I> source, @NotNull Class<D> dataBindingClass
+//            , Function3<ViewDataBinding, I, Integer, Unit> function3) {
+//        Function1<Integer, Unit> function = new Function1<Integer, Unit>() {
+//            @Override
+//            public Unit invoke(Integer integer) {
+//
+//
+//                return null;
+//            }
+//        };
+//        RecyclerView.Adapter<?> adapter = ExtensionCoreMethod.adapter(source, , dataBindingClass,
+//                (d, integer) -> {
+//
+//
+//                    return null;
+//                }
+//                , function3);
+//        return adapter;
+//    }
 }

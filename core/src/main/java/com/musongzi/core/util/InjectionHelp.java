@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
@@ -26,11 +27,13 @@ import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.IOnClickAction;
 import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.IWant;
+import com.musongzi.core.itf.holder.IHolderActivity;
 import com.musongzi.core.itf.holder.IHolderViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -45,6 +48,9 @@ import kotlin.jvm.functions.Function1;
 public class InjectionHelp {
 
     static Map<String, Class<?>> CACHE_CALSS = new HashMap<>();
+
+    static Map<String, Method> CACHE_METHOD = new HashMap<>();
+
     @org.jetbrains.annotations.NotNull
     public static final String BUSINESS_NAME_KEY = "BUSINESS_NAME_KEY";
     private static final String TAG = "InjectionHelp";
@@ -66,9 +72,30 @@ public class InjectionHelp {
         }
     }
 
-    @Nullable
-    public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex) {
 
+    public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex) {
+        return findDataBinding(aClass, parent, name, actualTypeArgumentsIndex, null);
+    }
+
+    @Nullable
+    public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex,
+                                                                @Nullable DataBindingComponent dataBindingComponent) {
+
+        Function1<Method, D> function1 = method -> {
+            try {
+                return (D) method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), parent, false, dataBindingComponent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
+
+        Method method = CACHE_METHOD.get(aClass.getCanonicalName() + actualTypeArgumentsIndex);
+        if (method != null) {
+            Log.i(TAG, "findDataBinding: had cache " + aClass.getCanonicalName());
+            return function1.invoke(method);
+        }
+        Log.i(TAG, "findDataBinding:no had cache , ready find " + aClass.getCanonicalName());
 //        Log.i(TAG, "getDataBinding: " + aClass.getSuperclass().getName() + " , " + name);
         if (aClass.getSuperclass() != null && name.equals(aClass.getSuperclass().getName())) {//aClass.getSuperclass().getName().equals(name)) {
             Class<?> c = null;
@@ -85,9 +112,10 @@ public class InjectionHelp {
             }
             try {
                 //反射获取Databinding通用的静态inflate方法
-                Method method = c.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
+                method = c.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class, Object.class);
+                CACHE_METHOD.put(aClass.getCanonicalName() + actualTypeArgumentsIndex, method);
                 //根据获取到泛型c class ，调用函数方法初始化指定泛型并且返回
-                return (D) method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), parent, false);
+                return function1.invoke(method);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -138,21 +166,33 @@ public class InjectionHelp {
         return cache;
     }
 
-
     @org.jetbrains.annotations.Nullable
     public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, @NotNull ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass) {
+        return findViewModel(javaClass, name, viewModelProvider, actualTypeArgumentsViewModelIndex, findClass, 0);
+    }
+
+    @org.jetbrains.annotations.Nullable
+    public static <V> V findViewModel(@NotNull Class<?> javaClass, String name, @NotNull ViewModelProvider viewModelProvider, int actualTypeArgumentsViewModelIndex, Class[] findClass, int check) {
+//        int checkNow = check;
+        Class c;
+//        if (check == 0) {
+//            c = CACHE_CALSS.get(javaClass.getCanonicalName() + name + actualTypeArgumentsViewModelIndex);
+//            if(c != null){
+//
+//            }
+//        }
         if (javaClass.getSuperclass().getName().equals(name)) {
             Type type = javaClass.getGenericSuperclass();
             if (type instanceof ParameterizedType) {
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
                 if (types.length > actualTypeArgumentsViewModelIndex) {
-                    Class c = (Class) types[actualTypeArgumentsViewModelIndex];
+                    c =(Class) types[actualTypeArgumentsViewModelIndex];
                     findClass[0] = c;
                     return (V) viewModelProvider.get(c);
                 }
             }
         }
-        return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex, findClass);
+        return findViewModel(javaClass.getSuperclass(), name, viewModelProvider, actualTypeArgumentsViewModelIndex, findClass, check);
     }
 
     public static <V extends ViewModel> V getViewModel(@NotNull ViewModelProvider provider, @org.jetbrains.annotations.Nullable Class clazz) {
@@ -194,7 +234,7 @@ public class InjectionHelp {
             if (instance instanceof IAgentHolder) {
                 try {
                     ((IAgentHolder) instance).setAgentModel(agent);
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     Log.i(TAG, "injectBusiness: setAgent error in instance");
                     ex.printStackTrace();
                 }
@@ -322,6 +362,13 @@ public class InjectionHelp {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        return null;
+    }
+
+    @org.jetbrains.annotations.Nullable
+    public static IHolderActivity buildHolderActivityProxy(@org.jetbrains.annotations.Nullable IHolderActivity instance) {
+
+
         return null;
     }
 }

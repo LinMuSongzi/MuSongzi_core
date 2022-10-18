@@ -55,7 +55,7 @@ interface IPlayQueueManager : IHolderPlayController, InstanceManager {
     fun getListenerManager(): ListenerManager
 
     companion object {
-        const val MANAGER_ID = 100
+        const val MANAGER_ID = "IPlayQueueManager"
         const val NORMAL_NAME = "NORMAL_NAME"
         fun KClass<IPlayQueueManager>.pauseMusic(){
             MANAGER_ID.manager<IPlayQueueManager>().getPlayController().pauseMusic()

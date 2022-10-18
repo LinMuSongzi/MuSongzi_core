@@ -38,8 +38,10 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
             val c = arrayOfNulls<Class<*>>(1)
             instanceViewModel(c);
             CLASS_CACHE[javaClass.name] = c[0]
+            Log.i(TAG, "onCreateView: find viewModel")
+        }else {
+            Log.i(TAG, "onCreateView: cache had viewModel = ${getViewModel()}")
         }
-        Log.i(TAG, "onCreateView: viewModel = ${getViewModel()}")
         handlerArguments()
         return v;
     }

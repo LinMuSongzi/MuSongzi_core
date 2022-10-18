@@ -1,5 +1,6 @@
 package com.musongzi.comment.util
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.Image
 import android.net.Uri
@@ -71,6 +72,10 @@ fun RequestBuilder<Drawable>.overrideInto(
 
 fun ImageView.showImage(uri: Any?, conifgOverride: (() -> Pair<Int, Int>)? = null) {
     uri?.let {
+        if(uri is Bitmap){
+            setImageBitmap(uri)
+            return
+        }
         Glide.with(this).loadByAny(it).placeholderRes().errorRes().memoryCacheStrategy()
             .overrideInto(this, conifgOverride)
     }
@@ -117,6 +122,11 @@ fun viewVisibility(v: View, isShow: Boolean) {
 @BindingAdapter("imageLoadNormal")
 fun imageLoadNormal(image: ImageView, uri: Any?) {
     image.showImage(uri)
+}
+
+@BindingAdapter("imageSet")
+fun imageSet(image: ImageView, b: Bitmap?) {
+    image.showImage(b)
 }
 
 

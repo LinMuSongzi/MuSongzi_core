@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitManager {
 
     private static final String URL = "http://shange.musiccz.net:6060/";
-
+    private static final String URL2 = "http://192.168.1.106:8081/";
 
     static RetrofitManager MANAGER;
     private Map<String, Object> apis = new HashMap<>();
@@ -57,7 +57,7 @@ public class RetrofitManager {
         if (callBack != null && callBack.getRetrofit() != null) {
             retrofit = callBack.getRetrofit();
         } else {
-            retrofit = new Retrofit.Builder().baseUrl(URL)
+            retrofit = new Retrofit.Builder().baseUrl(URL2)
                     .client(getOkHttpCLient())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create()).build();

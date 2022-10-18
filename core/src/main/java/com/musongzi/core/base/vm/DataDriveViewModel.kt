@@ -55,7 +55,6 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
     }
 
 
-
     private var sourceBundle: WeakReference<Bundle?>? = null
 
 

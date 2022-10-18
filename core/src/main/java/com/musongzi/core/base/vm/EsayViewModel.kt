@@ -4,5 +4,5 @@ import com.musongzi.core.base.business.EmptyBusiness
 import com.musongzi.core.itf.IClient
 
 /*** created by linhui * on 2022/8/16 */
-class EmployeeEsayViewModel: MszViewModel<IClient, EmptyBusiness>() {
+class EsayViewModel: MszViewModel<IClient, EmptyBusiness>() {
 }

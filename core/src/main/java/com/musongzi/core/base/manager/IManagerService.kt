@@ -7,6 +7,6 @@ interface IManagerService : InstanceManager {
 
     fun loadManagers(managers: Collection<ManagerInstanceHelp>, classLoader: ClassLoader)
 
-    fun <I> getManager(id: Int): I?
+    fun <I> getManager(id: String): I?
 
 }
