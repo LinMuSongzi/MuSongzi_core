@@ -11,6 +11,13 @@ public class ResponeCodeBean {
         this.msg = msg;
     }
 
+    @Override
+    public String toString() {
+        return "ResponeCodeBean{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                '}';
+    }
 
     public int getCode() {
         return code;

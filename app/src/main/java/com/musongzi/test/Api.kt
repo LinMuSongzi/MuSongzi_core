@@ -3,12 +3,12 @@ package com.musongzi.test
 import com.musongzi.core.StringChooseBean
 import com.musongzi.test.bean.DiscoverBannerBean
 import com.musongzi.test.bean.ListDataBean
+import com.musongzi.test.bean.LoginBean
+import com.musongzi.test.bean.ResponeCodeBean
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.Streaming
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface Api {
 
@@ -19,9 +19,11 @@ interface Api {
     @GET("banner/bannerList")
     fun getBannerList(): Observable<ListDataBean<DiscoverBannerBean>>
 
-    @GET("")
+//    @GET("")
     fun getArrayEngine(page: Int): Observable<Array<StringChooseBean>>
 
     fun searchText(text: CharSequence): Observable<Array<StringChooseBean>>
+
+
 
 }

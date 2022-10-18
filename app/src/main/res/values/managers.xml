@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="manager_instance">
+        <item>com.musongzi.ConfigManager$ManagerInstanceHelpImpl</item>
+    </string-array>
+
+</resources>

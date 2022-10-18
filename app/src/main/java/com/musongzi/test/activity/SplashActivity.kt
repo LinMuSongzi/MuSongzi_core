@@ -7,14 +7,10 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.musongzi.comment.ExtensionMethod.startActivity
 import com.musongzi.comment.ExtensionMethod.startActivityNormal
-import com.musongzi.comment.ExtensionMethod.startRecyeleActivity
 import com.musongzi.test.R
 import com.musongzi.test.databinding.ActivityMainBinding
-import com.musongzi.test.engine.ArrayEngine
-import com.musongzi.test.fragment.RecyleViewCheckFragment
-import com.musongzi.test.fragment.TowFragment
+import com.musongzi.test.fragment.SoulAppTestFragemnt
 import com.musongzi.test.simple.BannerAndRetrofitMainFragment
 import kotlinx.coroutines.*
 
@@ -107,11 +103,14 @@ class SplashActivity : BaseActivity() {
 //        )
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
+
+        SoulAppTestFragemnt::class.java.startActivityNormal("滑动测试")
+
 //        BannerAndRetrofitMainFragment::class.java.startActivityNormal("Banner请求")
 
 //        RecyleViewCheckFragment::class.java.startActivityNormal("测试recycle")
 
-        TowActivity::class.java.startActivity()
+//        TowActivity::class.java.startActivity()
 
 //        Camra2Fragment::class.java.startActivityNormal("TestMainFragment")
 //        CollectionsViewFragment.

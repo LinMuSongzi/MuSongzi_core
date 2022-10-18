@@ -5,10 +5,8 @@ import android.view.View
 import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.comment.R
 import com.musongzi.comment.bean.ImageLoadBean
-import com.musongzi.comment.bean.MainIndexBean
 import com.musongzi.comment.bean.SimpleCardInfo
 import com.musongzi.comment.business.MainBottomBusiness
-import com.musongzi.comment.business.MainIndexBusiness
 import com.musongzi.comment.business.itf.IMainIndexBusiness
 import com.musongzi.comment.client.IMainIndexClient
 import com.musongzi.comment.viewmodel.itf.IMainIndexViewModel
@@ -17,9 +15,8 @@ import com.musongzi.comment.viewmodel.ApiViewModel
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.data.IChoose
 import com.musongzi.core.itf.page.ISource
-import com.musongzi.core.util.InjectionHelp
 import com.musongzi.spi.ISpiRequest
-import com.musongzi.spi.SpiManger
+import com.musongzi.spi.SpiManager
 import com.musongzi.test.Api
 import io.reactivex.rxjava3.core.Observable
 
@@ -28,7 +25,7 @@ class MainIndexViewModel : ApiViewModel<IMainIndexClient, IMainIndexBusiness, Ap
     IMainIndexViewModel, ISpiRequest {
 
     override fun createBusiness2(): IMainIndexBusiness {
-        val business:IMainIndexBusiness =  SpiManger.loadInstance(this)!!
+        val business:IMainIndexBusiness =  SpiManager.loadInstance(this)!!
         Log.i(TAG, "createBusiness2: $business")
         return business;
     }

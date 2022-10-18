@@ -10,7 +10,7 @@ import com.musongzi.test.simple.BannerAndRetrofitMainFragment
 class TowActivity : BaseActivity() {
 
 
-    var indexFragment = createFragment2()
+    var indexFragment = createFragment1()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

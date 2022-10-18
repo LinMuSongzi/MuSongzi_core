@@ -3,8 +3,7 @@ package com.musongzi.test.fragment
 import android.util.Log
 import com.musongzi.core.ExtensionCoreMethod.getViewModel
 import com.musongzi.core.base.fragment.MszFragment
-import com.musongzi.core.base.vm.SimpleHelpClientViewModel
-import com.musongzi.core.base.vm.EmployeeEsayViewModel
+import com.musongzi.core.base.vm.EsayViewModel
 import com.musongzi.core.base.vm.SimpleViewModel
 import com.musongzi.test.databinding.ActivityTowBinding
 
@@ -16,12 +15,12 @@ class TowFragment : MszFragment<SimpleViewModel, ActivityTowBinding>() {
 
 
     override fun initView() {
-        EmployeeEsayViewModel::class.java.getViewModel(topViewModelProvider()!!).apply {
+        EsayViewModel::class.java.getViewModel(topViewModelProvider()!!).apply {
             Log.i(TAG, "initView1: $this")
             Log.i(TAG, "initView1: ${getThisLifecycle()}")
         }
 
-        EmployeeEsayViewModel::class.java.getViewModel(topViewModelProvider()!!).apply {
+        EsayViewModel::class.java.getViewModel(topViewModelProvider()!!).apply {
 //            isAttachNow()
             Log.i(TAG, "initView2: ${isAttachNow()} , business = ${getHolderBusiness()}")
             Log.i(TAG, "initView2: ${getThisLifecycle()}")

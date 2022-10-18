@@ -36,14 +36,14 @@ class MyApplication : MszApplicaton() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessage(d: DiscoverBannerBean) {
-
+        resources.getStringArray(R.array.manager_instance)
     }
 
     override fun getManagers(): Array<ManagerInstanceHelp> {
 
         return arrayOf(
             com.musongzi.spi.Factory.spiManagerHelp(MyRuleProxy::class.java),
-            ConfigManager.ManagerInstanceHelpImpl(),
+//            ConfigManager.ManagerInstanceHelpImpl(),
             instanceHelp {
                 RetrofitCallBackInstance()
             },
