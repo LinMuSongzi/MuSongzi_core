@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingComponent
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -24,6 +25,7 @@ import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import com.musongzi.core.view.TipDialog
 import com.trello.rxlifecycle4.components.support.RxFragment
+import java.lang.ref.WeakReference
 
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
@@ -151,7 +153,9 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     ): View? {
         Log.i(TAG, "FragmentState:onCreateView")
         fControl = FragmentBusinessControlClientImpl(this)
-        return instanceView(layoutInflater, container!!)
+        val v = instanceView(layoutInflater, container!!)
+        dataBinding.lifecycleOwner = this
+        return v
     }
 
     private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View? {
@@ -162,10 +166,9 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
                     javaClass,
                     container,
                     superDatabindingName(),
-                    actualTypeArgumentsDatabindinIndex()
+                    actualTypeArgumentsDatabindinIndex(),DataBindingComponentInstance(requireActivity())
                 )!!
             }
-            dataBinding.lifecycleOwner = this
             dataBinding.root
 
         } else if (getLayoutId() == View.NO_ID) {
@@ -308,5 +311,10 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 //        }
 //
 //    }
+
+    class DataBindingComponentInstance(activity: Activity?) :DataBindingComponent{
+        var weakReference = WeakReference<Activity>(activity)
+    }
+
 
 }

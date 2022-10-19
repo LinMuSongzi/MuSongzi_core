@@ -6,23 +6,30 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/id_SmartRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <TextView
-            android:id="@+id/id_top"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/id_recyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/adapter_model_card_1" />
+            android:layout_height="match_parent">
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <TextView
+                android:id="@+id/id_top"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/id_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/adapter_model_card_1" />
+
+
+        </LinearLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
 </layout>

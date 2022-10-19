@@ -5,7 +5,7 @@ interface ManagerInstanceHelp {
 
     fun instance(): InstanceManager?
 
-    fun name(): String? = null
+    fun classLoadPathName(): String? = null
 
     fun readyNow(my: InstanceManager): Any? = null
 
@@ -13,6 +13,9 @@ interface ManagerInstanceHelp {
 
 
     companion object {
+
+
+        const val NORMAL_MANAGER_CLASS = "ManagerInstanceHelpImpl"
 
         fun instanceHelp(instance: () -> InstanceManager): ManagerInstanceHelp {
             return object : ManagerInstanceHelp {

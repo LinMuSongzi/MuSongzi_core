@@ -11,14 +11,19 @@ import java.io.File
 /*** created by linhui * on 2022/10/11 */
 interface MszTestApi {
 
-    @POST("/login2")
-    fun login2(@Body bean: LoginBean): Observable<ResponeCodeBean>
+    @POST("login2")
+    fun login2(@Body bean: LoginBean): Observable<ResponeCodeBean<String>>
 
-    @POST("/testUser")
-    fun getArrayEngine(@Field("token") token:String, page: Int): Observable<Array<StringChooseBean>>
+    @FormUrlEncoded
+    @POST("testArray")
+    fun getArrayEngine(
+        @Field("page") page: Int,
+        @Field("size") size: Int?,
+        @Field("lastId") lastId: String? = null
+    ): Observable<ResponeCodeBean<List<StringChooseBean>>>
 
     @Multipart
-    @POST("/postPath")
-    fun postPath(@Part file:MultipartBody.Part):Observable<ResponeCodeBean>
+    @POST("postPath")
+    fun postPath(@Part file: MultipartBody.Part): Observable<ResponeCodeBean<String>>
 
 }

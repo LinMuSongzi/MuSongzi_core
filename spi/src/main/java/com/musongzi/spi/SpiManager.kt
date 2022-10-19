@@ -94,7 +94,7 @@ class SpiManager private constructor() : InstanceManager, IHolderSavedStateHandl
             return SPI_MANAGER
         }
 
-        override fun name(): String? {
+        override fun classLoadPathName(): String? {
             return null
         }
     }

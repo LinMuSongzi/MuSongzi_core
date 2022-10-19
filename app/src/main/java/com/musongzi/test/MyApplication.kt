@@ -53,60 +53,16 @@ class MyApplication : MszApplicaton() {
         )
     }
 
+//    class RetrofitCallBackManagerHelp:ManagerInstanceHelp{
+//
+//    }
+
     class RetrofitCallBackInstance : InstanceManager {
 
         override fun onReady(a: Any?) {
             RetrofitManager.getInstance().init(object : RetrofitManager.CallBack {
                 override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
                     when (method.name) {
-                        "getArrayEngine" -> {
-                            var cb: Any?
-                            if ((args[0] as Int) > 2) {
-                                cb = ObservableCreate.fromArray(emptyArray<StringChooseBean>())
-                            } else if ((args[0] as Int) == 2) {
-                                cb = ObservableCreate.fromArray(
-                                    arrayOf(
-                                    "20".bean(),
-                                    "21".bean(),
-                                    "22".bean(),
-                                    "23".bean(),
-                                    "24".bean(),
-                                    "25".bean(),
-                                    "26".bean(),
-                                    "27".bean(),
-                                    "28".bean()
-                                    )
-                                )
-                            } else {
-                                cb = ObservableCreate.fromArray(
-                                    arrayOf(
-                                        "a".bean(),
-                                        "1".bean(),
-                                        "2".bean(),
-                                        "3".bean(),
-                                        "4".bean(),
-                                        "5".bean(),
-                                        "6".bean(),
-                                        "7".bean(),
-                                        "8".bean(),
-                                        "9".bean(),
-                                        "10".bean(),
-                                        "11".bean(),
-                                        "12".bean(),
-                                        "13".bean(),
-                                        "14".bean(),
-                                        "15".bean(),
-                                        "16".bean(),
-                                        "17".bean(),
-                                        "18".bean(),
-                                        "19".bean(),
-                                    )
-
-                                )
-                            }
-                            return cb
-
-                        }
                         "grilPic" -> {
                             return RetrofitManager.getInstance().getApi(Api::class.java).grilPic()
                                 .delay(5, TimeUnit.SECONDS).doOnDispose {

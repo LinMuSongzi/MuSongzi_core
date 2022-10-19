@@ -53,12 +53,17 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
     }
 
     private void instanceCollectionViewEngine(Bundle arguments) {
-
+        /**
+         *  mIDictionaryClass 一个构建collectionsViewEngine的 类实例
+         */
         if (arguments == null) {
             mIDictionaryClass = iAgent.getHolderClient().engineName();
         } else {
             mIDictionaryClass = iAgent.collectionsInfo.getEngineName();
         }
+        /**
+         * 如果client返回的是空，则用mIDictionaryClass去构建 实例
+         */
         collectionsViewEngine = iAgent.getHolderClient().getCollectionsViewEngine();
         if (collectionsViewEngine == null) {
             try {
@@ -66,7 +71,10 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            collectionsViewEngine.init(iAgent);
         }
+//        collectionsViewEngine.init
         Log.i(TAG, "instanceCollectionViewEngine: " + collectionsViewEngine + " , " + mIDictionaryClass);
         if (!isEnableEventBus()) {
             if (isRegisterEventBus && iAgent.collectionsInfo.isEnableEventBus()) {
@@ -78,9 +86,9 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
 
     @Override
     public void handlerView(@NotNull RecyclerView r, @org.jetbrains.annotations.Nullable SmartRefreshLayout refreshLayout) {
-        Log.i(TAG, "handlerView: mIDictionaryClass = " + mIDictionaryClass);
+        Log.i(TAG, "handlerView: mIDictionaryClass = " + mIDictionaryClass + " , collectionsViewEngine = " + collectionsViewEngine);
 //        if(refreshLayout!=null) {
-            refreshLayoutInit(refreshLayout, this, iAgent.collectionsInfo.isEnableReFresh(), iAgent.collectionsInfo.isEnableLoadMore());
+        refreshLayoutInit(refreshLayout, this, iAgent.collectionsInfo.isEnableReFresh(), iAgent.collectionsInfo.isEnableLoadMore());
 //        }
         final RecyclerView.LayoutManager l = collectionsViewEngine.getLayoutManger();
         if (l == null) {

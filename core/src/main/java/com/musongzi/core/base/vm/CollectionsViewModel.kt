@@ -105,7 +105,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
         /**
          * 是否注册eventbus
          */
-        var isEnableEventBus = true
+        var isEnableEventBus = false
 
         /**
          * 标题

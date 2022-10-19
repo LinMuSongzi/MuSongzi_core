@@ -78,13 +78,14 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
     private fun getProvider(): ViewModelProvider? {
         val p: ViewModelProvider?
         when {
-            modelProviderEnable.and(PROVIDER_MAIN) > 0 -> {
+            modelProviderEnable.and(PROVIDER_MAIN) == PROVIDER_MAIN -> {
                 p = topViewModelProvider()
             }
-            modelProviderEnable.and(PROVIDER_SINGLE) > 0 -> {
+            modelProviderEnable.and(PROVIDER_SINGLE) == PROVIDER_SINGLE -> {
                 p = thisViewModelProvider()
             }
             else -> {
+                modelProviderEnable.and(PROVIDER_NORMAL.inv())
                 modelProviderEnable = modelProviderEnable.or(if (isNeedTopViewModelProvider()) PROVIDER_MAIN else PROVIDER_SINGLE)
                 return getProvider()
             }

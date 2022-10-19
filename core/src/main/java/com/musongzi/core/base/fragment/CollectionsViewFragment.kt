@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.IHolderCollections
 import com.musongzi.core.base.client.IRefreshClient
@@ -12,6 +13,7 @@ import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.databinding.FragmentRecycleListBinding
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.util.StringUtil
+import io.reactivex.rxjava3.core.Observable
 
 /**
  * 一个基于集合的基本碎片
@@ -21,13 +23,6 @@ import com.musongzi.core.util.StringUtil
 open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycleListBinding, Any, Any>() {
 
     override fun getCollectionsViewEngine(): IHolderCollections? = null
-
-    override fun initView() {
-        super.initView()
-        getViewModel().getHolderBusiness().handlerView(recycleView(), refreshView())
-        getViewModel().getHolderBusiness().handlerEmptyRes(emptyView())
-    }
-
 
     override fun getPageEngine(): IPageEngine<Any>? {
         return if(lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)){
@@ -75,6 +70,10 @@ open class CollectionsViewFragment : BaseCollectionsViewFragment<FragmentRecycle
     override fun <I> getRefreshClient(): IRefreshClient<I> {
        return this as IRefreshClient<I>
     }
+
+    override fun getAdapter(): RecyclerView.Adapter<*>? = null
+
+    override fun getRemoteData(index: Int): Observable<Any>?  = null
 
 
 }

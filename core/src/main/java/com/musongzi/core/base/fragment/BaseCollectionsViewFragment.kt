@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
@@ -32,6 +33,8 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : Re
 
     override fun initView() {
         getViewModel().getHolderBusiness().handlerArguments(arguments)
+        getViewModel().getHolderBusiness().handlerView(recycleView(), refreshView())
+        getViewModel().getHolderBusiness().handlerEmptyRes(emptyView())
     }
 
     override fun handlerArguments() {
@@ -93,13 +96,13 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> : Re
 
     protected abstract fun transformDataToList(entity: DATA): List<ITEM>
 
-    override fun getAdapter(): RecyclerView.Adapter<*>? = null
+//    override fun getAdapter(): RecyclerView.Adapter<*>? = null
 
-    fun getRemoteData(index: Int): Observable<DATA>? = null
+    abstract fun getRemoteData(index: Int): Observable<DATA>?
 
     fun createDataEngine(): IDataEngine<DATA>? = null
 
-    override fun getLayoutManger(): RecyclerView.LayoutManager? = null
+    override fun getLayoutManger(): RecyclerView.LayoutManager? = LinearLayoutManager(null,LinearLayoutManager.VERTICAL,false)
 
 
     companion object{

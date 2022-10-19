@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitManager {
 
     private static final String URL = "http://shange.musiccz.net:6060/";
-    private static final String URL2 = "http://192.168.1.106:8081/";
+    private static final String URL2 = "http://192.168.1.106:8080/";
 
     static RetrofitManager MANAGER;
     private Map<String, Object> apis = new HashMap<>();
@@ -119,17 +119,22 @@ public class RetrofitManager {
                             return method.invoke(this, args);
                         }
                         args = args != null ? args : emptyArgs;
+                        Log.i(TAG, "invoke: 1");
                         Object returnInstance = null;
                         if (c.get() != null) {
+                            Log.i(TAG, "invoke: 2");
                             returnInstance = c.get().invoke(proxy, method, args);
                         }
                         if (returnInstance == null) {
+                            Log.i(TAG, "invoke: 3");
                             returnInstance = method.invoke(r.get().getApi(tClass), args);
                         }
-
+                        Log.i(TAG, "invoke: 4");
                         if (method.getReturnType().isAssignableFrom(Observable.class)) {
+                            Log.i(TAG, "invoke: 5");
                             returnInstance = ((Observable<?>) returnInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).compose(want.bindToLifecycle());
                         }
+                        Log.i(TAG, "invoke: 6 "+returnInstance);
                         return returnInstance;
                     }
                 };
@@ -160,4 +165,7 @@ public class RetrofitManager {
         @Nullable
         Retrofit getRetrofit();
     }
+
+    static final String TAG = "InvocationHandler";
 }
+

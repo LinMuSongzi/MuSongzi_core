@@ -1,10 +1,20 @@
 package com.musongzi.test.bean;
 
-public class ResponeCodeBean {
+public class ResponeCodeBean<T> {
 
     private int code;
 
     private String msg;
+
+    private T data;
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 
     public ResponeCodeBean(int code, String msg) {
         this.code = code;

@@ -44,7 +44,7 @@ class TypeSupportAdaper<ITEM> constructor(datas: List<ITEM>, private var typeBre
     override fun convertData(d: ViewDataBinding, entity: ITEM, postion: Int) {
         typeDataBindings[getItemViewType(postion)].holderConvert?.convertData(d, entity, postion)
         allConvertMethod?.apply {
-            beanSet.invoke(d, entity!!)
+//            beanSet.invoke(d, entity!!)
             invoke(d, entity, postion)
         }
     }

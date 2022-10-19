@@ -5,13 +5,16 @@ import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 
-class CoreObserver<T>(var c: Consumer<T>? = null) : Observer<T> {
+class BaseObserver<T : Any>(var c: Consumer<T>? = null) : Observer<T> {
 
     companion object {
-        const val TAG = "CoreObserver"
+        const val TAG = "BaseObserver"
     }
 
-    override fun onSubscribe(d: Disposable?) {
+    var runOnDisposable: (Disposable.() -> Unit)? = null
+
+    override fun onSubscribe(d: Disposable) {
+        runOnDisposable?.invoke(d)
         Log.i(TAG, "onSubscribe: " + Thread.currentThread())
     }
 
@@ -20,8 +23,9 @@ class CoreObserver<T>(var c: Consumer<T>? = null) : Observer<T> {
         c?.accept(t)
     }
 
-    override fun onError(e: Throwable?) {
-        Log.i(TAG, "onError: " + e?.message)
+    override fun onError(e: Throwable) {
+        e.printStackTrace()
+//        Log.i(TAG, "onError: " + e?.message)
     }
 
     override fun onComplete() {

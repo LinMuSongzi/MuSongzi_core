@@ -1,14 +1,12 @@
 package com.musongzi.core
 
 import android.annotation.SuppressLint
-import android.icu.util.Measure
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -19,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.business.HandlerChooseBusiness
-import com.musongzi.core.base.business.collection.ICollectionsViewEngine
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
@@ -34,11 +31,12 @@ import com.musongzi.core.util.TextUtil
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import io.reactivex.rxjava3.core.CompletableOnSubscribe
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.reflect.KClass
 
 /*** created by linhui * on 2022/7/20 */
 object ExtensionCoreMethod {
@@ -110,7 +108,7 @@ object ExtensionCoreMethod {
     }
 
 
-    fun <B : IBusiness> Class<B>.getNeedNext(holder:IHolderNeed?):B?{
+    fun <B : IBusiness> Class<B>.getNeedNext(holder: IHolderNeed?): B? {
         return holder?.getHolderNeed()?.getNext(this)
     }
 
@@ -139,8 +137,14 @@ object ExtensionCoreMethod {
 //        ThreadUtil.startThread(r)
     }
 
-    inline fun <T> Observable<T>.sub(c: Consumer<T>) {
-        subscribe(CoreObserver(c))
+    fun <T : Any> Observable<T>.sub(c: Consumer<T>) {
+        subscribe(BaseObserver(c))
+    }
+
+    fun <T : Any> Observable<T>.sub(runOnDisposable: Disposable.() -> Unit, sub: Consumer<T>) {
+        subscribe(BaseObserver(sub).apply {
+            this.runOnDisposable = runOnDisposable
+        })
     }
 
     fun Any.toJson(): String {
@@ -148,7 +152,7 @@ object ExtensionCoreMethod {
     }
 
     @JvmStatic
-    fun Int.layoutInflater(p: ViewGroup?) =
+    fun Int.layoutInflater(p: ViewGroup?): View =
         LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()).inflate(this, p, false);
 
     @JvmStatic

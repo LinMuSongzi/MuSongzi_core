@@ -6,7 +6,6 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.ExtensionCoreMethod.wantPick
-import com.musongzi.core.CoreObserver
 import com.musongzi.core.annotation.CollecttionsEngine
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.base.map.LocalSavedHandler
@@ -19,9 +18,9 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.base.page.PageSupport
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
-import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.data.IChoose
+import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.UiUtil
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -55,7 +54,8 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private var supportDataEngine: IDataEngine<Data>? = null
     private var observer: Observer<Data>? = null
     private var initFlag = false
-    private var localSavedStateHandle:ISaveStateHandle? = null
+    private var localSavedStateHandle: ISaveStateHandle? = null
+    private val datas = mutableListOf<Item>()
 
 
     override fun runOnUiThread(runnable: Runnable) {
@@ -69,9 +69,27 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
         if (!initFlag) {
             onInitBefore(i);
             this.callBack = i as IRefreshViewModel<Item>
-            dataPageSupport = PageSupport(this)
+            dataPageSupport = PageSupport(this,datas)
             dataPageSupport.enableRefreshLimit(enableLoaderLimite())
             instanceAdapter = myAdapter()
+            initFlag = true
+            i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
+                runOnHadBundleData(it)
+            }
+            onInitAfter(i);
+        }
+    }
+
+    final override fun init(
+        i: IRefreshViewModel<*>,
+        run: (IPageEngine<*>) -> RecyclerView.Adapter<*>
+    ) {
+        if (!initFlag) {
+            onInitBefore(i);
+            this.callBack = i as IRefreshViewModel<Item>
+            dataPageSupport = PageSupport(this)
+            dataPageSupport.enableRefreshLimit(enableLoaderLimite())
+            instanceAdapter = run(dataPageSupport)
             initFlag = true
             i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
                 runOnHadBundleData(it)
@@ -96,11 +114,11 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     }
 
-    protected open fun changeRemoteDataEngin(data: IDataEngine<Data>?){
+    protected open fun changeRemoteDataEngin(data: IDataEngine<Data>?) {
         this.supportDataEngine = data
     }
 
-    protected open fun changeObserver(observer: Observer<Data>?){
+    protected open fun changeObserver(observer: Observer<Data>?) {
         this.observer = observer
     }
 
@@ -127,24 +145,25 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun loadState(): Int = state()
     override fun page(): Int = dataPageSupport.page()
     override fun lastSize(): Int = dataPageSupport.lastSize()
-    override fun realData(): List<Item> = dataPageSupport.realData()
+    override fun realData(): List<Item> = datas
     override fun pageSize(): Int = supportDataEngine?.pageSize() ?: IPageEngine.PAGE_SIZE
 
     /**
      * 这里是代表开始页数，具体你要看自己的接口
      * @return Int
      */
-    override fun thisStartPage(): Int = supportDataEngine?.thisStartPage() ?:1
+    override fun thisStartPage(): Int = supportDataEngine?.thisStartPage() ?: 1
 
     override fun createPostEvent(): Nothing? = null
 
-    override fun handlerState(integer: Int) {}
+    override fun handlerState(integer: Int?) {}
 
     override fun handlerData(items: List<Item>, action: Int) {
         callBack.refreshHolderClient()?.buildViewByData(items)
     }
 
-    final override fun getRemoteData(page: Int) = supportDataEngine?.getRemoteData(page) ?: getRemoteDataReal(page)
+    final override fun getRemoteData(page: Int) =
+        supportDataEngine?.getRemoteData(page) ?: getRemoteDataReal(page)
 
     protected abstract fun getRemoteDataReal(page: Int): Observable<Data>?
 
@@ -166,7 +185,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     }
 
-    override  fun getPageSupport() = this
+    override fun getPageSupport() = this
 
     override fun getAdMessage(): IAdMessage<Item>? = null
 
@@ -176,7 +195,8 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     fun getMainLifecycle(): IHolderLifecycle? = callBack.refreshHolderClient()?.getMainLifecycle()
 
-    override fun getThisLifecycle(): LifecycleOwner? = callBack.refreshHolderClient()?.getThisLifecycle()
+    override fun getThisLifecycle(): LifecycleOwner? =
+        callBack.refreshHolderClient()?.getThisLifecycle()
 
     fun <C : IChoose> pickSingle(pick: C) {
         (callBack as? IHandlerChooseViewModel<*>)?.wantPick()?.pickRun(pick)
@@ -194,10 +214,10 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
 
     override fun getHolderSavedStateHandle(): ISaveStateHandle {
-        if(localSavedStateHandle == null){
+        if (localSavedStateHandle == null) {
             localSavedStateHandle = LocalSavedHandler()
         }
-       return localSavedStateHandle!!
+        return localSavedStateHandle!!
     }
 
     override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {

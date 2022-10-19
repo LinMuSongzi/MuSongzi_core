@@ -41,7 +41,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     /**
      * 分页的最基本的数据存储原型
      */
-    private final List<ListItem> data = new PageArrayList<>();
+    private final List<ListItem> data;// = new PageArrayList<>();
 //    /**
 //     * 是否正在加载
 //     */
@@ -120,7 +120,12 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         throw new Exception("不允许初始化,请使用带参数的构造方法 PageSupport(CallBack<ListItem, DataEntity> callBack) ");
     }
 
-    public PageSupport(CallBack<ListItem, DataEntity> callBack) {
+    public PageSupport(CallBack<ListItem, DataEntity> callBack){
+        this(callBack,new ArrayList<>());
+    }
+
+    public PageSupport(CallBack<ListItem, DataEntity> callBack,List<ListItem> data) {
+        this.data = data;
         this.callBack = callBack;
         LifecycleOwner lifecycleOwner = callBack.getThisLifecycle();
         Log.i(TAG, "PageSupport: " + callBack.pageSize());

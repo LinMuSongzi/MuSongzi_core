@@ -45,10 +45,10 @@ class BannerViewModel : ApiViewModel<IBannerAndRetrofitClient, EmptyBusiness, Ms
 
     fun login(s: String, s1: String) {
 
-        RetrofitManager.getInstance().getApi(MszTestApi::class.java, this).login2(LoginBean(s, s1))
-            .sub {
-                Log.i(TAG, "login: ${it.toJson()}")
-            }
+//        RetrofitManager.getInstance().getApi(MszTestApi::class.java, this).login2(LoginBean(s, s1))
+//            .sub {
+//                Log.i(TAG, "login: ${it.toJson()}")
+//            }
 
     }
 

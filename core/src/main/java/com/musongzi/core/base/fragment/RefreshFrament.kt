@@ -1,5 +1,6 @@
 package com.musongzi.core.base.fragment
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -34,9 +35,9 @@ abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> :
         Log.i(TAG, "setRefresh: 6")
     }
 
-    override fun isNeedTopViewModelProvider(): Boolean {
-        return true
-    }
+//    override fun isNeedTopViewModelProvider(): Boolean {
+//        return fa
+//    }
 
 
 //    override fun instanceViewModel(): V? = InjectionHelp.findViewModel(
@@ -45,8 +46,10 @@ abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> :
 //        actualTypeArgumentsViewModelIndex()
 //    )
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun notifyDataSetChanged() {
         super.notifyDataSetChanged()
+        Log.i(TAG, "notifyDataSetChanged: "+recycleView()?.adapter)
         recycleView()?.adapter?.notifyDataSetChanged()
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.musongzi.comment.util.SourceImpl
 import com.musongzi.core.ExtensionCoreMethod.adapter
+import com.musongzi.core.ExtensionCoreMethod.getApi
 import com.musongzi.core.ExtensionCoreMethod.linearLayoutManager
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.StringChooseBean
@@ -29,24 +30,28 @@ class RecyleViewCheckFragment : DataBindingFragment<FragmentRecycleCheckBinding>
 
         var height = dataBinding.idNestedScrollView.layoutParams.height
         val width = dataBinding.idNestedScrollView.layoutParams.width
-        height = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(height),View.MeasureSpec.UNSPECIFIED);
-        dataBinding.idNestedScrollView.measure(width,height)
-        dataBinding.idRecyclerView.layoutParams.height = ScreenUtil.getScreenHeight() - ScreenUtil.dp2px(400f)
+        height = View.MeasureSpec.makeMeasureSpec(
+            View.MeasureSpec.getSize(height),
+            View.MeasureSpec.UNSPECIFIED
+        );
+        dataBinding.idNestedScrollView.measure(width, height)
+        dataBinding.idRecyclerView.layoutParams.height =
+            ScreenUtil.getScreenHeight() - ScreenUtil.dp2px(400f)
 
 //        dataBinding.idRecyclerView.head
 
-        Log.i(TAG, "initView: AdapterString idNestedScrollView height = ${dataBinding.idNestedScrollView.measuredHeight}," +
-                "sceen height = ${ScreenUtil.getScreenHeight()}")
-
-
-
+        Log.i(
+            TAG,
+            "initView: AdapterString idNestedScrollView height = ${dataBinding.idNestedScrollView.measuredHeight}," +
+                    "sceen height = ${ScreenUtil.getScreenHeight()}"
+        )
 
         RetrofitManager.getInstance().getApi(Api::class.java, this).getArrayEngine(0).sub {
             source.realData().addAll(it)
             dataBinding.idRecyclerView.linearLayoutManager {
                 source.adapter(AdapterStringBinding::class.java, { d, t ->
                     Log.i(TAG, "AdapterString: convert sum = ${++sum}")
-                }) { d, i, p ->
+                }) { _, _, p ->
                     Log.i(TAG, "AdapterString: position = $p")
                 }
             }
