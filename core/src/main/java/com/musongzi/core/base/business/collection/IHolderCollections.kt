@@ -14,4 +14,5 @@ interface IHolderCollections : CollectionsViewSupport, IHolderSavedStateHandle {
     fun onEmptyViewCreate(v: View?)
     fun getPageSupport(): IPageEngine<*>
     fun getTag():String
+    fun bindAdapter();
 }

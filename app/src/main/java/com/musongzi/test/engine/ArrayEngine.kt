@@ -15,11 +15,13 @@ import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.BaseCollectionsViewFragment.Companion.TOTAL_KEY
 import com.musongzi.core.base.vm.IRefreshViewModel
 import com.musongzi.test.Api
+import com.musongzi.test.MszTestApi
+import com.musongzi.test.bean.ResponeCodeBean
 import com.musongzi.test.databinding.AdapterStringBinding
 import io.reactivex.rxjava3.core.Observable
 
 @CollecttionsEngine(isEnableReFresh = true, isEnableLoadMore = true, isEnableEventBus = true)
-class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>>() {
+class ArrayEngine : BaseMoreViewEngine<StringChooseBean, ResponeCodeBean<List<StringChooseBean>>>() {
 
 
     override fun onInitAfter(iRefreshViewModel: IRefreshViewModel<StringChooseBean>) {
@@ -34,10 +36,14 @@ class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>
         }
     }
 
+    override fun pageSize(): Int {
+        return 7
+    }
+
     var sum = 0;
 
-    override fun getRemoteDataReal(page: Int): Observable<Array<StringChooseBean>>? =
-        Api::class.java.getApi(getRefreshViewModel().refreshHolderClient())?.getArrayEngine(page)
+    override fun getRemoteDataReal(page: Int): Observable<ResponeCodeBean<List<StringChooseBean>>>? =
+        MszTestApi::class.java.getApi(getRefreshViewModel().refreshHolderClient())?.getArrayEngine(page,pageSize())
             .apply {
                 Log.i(TAG, "getRemoteDataReal: load page = $page")
             }
@@ -59,17 +65,7 @@ class ArrayEngine : BaseMoreViewEngine<StringChooseBean, Array<StringChooseBean>
         pickSingle(d.root, i)
     }
 
-    override fun transformDataToList(entity: Array<StringChooseBean>) =
-        ArrayList<StringChooseBean>().let {
-//            if(page() == thisStartPage()){
-//
-//            }
-            it.addAll(entity)
-            BaseCollectionsViewFragment.TOTAL_KEY.saveStateChange(
-                getRefreshViewModel(),
-                entity.size
-            )
-            it
-        }
+    override fun transformDataToList(entity: ResponeCodeBean<List<StringChooseBean>>) =
+        entity.data
 
 }

@@ -55,11 +55,15 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private var observer: Observer<Data>? = null
     private var initFlag = false
     private var localSavedStateHandle: ISaveStateHandle? = null
-    private val datas = mutableListOf<Item>()
+//    private val datas = mutableListOf<Item>()
 
 
     override fun runOnUiThread(runnable: Runnable) {
         UiUtil.post(runnable)
+    }
+
+    override fun bindAdapter() {
+        instanceAdapter = myAdapter()
     }
 
     public var TAG = javaClass.simpleName
@@ -69,9 +73,9 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
         if (!initFlag) {
             onInitBefore(i);
             this.callBack = i as IRefreshViewModel<Item>
-            dataPageSupport = PageSupport(this,datas)
+            dataPageSupport = PageSupport(this)
             dataPageSupport.enableRefreshLimit(enableLoaderLimite())
-            instanceAdapter = myAdapter()
+
             initFlag = true
             i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
                 runOnHadBundleData(it)
@@ -89,7 +93,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
             this.callBack = i as IRefreshViewModel<Item>
             dataPageSupport = PageSupport(this)
             dataPageSupport.enableRefreshLimit(enableLoaderLimite())
-            instanceAdapter = run(dataPageSupport)
+
             initFlag = true
             i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
                 runOnHadBundleData(it)
@@ -145,7 +149,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun loadState(): Int = state()
     override fun page(): Int = dataPageSupport.page()
     override fun lastSize(): Int = dataPageSupport.lastSize()
-    override fun realData(): List<Item> = datas
+    override fun realData(): List<Item> = dataPageSupport.realData()
     override fun pageSize(): Int = supportDataEngine?.pageSize() ?: IPageEngine.PAGE_SIZE
 
     /**

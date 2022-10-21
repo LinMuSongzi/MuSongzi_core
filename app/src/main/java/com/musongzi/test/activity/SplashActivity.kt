@@ -8,8 +8,10 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.musongzi.comment.ExtensionMethod.startActivityNormal
+import com.musongzi.comment.ExtensionMethod.startRecycleActivity
 import com.musongzi.test.R
 import com.musongzi.test.databinding.ActivityMainBinding
+import com.musongzi.test.engine.ArrayEngine
 import com.musongzi.test.fragment.SoulAppTestFragemnt
 import com.musongzi.test.simple.BannerAndRetrofitMainFragment
 import kotlinx.coroutines.*
@@ -104,7 +106,7 @@ class SplashActivity : BaseActivity() {
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
 
-        SoulAppTestFragemnt::class.java.startActivityNormal("滑动测试")
+//        SoulAppTestFragemnt::class.java.startActivityNormal("滑动测试")
 
 //        BannerAndRetrofitMainFragment::class.java.startActivityNormal("Banner请求")
 
@@ -119,7 +121,7 @@ class SplashActivity : BaseActivity() {
 //
 //        }
 
-//        ArrayEngine::class.java.startRecyeleActivity("选择")
+        ArrayEngine::class.java.startRecycleActivity("选择")
 
     }
 
