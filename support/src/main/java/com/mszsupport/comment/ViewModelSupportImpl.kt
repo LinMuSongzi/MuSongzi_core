@@ -50,6 +50,9 @@ class ViewModelSupportImpl<B : IBusiness>() : IHolderViewModel<B> {
     }
 
     override fun attachNow(t: IActivityView?) {
+        if(isAttachNow()){
+            return
+        }
         hodlerActivity = WeakReference(t)
     }
 

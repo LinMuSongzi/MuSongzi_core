@@ -13,9 +13,9 @@ import com.mszsupport.itf.holder.IHolderLifecycle
 import com.mszsupport.itf.holder.IHolderViewModelProvider
 import io.reactivex.rxjava3.core.ObservableTransformer
 
-class ActivityViewSupportImpl(
+class ActivityViewSupportImpl @JvmOverloads constructor(
     var lifecycle: LifecycleOwner,
-    savedInstanceBudnle: Bundle,
+    savedInstanceBudnle: Bundle?,
     notifyDataMethod: (() -> INotifyDataSetChanged)? = null,
     var observableTransformer: ObservableTransformer<*, *>? = null
 ) : IActivityView, IClient,

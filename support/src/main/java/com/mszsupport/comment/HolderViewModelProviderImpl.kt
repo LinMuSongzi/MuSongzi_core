@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
 
 class HolderViewModelProviderImpl(
     var activity: IActivityView,
-    savedInstanceBundle: Bundle,
+    savedInstanceBundle: Bundle? = null,
     factory: IHolderViewModelFactory? = null
 ) : IHolderViewModelProvider {
 
