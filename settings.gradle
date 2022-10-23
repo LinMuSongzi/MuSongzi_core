@@ -6,3 +6,4 @@ include ':app'
 rootProject.name = "My Application"
 include ':spi'
 include ':videoplay'
+include ':support'
