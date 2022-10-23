@@ -2,6 +2,7 @@ package com.musongzi.core.base.business.collection
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
@@ -55,7 +56,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     private var observer: Observer<Data>? = null
     private var initFlag = false
     private var localSavedStateHandle: ISaveStateHandle? = null
-    private val datas = mutableListOf<Item>()
+//    private lateinit var  datas :List<>
 
 
     override fun runOnUiThread(runnable: Runnable) {
@@ -65,13 +66,20 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     public var TAG = javaClass.simpleName
     final override fun getAdapter(): RecyclerView.Adapter<*> = instanceAdapter
 
+    override fun bindAdapter() {
+        instanceAdapter = myAdapter()
+    }
+
     final override fun init(i: IRefreshViewModel<*>) {
         if (!initFlag) {
             onInitBefore(i);
             this.callBack = i as IRefreshViewModel<Item>
-            dataPageSupport = PageSupport(this,datas)
+            dataPageSupport = if(callBack.getHolderSource() != null) {
+                PageSupport(this, callBack.getHolderSource()!!.realData())
+            }else{
+                PageSupport(this)
+            }
             dataPageSupport.enableRefreshLimit(enableLoaderLimite())
-            instanceAdapter = myAdapter()
             initFlag = true
             i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
                 runOnHadBundleData(it)
@@ -145,7 +153,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun loadState(): Int = state()
     override fun page(): Int = dataPageSupport.page()
     override fun lastSize(): Int = dataPageSupport.lastSize()
-    override fun realData(): List<Item> = datas
+    override fun realData(): List<Item> = dataPageSupport.realData()
     override fun pageSize(): Int = supportDataEngine?.pageSize() ?: IPageEngine.PAGE_SIZE
 
     /**

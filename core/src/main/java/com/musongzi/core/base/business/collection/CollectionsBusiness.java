@@ -74,6 +74,7 @@ public class CollectionsBusiness extends BaseLifeBusiness<CollectionsViewModel> 
         } else {
             collectionsViewEngine.init(iAgent);
         }
+        collectionsViewEngine.bindAdapter();
 //        collectionsViewEngine.init
         Log.i(TAG, "instanceCollectionViewEngine: " + collectionsViewEngine + " , " + mIDictionaryClass);
         if (!isEnableEventBus()) {

@@ -8,12 +8,12 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 
 interface IRefreshViewClient {
 
-    fun normalView(): View?
+    fun normalView(): View? = null
 
     fun recycleView(): RecyclerView?
 
     fun refreshView(): SmartRefreshLayout?
 
-    fun emptyView():ViewGroup?
+    fun emptyView():ViewGroup? = null
 
 }

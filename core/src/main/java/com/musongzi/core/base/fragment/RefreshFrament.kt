@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.TypeAdapter
+import com.musongzi.core.ExtensionCoreMethod.dataBindingInflate
+import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.vm.MszViewModel
@@ -49,7 +52,7 @@ abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> :
     @SuppressLint("NotifyDataSetChanged")
     override fun notifyDataSetChanged() {
         super.notifyDataSetChanged()
-        Log.i(TAG, "notifyDataSetChanged: "+recycleView()?.adapter)
+        Log.i(TAG, "notifyDataSetChanged: size = "+(recycleView()?.adapter as TypeSupportAdaper<*>).list)
         recycleView()?.adapter?.notifyDataSetChanged()
     }
 

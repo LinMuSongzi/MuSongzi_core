@@ -367,6 +367,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         if (list.size() > 0) {
             data.addAll(list);
         }
+        Log.i(TAG, "onNext: datas.size = " + data.size());
         size.setValue(++size2);
         if (callBack.getObserver() != null) {
             callBack.getObserver().onNext(entity);

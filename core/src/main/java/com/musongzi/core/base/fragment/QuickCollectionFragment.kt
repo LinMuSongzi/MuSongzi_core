@@ -2,10 +2,12 @@ package com.musongzi.core.base.fragment
 
 import android.util.Log
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.client.IRefreshViewClient
 import com.musongzi.core.itf.page.IPageEngine
+import com.musongzi.core.itf.page.ISource
 import io.reactivex.rxjava3.core.Observable
 
 /*** created by linhui * on 2022/10/18 */
@@ -18,27 +20,21 @@ abstract class QuickCollectionFragment<B : ViewDataBinding, I, D> :
         Log.i(TAG, "updateTitle: $aNull")
     }
 
-    override fun getPageEngine(): IPageEngine<I>?  = getViewModel().getHolderBusiness().base as? IPageEngine<I>
-
-    final override fun getAdapter(): RecyclerView.Adapter<*>? {
-        return getAdapter(getCollectionsViewEngine()?.getPageSupport() as? IPageEngine<I>)
+    override fun getPageEngine(): IPageEngine<I>? {
+        return if(lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)){
+            getCollectionsViewEngine() as? IPageEngine<I>?
+        }else{
+            null
+        }
     }
 
-    abstract fun getAdapter(page: IPageEngine<I>?): RecyclerView.Adapter<*>?
+    final override fun getAdapter(): RecyclerView.Adapter<*>? {
+        return getAdapter(getCollectionsViewEngine() as? ISource<I>)
+    }
+
+    abstract fun getAdapter(page: ISource<I>?): RecyclerView.Adapter<*>?
 
     override fun <I> getRefreshClient(): IRefreshClient<I> {
         return this as IRefreshClient<I>
     }
-
-//    override fun createRecycleViewClient(): IRefreshViewClient {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun transformDataToList(entity: D): List<I> {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override fun getRemoteData(index: Int): Observable<D>? {
-//        TODO("Not yet implemented")
-//    }
 }

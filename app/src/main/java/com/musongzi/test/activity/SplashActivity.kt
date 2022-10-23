@@ -8,8 +8,10 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.musongzi.comment.ExtensionMethod.startActivityNormal
+import com.musongzi.comment.ExtensionMethod.startRecycleActivity
 import com.musongzi.test.R
 import com.musongzi.test.databinding.ActivityMainBinding
+import com.musongzi.test.engine.ArrayEngine
 import com.musongzi.test.fragment.SoulAppTestFragemnt
 import com.musongzi.test.simple.BannerAndRetrofitMainFragment
 import kotlinx.coroutines.*
@@ -119,7 +121,7 @@ class SplashActivity : BaseActivity() {
 //
 //        }
 
-//        ArrayEngine::class.java.startRecyeleActivity("选择")
+//        ArrayEngine::class.java.startRecycleActivity("选择")
 
     }
 
