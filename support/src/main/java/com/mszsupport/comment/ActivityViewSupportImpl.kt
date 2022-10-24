@@ -15,7 +15,7 @@ import io.reactivex.rxjava3.core.ObservableTransformer
 
 class ActivityViewSupportImpl @JvmOverloads constructor(
     var lifecycle: LifecycleOwner,
-    savedInstanceBudnle: Bundle?,
+    savedInstanceBudnle: Bundle? = null,
     notifyDataMethod: (() -> INotifyDataSetChanged)? = null,
     var observableTransformer: ObservableTransformer<*, *>? = null
 ) : IActivityView, IClient,
