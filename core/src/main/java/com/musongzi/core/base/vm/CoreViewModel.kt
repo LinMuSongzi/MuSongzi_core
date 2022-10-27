@@ -9,6 +9,7 @@ import com.musongzi.core.itf.holder.IHolderActivity
 import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.util.UiUtil
 import com.trello.rxlifecycle4.LifecycleTransformer
+import java.lang.ref.WeakReference
 
 abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWant, IDisconnect {
     protected val TAG = javaClass.simpleName
@@ -22,7 +23,7 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
         UiUtil.post(runnable)
     }
 
-    protected var holderActivity: IHolderActivity? = null
+    protected var holderActivity: WeakReference<IHolderActivity?>? = null
 
     protected var mSavedStateHandles = Array<ISaveStateHandle?>(SAVEDS_MAX) {
         null
@@ -37,7 +38,7 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
     @Deprecated("已过期", replaceWith = ReplaceWith("建议使用,ISaveStateHandle 来观察"))
     override fun attachNow(t: H?) {
         Log.i(TAG, "attachNow: = $t")
-        holderActivity = t;
+        holderActivity = WeakReference(t);
     }
 
     override fun clear() {
@@ -45,18 +46,18 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
     }
 
     final override fun disconnect(): Boolean {
-        return holderActivity?.getClient()?.disconnect() ?: true
+        return holderActivity?.get()?.getClient()?.disconnect() ?: true
     }
 
     final override fun isAttachNow(): Boolean = holderActivity != null
 
     override fun <T> bindToLifecycle(): LifecycleTransformer<T>? {
-        return holderActivity?.bindToLifecycle()
+        return holderActivity?.get()?.bindToLifecycle()
     }
 
-    final override fun getMainLifecycle(): IHolderLifecycle? = holderActivity?.getMainLifecycle()
+    final override fun getMainLifecycle(): IHolderLifecycle? = holderActivity?.get()?.getMainLifecycle()
 
-    final override fun getThisLifecycle(): LifecycleOwner? = holderActivity?.getThisLifecycle()
+    final override fun getThisLifecycle(): LifecycleOwner? = holderActivity?.get()?.getThisLifecycle()
 
 //    companion object{
 //        const val

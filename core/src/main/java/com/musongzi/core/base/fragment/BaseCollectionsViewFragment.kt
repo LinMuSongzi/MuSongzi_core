@@ -17,7 +17,7 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable
 
-abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA:Any> :
+abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> :
     RefreshFrament<CollectionsViewModel, B, ITEM>(), CollectionsViewClient,
     CollectionsViewSupport {
 
@@ -106,7 +106,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA:Any> 
     }
 
 
-    internal open class SimpleEngine<I, D:Any>(var client: BaseCollectionsViewFragment<*, I, D>) :
+    internal open class SimpleEngine<I, D>(var client: BaseCollectionsViewFragment<*, I, D>) :
         BaseMoreViewEngine<I, D>() {
 
         override fun myAdapter() =

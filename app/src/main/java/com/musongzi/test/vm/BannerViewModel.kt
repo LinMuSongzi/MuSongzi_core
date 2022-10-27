@@ -54,7 +54,7 @@ class BannerViewModel : ApiViewModel<IBannerAndRetrofitClient, EmptyBusiness, Ms
 
     fun upload() {
 
-        PictureSelector.create(client as Fragment)
+        PictureSelector.create(getHolderClient() as? Fragment)
             .openGallery(ofAll())
             .setSelectionMode(SelectModeConfig.SINGLE)
             .setImageEngine(GlideEngine.createGlideEngine())

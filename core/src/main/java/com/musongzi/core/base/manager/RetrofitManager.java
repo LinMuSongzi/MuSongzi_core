@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitManager {
 
     private static final String URL = "http://shange.musiccz.net:6060/";
-    private static final String URL2 = "http://192.168.88.88:8080/";
+    private static final String URL2 = "http://192.168.1.106:8080/";
 
     static RetrofitManager MANAGER;
     private Map<String, Object> apis = new HashMap<>();

@@ -40,7 +40,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @property observer Observer<Data> 当前总体数据的一个观察者回调
  * @property initFlag Boolean 是否初始化
  */
-abstract class BaseMoreViewEngine<Item, Data:Any> : ICollectionsViewEngine<Item>,
+abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     PageSupport.CallBack<Item, Data>, IHolderContext, IAnalyticSpanner<List<Item>, Data> {
     /**
      * 分页引擎
