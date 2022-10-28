@@ -32,6 +32,7 @@ import kotlin.collections.HashSet
 class MyApplication : MszApplicaton() {
     companion object {
         const val TAG = "MyApplication"
+        const val URL2 = "http://192.168.1.106:8080/"
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -73,9 +74,7 @@ class MyApplication : MszApplicaton() {
                     return null;
                 }
 
-                override fun getOkHttpCLient(): OkHttpClient? = null
-
-                override fun getRetrofit(): Retrofit? = null
+                override fun baseUrl() =  URL2
 
             })
         }

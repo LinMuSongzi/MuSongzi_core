@@ -38,12 +38,8 @@ abstract class MszViewModel<C : IClient?, B : IBusiness>() : DataDriveViewModel<
     }
 
     @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
-    final fun setHolderClient(client: C) {
+     fun setHolderClient(client: C) {
 //        this.client = client;
-    }
-
-    override fun clear() {
-        super.clear()
     }
 
     override fun indexBusinessActualTypeArgument() = 1
