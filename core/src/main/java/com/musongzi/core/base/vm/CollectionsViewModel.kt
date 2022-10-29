@@ -184,7 +184,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
     override fun updateByPick(info: IChoose?) {
 //        notifyDataSetChanged()
-        refreshHolderClient()?.notifyDataSetChanged()
+        getRefreshClient()?.notifyDataSetChanged()
     }
 
     fun joinLazyLoad() {
@@ -204,7 +204,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
     }
 
-    override fun refreshHolderClient(): IRefreshClient<Any>? {
+    override fun getRefreshClient(): IRefreshClient<Any>? {
         return getHolderClient()?.getRefreshClient()
     }
 

@@ -17,11 +17,11 @@ import com.musongzi.core.itf.data.IChoose
 import com.musongzi.core.itf.page.ISource
 import com.musongzi.spi.ISpiRequest
 import com.musongzi.spi.SpiManager
-import com.musongzi.test.Api
+import com.musongzi.test.MszTestApi
 import io.reactivex.rxjava3.core.Observable
 
 /*** created by linhui * on 2022/7/20 */
-class MainIndexViewModel : ApiViewModel<IMainIndexClient, IMainIndexBusiness, Api>(),
+class MainIndexViewModel : ApiViewModel<IMainIndexClient, IMainIndexBusiness, MszTestApi>(),
     IMainIndexViewModel, ISpiRequest {
 
     override fun createBusiness2(): IMainIndexBusiness {

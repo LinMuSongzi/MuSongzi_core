@@ -2,7 +2,6 @@ package com.musongzi.core.base.business.collection
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
@@ -164,7 +163,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
     override fun handlerState(integer: Int?) {}
 
     override fun handlerData(items: List<Item>, action: Int) {
-        callBack.refreshHolderClient()?.buildViewByData(items)
+        callBack.getRefreshClient()?.buildViewByData(items)
     }
 
     final override fun getRemoteData(page: Int) =
@@ -198,10 +197,10 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     override fun getTag(): String = javaClass.name
 
-    fun getMainLifecycle(): IHolderLifecycle? = callBack.refreshHolderClient()?.getMainLifecycle()
+    fun getMainLifecycle(): IHolderLifecycle? = callBack.getRefreshClient()?.getMainLifecycle()
 
     override fun getThisLifecycle(): LifecycleOwner? =
-        callBack.refreshHolderClient()?.getThisLifecycle()
+        callBack.getRefreshClient()?.getThisLifecycle()
 
     fun <C : IChoose> pickSingle(pick: C) {
         (callBack as? IHandlerChooseViewModel<*>)?.wantPick()?.pickRun(pick)

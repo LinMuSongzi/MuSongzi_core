@@ -65,7 +65,7 @@ class MyApplication : MszApplicaton() {
                 override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
                     when (method.name) {
                         "grilPic" -> {
-                            return RetrofitManager.getInstance().getApi(Api::class.java).grilPic()
+                            return RetrofitManager.getInstance().getApi(MszTestApi::class.java).grilPic()
                                 .delay(5, TimeUnit.SECONDS).doOnDispose {
                                 Log.i(TAG, "grilPic: 取消")
                             }

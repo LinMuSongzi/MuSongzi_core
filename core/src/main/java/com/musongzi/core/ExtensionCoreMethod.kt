@@ -35,8 +35,10 @@ import io.reactivex.rxjava3.core.CompletableOnSubscribe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
+import java.lang.reflect.Method
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 /*** created by linhui * on 2022/7/20 */
 object ExtensionCoreMethod {
@@ -95,15 +97,25 @@ object ExtensionCoreMethod {
     fun ViewDataBinding.businessSet(business: Any) {
         exceptionRun {
             javaClass.getMethod("setBusiness", business::class.java).invoke(this, business)
-            Log.i("businessSet", ": succeed " + business.javaClass.simpleName)
+//            Log.i("businessSet", ": succeed " + business.javaClass.simpleName)
         }
     }
 
+    private val CACHE_BEAN_METHOD = HashMap<String, Method>()
+    private const val BEAN_TAG = "businessSet"
     fun <T> ViewDataBinding.entitySet(entity: String, clazz: Class<T>, entityObject: T?) {
         exceptionRun {
-            javaClass.getMethod("set${TextUtil.capitalizationText(entity)}", clazz)
-                .invoke(this, entityObject)
-            Log.i("businessSet", ": succeed " + entity.javaClass.simpleName)
+            val key = javaClass.simpleName + clazz.simpleName
+            var method = CACHE_BEAN_METHOD[key]
+            if (method == null) {
+                method = javaClass.getMethod("set${TextUtil.capitalizationText(entity)}", clazz)
+                CACHE_BEAN_METHOD[key] = method
+//                Log.i(BEAN_TAG, ": succeed: find")
+//                Log.i(BEAN_TAG, ": succeed " + clazz.simpleName)
+            }else{
+//                Log.i(BEAN_TAG, ": succeed: cache")
+            }
+            method!!.invoke(this, entityObject)
         }
     }
 
