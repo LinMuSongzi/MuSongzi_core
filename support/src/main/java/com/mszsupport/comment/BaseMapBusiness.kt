@@ -94,6 +94,8 @@ private fun <A : IViewInstance?, B : IBusiness?> injectBusiness(
         } else {
             constructor.newInstance(businessWrapInstance)
         }
+
+
         if (instance is IAgentHolder<*>) {
             try {
                 (instance as IAgentHolder<*>?)?.setAgentModel(agent as Nothing)
