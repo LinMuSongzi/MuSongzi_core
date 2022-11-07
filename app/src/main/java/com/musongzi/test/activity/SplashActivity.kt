@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import com.mszsupport.test.TestImplFragment
 import com.musongzi.comment.ExtensionMethod.startActivityNormal
 import com.musongzi.comment.ExtensionMethod.startRecycleActivity
 import com.musongzi.test.R
@@ -106,7 +107,7 @@ class SplashActivity : BaseActivity() {
 //        MainActivity::class.java.startActivity()
 //        TowFragment::class.java.startActivityNormal("第二个页面")
 
-        SoulAppTestFragemnt::class.java.startActivityNormal("滑动测试")
+        TestImplFragment::class.java.startActivityNormal("滑动测试")
 
 //        BannerAndRetrofitMainFragment::class.java.startActivityNormal("Banner请求")
 

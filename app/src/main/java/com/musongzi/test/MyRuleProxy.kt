@@ -1,5 +1,6 @@
 package com.musongzi.test
 
+import com.musongzi.comment.business.MainIndexBusiness
 import com.musongzi.spi.Factory
 import com.musongzi.spi.ISpiRequest
 import com.musongzi.spi.IStrategyRule
@@ -18,7 +19,13 @@ class MyRuleProxy : IStrategyRule {
     override fun onLoadRule(request: ISpiRequest): Class<*> {
         return when (request.orderName()) {
             MainIndexViewModel::class.java.name ->
-                TestMainIndexBusiness::class.java
+//                if(!openad) {
+                    //
+                    TestMainIndexBusiness::class.java
+//                }else{
+//                    //金
+//                    MainIndexBusiness::class.java
+//                }
             else -> {
                 TODO("error")
             }

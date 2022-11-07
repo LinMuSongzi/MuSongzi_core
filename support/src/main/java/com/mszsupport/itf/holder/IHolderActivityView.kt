@@ -8,9 +8,6 @@ interface IHolderActivityView : LifecycleOwner {
 
     fun getHolderActivityView(): IActivityView?
 
-
-
-
 }
 
 fun IHolderActivityView.getSafeAtivityView(): IActivityView? =

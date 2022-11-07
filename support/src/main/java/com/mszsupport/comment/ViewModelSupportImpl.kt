@@ -10,7 +10,7 @@ import com.mszsupport.itf.holder.IHolderLifecycle
 import com.mszsupport.itf.holder.IHolderViewModel
 import java.lang.ref.WeakReference
 
-class ViewModelSupportImpl<B : IBusiness>() : IHolderViewModel<B> {
+open class ViewModelSupportImpl<B : IBusiness> : IHolderViewModel<B> {
 
     private var localSavedHandler: ISaveStateHandle? = null
     private lateinit var savedStateHandler: ISaveStateHandle

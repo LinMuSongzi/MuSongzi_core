@@ -1,7 +1,9 @@
 package com.mszsupport.comment
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import com.mszsupport.itf.*
+import com.mszsupport.itf.holder.IHolderViewModel
 import java.lang.reflect.Constructor
 
 
@@ -106,3 +108,9 @@ private fun <A : IViewInstance?, B : IBusiness?> injectBusiness(
     }
     return instance
 }
+
+
+//inline fun <reified M : ViewModelSupportImpl<B>, B : IBusiness> M.injectBusinessToModel():B {
+//    M::class.get
+//    getBusinessIndext()
+//}

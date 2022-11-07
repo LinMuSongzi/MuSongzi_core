@@ -23,7 +23,7 @@ class ActivityViewSupportImpl @JvmOverloads constructor(
     INotifyDataSetChanged {
 
     var notifyData = notifyDataMethod?.invoke()
-    var miHolderViewModelProviderImpl = HolderViewModelProviderImpl(this, savedInstanceBudnle)
+    var holderViewModelProviderImpl = HolderViewModelProviderImpl(this, savedInstanceBudnle)
 
     override fun notifyDataSetChanged() {
         notifyData?.notifyDataSetChanged()
@@ -54,9 +54,9 @@ class ActivityViewSupportImpl @JvmOverloads constructor(
 
 
     override fun topViewModelProvider(): ViewModelProvider? =
-        miHolderViewModelProviderImpl.topViewModelProvider()
+        holderViewModelProviderImpl.topViewModelProvider()
 
     override fun thisViewModelProvider(): ViewModelProvider? =
-        miHolderViewModelProviderImpl.thisViewModelProvider()
+        holderViewModelProviderImpl.thisViewModelProvider()
 
 }
