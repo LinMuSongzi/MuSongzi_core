@@ -20,11 +20,11 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
 
 
     override fun showDialog(msg: String?) {
-
+        getHolderClient()?.showDialog(msg)
     }
 
     override fun disimissDialog() {
-
+        getHolderClient()?.disimissDialog()
     }
 
     override fun getHolderClient(): IClient? {

@@ -21,34 +21,37 @@ class HolderViewModelProviderImpl(
     private var thisProvider: ViewModelProvider? = null
 
     init {
-        val f = factory?.getHolderFactory() ?: object : AbstractSavedStateViewModelFactory(
-            activity.getThisLifecycle() as SavedStateRegistryOwner,
-            savedInstanceBundle
-        ) {
-            override fun <T : ViewModel> create(
-                key: String,
-                modelClass: Class<T>,
-                handle: SavedStateHandle
-            ): T {
-                val t = modelClass.newInstance()
-                (t as? IHolderViewModel<*>)?.apply {
-                    t.attachNow(activity)
-                    setHolderSavedStateHandle(SaveStateHandleWarp(handle))
-                }
-                return t
+        val run:(SavedStateRegistryOwner)->ViewModelProvider.Factory = {s->
+            val f = factory?.getHolderFactory() ?: object : AbstractSavedStateViewModelFactory(
+                s,
+                savedInstanceBundle
+            ) {
+                override fun <T : ViewModel> create(
+                    key: String,
+                    modelClass: Class<T>,
+                    handle: SavedStateHandle
+                ): T {
+                    val t = modelClass.newInstance()
+                    (t as? IHolderViewModel<*>)?.apply {
+                        t.attachNow(activity)
+                        setHolderSavedStateHandle(SaveStateHandleWarp(handle))
+                    }
+                    return t
 
+                }
             }
+            f
         }
         activity.getThisLifecycle()?.let {
             if (it is FragmentActivity) {
-                thisProvider = ViewModelProvider(it as ViewModelStoreOwner, f)
+                thisProvider = ViewModelProvider(it as ViewModelStoreOwner, run(it as SavedStateRegistryOwner))
                 mainpProvider = WeakReference(thisProvider)
             } else {
-                thisProvider = ViewModelProvider(it as ViewModelStoreOwner, f)
+                thisProvider = ViewModelProvider(it as ViewModelStoreOwner, run(it as SavedStateRegistryOwner))
                 mainpProvider = WeakReference(
                     ViewModelProvider(
                         (it as Fragment).requireActivity() as ViewModelStoreOwner,
-                        f
+                        run(activity.getHolderContext() as SavedStateRegistryOwner)
                     )
                 )
             }

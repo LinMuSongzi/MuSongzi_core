@@ -3,21 +3,14 @@ package com.musongzi.test.simple
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.databinding.Observable
-import androidx.databinding.ObservableField
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
-import com.musongzi.core.base.fragment.MszFragment
-import com.musongzi.core.databinding.FragmentTestMainBinding
-import com.musongzi.core.itf.ILifeSaveStateHandle
-import com.musongzi.core.itf.ISaveStateHandle
+import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.test.IBannerAndRetrofitClient
 import com.musongzi.test.databinding.FragmentBannerCheckBinding
 import com.musongzi.test.vm.BannerViewModel
 
 open class BannerAndRetrofitMainFragment :
-    MszFragment<BannerViewModel, FragmentBannerCheckBinding>(), IBannerAndRetrofitClient {
+    ViewModelFragment<BannerViewModel, FragmentBannerCheckBinding>(), IBannerAndRetrofitClient {
 
     /*
      */

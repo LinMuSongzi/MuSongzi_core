@@ -21,7 +21,7 @@ class TestImplFragment : IHolderActivityView, Fragment() {
         val vm = activityView.thisViewModelProvider()?.get(MyViewModel::class.java)
 
 
-        activityView.getViewModelInstance<MyViewModel>(false)?.getHolderBusiness()//.getThisLifecycle()
+        activityView.getViewModelInstance<MyViewModel>()?.getHolderBusiness()//.getThisLifecycle()
 
         vm?.let {
             it.getHolderSavedStateHandle().getLiveData<String>("").observe(this){

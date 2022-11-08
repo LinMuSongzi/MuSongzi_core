@@ -2,13 +2,13 @@ package com.musongzi.test.fragment
 
 import android.util.Log
 import com.musongzi.core.ExtensionCoreMethod.getViewModel
-import com.musongzi.core.base.fragment.MszFragment
+import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.base.vm.EsayViewModel
 import com.musongzi.core.base.vm.SimpleViewModel
 import com.musongzi.test.databinding.ActivityTowBinding
 
 /*** created by linhui * on 2022/7/7 */
-class TowFragment : MszFragment<SimpleViewModel, ActivityTowBinding>() {
+class TowFragment : ViewModelFragment<SimpleViewModel, ActivityTowBinding>() {
 
 
 

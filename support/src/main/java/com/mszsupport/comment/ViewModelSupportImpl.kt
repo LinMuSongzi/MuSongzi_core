@@ -1,21 +1,21 @@
 package com.mszsupport.comment
 
 import androidx.lifecycle.LifecycleOwner
-import com.mszsupport.itf.IBusiness
-import com.mszsupport.itf.IClient
-import com.mszsupport.itf.ISaveStateHandle
-import com.mszsupport.itf.IActivityView
+import com.mszsupport.itf.*
 import com.mszsupport.itf.holder.IHolderApi
+import com.mszsupport.itf.holder.IHolderBusiness
 import com.mszsupport.itf.holder.IHolderLifecycle
 import com.mszsupport.itf.holder.IHolderViewModel
 import java.lang.ref.WeakReference
 
-open class ViewModelSupportImpl<B : IBusiness> : IHolderViewModel<B> {
+open class ViewModelSupportImpl<B : IBusiness>(var holder: IHolderBusiness<B>? = null) :
+    IHolderViewModel<B> {
+
 
     private var localSavedHandler: ISaveStateHandle? = null
     private lateinit var savedStateHandler: ISaveStateHandle
     private var hodlerActivity: WeakReference<IActivityView?>? = null
-    private lateinit var business: B
+    private var businessFactory: ITypeFactory? = null
 
     fun getLocalSavedHandler(): ISaveStateHandle {
         if (localSavedHandler == null) {
@@ -50,7 +50,7 @@ open class ViewModelSupportImpl<B : IBusiness> : IHolderViewModel<B> {
     }
 
     override fun attachNow(t: IActivityView?) {
-        if(isAttachNow()){
+        if (isAttachNow()) {
             return
         }
         hodlerActivity = WeakReference(t)
@@ -71,6 +71,7 @@ open class ViewModelSupportImpl<B : IBusiness> : IHolderViewModel<B> {
 
     override fun getSavedState(): ISaveStateHandle = getLocalSavedHandler()
 
-    override fun getHolderBusiness(): B = business
+    override fun getHolderBusiness() = holder?.getHolderBusiness()
+
 
 }

@@ -1,6 +1,5 @@
 package com.musongzi.core.base.fragment
 
-import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,15 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.*
-import com.musongzi.core.itf.IClient
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
-import com.musongzi.core.view.TipDialog
 
 /**
  * 有videmodel
  */
-abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
+abstract class ViewModelFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
     DataBindingFragment<D>() {
 
     private var mVp: ViewModelProvider? = null
@@ -63,7 +60,7 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
 
     protected open fun actualTypeArgumentsViewModelIndex(): Int = 0
 
-    override fun superDatabindingName() = MszFragment::class.java.name
+    override fun superDatabindingName() = ViewModelFragment::class.java.name
 
     protected open fun instanceViewModel(clazz: Array<Class<*>?>): V? = InjectionHelp.findViewModel(
         javaClass,
@@ -73,7 +70,7 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
         clazz
     )
 
-    protected open fun superFragmentName(): String = MszFragment::class.java.name
+    protected open fun superFragmentName(): String = ViewModelFragment::class.java.name
 
     private fun getProvider(): ViewModelProvider? {
         val p: ViewModelProvider?
@@ -94,6 +91,9 @@ abstract class MszFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
         return p
     }
 
+    /**
+     * 默认viewmodel 是在自己作用域
+     */
     protected open fun isNeedTopViewModelProvider(): Boolean {
         return false
     }

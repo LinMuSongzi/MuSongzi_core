@@ -19,7 +19,6 @@ import com.musongzi.core.itf.page.IPageEngine;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -149,7 +148,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
 
         androidx.lifecycle.Observer<Integer> observer = mState -> {
             Log.i(TAG, "PageSupport: change " + this);
-            callBack.handlerData(data, callBack.getCode());
+            callBack.resolveData(data, callBack.getCode());
             if (callBack.createPostEvent() != null) {
                 EventBus.getDefault().post(callBack.createPostEvent());
             }

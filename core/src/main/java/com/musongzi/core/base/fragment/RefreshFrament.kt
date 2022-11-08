@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.TypeAdapter
-import com.musongzi.core.ExtensionCoreMethod.dataBindingInflate
 import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.client.IRefreshClient
@@ -23,7 +21,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
  * @param M : LViewModel<*, *>
  * @param D : ViewDataBinding
  */
-abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> : MszFragment<V, D>(),
+abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> : ViewModelFragment<V, D>(),
     IRefreshClient<Item>, IRecycleViewClient<Item> {
 
     override fun setRefresh(b: Boolean) {

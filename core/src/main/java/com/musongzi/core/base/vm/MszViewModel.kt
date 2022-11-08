@@ -14,32 +14,18 @@ import java.lang.ref.WeakReference
 abstract class MszViewModel<C : IClient?, B : IBusiness>() : DataDriveViewModel<B>(),
     IHolderClientViewModel<C, B> {
 
-//    protected var client: C? = null
-
-
-//    override fun showDialog(msg: String?) {
-//        holderActivity?.getClient()?.showDialog(msg)
-//    }
-//
-//    override fun disimissDialog() {
-//        holderActivity?.getClient()?.disimissDialog()
-//    }
-
 
     override fun attachNow(t: IHolderActivity?) {
         synchronized(this) {
             if (isAttachNow()) {
                 return
             }
-
-//            client = t?.getClient() as? C
             super.attachNow(t)
         }
     }
 
     @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
      fun setHolderClient(client: C) {
-//        this.client = client;
     }
 
     override fun indexBusinessActualTypeArgument() = 1

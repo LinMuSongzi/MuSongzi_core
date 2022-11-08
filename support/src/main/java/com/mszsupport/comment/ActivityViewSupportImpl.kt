@@ -13,7 +13,7 @@ import com.mszsupport.itf.holder.IHolderLifecycle
 import com.mszsupport.itf.holder.IHolderViewModelProvider
 import io.reactivex.rxjava3.core.ObservableTransformer
 
-class ActivityViewSupportImpl @JvmOverloads constructor(
+open class ActivityViewSupportImpl @JvmOverloads constructor(
     var lifecycle: LifecycleOwner,
     savedInstanceBudnle: Bundle? = null,
     notifyDataMethod: (() -> INotifyDataSetChanged)? = null,

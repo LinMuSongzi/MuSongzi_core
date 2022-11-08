@@ -131,10 +131,12 @@ object ExtensionCoreMethod {
         return@let it.getNext(HandlerChooseBusiness::class.java)
     } ?: HandlerChooseBusiness(this)
 
+    @JvmStatic
     fun <V : ViewModel> Class<V>.topInstance(b: IHolderViewModelProvider?): V? {
         return b?.topViewModelProvider()?.get(this)
     }
 
+    @JvmStatic
     fun <V : ViewModel> Class<V>.thisInstance(b: IHolderViewModelProvider?): V? {
         return b?.thisViewModelProvider()?.get(this)
     }

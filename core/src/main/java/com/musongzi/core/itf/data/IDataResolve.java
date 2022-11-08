@@ -6,8 +6,8 @@ import java.util.List;
  * 处理数据
  * @param <I>
  */
-public interface DataBusiness<I> {
+public interface IDataResolve<I> {
 
-    void handlerData(List<I> t, int action);
+    void resolveData(List<I> t, int action);
 
 }

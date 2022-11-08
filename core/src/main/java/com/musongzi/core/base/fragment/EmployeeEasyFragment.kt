@@ -5,7 +5,7 @@ import androidx.databinding.ViewDataBinding
 import com.musongzi.core.base.vm.EsayViewModel
 
 /*** created by linhui * on 2022/8/16 */
-class EmployeeEasyFragment: MszFragment<EsayViewModel,ViewDataBinding>() {
+class EmployeeEasyFragment: ViewModelFragment<EsayViewModel,ViewDataBinding>() {
 
     override fun getLayoutId(): Int {
         return View.NO_ID

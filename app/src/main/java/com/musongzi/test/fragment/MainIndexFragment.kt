@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.client.IMainIndexClient
-import com.musongzi.core.base.fragment.MszFragment
+import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.test.business.BottomBusiness
 import com.musongzi.test.databinding.FragmentMainIndexBinding
 import com.musongzi.test.vm.MainIndexViewModel
@@ -22,7 +22,7 @@ import com.musongzi.test.vm.MainIndexViewModel
  *
  *
  * */
-class MainIndexFragment : MszFragment<MainIndexViewModel, FragmentMainIndexBinding>(),
+class MainIndexFragment : ViewModelFragment<MainIndexViewModel, FragmentMainIndexBinding>(),
     IMainIndexClient {
 
     override fun initView() {

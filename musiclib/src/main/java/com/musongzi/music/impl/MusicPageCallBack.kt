@@ -26,8 +26,8 @@ class MusicPageCallBack<I : IAttribute, D>(var packet: RemoteDataPacket<I, D>) :
 
     }
 
-    override fun handlerData(t: MutableList<I>?, action: Int) {
-        packet.handlerData(t,action)
+    override fun resolveData(t: MutableList<I>?, action: Int) {
+        packet.resolveData(t,action)
     }
 
     override fun transformDataToList(entity: D): List<I> {

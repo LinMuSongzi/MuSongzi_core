@@ -14,7 +14,7 @@ import io.reactivex.rxjava3.core.Observable
 abstract class QuickCollectionFragment<B : ViewDataBinding, I, D> :
     BaseCollectionsViewFragment<B, I, D>() {
 
-    override fun superDatabindingName() = QuickCollectionFragment::class.java.name
+    override fun superDatabindingName(): String = QuickCollectionFragment::class.java.name
 
     final override fun updateTitle(aNull: String) {
         Log.i(TAG, "updateTitle: $aNull")

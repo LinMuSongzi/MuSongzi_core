@@ -106,8 +106,7 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> :
     }
 
 
-    internal open class SimpleEngine<I, D>(var client: BaseCollectionsViewFragment<*, I, D>) :
-        BaseMoreViewEngine<I, D>() {
+    internal open class SimpleEngine<I, D>(var client: BaseCollectionsViewFragment<*, I, D>) : BaseMoreViewEngine<I, D>() {
 
         override fun myAdapter() =
             client.getAdapter()!!

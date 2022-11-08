@@ -19,6 +19,8 @@ import com.mszsupport.itf.IActivityView
 import com.mszsupport.itf.IBusiness
 import com.mszsupport.itf.holder.IHolderNeed
 import com.mszsupport.itf.holder.IHolderViewModelProvider
+import com.mszsupport.util.ClassCaheUtil.getMethodCache
+import com.mszsupport.util.ClassCaheUtil.putMethodCache
 import java.lang.reflect.Method
 import java.text.SimpleDateFormat
 import java.util.*
@@ -85,21 +87,21 @@ object ExtensionCoreMethod {
         }
     }
 
-    private val CACHE_BEAN_METHOD = HashMap<String, Method>()
-    private const val BEAN_TAG = "businessSet"
+//    private val CACHE_BEAN_METHOD = HashMap<String, Method>()
+//    private const val BEAN_TAG = "businessSet"
     fun <T> ViewDataBinding.entitySet(entity: String, clazz: Class<T>, entityObject: T?) {
         exceptionRun {
             val key = javaClass.simpleName + clazz.simpleName
-            var method = CACHE_BEAN_METHOD[key]
+            var method = key.getMethodCache()
             if (method == null) {
                 method = javaClass.getMethod("set${TextUtil.capitalizationText(entity)}", clazz)
-                CACHE_BEAN_METHOD[key] = method
+                key.putMethodCache(method)
 //                Log.i(BEAN_TAG, ": succeed: find")
 //                Log.i(BEAN_TAG, ": succeed " + clazz.simpleName)
             } else {
 //                Log.i(BEAN_TAG, ": succeed: cache")
             }
-            method!!.invoke(this, entityObject)
+            method?.invoke(this, entityObject)
         }
     }
 

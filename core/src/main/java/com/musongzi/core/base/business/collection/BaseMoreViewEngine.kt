@@ -39,8 +39,7 @@ import org.greenrobot.eventbus.ThreadMode
  * @property observer Observer<Data> 当前总体数据的一个观察者回调
  * @property initFlag Boolean 是否初始化
  */
-abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
-    PageSupport.CallBack<Item, Data>, IHolderContext, IAnalyticSpanner<List<Item>, Data> {
+abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>, PageSupport.CallBack<Item, Data>, IHolderContext, IAnalyticSpanner<List<Item>, Data> {
     /**
      * 分页引擎
      */
@@ -84,23 +83,23 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
         }
     }
 
-    final override fun init(
-        i: IRefreshViewModel<*>,
-        run: (IPageEngine<*>) -> RecyclerView.Adapter<*>
-    ) {
-        if (!initFlag) {
-            onInitBefore(i);
-            this.callBack = i as IRefreshViewModel<Item>
-            dataPageSupport = PageSupport(this)
-            dataPageSupport.enableRefreshLimit(enableLoaderLimite())
-            instanceAdapter = run(dataPageSupport)
-            initFlag = true
-            i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
-                runOnHadBundleData(it)
-            }
-            onInitAfter(i);
-        }
-    }
+//    final override fun init(
+//        i: IRefreshViewModel<*>,
+//        run: (IPageEngine<*>) -> RecyclerView.Adapter<*>
+//    ) {
+//        if (!initFlag) {
+//            onInitBefore(i);
+//            this.callBack = i as IRefreshViewModel<Item>
+//            dataPageSupport = PageSupport(this)
+//            dataPageSupport.enableRefreshLimit(enableLoaderLimite())
+//            instanceAdapter = run(dataPageSupport)
+//            initFlag = true
+//            i.getBundle()?.getBundle(CollecttionsEngine.B)?.let {
+//                runOnHadBundleData(it)
+//            }
+//            onInitAfter(i);
+//        }
+//    }
 
     protected open fun onInitAfter(iRefreshViewModel: IRefreshViewModel<Item>) {
     }
@@ -162,7 +161,7 @@ abstract class BaseMoreViewEngine<Item, Data> : ICollectionsViewEngine<Item>,
 
     override fun handlerState(integer: Int?) {}
 
-    override fun handlerData(items: List<Item>, action: Int) {
+    override fun resolveData(items: List<Item>, action: Int) {
         callBack.getRefreshClient()?.buildViewByData(items)
     }
 

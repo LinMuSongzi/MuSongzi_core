@@ -35,7 +35,7 @@ import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
 import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.CollectionsViewFragment
-import com.musongzi.core.base.fragment.MszFragment
+import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.MszViewModel
@@ -124,7 +124,7 @@ object ExtensionMethod {
         data?.let {
             bundle.putBundle(CollecttionsEngine.B, it)
         }
-        MszFragment.composeProvider(bundle, false)
+        ViewModelFragment.composeProvider(bundle, false)
         mCollectionsInfo.engineName = name
         bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
         return bundle
@@ -169,7 +169,7 @@ object ExtensionMethod {
      * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
      * @param mStyleMessageDescribe 控制样式一些信息，比如标题，状态栏颜色
      * @param dataBundle 传递的数据
-     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     * @param businessClassName 如果fragment继承于 [ViewModelFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
      *                          请注意，一定要是相关的继承关系
      */
     @JvmStatic
@@ -209,7 +209,7 @@ object ExtensionMethod {
      * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
      * @param barColor 状态栏颜色
      * @param dataBundle 传递的数据
-     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     * @param businessClassName 如果fragment继承于 [ViewModelFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
      *                          请注意，一定要是相关的继承关系
      */
     @JvmStatic
@@ -248,6 +248,8 @@ object ExtensionMethod {
         }
     }
 
+    @JvmStatic
+    @JvmOverloads
     fun toast(msg: String?, activity: Activity? = null, cacheKey: String? = "TOAST_KEY") {
         if (msg != null) {
             if (Thread.currentThread() != Looper.getMainLooper().thread) {
