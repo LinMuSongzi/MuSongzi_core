@@ -83,7 +83,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
             c?.let {
                 isEnableEventBus = it.isEnableEventBus
                 isEnableLoadMore = it.isEnableLoadMore
-                isEnableEventBus = it.isEnableEventBus
+                isEnableReFresh = it.isEnableReFresh
                 title = it.title
                 emptyLoadRes = it.emptyLoadRes
                 modelKey = it.modelKey

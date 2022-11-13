@@ -291,7 +291,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     public int state() {
         Integer o = state.getValue();
         if (o == null) {
-            return -1;
+            return NONE;
         }
         return o;
     }

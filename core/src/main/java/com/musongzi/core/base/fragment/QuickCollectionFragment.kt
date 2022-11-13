@@ -32,7 +32,7 @@ abstract class QuickCollectionFragment<B : ViewDataBinding, I, D> :
         return getAdapter(getCollectionsViewEngine() as? ISource<I>)
     }
 
-    abstract fun getAdapter(page: ISource<I>?): RecyclerView.Adapter<*>?
+    abstract fun getAdapter(resources: ISource<I>?): RecyclerView.Adapter<*>?
 
     override fun <I> getRefreshClient(): IRefreshClient<I> {
         return this as IRefreshClient<I>
