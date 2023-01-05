@@ -2,10 +2,10 @@ package com.musongzi.music
 
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
-import com.musongzi.comment.activity.MszFragmentActivity
+import com.musongzi.comment.activity.SupportFragmentActivity
 import com.musongzi.core.itf.ILifeObject
 
-class MainActivity : MszFragmentActivity(), ILifeObject {
+class MainActivity : SupportFragmentActivity(), ILifeObject {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

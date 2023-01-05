@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.musongzi.core.base.adapter.TypeSupportAdaper
 import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.client.IRefreshClient
 import com.musongzi.core.base.vm.MszViewModel
@@ -20,7 +21,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
  * @param M : LViewModel<*, *>
  * @param D : ViewDataBinding
  */
-abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> : MszFragment<V, D>(),
+abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> : ViewModelFragment<V, D>(),
     IRefreshClient<Item>, IRecycleViewClient<Item> {
 
     override fun setRefresh(b: Boolean) {
@@ -49,7 +50,7 @@ abstract class RefreshFrament<V :MszViewModel<*, *>, D :ViewDataBinding, Item> :
     @SuppressLint("NotifyDataSetChanged")
     override fun notifyDataSetChanged() {
         super.notifyDataSetChanged()
-        Log.i(TAG, "notifyDataSetChanged: "+recycleView()?.adapter)
+        Log.i(TAG, "notifyDataSetChanged: size = "+(recycleView()?.adapter as TypeSupportAdaper<*>).list)
         recycleView()?.adapter?.notifyDataSetChanged()
     }
 

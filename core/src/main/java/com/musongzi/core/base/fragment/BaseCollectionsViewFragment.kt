@@ -77,29 +77,15 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> :
         return mRecycleViewClient.emptyView()
     }
 
-    var mBaseMoreViewEngine: BaseMoreViewEngine<ITEM, DATA>? = null
+    var engine: IHolderCollections? = null
 
     override fun getCollectionsViewEngine(): IHolderCollections? {
-        return if (mBaseMoreViewEngine == null) {
-            object : BaseMoreViewEngine<ITEM, DATA>() {
-
-                override fun myAdapter() =
-                    this@BaseCollectionsViewFragment.getAdapter()!!
-
-                override fun getLayoutManger() =
-                    this@BaseCollectionsViewFragment.getLayoutManger()
-
-                override fun getRemoteDataReal(page: Int): Observable<DATA>? =
-                    this@BaseCollectionsViewFragment.getRemoteData(page);
-
-                override fun transformDataToList(entity: DATA): List<ITEM> =
-                    this@BaseCollectionsViewFragment.transformDataToList(entity);
-
-            }.apply {
-                mBaseMoreViewEngine = this
+        return if (engine == null) {
+            SimpleEngine(this).apply {
+                engine = this
             }
         } else {
-            mBaseMoreViewEngine
+            engine
         }
     }
 
@@ -119,5 +105,21 @@ abstract class BaseCollectionsViewFragment<B : ViewDataBinding, ITEM, DATA> :
         const val TOTAL_KEY = "vcvf_TOTAL_KEY"
     }
 
+
+    internal open class SimpleEngine<I, D>(var client: BaseCollectionsViewFragment<*, I, D>) : BaseMoreViewEngine<I, D>() {
+
+        override fun myAdapter() =
+            client.getAdapter()!!
+
+        override fun getLayoutManger() =
+            client.getLayoutManger()
+
+        override fun getRemoteDataReal(page: Int): Observable<D>? =
+            client.getRemoteData(page);
+
+        override fun transformDataToList(entity: D): List<I> =
+            client.transformDataToList(entity);
+
+    }
 
 }

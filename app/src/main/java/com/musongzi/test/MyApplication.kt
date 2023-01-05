@@ -32,6 +32,7 @@ import kotlin.collections.HashSet
 class MyApplication : MszApplicaton() {
     companion object {
         const val TAG = "MyApplication"
+        const val URL2 = "http://192.168.1.106:8080/"
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -64,7 +65,7 @@ class MyApplication : MszApplicaton() {
                 override fun invoke(proxy: Any?, method: Method, args: Array<out Any>): Any? {
                     when (method.name) {
                         "grilPic" -> {
-                            return RetrofitManager.getInstance().getApi(Api::class.java).grilPic()
+                            return RetrofitManager.getInstance().getApi(MszTestApi::class.java).grilPic()
                                 .delay(5, TimeUnit.SECONDS).doOnDispose {
                                 Log.i(TAG, "grilPic: 取消")
                             }
@@ -73,9 +74,7 @@ class MyApplication : MszApplicaton() {
                     return null;
                 }
 
-                override fun getOkHttpCLient(): OkHttpClient? = null
-
-                override fun getRetrofit(): Retrofit? = null
+                override fun baseUrl() =  URL2
 
             })
         }

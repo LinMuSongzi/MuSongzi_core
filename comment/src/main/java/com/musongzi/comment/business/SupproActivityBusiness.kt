@@ -224,7 +224,7 @@ class SupproActivityBusiness : BaseMapBusiness<IHolderLifecycle>(), ISupprotActi
             handle: SavedStateHandle
         ): T {
             Log.i("SupportViewModelFactory", "create:   = ${modelClass.name} , activity = ${activity.getHolderActivity()}")
-            return InjectionHelp.injectViewModel(activity, defaultArgs, modelClass, handle)!!
+            return InjectionHelp.injectViewModel(activity, defaultArgs, modelClass, handle) as T
         }
 
     }

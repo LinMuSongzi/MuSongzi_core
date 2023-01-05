@@ -24,7 +24,7 @@ import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.comment.activity.MszFragmentActivity
+import com.musongzi.comment.activity.SupportFragmentActivity
 import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
@@ -35,7 +35,7 @@ import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
 import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.CollectionsViewFragment
-import com.musongzi.core.base.fragment.MszFragment
+import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.MszViewModel
@@ -124,7 +124,7 @@ object ExtensionMethod {
         data?.let {
             bundle.putBundle(CollecttionsEngine.B, it)
         }
-        MszFragment.composeProvider(bundle, false)
+        ViewModelFragment.composeProvider(bundle, false)
         mCollectionsInfo.engineName = name
         bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
         return bundle
@@ -166,10 +166,10 @@ object ExtensionMethod {
 
     /**
      * 通过fragment直接打开一个activity
-     * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
+     * @param activity 框架内的一个[SupportFragmentActivity]activity。继承于此的任何子类都可以
      * @param mStyleMessageDescribe 控制样式一些信息，比如标题，状态栏颜色
      * @param dataBundle 传递的数据
-     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     * @param businessClassName 如果fragment继承于 [ViewModelFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
      *                          请注意，一定要是相关的继承关系
      */
     @JvmStatic
@@ -181,7 +181,7 @@ object ExtensionMethod {
         businessClassName: String? = null
     ) {
         (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
-            val activityClass = activity ?: MszFragmentActivity::class.java;
+            val activityClass = activity ?: SupportFragmentActivity::class.java;
             val intent = Intent(it, activityClass)
             val fInfo = FragmentDescribe(
                 this.name,
@@ -206,10 +206,10 @@ object ExtensionMethod {
     /**
      * 通过fragment直接打开一个activity
      * @param title 标题
-     * @param activity 框架内的一个[MszFragmentActivity]activity。继承于此的任何子类都可以
+     * @param activity 框架内的一个[SupportFragmentActivity]activity。继承于此的任何子类都可以
      * @param barColor 状态栏颜色
      * @param dataBundle 传递的数据
-     * @param businessClassName 如果fragment继承于 [MszFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
+     * @param businessClassName 如果fragment继承于 [ViewModelFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
      *                          请注意，一定要是相关的继承关系
      */
     @JvmStatic
@@ -217,7 +217,7 @@ object ExtensionMethod {
     fun <F : Fragment> Class<F>.startActivityNormal(
         title: String? = null,
         //其实必须是NormalFragmentActivity 子类
-        activity: Class<*>? = MszFragmentActivity::class.java,
+        activity: Class<*>? = SupportFragmentActivity::class.java,
         barColor: Int = R.color.bg_white,
         dataBundle: Bundle? = null,
         businessClassName: String? = null
@@ -248,6 +248,8 @@ object ExtensionMethod {
         }
     }
 
+    @JvmStatic
+    @JvmOverloads
     fun toast(msg: String?, activity: Activity? = null, cacheKey: String? = "TOAST_KEY") {
         if (msg != null) {
             if (Thread.currentThread() != Looper.getMainLooper().thread) {

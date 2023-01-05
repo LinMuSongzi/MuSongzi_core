@@ -4,13 +4,13 @@ import android.util.Log
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import com.musongzi.core.base.fragment.MszFragment
+import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.test.databinding.FragmentCamera2Binding
 import com.musongzi.test.vm.BannerViewModel
 import java.util.concurrent.Executor
 
 /*** created by linhui * on 2022/8/18 */
-class Camra2Fragment: MszFragment<BannerViewModel, FragmentCamera2Binding>() {
+class Camra2Fragment: ViewModelFragment<BannerViewModel, FragmentCamera2Binding>() {
 
     var flag = 0
     var executor = Executor {

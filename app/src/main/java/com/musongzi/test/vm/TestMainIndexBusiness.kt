@@ -1,26 +1,14 @@
 package com.musongzi.test.vm
 
-import android.content.ContentValues
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.os.FileUtils
-import android.provider.MediaStore
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.musongzi.FutureDemo
-import com.musongzi.FutureDemo.acceptEither
-import com.musongzi.comment.ExtensionMethod.getSaveStateLiveData
 import com.musongzi.comment.ExtensionMethod.saveStateChange
 import com.musongzi.comment.business.MainIndexBusiness
 import com.musongzi.core.ExtensionCoreMethod.sub
-import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CoreViewModel
-import com.musongzi.mExecutor
-import com.musongzi.test.Api
+import com.musongzi.test.MszTestApi
 import com.musongzi.test.business.SimpleDataBusiness
 import java.util.concurrent.TimeUnit
 
@@ -36,9 +24,9 @@ class TestMainIndexBusiness : MainIndexBusiness() {
 
     override fun buildFragments(): List<Fragment> {
 
-        iAgent.holderApiInstance<Api>()?.getApi()?.getArrayEngine(0)?.sub {
+        iAgent.holderApiInstance<MszTestApi>()?.getApi()?.getArrayEngine(0,20)?.sub {
 //
-            Log.i(TAG, "buildFragments: ${it[0].title} " + javaClass.name)
+            Log.i(TAG, "buildFragments: ${it.data[0].title} " + javaClass.name)
 //
         }
 

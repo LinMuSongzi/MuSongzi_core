@@ -52,7 +52,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
 
     override fun disimissDialog() {
-        client?.getRefreshClient<Any>()?.disimissDialog()
+        getHolderClient()?.getRefreshClient<Any>()?.disimissDialog()
     }
 
 //    override fun notifyDataSetChangedItem(postiont: Int) {
@@ -60,7 +60,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 //    }
 
     override fun getHolderContext(): Context? {
-        return super.holderActivity?.getHolderContext()
+        return super.holderActivity?.get()?.getHolderContext()
     }
 
 //    override fun getViewModelProvider(thisOrTopProvider: Boolean): ViewModelProvider {
@@ -83,7 +83,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
             c?.let {
                 isEnableEventBus = it.isEnableEventBus
                 isEnableLoadMore = it.isEnableLoadMore
-                isEnableEventBus = it.isEnableEventBus
+                isEnableReFresh = it.isEnableReFresh
                 title = it.title
                 emptyLoadRes = it.emptyLoadRes
                 modelKey = it.modelKey
@@ -184,7 +184,7 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
     override fun updateByPick(info: IChoose?) {
 //        notifyDataSetChanged()
-        refreshHolderClient()?.notifyDataSetChanged()
+        getRefreshClient()?.notifyDataSetChanged()
     }
 
     fun joinLazyLoad() {
@@ -204,12 +204,12 @@ class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusi
 
     }
 
-    override fun refreshHolderClient(): IRefreshClient<Any>? {
-        return client?.getRefreshClient()
+    override fun getRefreshClient(): IRefreshClient<Any>? {
+        return getHolderClient()?.getRefreshClient()
     }
 
     override fun getHolderViewModelProvider(): IHolderViewModelProvider? {
-        return client
+        return getHolderClient()
     }
 
 }

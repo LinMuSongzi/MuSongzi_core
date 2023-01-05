@@ -4,7 +4,8 @@ import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.ITransformData
 
 
-interface IHolderDataConvert<E, D> : IDataEngine<D>, DataBusiness<E>,
+interface IHolderDataConvert<E, D> : IDataEngine<D>,
+    IDataResolve<E>,
     ITransformData<E, D> {
 
 

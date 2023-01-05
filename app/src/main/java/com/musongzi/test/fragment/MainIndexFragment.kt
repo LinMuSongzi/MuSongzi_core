@@ -4,18 +4,39 @@ import android.app.Activity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewpager2.widget.ViewPager2
+import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.client.IMainIndexClient
-import com.musongzi.core.base.fragment.MszFragment
+import com.musongzi.core.base.fragment.ViewModelFragment
+import com.musongzi.test.business.BottomBusiness
 import com.musongzi.test.databinding.FragmentMainIndexBinding
 import com.musongzi.test.vm.MainIndexViewModel
 
-/*** created by linhui * on 2022/7/20 */
-class MainIndexFragment : MszFragment<MainIndexViewModel, FragmentMainIndexBinding>(),
+/*** created by linhui * on 2022/7/20
+ *
+ *
+ * activity/fragment view
+ *
+ * viewmodel   data
+ *
+ * business  业务
+ *
+ *
+ * */
+class MainIndexFragment : ViewModelFragment<MainIndexViewModel, FragmentMainIndexBinding>(),
     IMainIndexClient {
 
     override fun initView() {
         getViewModel().getHolderBusiness().buildDataBySize()
         (getRecycleView().itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+
+        "BottomData".liveSaveStateObserver<List<String>>(getViewModel()){
+            getViewModel().getHolderBusiness().getNext(BottomBusiness::class.java)?.update(dataBinding.root)
+        }
+//        if()
+        getViewModel().getHolderBusiness().getNext(BottomBusiness::class.java)?.change4Bottom()
+
+//        getViewModel().getHolderBusiness().getNext(A::class.java)
+
     }
     override fun getHolderContext(): Activity {
         return requireActivity()

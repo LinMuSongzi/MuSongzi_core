@@ -10,9 +10,9 @@ import com.musongzi.core.itf.page.IPageEngine
 interface IHolderCollections : CollectionsViewSupport, IHolderSavedStateHandle {
     fun onRefreshViewClientOnEvent(i: IRefreshViewClient);
     fun init(i: IRefreshViewModel<*>);
-    fun init(i: IRefreshViewModel<*>,run:(IPageEngine<*>)->RecyclerView.Adapter<*>);
+//    fun init(i: IRefreshViewModel<*>,run:(IPageEngine<*>)->RecyclerView.Adapter<*>);
     fun onEmptyViewCreate(v: View?)
     fun getPageSupport(): IPageEngine<*>
     fun getTag():String
-    fun bindAdapter();
+    fun bindAdapter()
 }

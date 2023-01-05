@@ -90,7 +90,7 @@ class MusicConfigHelpBusines : BaseMapBusiness<IViewInstance>(), IMusicInit {
                         }
                     }
 
-                    override fun handlerData(t: MutableList<IMediaPlayInfo>, action: Int) {
+                    override fun resolveData(t: MutableList<IMediaPlayInfo>, action: Int) {
                         val o = Observable.create<ObservableMusicArrayEntity> {
                             it.onNext(ObservableMusicArrayEntity(n,t,action))
                         }

@@ -2,22 +2,17 @@ package com.musongzi.test.fragment
 
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import com.musongzi.comment.util.SourceImpl
 import com.musongzi.core.ExtensionCoreMethod.adapter
-import com.musongzi.core.ExtensionCoreMethod.getApi
 import com.musongzi.core.ExtensionCoreMethod.linearLayoutManager
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.base.fragment.DataBindingFragment
 import com.musongzi.core.base.manager.RetrofitManager
-import com.musongzi.core.itf.page.ISource
 import com.musongzi.core.util.ScreenUtil
-import com.musongzi.test.Api
+import com.musongzi.test.MszTestApi
 import com.musongzi.test.databinding.AdapterStringBinding
 import com.musongzi.test.databinding.FragmentRecycleCheckBinding
-import com.musongzi.test.view.RepairScrollView
 
 /*** created by linhui * on 2022/9/22 */
 class RecyleViewCheckFragment : DataBindingFragment<FragmentRecycleCheckBinding>() {
@@ -46,8 +41,8 @@ class RecyleViewCheckFragment : DataBindingFragment<FragmentRecycleCheckBinding>
                     "sceen height = ${ScreenUtil.getScreenHeight()}"
         )
 
-        RetrofitManager.getInstance().getApi(Api::class.java, this).getArrayEngine(0).sub {
-            source.realData().addAll(it)
+        RetrofitManager.getInstance().getApi(MszTestApi::class.java, this).getArrayEngine(page = 0,20).sub {
+            source.realData().addAll(it.data)
             dataBinding.idRecyclerView.linearLayoutManager {
                 source.adapter(AdapterStringBinding::class.java, { d, t ->
                     Log.i(TAG, "AdapterString: convert sum = ${++sum}")

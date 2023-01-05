@@ -3,6 +3,8 @@ include ':musiclib'
 include ':aptlib'
 include ':core'
 include ':app'
+include ':support'
 rootProject.name = "My Application"
 include ':spi'
 include ':videoplay'
+
