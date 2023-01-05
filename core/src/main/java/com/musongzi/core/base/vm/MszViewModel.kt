@@ -14,15 +14,15 @@ import java.lang.ref.WeakReference
 abstract class MszViewModel<C : IClient?, B : IBusiness>() : DataDriveViewModel<B>(),
     IHolderClientViewModel<C, B> {
 
-    protected var client: C? = null
+    protected var client: WeakReference<C>? = null
 
 
     override fun showDialog(msg: String?) {
-        client?.showDialog(msg)
+        client?.get()?.showDialog(msg)
     }
 
     override fun disimissDialog() {
-        client?.disimissDialog()
+        client?.get()?.disimissDialog()
     }
 
 
@@ -32,14 +32,14 @@ abstract class MszViewModel<C : IClient?, B : IBusiness>() : DataDriveViewModel<
                 return
             }
 
-            client = t?.getClient() as? C
+            client = WeakReference(t?.getClient() as? C)
             super.attachNow(t)
         }
     }
 
     @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
     final fun setHolderClient(client: C) {
-        this.client = client;
+        this.client = WeakReference(client);
     }
 
     override fun clear() {
@@ -50,7 +50,7 @@ abstract class MszViewModel<C : IClient?, B : IBusiness>() : DataDriveViewModel<
     override fun indexBusinessActualTypeArgument() = 1
 
     override fun getHolderClient(): C? {
-        return InjectionHelp.checkClient(client, javaClass, indexClientActualTypeArgument())
+        return InjectionHelp.checkClient(client?.get(), javaClass, indexClientActualTypeArgument())
     }
 
     protected fun indexClientActualTypeArgument(): Int = 0;

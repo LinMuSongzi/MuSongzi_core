@@ -99,7 +99,7 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
     }
 
     override fun getArguments(): Bundle? {
-        return super.holderActivity?.getArguments()
+        return super.holderActivity?.get()?.getArguments()
     }
 
     override fun handlerArguments() {
