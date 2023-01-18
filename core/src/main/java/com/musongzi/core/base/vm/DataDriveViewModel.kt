@@ -11,8 +11,13 @@ import java.lang.ref.WeakReference
 /*** created by linhui * on 2022/9/15
  *
  * */
-abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>() ,IHolderViewModel<B>,IHolderNeed{
+abstract class DataDriveViewModel<B : IBusiness> : CoreViewModel<IHolderActivity>(), IHolderViewModel<B>, IHolderNeed {
 
+    private var sourceBundle: WeakReference<Bundle?>? = null
+    private var businessInfo: BusinessInfo? = null
+    private val business: B by lazy {
+        createBusiness()
+    }
 
     override fun getHolderNeed(): INeed? {
         return getHolderBusiness()
@@ -54,14 +59,10 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
         return mSavedStateHandles[REMOTE_SAVED_INDEX]!!
     }
 
-
-    private var sourceBundle: WeakReference<Bundle?>? = null
-
-
-
     protected open fun createBusiness2(): B {
         TODO("Not yet implemented")
     }
+
     override fun getHolderBusiness(): B = business
 
     protected open fun indexBusinessActualTypeArgument() = 0
@@ -70,13 +71,9 @@ abstract class DataDriveViewModel<B:IBusiness> : CoreViewModel<IHolderActivity>(
         super.attachNow(t)
         (business as? IAgentHolder<IAgent>)?.setAgentModel(this)
         business.afterHandlerBusiness()
-//        handlerAnnotion(business)
     }
 
-    private var businessInfo: BusinessInfo? = null
-    private val business: B by lazy {
-        createBusiness()
-    }
+
     private fun createBusiness(): B {
         return businessInfo?.let {
             Log.i(TAG, "createBusiness: 1")

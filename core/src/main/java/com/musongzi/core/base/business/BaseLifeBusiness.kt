@@ -9,6 +9,7 @@ import com.musongzi.core.itf.holder.IHolderLifecycle
 import org.greenrobot.eventbus.EventBus
 import java.lang.Exception
 
+@Deprecated("不建议使用")
 open class BaseLifeBusiness<L : IHolderLifecycle> : BaseMapBusiness<L>(), DefaultLifecycleObserver{
 
     override fun afterHandlerBusiness() {

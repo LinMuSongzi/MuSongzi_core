@@ -38,7 +38,7 @@ import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
 import com.musongzi.core.base.vm.CollectionsViewModel
-import com.musongzi.core.base.vm.MszViewModel
+import com.musongzi.core.base.vm.ClientViewModel
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.util.ActivityThreadHelp
@@ -143,11 +143,11 @@ object ExtensionMethod {
 
     fun <V : ViewModel> Class<V>.instacne(
         provider: ViewModelProvider?,
-        ifEsayViewModelInjectRun: ((MszViewModel<*, *>) -> Unit)? = null
+        ifEsayViewModelInjectRun: ((ClientViewModel<*, *>) -> Unit)? = null
     ): V? {
         return provider?.let {
             val vm = InjectionHelp.getViewModel(it, this) as V
-            (vm as? MszViewModel<*, *>)?.apply {
+            (vm as? ClientViewModel<*, *>)?.apply {
                 ifEsayViewModelInjectRun?.invoke(this)
             }
             vm

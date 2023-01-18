@@ -1,18 +1,15 @@
 package com.musongzi.core.base.vm
 
-import android.os.Bundle
-import android.util.Log
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.SavedStateHandle
-import com.musongzi.core.base.bean.BusinessInfo
-import com.musongzi.core.base.business.BaseLifeBusiness
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-abstract class MszViewModel<C : IClient?, B : IBusiness>() : DataDriveViewModel<B>(),
-    IHolderClientViewModel<C, B> {
+/**
+ * client其实一般是activity/fragment
+ */
+@Deprecated("一种兼容方式,尽量使用 [DataDriveViewModel]")
+abstract class ClientViewModel<C : IClient?, B : IBusiness> : DataDriveViewModel<B>(), IHolderClientViewModel<C, B> {
 
     protected var client: WeakReference<C>? = null
 

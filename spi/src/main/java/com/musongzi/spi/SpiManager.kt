@@ -22,7 +22,7 @@ class SpiManager private constructor() : InstanceManager, IHolderSavedStateHandl
     /**
      * 加载规则
      */
-    private var rulre: IStrategyRule? = null
+    private var rule: IStrategyRule? = null
 
 
     private fun <T> load(
@@ -52,7 +52,7 @@ class SpiManager private constructor() : InstanceManager, IHolderSavedStateHandl
         request: ISpiRequest,
         sets: java.util.HashMap<String, Pair<Class<*>, Class<*>>>
     ) {
-        val clazz = rulre?.onLoadRule(request)!!
+        val clazz = rule?.onLoadRule(request)!!
         sets[request.orderName()] = request.getRequestLoaderClass() to clazz
     }
 
@@ -61,7 +61,7 @@ class SpiManager private constructor() : InstanceManager, IHolderSavedStateHandl
 //    }
 
     override fun onReady(a: Any?) {
-        rulre = a as? IStrategyRule
+        rule = a as? IStrategyRule
         setHolderSavedStateHandle(LocalSavedHandler())
     }
 

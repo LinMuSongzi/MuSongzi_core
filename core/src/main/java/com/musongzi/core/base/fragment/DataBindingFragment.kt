@@ -30,13 +30,17 @@ import java.lang.ref.WeakReference
 abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
     IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
 
+
+    private var tipDialog: Dialog? = null
+    protected val TAG = javaClass.name
+    protected lateinit var dataBinding: D
+    private lateinit var fControl: FragmentControlClient
+
     override fun runOnUiThread(runnable: Runnable) {
         requireActivity().runOnUiThread(runnable)
     }
-    private var tipDialog: Dialog? = null
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handlerOnViewCreateSaveInstanceState(savedInstanceState)
         initView()
@@ -44,7 +48,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         initEvent()
     }
 
-    protected open fun handlerOnViewCreateSaveInstanceState(savedInstanceState: Bundle?){
+    protected open fun handlerOnViewCreateSaveInstanceState(savedInstanceState: Bundle?) {
         Log.i(TAG, "handlerOnViewCreateSaveInstanceState: bundle = $savedInstanceState")
     }
 
@@ -68,17 +72,11 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         }
     }
 
-
     override fun getClient(): IClient = this
-//    protected var savedInstance :Bundle? = null
 
-    protected val TAG = javaClass.name
-
-    lateinit var dataBinding: D
-
-    private lateinit var fControl: FragmentControlClient
-
-//    private var mMainModelProvider: ViewModelProvider? = null
+    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory {
+        return newFactory(this)
+    }
 
     private fun newFactory(owner: SavedStateRegistryOwner): ViewModelProvider.Factory =
         object : AbstractSavedStateViewModelFactory(owner, getFactoryDefaultArgs()) {
@@ -113,7 +111,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
     }
 
     override fun thisViewModelProvider(): ViewModelProvider? {
-        return ViewModelProvider(this, newFactory(this))
+        return ViewModelProvider(this, defaultViewModelProviderFactory)
     }
 
     override fun layoutId(): Int = 0
@@ -146,7 +144,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         return true
     }
 
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -166,8 +164,7 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
                     javaClass,
                     container,
                     superDatabindingName(),
-                    actualTypeArgumentsDatabindinIndex(),DataBindingComponentInstance(requireActivity())
-                )!!
+                    actualTypeArgumentsDatabindinIndex())!!
             }
             dataBinding.root
 
@@ -296,25 +293,9 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
         Log.i(TAG, "FragmentState:onLowMemory")
     }
 
-//    on
-
-
-//    open class NativeSimpleFactory(owner: SavedStateRegistryOwner, defaultArgs: Bundle?) :
-//        AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-//
-//        override fun <T : ViewModel?> create(
-//            key: String,
-//            modelClass: Class<T>,
-//            handle: SavedStateHandle
-//        ): T {
-//            TODO("Not yet implemented")
-//        }
-//
+//    class DataBindingComponentInstance(activity: Activity?) : DataBindingComponent {
+//        var weakReference = WeakReference<Activity>(activity)
 //    }
-
-    class DataBindingComponentInstance(activity: Activity?) :DataBindingComponent{
-        var weakReference = WeakReference<Activity>(activity)
-    }
 
 
 }

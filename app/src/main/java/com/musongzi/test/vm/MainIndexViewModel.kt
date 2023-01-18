@@ -22,7 +22,7 @@ import io.reactivex.rxjava3.core.Observable
 
 /*** created by linhui * on 2022/7/20 */
 class MainIndexViewModel : ApiViewModel<IMainIndexClient, IMainIndexBusiness, MszTestApi>(),
-    IMainIndexViewModel, ISpiRequest {
+    IMainIndexViewModel, ISpiRequest,IBottomViewModel {
 
     override fun createBusiness2(): IMainIndexBusiness {
         val business:IMainIndexBusiness =  SpiManager.loadInstance(this)!!
@@ -106,6 +106,10 @@ class MainIndexViewModel : ApiViewModel<IMainIndexClient, IMainIndexBusiness, Ms
 
     override fun orderName(): String {
       return  MainIndexViewModel::class.java.name
+    }
+
+    override fun remoteData() {
+
     }
 
 

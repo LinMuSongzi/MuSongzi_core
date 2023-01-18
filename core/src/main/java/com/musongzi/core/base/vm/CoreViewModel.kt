@@ -12,7 +12,7 @@ import com.trello.rxlifecycle4.LifecycleTransformer
 import java.lang.ref.WeakReference
 
 abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWant, IDisconnect {
-    protected val TAG = javaClass.simpleName
+    protected val TAG: String = javaClass.simpleName
     companion object {
         const val LOCAL_SAVED_INDEX = 1;
         const val REMOTE_SAVED_INDEX = 0;
@@ -41,6 +41,12 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
         holderActivity = WeakReference(t);
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        Log.i(TAG, "onCleared: --->")
+        clear()
+    }
+    
     override fun clear() {
         holderActivity = null;
     }

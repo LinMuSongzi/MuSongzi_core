@@ -20,7 +20,7 @@ import com.musongzi.core.itf.holder.IHolderViewModelProvider
  *
  *
  */
-class CollectionsViewModel : MszViewModel<CollectionsViewClient, CollectionsBusiness>(),
+class CollectionsViewModel : ClientViewModel<CollectionsViewClient, CollectionsBusiness>(),
     IHandlerChooseViewModel<CollectionsBusiness>, IRefreshViewModel<Any> {
 
 //    lateinit var emptyString: String
