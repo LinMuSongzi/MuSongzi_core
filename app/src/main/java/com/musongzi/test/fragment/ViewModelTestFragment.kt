@@ -56,6 +56,7 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 
         val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         dataBinding.idContentIv.measure(w, w)
+//        dataBinding.idContentIv.line
 
         Log.i(TAG, "initData: measuredHeight = ${dataBinding.idContentIv.measuredHeight} , 18dp = ${ScreenUtil.dp2px(18f)}px")
 
@@ -64,24 +65,24 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
             var start = 0
             var end = 2
 //
-//            var span = BackDynamicDrawableSpan(
-//                R.drawable.shape_red,
-//                text.substring(start, end),
-//                ScreenUtil.dp2px(5),
-//                ScreenUtil.dp2px(18f),
-//                dataBinding.idContentIv.measuredHeight
-//            )
-//
-//            it.setSpan(span, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
+            var span = BackDynamicDrawableSpan(
+                myDrawable = R.drawable.shape_red.getDrawable(),
+                myText = text.substring(start, end),
+                paddingWidth = ScreenUtil.dp2px(5),
+                height = ScreenUtil.dp2px(18f),
+                marginWidth = ScreenUtil.dp2px(5)
+            )
+
+            it.setSpan(span, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
 
             start = 2
             end = 5
             var span2 = BackDynamicDrawableSpan(
                 myDrawable = R.drawable.shape_gold.getDrawable(),
                 myText = text.substring(start, end),
-                paddingWith = ScreenUtil.dp2px(5),
+                paddingWidth = ScreenUtil.dp2px(5),
                 height = ScreenUtil.dp2px(18f),
-                marginW = ScreenUtil.dp2px(5)
+                marginWidth = ScreenUtil.dp2px(5)
             )
             it.setSpan(span2, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
 
@@ -101,9 +102,11 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
     class BackDynamicDrawableSpan(
         var myDrawable: Drawable,
         var myText: String,
-        var paddingWith: Int,
         height: Int,
-        var marginW: Int
+        var paddingWidth: Int = ScreenUtil.dp2px(5),
+        var marginWidth: Int = ScreenUtil.dp2px(3),
+        var paddingHeight: Int = ScreenUtil.dp2px(1),
+//        var marginHeight: Int = ScreenUtil.dp2px(10),
     ) :
         ReplacementSpan() {
         var myHeight = height
@@ -124,32 +127,32 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 
         override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
             textWidth = paint.measureText(myText).toInt()
-            myWith = paddingWith * 2 + marginW * 2 + textWidth
-            getCahceDrawable().setBounds(0, 0, textWidth + paddingWith * 2, myHeight)
+            myWith = paddingWidth * 2 + marginWidth * 2 + textWidth
+            getCahceDrawable().setBounds(0, 0, textWidth + paddingWidth * 2, myHeight + paddingHeight * 2)
             Log.i("initData", "getSize: textWidth = $textWidth , myWith = $myWith")
             return myWith
         }
 
         override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
-            Log.i("initData", "initData draw: $text , start = $start , end = $end , x = $x , top = $top , y = $y , bottom = $bottom")
-            Log.i("initData", "draw: paint.textSize = ${paint.textSize} , myText.size = ${paint.measureText(myText)}")
+            Log.d("initData", "initData draw: $text , start = $start , end = $end , x = $x , top = $top , y = $y , bottom = $bottom")
+            Log.d("initData", "draw: paint.textSize = ${paint.textSize} , myText.size = ${paint.measureText(myText)}")
 //            super.draw(canvas, text, start, end, x, top, y, bottom, paint)
             canvas.save()
-
+//            canvas.clipBounds.set(0,0,textWidth + paddingWidth * 2,myHeight + paddingHeight * 2)
 
             var transY: Int = bottom - getCahceDrawable().bounds.bottom
             if (mVerticalAlignment == ALIGN_BASELINE) {
                 transY -= paint.fontMetricsInt.descent
             } else if (mVerticalAlignment == ALIGN_CENTER) {
-                transY = top + (bottom - top) / 2 - getCahceDrawable().getBounds().height() / 2
+                transY = top + (bottom - top) / 2 - getCahceDrawable().bounds.height() / 2
             }
-            canvas.translate(x + marginW, transY.toFloat())
+            canvas.translate(x + marginWidth, transY.toFloat() + paddingHeight)
             getCahceDrawable().draw(canvas)
             canvas.restore()
 
 
             canvas.save()
-            canvas.drawText(myText, x + paddingWith + marginW, myHeight.toFloat(), paint)
+            canvas.drawText(myText, x + paddingWidth + marginWidth, myHeight.toFloat(), paint)
             canvas.restore()
         }
 
