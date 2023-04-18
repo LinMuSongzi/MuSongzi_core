@@ -1,6 +1,7 @@
 package com.musongzi.test.fragment
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.text.SpannableString
@@ -9,6 +10,9 @@ import android.text.style.*
 import android.util.Log
 import android.view.View.MeasureSpec
 import com.musongzi.comment.ExtensionMethod.getDrawable
+import com.musongzi.comment.util.setTextColorRes
+import com.musongzi.core.ExtensionCoreMethod.androidColorGet
+import com.musongzi.core.annotation.CollecttionsEngine.B
 import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.util.ScreenUtil
 import com.musongzi.test.R
@@ -51,7 +55,7 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 //            }
 //
 //        }.run()
-        val text = "热评vip果然很搞笑哈哈哈哈哈"
+        val text = "热评精选神回复果然很搞笑哈哈哈哈哈"
 
 
         val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
@@ -66,25 +70,40 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
             var end = 2
 //
             var span = BackDynamicDrawableSpan(
-                myDrawable = R.drawable.shape_red.getDrawable(),
+                myDrawable = R.drawable.shape_reping.getDrawable(),
                 myText = text.substring(start, end),
                 paddingWidth = ScreenUtil.dp2px(5),
                 height = ScreenUtil.dp2px(18f),
-                marginWidth = ScreenUtil.dp2px(5)
+                marginWidth = ScreenUtil.dp2px(2),
+                colorValue = R.color.reping.androidColorGet()
             )
 
             it.setSpan(span, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
 
             start = 2
-            end = 5
+            end = 4
             var span2 = BackDynamicDrawableSpan(
-                myDrawable = R.drawable.shape_gold.getDrawable(),
+                myDrawable = R.drawable.shape_jingxuan.getDrawable(),
                 myText = text.substring(start, end),
                 paddingWidth = ScreenUtil.dp2px(5),
                 height = ScreenUtil.dp2px(18f),
-                marginWidth = ScreenUtil.dp2px(5)
+                marginWidth = ScreenUtil.dp2px(2),
+                colorValue = R.color.jingxuan.androidColorGet()
             )
             it.setSpan(span2, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
+
+            start = 4
+            end = 7
+            span2 = BackDynamicDrawableSpan(
+                myDrawable = R.drawable.shape_shenhuifu.getDrawable(),
+                myText = text.substring(start, end),
+                paddingWidth = ScreenUtil.dp2px(5),
+                height = ScreenUtil.dp2px(18f),
+                marginWidth = ScreenUtil.dp2px(2),
+                colorValue = R.color.shenhuifu.androidColorGet()
+            )
+            it.setSpan(span2, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
+
 
 
             it
@@ -103,10 +122,13 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
         var myDrawable: Drawable,
         var myText: String,
         height: Int,
-        var paddingWidth: Int = ScreenUtil.dp2px(5),
-        var marginWidth: Int = ScreenUtil.dp2px(3),
-        var paddingHeight: Int = ScreenUtil.dp2px(1),
+        var paddingWidth: Int = ScreenUtil.dp2px(2),
+        var marginWidth: Int = ScreenUtil.dp2px(1),
+//        var paddingHeight: Int = ScreenUtil.dp2px(1),
 //        var marginHeight: Int = ScreenUtil.dp2px(10),
+        var textNewSize: Float = ScreenUtil.dp2px(10).toFloat(),
+//        var height:Int
+        var colorValue: Int = Color.BLACK
     ) :
         ReplacementSpan() {
         var myHeight = height
@@ -123,19 +145,26 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
         }
 //        android.text.style.DynamicDrawableSpan.ALIGN_BOTTOM
 
-        private var mVerticalAlignment = ALIGN_BOTTOM
+        private var mVerticalAlignment = ALIGN_CENTER
+//        private var paint:Paint = Paint().apply {
+//            color = colorValue
+//            textSize = textNewSize
+//        }
 
         override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-            textWidth = paint.measureText(myText).toInt()
+            textWidth = paint.apply {
+                textSize = textNewSize
+                color = colorValue
+            }.measureText(myText).toInt()
             myWith = paddingWidth * 2 + marginWidth * 2 + textWidth
-            getCahceDrawable().setBounds(0, 0, textWidth + paddingWidth * 2, myHeight + paddingHeight * 2)
-            Log.i("initData", "getSize: textWidth = $textWidth , myWith = $myWith")
+            getCahceDrawable().setBounds(0, 0, textWidth + paddingWidth * 2, myHeight)
+            Log.i("initData", "getSize: textWidth = $textWidth , myWith = $myWith , paint = $paint")
             return myWith
         }
 
         override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
             Log.d("initData", "initData draw: $text , start = $start , end = $end , x = $x , top = $top , y = $y , bottom = $bottom")
-            Log.d("initData", "draw: paint.textSize = ${paint.textSize} , myText.size = ${paint.measureText(myText)}")
+            Log.d("initData", "draw: paint.textSize = ${paint.textSize} , myText.size = ${paint.measureText(myText)} , paint = $paint")
 //            super.draw(canvas, text, start, end, x, top, y, bottom, paint)
             canvas.save()
 //            canvas.clipBounds.set(0,0,textWidth + paddingWidth * 2,myHeight + paddingHeight * 2)
@@ -146,13 +175,13 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
             } else if (mVerticalAlignment == ALIGN_CENTER) {
                 transY = top + (bottom - top) / 2 - getCahceDrawable().bounds.height() / 2
             }
-            canvas.translate(x + marginWidth, transY.toFloat() + paddingHeight)
+            canvas.translate(x + marginWidth, transY.toFloat())
             getCahceDrawable().draw(canvas)
             canvas.restore()
 
 
             canvas.save()
-            canvas.drawText(myText, x + paddingWidth + marginWidth, myHeight.toFloat(), paint)
+            canvas.drawText(myText, x + paddingWidth + marginWidth, myHeight - (myHeight.toFloat() - textNewSize)/2, paint)
             canvas.restore()
         }
 

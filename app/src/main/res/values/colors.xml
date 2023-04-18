@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="reping">#FF7A00</color>
+    <color name="jingxuan">#FCA600</color>
+    <color name="shenhuifu">#FF78C7</color>
 </resources>
