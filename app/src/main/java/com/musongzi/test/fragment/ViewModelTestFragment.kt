@@ -55,7 +55,10 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 //            }
 //
 //        }.run()
-        val text = "热评精选神回复果然很搞笑哈哈哈哈哈"
+        val text = "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
+                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
+                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
+                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。"
 
 
         val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
@@ -94,6 +97,31 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 
             start = 4
             end = 7
+            span2 = BackDynamicDrawableSpan(
+                myDrawable = R.drawable.shape_shenhuifu.getDrawable(),
+                myText = text.substring(start, end),
+                paddingWidth = ScreenUtil.dp2px(5),
+                height = ScreenUtil.dp2px(18f),
+                marginWidth = ScreenUtil.dp2px(2),
+                colorValue = R.color.shenhuifu.androidColorGet()
+            )
+            it.setSpan(span2, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
+
+
+            start = 14
+            end = 45
+            span2 = BackDynamicDrawableSpan(
+                myDrawable = R.drawable.shape_jingxuan.getDrawable(),
+                myText = text.substring(start, end),
+                paddingWidth = ScreenUtil.dp2px(5),
+                height = ScreenUtil.dp2px(18f),
+                marginWidth = ScreenUtil.dp2px(2),
+                colorValue = R.color.jingxuan.androidColorGet()
+            )
+            it.setSpan(span2, start, end, SPAN_INCLUSIVE_EXCLUSIVE)
+
+            start = 66
+            end = 71
             span2 = BackDynamicDrawableSpan(
                 myDrawable = R.drawable.shape_shenhuifu.getDrawable(),
                 myText = text.substring(start, end),
@@ -163,8 +191,8 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
         }
 
         override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
-            Log.d("initData", "initData draw: $text , start = $start , end = $end , x = $x , top = $top , y = $y , bottom = $bottom")
-            Log.d("initData", "draw: paint.textSize = ${paint.textSize} , myText.size = ${paint.measureText(myText)} , paint = $paint")
+            Log.d("initData", "initData draw: start = $start , end = $end , x = $x , top = $top , y = $y , bottom = $bottom")
+//            Log.d("initData", "draw: paint.textSize = ${paint.textSize} , myText.size = ${paint.measureText(myText)} , paint = $paint")
 //            super.draw(canvas, text, start, end, x, top, y, bottom, paint)
             canvas.save()
 //            canvas.clipBounds.set(0,0,textWidth + paddingWidth * 2,myHeight + paddingHeight * 2)
