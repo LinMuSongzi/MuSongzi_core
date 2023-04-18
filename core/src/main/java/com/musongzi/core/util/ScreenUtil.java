@@ -46,6 +46,14 @@ public class ScreenUtil {
     /**
      * 功能：屏幕单位转换
      */
+    public static int dp2px(int dpValue) {
+        Context context = ActivityThreadHelp.getCurrentApplication();
+        return dp2px(context, dpValue);
+    }
+
+    /**
+     * 功能：屏幕单位转换
+     */
     public static float dp2px2(float dpValue) {
         Context context = ActivityThreadHelp.getCurrentApplication();
         return dp2px(context, dpValue);

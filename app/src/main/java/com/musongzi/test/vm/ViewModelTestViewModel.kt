@@ -12,7 +12,4 @@ import com.musongzi.core.itf.holder.IHolderActivity
 
 class ViewModelTestViewModel : ClientViewModel<IClient, EmptyBusiness>() {
 
-
-    var initFlag = ObservableField<Int>(0)
-
 }
