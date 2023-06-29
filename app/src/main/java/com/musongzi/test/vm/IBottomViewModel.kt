@@ -1,10 +1,8 @@
 package com.musongzi.test.vm
 
-import com.musongzi.core.itf.ILifeObject
-import com.musongzi.core.itf.ILifeSaveStateHandle
-import com.musongzi.core.itf.IViewInstance
+import com.musongzi.core.itf.ILifeSaveStateHandler
 
-interface IBottomViewModel:ILifeSaveStateHandle {
+interface IBottomViewModel: ILifeSaveStateHandler {
 
 
     fun remoteData()

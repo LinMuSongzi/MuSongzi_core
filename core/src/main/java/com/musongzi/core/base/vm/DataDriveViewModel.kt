@@ -89,18 +89,18 @@ abstract class DataDriveViewModel<B : IBusiness> : CoreViewModel<IHolderActivity
         })
     }
 
-    override fun putArguments(d: Bundle?) {
-        d?.let {
-            businessInfo = d.getParcelable(InjectionHelp.BUSINESS_NAME_KEY)
-        }
-    }
-
-    override fun getArguments(): Bundle? {
-        return super.holderActivity?.get()?.getArguments()
-    }
-
-    override fun handlerArguments() {
-
-    }
+//    override fun putArguments(d: Bundle?) {
+//        d?.let {
+//            businessInfo = d.getParcelable(InjectionHelp.BUSINESS_NAME_KEY)
+//        }
+//    }
+//
+//    override fun getArguments(): Bundle? {
+//        return super.holderActivity?.get()?.getArguments()
+//    }
+//
+//    override fun handlerArguments() {
+//
+//    }
 
 }

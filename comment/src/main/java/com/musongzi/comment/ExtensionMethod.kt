@@ -294,7 +294,7 @@ object ExtensionMethod {
      */
     @JvmStatic
     fun <T> String.liveSaveStateObserver(
-        holder: ILifeSaveStateHandle,
+        holder: ILifeSaveStateHandler,
         observer: Observer<T>
     ) {
         holder.getThisLifecycle()?.let {
@@ -319,7 +319,7 @@ object ExtensionMethod {
     @JvmStatic
     @JvmOverloads
     fun <T> String.liveSaveStateObserverOnOwner(
-        holder: ILifeSaveStateHandle,
+        holder: ILifeSaveStateHandler,
         observer: Observer<T>,
         l: LifecycleOwner,
         isRemove: Boolean = false,
@@ -408,7 +408,7 @@ object ExtensionMethod {
      */
     @JvmStatic
     fun <T> String.liveSaveStateObserverCall(
-        holder: ILifeSaveStateHandle,
+        holder: ILifeSaveStateHandler,
         observer: (call: T) -> Boolean
     ) {
         holder.getThisLifecycle()?.let {

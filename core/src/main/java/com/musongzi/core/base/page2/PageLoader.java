@@ -9,7 +9,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
 
-import com.heart.core.base.page2.RemoteObserver;
 import com.musongzi.core.base.page.ICataloguePage2;
 import com.musongzi.core.base.page.PageArrayList;
 import com.musongzi.core.itf.holder.IHolderCheckDataEnd;
@@ -236,7 +235,7 @@ public class PageLoader<ListItem, DataEntity> implements ICataloguePage2<ListIte
             //已过期；会调用回调的方法去发送一个otto订阅对象，前提是post不为空
             Object post = pageCallBack.createPostEvent(request);
             if (post != null) {
-                OttoBus.getInstance().post(post);
+//                OttoBus.getInstance().post(post);
             }
         };
         //订阅处理数据回调

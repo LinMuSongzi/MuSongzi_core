@@ -65,8 +65,6 @@ abstract class CoreViewModel<H : IHolderActivity> : ViewModel(), IAttach<H>, IWa
 
     final override fun getThisLifecycle(): LifecycleOwner? = holderActivity?.get()?.getThisLifecycle()
 
-//    companion object{
-//        const val
-//    }
+
 
 }
