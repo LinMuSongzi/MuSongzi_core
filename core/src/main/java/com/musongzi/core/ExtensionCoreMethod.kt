@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,8 +23,11 @@ import com.musongzi.core.base.client.IRecycleViewClient
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
 import com.musongzi.core.itf.IBusiness
+import com.musongzi.core.itf.IHolderSavedStateHandle
+import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.IWant
 import com.musongzi.core.itf.holder.IHolderNeed
+import com.musongzi.core.itf.holder.IHolderSavedStateHandler
 import com.musongzi.core.itf.holder.IHolderViewModelProvider
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.ISource
@@ -466,6 +471,59 @@ object ExtensionCoreMethod {
 
     fun <V : ViewModel> Class<V>.getViewModel(vp: ViewModelProvider): V {
         return vp.get(this)
+    }
+
+
+    @JvmStatic
+    fun <T> String.liveSaveStateObserver(
+        lifecycle: LifecycleOwner?, saveStateHandle: IHolderSavedStateHandler?, observer: Observer<T>
+    ) {
+        liveSaveStateObserver(lifecycle, saveStateHandle?.getHolderSavedStateHandle(), observer)
+    }
+
+    @JvmStatic
+    fun <T> String.liveSaveStateObserver(
+        lifecycle: LifecycleOwner?, saveStateHandle: ISaveStateHandle?, observer: Observer<T>
+    ) {
+        if (lifecycle != null) {
+            saveStateHandle?.getLiveData<T>(this)?.observe(lifecycle, observer)
+        } else {
+            saveStateHandle?.getLiveData<T>(this)?.observeForever(observer)
+        }
+    }
+
+    /**
+     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
+     */
+    @JvmStatic
+    fun <T> String.saveStateChange(holder: IHolderSavedStateHandle, v: T) {
+        holder.getHolderSavedStateHandle()[this] = v
+    }
+
+    /**
+     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
+     */
+    @JvmStatic
+    fun <T> String.saveStateChange(saveStateHandle: ISaveStateHandle, v: T) {
+        saveStateHandle[this] = v
+    }
+
+    /**
+     * 获取基于“key”的可观察的value
+     */
+    @JvmStatic
+    fun <T> String.getSaveStateValue(holder: IHolderSavedStateHandle): T? {
+        return holder.getHolderSavedStateHandle()[this]
+    }
+
+    @JvmStatic
+    fun <T> String.getSaveStateValue(saveStateHandle: ISaveStateHandle): T? {
+        return saveStateHandle[this]
+    }
+
+
+    fun isHeatDarkMode(){
+        TODO()
     }
 
 }

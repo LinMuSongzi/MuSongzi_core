@@ -1,8 +1,6 @@
 package com.musongzi.test.fragment
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.text.SpannableString
 import android.text.Spanned.SPAN_INCLUSIVE_EXCLUSIVE
@@ -10,9 +8,7 @@ import android.text.style.*
 import android.util.Log
 import android.view.View.MeasureSpec
 import com.musongzi.comment.ExtensionMethod.getDrawable
-import com.musongzi.comment.util.setTextColorRes
 import com.musongzi.core.ExtensionCoreMethod.androidColorGet
-import com.musongzi.core.annotation.CollecttionsEngine.B
 import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.util.ScreenUtil
 import com.musongzi.test.R
@@ -39,7 +35,93 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
     }
 
     override fun initEvent() {
+        dataBinding.idDra.background = object : Drawable() {
+            val b = BitmapFactory.decodeResource(requireActivity().application.resources, R.mipmap.ic_normal_man_hear)
 
+            var rotate = 0f
+
+            val p = Paint().apply {
+                color = Color.parseColor("#a4fa9b")
+                style = Paint.Style.FILL
+                isAntiAlias = true
+                textSize = ScreenUtil.dp2px(17f).toFloat()
+            }
+
+            private val sModes = arrayOf<Xfermode>(
+                PorterDuffXfermode(PorterDuff.Mode.CLEAR),
+                PorterDuffXfermode(PorterDuff.Mode.SRC),
+                PorterDuffXfermode(PorterDuff.Mode.DST),
+                PorterDuffXfermode(PorterDuff.Mode.SRC_OVER),
+                PorterDuffXfermode(PorterDuff.Mode.DST_OVER),
+                PorterDuffXfermode(PorterDuff.Mode.SRC_IN),
+                PorterDuffXfermode(PorterDuff.Mode.DST_IN),
+                PorterDuffXfermode(PorterDuff.Mode.SRC_OUT),
+                PorterDuffXfermode(PorterDuff.Mode.DST_OUT),
+                PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP),
+                PorterDuffXfermode(PorterDuff.Mode.DST_ATOP),
+                PorterDuffXfermode(PorterDuff.Mode.XOR),
+                PorterDuffXfermode(PorterDuff.Mode.DARKEN),
+                PorterDuffXfermode(PorterDuff.Mode.LIGHTEN),
+                PorterDuffXfermode(PorterDuff.Mode.MULTIPLY),
+                PorterDuffXfermode(PorterDuff.Mode.SCREEN)
+            )
+
+            val cp = Paint().apply {
+                color = Color.parseColor("#98c61f")
+                textSize = ScreenUtil.dp2px(17f).toFloat()
+                style = Paint.Style.FILL
+                isAntiAlias = true
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
+            }
+
+            var index = 0
+
+            override fun draw(canvas: Canvas) {
+                // 创建一个Bitmap对象
+                // 创建一个Bitmap对象
+                val bitmap = b
+
+// 创建一个BitmapShader对象
+
+// 创建一个BitmapShader对象
+                val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+
+// 创建一个Paint对象，并将其Shader属性设置为上面创建的BitmapShader对象
+
+// 创建一个Paint对象，并将其Shader属性设置为上面创建的BitmapShader对象
+                val paint = Paint()
+                paint.shader = shader
+
+// 计算圆形的半径
+
+// 计算圆形的半径
+                val radius = Math.min(bitmap.width, bitmap.height) / 2
+
+// 创建一个Canvas对象，并在其上绘制一个圆形
+
+// 创建一个Canvas对象，并在其上绘制一个圆形
+//                val canvas = Canvas()
+//                canvas.drawCircle(radius.toFloat(), radius.toFloat(), radius.toFloat(), paint)
+
+                canvas.drawRoundRect(
+                    RectF(0f, 0f, b.width.toFloat()/2, b.height.toFloat()),
+                    20f,
+                    20f,
+                    paint
+                )
+
+            }
+
+            override fun setAlpha(alpha: Int) {
+
+            }
+
+            override fun setColorFilter(colorFilter: ColorFilter?) {
+            }
+
+            override fun getOpacity() = PixelFormat.UNKNOWN
+
+        }
     }
 
     var _sum = 0
@@ -55,10 +137,11 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 //            }
 //
 //        }.run()
-        val text = "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
-                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
-                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
-                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。"
+        val text = "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴"
+        //"树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
+//                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
+//                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。" +
+//                "依然坚持做自己想做的事情，成为自己想成为的人，是啊，无论多么不平凡的生命，最终都要归于平凡的柴米油盐；无论生命中有多少波澜壮阔，我们最迷恋的，始终是包裹在烟火人事里，平凡琐碎的温暖和感动。正如朴树的《平凡之路》，“我曾经跨过山和大海，也穿过人山人海，我曾经拥有着的一切，转眼都飘散如烟，我曾经失落失望失掉所有方向，直到看见平凡才是唯一的答案。"
 
 
         val w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
@@ -209,7 +292,7 @@ class ViewModelTestFragment : ViewModelFragment<ViewModelTestViewModel, Fragment
 
 
             canvas.save()
-            canvas.drawText(myText, x + paddingWidth + marginWidth, myHeight - (myHeight.toFloat() - textNewSize)/2, paint)
+            canvas.drawText(myText, x + paddingWidth + marginWidth, myHeight - (myHeight.toFloat() - textNewSize) / 2, paint)
             canvas.restore()
         }
 

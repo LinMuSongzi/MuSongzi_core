@@ -1,9 +1,10 @@
 package com.musongzi.core.itf.holder
 
 import android.os.Bundle
-import com.musongzi.core.itf.*
+import com.musongzi.core.itf.IAgent
+import com.musongzi.core.itf.IBusiness
 
-interface IHolderViewModel<B : IBusiness> : IAgent, IAttach<IHolderActivity>, IHolderBusiness<B>, IHolderArguments<Bundle>, ILifeSaveStateHandle {
+interface IHolderViewModel<B : IBusiness> : IAgent, IHolderBusiness<B>, IHolderAnySaveStateHandler {
 
     @Deprecated("~暂时先标记过时")
     fun handlerSavedInstanceState(savedInstanceState: Bundle?);

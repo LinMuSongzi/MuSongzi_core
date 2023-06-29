@@ -14,34 +14,46 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="#BFACBC"
         android:layout_height="match_parent"
+        android:background="#BFACBC"
         android:fitsSystemWindows="true"
         tools:context=".fragment.ViewModelTestFragment">
 
         <ScrollView
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/id_content_iv"
+            android:id="@+id/id_nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:clipChildren="false"
-            android:textStyle="bold"
-            android:textColor="@color/bg_white"
-            android:textColorHint="@color/bg_white"
-            android:layout_marginHorizontal="50dp"
-            android:hint="哈哈哈"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/id_content_iv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+                android:clipChildren="false"
+                android:hint="哈哈哈"
+                android:textColor="@color/bg_white"
+                android:textColorHint="@color/bg_white"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </ScrollView>
+
+
+        <View
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/id_nestedScrollView"
+            android:id="@+id/id_dra"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

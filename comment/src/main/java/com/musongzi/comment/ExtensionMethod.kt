@@ -287,21 +287,6 @@ object ExtensionMethod {
         }
     }
 
-    /**
-     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
-     */
-    @JvmStatic
-    fun <T> String.saveStateChange(holder: IHolderSavedStateHandle, v: T) {
-        holder.getHolderSavedStateHandle()[this] = v
-    }
-
-    /**
-     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
-     */
-    @JvmStatic
-    fun <T> String.saveStateChange(saveStateHandle: ISaveStateHandle, v: T) {
-        saveStateHandle[this] = v
-    }
 
 
     /**

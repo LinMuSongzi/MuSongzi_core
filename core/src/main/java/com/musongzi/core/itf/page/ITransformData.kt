@@ -1,7 +1,9 @@
 package com.musongzi.core.itf.page
 
+
+
 /*** created by linhui * on 2022/7/28 */
-interface ITransformData<I,D> {
+interface ITransformData<I, D> {
 
     /**
      * 核心的数据转换的函数
@@ -9,5 +11,11 @@ interface ITransformData<I,D> {
      * @param entity 当前加载的数据
      * @return 返回数据源对应泛型
      */
-    fun transformDataToList(entity: D): List<I>
+    fun transformDataToList(entity: D): List<I>?
+}
+
+open class TransformDataImpl<I> : ITransformData<I, List<I>?> {
+    override fun transformDataToList(entity: List<I>?): List<I> {
+        return entity ?: mutableListOf()
+    }
 }

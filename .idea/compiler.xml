@@ -20,13 +20,13 @@
     <bytecodeTargetLevel target="1.8">
       <module name="aptlib" target="1.7" />
       <module name="comment" target="1.7" />
-      <module name="My_Application.app" target="11" />
-      <module name="My_Application.comment" target="11" />
-      <module name="My_Application.core" target="11" />
-      <module name="My_Application.musiclib" target="11" />
-      <module name="My_Application.spi" target="11" />
-      <module name="My_Application.support" target="11" />
-      <module name="My_Application.videoplay" target="11" />
+      <module name="My_Application.app" target="17" />
+      <module name="My_Application.comment" target="17" />
+      <module name="My_Application.core" target="17" />
+      <module name="My_Application.musiclib" target="17" />
+      <module name="My_Application.spi" target="17" />
+      <module name="My_Application.support" target="17" />
+      <module name="My_Application.videoplay" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

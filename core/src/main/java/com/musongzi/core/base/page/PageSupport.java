@@ -8,18 +8,26 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
+import com.heart.core.base.page.ICataloguePage;
+import com.heart.core.base.page.PageArrayList;
+import com.musongzi.core.base.page2.StateInfo;
 import com.musongzi.core.itf.ILifeObject;
 import com.musongzi.core.itf.data.IHolderDataConvert;
 import com.musongzi.core.itf.page.Book;
 import com.musongzi.core.itf.page.IAdMessage;
+import com.musongzi.core.itf.page.ICheckDataEnd;
+import com.musongzi.core.itf.page.IHolderOnDataChangeListener;
 import com.musongzi.core.itf.page.ILimitOnLoaderState;
 import com.musongzi.core.itf.page.ILimitRead;
-import com.musongzi.core.itf.page.IPageEngine;
+import com.musongzi.core.itf.page.IRead;
+import com.musongzi.core.itf.page.OnDataChangeListenerOwner;
+import com.musongzi.core.itf.page.OnPageDataChange;
 
-import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -33,8 +41,15 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * @param <ListItem>   每项数据的泛型{@link #data}
  * @param <DataEntity> remote 数据端加载进入来的未过滤的基本数据泛型 通过{@link CallBack#transformDataToList(DataEntity)} 转化成{@link #data}
  */
-public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>, Observer<DataEntity>, ILimitRead, ILimitOnLoaderState {
+@Deprecated
+public class PageSupport<ListItem, DataEntity> implements ICataloguePage<ListItem>, Observer<DataEntity>, ILimitRead, ILimitOnLoaderState, IHolderCheckDataEnd, IHolderOnDataChangeListener<ListItem>
+, OnDataChangeListenerOwner<ListItem> {
 
+    private final List<OnPageDataChange<ListItem>> mOnPageDataChanges = new LinkedList<>();
+    @Nullable
+    private Listener listener = null;
+
+    private int maxCount = -1;
     private static final String TAG = "PageSupport";
 
     /**
@@ -49,6 +64,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      * 一个提供给外部实现的回调函数
      * 用户处理不同业务情况
      */
+    @NonNull
     protected CallBack<ListItem, DataEntity> callBack;
     /**
      * 最后一次的数据长度
@@ -57,6 +73,7 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
     private int size2 = 0;
     private int maxPage = -1;
     public boolean isEndPage = false;
+    private ICheckDataEnd checkEndDatasFunction;
     /**
      * 状态
      */
@@ -96,8 +113,8 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     private long thisNextTimeLimite = 1500;
 
-    private boolean enableRefreshLimit = true;
-    private boolean enableNextLoadLimit = true;
+    private boolean enableRefreshLimit = false;
+    private boolean enableNextLoadLimit = false;
 
     public long getThisRefreshTimeLimite() {
         return thisRefreshTimeLimite;
@@ -119,15 +136,11 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         throw new Exception("不允许初始化,请使用带参数的构造方法 PageSupport(CallBack<ListItem, DataEntity> callBack) ");
     }
 
-//    public PageSupport(CallBack<ListItem, DataEntity> callBack){
-//        this(callBack,new ArrayList<>());
-//    }
-
     public PageSupport(CallBack<ListItem, DataEntity> callBack) {
 //        this.data = data;
         this.callBack = callBack;
         LifecycleOwner lifecycleOwner = callBack.getThisLifecycle();
-        Log.i(TAG, "PageSupport: " + callBack.pageSize());
+//        Log.i(TAG, "PageSupport: " + callBack.pageSize());
         if (lifecycleOwner == null) {
             page.observeForever(integer -> {
                 Log.i(TAG, "PageSupport: observeForever  = " + integer);
@@ -146,11 +159,12 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
             state.observe(lifecycleOwner, callBack::handlerState);
         }
 
-        androidx.lifecycle.Observer<Integer> observer = mState -> {
+        androidx.lifecycle.Observer<Integer> observer = size -> {
             Log.i(TAG, "PageSupport: change " + this);
-            callBack.resolveData(data, callBack.getCode());
+            checkOnDataChange(data, callBack.getCode());
+            callBack.handlerDataChange(data, callBack.getCode());
             if (callBack.createPostEvent() != null) {
-                EventBus.getDefault().post(callBack.createPostEvent());
+//                EventBus.getDefault().post(callBack.createPostEvent());
             }
         };
         if (lifecycleOwner == null) {
@@ -171,6 +185,24 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
             });
             state.observe(lifecycleOwner, mState -> callBack.getAdMessage().onDataStateChange(mState));
         }
+    }
+
+    private void checkOnDataChange(List<ListItem> data, int code) {
+
+
+        Iterator<OnPageDataChange<ListItem>> iterator = mOnPageDataChanges.iterator();
+        while (iterator.hasNext()) {
+            try {
+
+                OnPageDataChange<ListItem> change = iterator.next();
+                Log.d(TAG, "checkOnDataChange: change = " + change);
+                change.handlerDataChange(data, code);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+
     }
 
     /**
@@ -222,11 +254,16 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     @Override
     public void next() {
+        if (listener != null) {
+            if (listener.onLoadMoreBefore()) {
+                return;
+            }
+        }
         nextNewMethod(true);
     }
 
     private void nextNewMethod(boolean isEnableLimiteMoreLoadByMethodPara) {
-        if(isEnableLimiteMoreLoadByMethodPara) {
+        if (isEnableLimiteMoreLoadByMethodPara) {
             if (enableNextLoadLimit) {
                 if (Math.abs(thisNextTime - System.currentTimeMillis()) <= thisNextTimeLimite) {
                     Log.i(TAG, "refresh: 加载下一页间隔时间短~");
@@ -263,12 +300,17 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     @Override
     public void refresh() {
+        if (listener != null) {
+            if (listener.onRefreshBefore()) {
+                return;
+            }
+        }
         refreshNewMethod(true);
     }
 
     private void refreshNewMethod(boolean isEnableLimiteRefreshByMethodPara) {
-        if(isEnableLimiteRefreshByMethodPara) {
-            if(enableRefreshLimit) {
+        if (isEnableLimiteRefreshByMethodPara) {
+            if (enableRefreshLimit) {
                 if (Math.abs(thisRefreshTime - System.currentTimeMillis()) <= thisRefreshTimeLimite) {
                     Log.i(TAG, "refresh: 刷新间隔时间短~");
                     return;
@@ -347,8 +389,29 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
      */
     @Override
     public void onNext(DataEntity entity) {
+        int mode = callBack.getBusinessMode();
+        Log.i(TAG, "onNext: getBusinessMode = " + mode);
+        switch (mode) {
+
+            case POSTION_MODE:
+                postionModeBusiness(entity);
+                break;
+            default:
+                simpleModeBusiness(entity);
+        }
+    }
+
+    private void postionModeBusiness(DataEntity entity) {
         lastSize = data.size();
-        if (page.getValue() <= callBack.thisStartPage()) {
+        List<ListItem> transList = callBack.transformDataToList(entity);
+//        state.setValue(CONVERT_POSTION);
+        callBack.convertListByNewData(data, transList);
+        size.setValue(++size2);
+    }
+
+    private void simpleModeBusiness(DataEntity entity) {
+        lastSize = data.size();
+        if (page.getValue() != null && page.getValue() <= callBack.thisStartPage()) {
             maxPage = 0;
             data.clear();
             state.setValue(STATE_END_REFRASH);
@@ -359,11 +422,19 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
 
         Log.i(TAG, "onNext: lastSize = " + lastSize);
         List<ListItem> list = callBack.transformDataToList(entity);
-        if (checkIsNoDatas(list)) {
+        if (checkEndDatas(list)) {
+            state.setValue(NO_MORE_BY_LOADED_SUCCED_PAGE);
             Log.i(TAG, "onNext: 已经没有数据了~ pagesize = " + callBack.pageSize() + " , " + data.size());
             isEndPage = true;
+        } else {
+            state.setValue(LOADED_SUCCED_PAGE);
+            isEndPage = checkEndDatas(list);
+            Log.i(TAG, "onNext: again loader pagesize = " + callBack.pageSize() + " , " + data.size());
+            if (list != null && list.size() > 0) {
+                loaderCount += list.size();
+            }
         }
-        if (list.size() > 0) {
+        if (list != null && list.size() > 0) {
             data.addAll(list);
         }
         Log.i(TAG, "onNext: datas.size = " + data.size());
@@ -373,8 +444,20 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         }
     }
 
-    private boolean checkIsNoDatas(List<?> list) {
-        return list.size() < callBack.pageSize();
+    private int loaderCount = 0;
+
+    private boolean checkEndDatas(@Nullable List<?> list) {
+        if (maxCount != -1) {
+            return maxCount <= loaderCount;
+        } else {
+            if (list == null) {
+                Log.i(TAG, "checkEndDatas: need loader list = null " + 0);
+//                return checkEndDatasFunction != null && checkEndDatasFunction.checkDataIsNull(null);
+            } else {
+                Log.i(TAG, "checkEndDatas: need loader " + list.size());
+            }
+            return checkEndDatasFunction != null ? checkEndDatasFunction.checkDataIsNull(list) : (list == null || list.size() < callBack.pageSize());
+        }
     }
 
     @Override
@@ -435,16 +518,84 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
         enableNextLoadLimit = enable;
     }
 
+    @Override
+    public void clearNow() {
+        thisRefreshTime = System.currentTimeMillis();
+        isEndPage = false;
+        lastSize = 0;
+        state.setValue(STATE_CLEAR);
+        data.clear();
+    }
+
+    @Override
+    public ListItem get(int position) {
+        return data.get(position);
+    }
+
+    @Override
+    public void setCheckDataEnd(@NonNull ICheckDataEnd check) {
+        this.checkEndDatasFunction = check;
+    }
+
+    @Override
+    public int getBusinessMode() {
+        return callBack.getBusinessMode();
+    }
+
+    @NonNull
+    public IHolderOnDataChangeListener<ListItem> getHolderDataChangeListeners() {
+        return this;
+    }
+
+    @Override
+    public boolean addOnPageDataChange(@NonNull OnPageDataChange<ListItem> onDataChange) {
+        return mOnPageDataChanges.add(onDataChange);
+    }
+
+    @Override
+    public boolean removeOnPageDataChange(@Nullable OnPageDataChange<ListItem> onDataChange) {
+        return mOnPageDataChanges.remove(onDataChange);
+    }
+
+    @Override
+    public void setMaxCount(int maxCount) {
+        this.maxCount = maxCount;
+    }
+
+    @Override
+    public void observerState(@NonNull LifecycleOwner lifecycleOwner, @NonNull androidx.lifecycle.Observer<Integer> observer) {
+        state.observe(lifecycleOwner,observer);
+    }
+
+    @Override
+    public void observerStateInfo(@NonNull LifecycleOwner lifecycleOwner, @NonNull androidx.lifecycle.Observer<StateInfo> observer) {
+
+    }
+
+
     /**
      * 提供给外部环境的基本回调函数
      *
      * @param <ListItem>参数泛型定义与   {@link PageSupport} 一致
      * @param <DataEntity>参数泛型定义与 {@link PageSupport} 一致
      */
-    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, ILifeObject {
+    public interface CallBack<ListItem, DataEntity> extends IHolderDataConvert<ListItem, DataEntity>, Book, ILifeObject, IPostionModeBusiness<ListItem> {
+
+
+        @Override
+        default <I> void convertListByNewData(@NonNull List<I> data, @Nullable List<I> transList) {
+            if (transList != null) {
+                data.addAll(transList);
+            }
+        }
+
+        default int getBusinessMode() {
+            return IRead.SIMPLE_MODE;
+        }
 
         /**
          * 身份id
+         *
          * @return
          */
         int getCode();
@@ -470,10 +621,25 @@ public class PageSupport<ListItem, DataEntity> implements IPageEngine<ListItem>,
 
         /**
          * 广告辅助接口，用来处理数据集中广告业务
+         *
          * @return
          */
         @Nullable
         IAdMessage<ListItem> getAdMessage();
+
+    }
+
+
+    public void setListener(@NonNull Listener listener) {
+        this.listener = listener;
+    }
+
+    public interface Listener {
+
+        boolean onRefreshBefore();
+
+        boolean onLoadMoreBefore();
+
 
     }
 
