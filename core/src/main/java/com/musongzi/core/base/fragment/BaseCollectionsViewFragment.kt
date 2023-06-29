@@ -3,16 +3,13 @@ package com.musongzi.core.base.fragment
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.business.collection.BaseMoreViewEngine
 import com.musongzi.core.base.business.collection.CollectionsViewSupport
 import com.musongzi.core.base.business.collection.IHolderCollections
 import com.musongzi.core.base.client.CollectionsViewClient
 import com.musongzi.core.base.client.IRefreshViewClient
-import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.itf.page.IDataEngine
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import io.reactivex.rxjava3.core.Observable

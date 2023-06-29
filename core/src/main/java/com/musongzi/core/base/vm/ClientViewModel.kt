@@ -1,59 +1,47 @@
 package com.musongzi.core.base.vm
 
+import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import com.musongzi.core.itf.*
+import com.musongzi.core.itf.client.IContextClient
 import com.musongzi.core.itf.holder.*
 import com.musongzi.core.util.InjectionHelp
 import java.lang.ref.WeakReference
 
-/**
- * client其实一般是activity/fragment
- */
-@Deprecated("一种兼容方式,尽量使用 [DataDriveViewModel]")
-abstract class ClientViewModel<C : IClient?, B : IBusiness> : DataDriveViewModel<B>(), IHolderClientViewModel<C, B> {
+@Deprecated("不推荐使用")
+abstract class ClientViewModel<C : IClient, B : IBusiness> : DataDriveViewModel<B>,
+    IHolderClientViewModel<C, B>,IHolderContext {
 
-    protected var client: WeakReference<C>? = null
-
-
-    override fun showDialog(msg: String?) {
-        client?.get()?.showDialog(msg)
+    override fun getHolderContext(): Context? {
+        return client?.get() as? Context
     }
 
-    override fun disimissDialog() {
-        client?.get()?.disimissDialog()
-    }
+    constructor() : super()
+    constructor(saved: SavedStateHandle) : super(saved)
 
-
-    override fun attachNow(t: IHolderActivity?) {
-        synchronized(this) {
-            if (isAttachNow()) {
-                return
-            }
-
-            client = WeakReference(t?.getClient() as? C)
-            super.attachNow(t)
-        }
-    }
+    private var client: WeakReference<C?>? = null
+    val attachClientFlag = 0;
 
     @Deprecated("置换V层Client，不建议使用", ReplaceWith("this.client = client"))
-    final fun setHolderClient(client: C) {
-        this.client = WeakReference(client);
+    fun setHolderClient(client: C) {
+        this.client = WeakReference(client)
     }
 
-    override fun clear() {
-        client = null;
-        super.clear()
+    override fun attachNow(t: IContextClient?) {
+        super.attachNow(t)
+        this::class.java.apply {
+            InjectionHelp.attachClient(this@ClientViewModel, this, t, ClientViewModel::class.java.name, 0);
+        }
     }
 
     override fun indexBusinessActualTypeArgument() = 1
 
     override fun getHolderClient(): C? {
-        return InjectionHelp.checkClient(client?.get(), javaClass, indexClientActualTypeArgument())
+        return client?.get()
+            ?: holderActivity?.get() as? C//com.heart.core.util.InjectionHelp.checkClient(holderActivity?.get() as? C, javaClass, indexClientActualTypeArgument())
     }
 
-    protected fun indexClientActualTypeArgument(): Int = 0;
-
-
-
+    protected open fun indexClientActualTypeArgument(): Int = 0;
 
 
 }

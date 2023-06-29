@@ -37,7 +37,6 @@ import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
 import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
-import com.musongzi.core.base.vm.CollectionsViewModel
 import com.musongzi.core.base.vm.ClientViewModel
 import com.musongzi.core.itf.*
 import com.musongzi.core.itf.page.IPageEngine

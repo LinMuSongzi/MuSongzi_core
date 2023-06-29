@@ -1,5 +1,6 @@
 package com.musongzi.core.util;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,13 +22,18 @@ import com.musongzi.core.base.business.itf.ILightWeightBus;
 import com.musongzi.core.base.business.itf.ISupprotActivityBusiness;
 import com.musongzi.core.base.manager.RetrofitManager;
 import com.musongzi.core.base.map.SaveStateHandleWarp;
+import com.musongzi.core.base.vm.ClientViewModel;
 import com.musongzi.core.itf.IAgentHolder;
+import com.musongzi.core.itf.IAgentWrap;
+import com.musongzi.core.itf.IAttach;
 import com.musongzi.core.itf.IBusiness;
 import com.musongzi.core.itf.IClient;
 import com.musongzi.core.itf.IOnClickAction;
 import com.musongzi.core.itf.IViewInstance;
 import com.musongzi.core.itf.IWant;
+import com.musongzi.core.itf.client.IContextClient;
 import com.musongzi.core.itf.holder.IHolderActivity;
+import com.musongzi.core.itf.holder.IHolderSavedStateHandler;
 import com.musongzi.core.itf.holder.IHolderViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,35 +62,37 @@ public class InjectionHelp {
     private static final String TAG = "InjectionHelp";
     public static final ClassLoader CLASS_LOADER = InjectionHelp.class.getClassLoader();
 
-    public static CollecttionsEngine findAnnotation(Class<?> thisClazz) {
-//        if(thisClazz.getName().equals("java.lang.Object")){
-//            return null;
+//    public static CollecttionsEngine findAnnotation(Class<?> thisClazz) {
+////        if(thisClazz.getName().equals("java.lang.Object")){
+////            return null;
+////        }
+//        CollecttionsEngine collecttionsEngine = thisClazz.getAnnotation(CollecttionsEngine.class);
+//        if (collecttionsEngine == null) {
+//            try {
+//                return findAnnotation(thisClazz.getSuperclass());
+//            } catch (Exception ex) {
+//                return null;
+//            }
+//        } else {
+//            return collecttionsEngine;
 //        }
-        CollecttionsEngine collecttionsEngine = thisClazz.getAnnotation(CollecttionsEngine.class);
-        if (collecttionsEngine == null) {
-            try {
-                return findAnnotation(thisClazz.getSuperclass());
-            } catch (Exception ex) {
-                return null;
-            }
-        } else {
-            return collecttionsEngine;
-        }
-    }
+//    }
 
 
-    public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex) {
-        return findDataBinding(aClass, parent, name, actualTypeArgumentsIndex, null);
+    @Nullable
+    public static <D extends ViewDataBinding> D findDataBinding(Context activity, Class<?> aClass, @Nullable ViewGroup parent, String name, int actualTypeArgumentsIndex) {
+        return findDataBinding(activity, aClass, parent, name, actualTypeArgumentsIndex, null);
     }
 
     @Nullable
-    public static <D extends ViewDataBinding> D findDataBinding(Class<?> aClass, ViewGroup parent, String name, int actualTypeArgumentsIndex,
+    public static <D extends ViewDataBinding> D findDataBinding(Context activity, Class<?> aClass, @Nullable ViewGroup parent, String name, int actualTypeArgumentsIndex,
                                                                 @Nullable DataBindingComponent dataBindingComponent) {
 
         Function1<Method, D> function1 = method -> {
             try {
-                return (D) method.invoke(null, LayoutInflater.from(ActivityThreadHelp.getCurrentApplication()), parent, false, dataBindingComponent);
+                return (D) method.invoke(null, LayoutInflater.from(activity), parent, false, dataBindingComponent);
             } catch (Exception e) {
+                Log.i(TAG, "findDataBinding: error " + aClass.getCanonicalName());
                 e.printStackTrace();
             }
             return null;
@@ -122,7 +130,7 @@ public class InjectionHelp {
             return null;
         } else {
             //如果父类不符合名字要求，则递归往上层继续寻找
-            return findDataBinding(aClass.getSuperclass(), parent, name, actualTypeArgumentsIndex);
+            return findDataBinding(activity, aClass.getSuperclass(), parent, name, actualTypeArgumentsIndex);
         }
 
     }
@@ -186,7 +194,7 @@ public class InjectionHelp {
             if (type instanceof ParameterizedType) {
                 Type[] types = ((ParameterizedType) type).getActualTypeArguments();
                 if (types.length > actualTypeArgumentsViewModelIndex) {
-                    c =(Class) types[actualTypeArgumentsViewModelIndex];
+                    c = (Class) types[actualTypeArgumentsViewModelIndex];
                     findClass[0] = c;
                     return (V) viewModelProvider.get(c);
                 }
@@ -231,9 +239,9 @@ public class InjectionHelp {
             } else {
                 instance = constructor.newInstance(businessWrapInstance);
             }
-            if (instance instanceof IAgentHolder) {
+            if (instance instanceof IAgentWrap) {
                 try {
-                    ((IAgentHolder) instance).setAgentModel(agent);
+                    ((IAgentWrap) instance).setAgentModel(agent);
                 } catch (Exception ex) {
                     Log.i(TAG, "injectBusiness: setAgent error in instance");
                     ex.printStackTrace();
@@ -247,46 +255,63 @@ public class InjectionHelp {
     }
 
 
+//    static Function2<Object, Object, Unit> functionVM = new Function2<Object, Object, Unit>() {
+//        @Override
+//        public Unit invoke(Object iAttach, Object activity) {
+//            if (iAttach instanceof IAttach && activity instanceof IContextClient) {
+//                ((IAttach) iAttach).attachNow(activity);
+//            }
+//            return null;
+//        }
+//    };
+
+
+    /**
+     * @param activity    或许是activity，或许是fragment
+     * @param defaultArgs 如果调用者是activity，defaultArgs 是activity的 savedInstanceState.
+     *                    如果调用者是frament ，defaultArgs 是fragment的argment bundle
+     */
+    @org.jetbrains.annotations.Nullable
+    public static <C extends IContextClient, V extends ViewModel> V injectViewModel(@Nullable C activity, Bundle defaultArgs,
+                                                                                    @org.jetbrains.annotations.NonNls Class<V> clazz,
+                                                                                    @Nullable SavedStateHandle savedStateHandle) throws IllegalAccessException, InstantiationException {
+        return injectViewModel(activity, defaultArgs, clazz.newInstance(), savedStateHandle);
+    }
+
     /**
      * @param activity         或许是activity，或许是fragment
      * @param defaultArgs      如果调用者是activity，defaultArgs 是activity的 savedInstanceState.
      *                         如果调用者是frament ，defaultArgs 是fragment的argment bundle
-     * @param clazz
+     * @param vmI
      * @param savedStateHandle
      * @param <C>
      * @param <V>
      * @return
      */
     @org.jetbrains.annotations.Nullable
-    public static <C extends IClient, V extends ViewModel> V injectViewModel(@NonNull C activity, Bundle defaultArgs,
-                                                                             @org.jetbrains.annotations.NonNls Class<V> clazz, SavedStateHandle savedStateHandle) {
+    public static <C extends IContextClient, V extends ViewModel> V injectViewModel(@Nullable C activity, Bundle defaultArgs,
+                                                                                    @NotNull V vmI,
+                                                                                    @Nullable SavedStateHandle savedStateHandle) {
+        int IAttach_F = 1;
+        int IHolderSavedStateHandle_F = 4;
+        int thisItfFlag = 0;
         try {
-            V vmI = clazz.newInstance();
-
-            if (vmI instanceof IHolderViewModel) {
-                IHolderViewModel vmInstance = (IHolderViewModel) vmI;
-                /**
-                 *       Log.i(TAG, "createViewModel: $vm")
-                 * //        val vm = superV as? IHolderViewModel<*, *>
-                 *         vm?.let {
-                 *             it.attachNow(this)
-                 *             it.putArguments(arguments)
-                 *             it.handlerArguments()
-                 *         }
-                 */
-
-                vmInstance.putArguments(defaultArgs);
-                vmInstance.attachNow(activity);
-                vmInstance.setHolderSavedStateHandle(new SaveStateHandleWarp(savedStateHandle));
-                vmInstance.handlerArguments();
+            if (vmI instanceof IAttach) {
+                thisItfFlag |= IAttach_F;
+            }
+            if (vmI instanceof IHolderSavedStateHandler) {
+                thisItfFlag |= IHolderSavedStateHandle_F;
+            }
+            if ((thisItfFlag & IAttach_F) == IAttach_F) {
+                ((IAttach) vmI).attachNow(activity);
+            }
+            if ((thisItfFlag & IHolderSavedStateHandle_F) == IHolderSavedStateHandle_F && savedStateHandle != null) {
+                ((IHolderSavedStateHandler) vmI).setHolderSavedStateHandle(new SaveStateHandleWarp(savedStateHandle));
             }
             return vmI;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
-//            if(clazz != ActivityHelpViewModel.class){
-//              return   injectViewModel(activity, defaultArgs, ActivityHelpViewModel.class, savedStateHandle);
-//            }
         }
     }
 
@@ -332,9 +357,9 @@ public class InjectionHelp {
         return null;
     }
 
-    public static <Api> Api injectApi(@NotNull IWant apiViewModel, int indexApiActualTypeArgument) {
-        return RetrofitManager.getInstance().getApi(InjectionHelp.findGenericClass(apiViewModel.getClass(), indexApiActualTypeArgument), apiViewModel);
-    }
+//    public static <Api> Api injectApi(@NotNull IWant apiViewModel, int indexApiActualTypeArgument) {
+//        return RetrofitManager.getInstance().getApi(InjectionHelp.findGenericClass(apiViewModel.getClass(), indexApiActualTypeArgument), apiViewModel);
+//    }
 
     @NotNull
     public static ClassLoader getClassLoader() {
@@ -370,5 +395,25 @@ public class InjectionHelp {
 
 
         return null;
+    }
+
+    public static <C extends IClient, B extends IBusiness, V extends ClientViewModel<C, B>> void attachClient(@NotNull V clientViewModel, Class clientViewModelClass,
+                                                                                                              @Nullable IContextClient client,
+                                                                                                              String equalsName, int index) {
+//        Class clientClass = clientViewModel.getClass();
+        Class superClass = clientViewModelClass.getSuperclass();
+        if (superClass.getName().equals(equalsName)) {
+            Type types = clientViewModelClass.getGenericSuperclass();
+            if (types instanceof ParameterizedType) {
+                Type type = ((ParameterizedType) types).getActualTypeArguments()[index];
+                if (type instanceof Class && ((Class<?>) type).isInstance(client)) {
+                    clientViewModel.setHolderClient((C) client);
+                }
+            }
+        } else {
+            attachClient(clientViewModel, superClass, client, equalsName, index);
+        }
+
+
     }
 }
