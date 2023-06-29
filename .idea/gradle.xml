@@ -17,7 +17,6 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/musiclib" />
             <option value="$PROJECT_DIR$/spi" />
-            <option value="$PROJECT_DIR$/support" />
             <option value="$PROJECT_DIR$/videoplay" />
           </set>
         </option>

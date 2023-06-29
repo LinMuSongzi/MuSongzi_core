@@ -1,4 +1,4 @@
-package com.heart.core.base.page
+package com.musongzi.core.base.page
 
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.IRead

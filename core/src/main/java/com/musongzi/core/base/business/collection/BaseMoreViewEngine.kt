@@ -16,7 +16,7 @@ import com.musongzi.core.itf.holder.IHolderLifecycle
 import com.musongzi.core.itf.page.IAdMessage
 import com.musongzi.core.itf.page.IDataEngine
 import com.musongzi.core.itf.page.IPageEngine
-import com.musongzi.core.base.page.PageSupport
+import com.musongzi.core.base.page2.page.PageSupport
 import com.musongzi.core.base.vm.IHandlerChooseViewModel
 import com.musongzi.core.itf.ISaveStateHandle
 import com.musongzi.core.itf.data.IChoose

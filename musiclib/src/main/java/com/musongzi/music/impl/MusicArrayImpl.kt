@@ -3,7 +3,7 @@ package com.musongzi.music.impl
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.musongzi.comment.util.SourceImpl
-import com.musongzi.core.base.page.PageSupport
+import com.musongzi.core.base.page2.page.PageSupport
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.IRead2

@@ -1,8 +1,7 @@
 package com.musongzi.core.base.bean
 
 import android.os.Parcelable
-import com.musongzi.core.R
-import com.musongzi.core.base.page2.DefaultViewSupport
+import com.musongzi.core.ExtensionCoreMethod.isHeatDarkMode
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -73,7 +72,7 @@ class DefaultShowInfo(
     companion object {
         fun CharSequence.asDefaultShowInfo(): DefaultShowInfo {
             return DefaultShowInfo(
-                state = DefaultViewSupport.EMPTY_STATE, centerRes = intArrayOf(R.mipmap.empty_list_light, R.mipmap.empty_list_dark), tip = this
+                state = 1, centerRes = TODO()//intArrayOf(R.mipmap.empty_list_light, R.mipmap.empty_list_dark), tip = this
             )
         }
     }

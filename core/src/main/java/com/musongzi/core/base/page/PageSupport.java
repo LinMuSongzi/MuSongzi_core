@@ -8,11 +8,10 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 
-import com.heart.core.base.page.ICataloguePage;
-import com.heart.core.base.page.PageArrayList;
 import com.musongzi.core.base.page2.StateInfo;
 import com.musongzi.core.itf.ILifeObject;
 import com.musongzi.core.itf.data.IHolderDataConvert;
+import com.musongzi.core.itf.holder.IHolderCheckDataEnd;
 import com.musongzi.core.itf.page.Book;
 import com.musongzi.core.itf.page.IAdMessage;
 import com.musongzi.core.itf.page.ICheckDataEnd;

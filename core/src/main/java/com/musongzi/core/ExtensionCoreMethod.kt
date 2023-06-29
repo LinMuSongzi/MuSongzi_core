@@ -493,6 +493,22 @@ object ExtensionCoreMethod {
     }
 
     /**
+     * 获取基于“key”的可观察的value
+     */
+    @JvmStatic
+    fun <T> String.getSaveStateValue(holder: IHolderSavedStateHandler): T? {
+        return holder.getHolderSavedStateHandle()[this]
+    }
+
+    /**
+     * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
+     */
+    @JvmStatic
+    fun <T> String.saveStateChange(holder: IHolderSavedStateHandler?, v: T) {
+        holder?.getHolderSavedStateHandle()?.set(this, v)
+    }
+
+    /**
      * 保存基于“key”的value 存储于bundle基于SavedStateHandler api
      */
     @JvmStatic
@@ -522,8 +538,6 @@ object ExtensionCoreMethod {
     }
 
 
-    fun isHeatDarkMode(){
-        TODO()
-    }
+    val isHeatDarkMode = true
 
 }

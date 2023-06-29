@@ -1,6 +1,5 @@
-package com.heart.core.base.page
+package com.musongzi.core.base.page
 
-import android.util.Log
 //import com.musongzi.core.ExtensionMethod.isDebug
 
 /**

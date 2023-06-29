@@ -1,7 +1,7 @@
 package com.musongzi.music.impl
 
 import androidx.lifecycle.LifecycleOwner
-import com.musongzi.core.base.page.AbstractCallBack
+import com.musongzi.core.base.page2.page.AbstractCallBack
 import com.musongzi.core.itf.IAttribute
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.music.itf.RemoteDataPacket
