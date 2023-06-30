@@ -65,15 +65,6 @@ abstract class DataDriveViewModel<B : IBusiness> : CoreViewModel, IHolderViewMod
         return holderActivity?.get()
     }
 
-    override fun handlerSavedInstanceState(savedInstanceState: Bundle?) {
-        this.savedInstanceState = WeakReference(savedInstanceState)
-    }
-
-    override fun isSavedInstanceStateNull(): Boolean {
-        return savedInstanceState == null || savedInstanceState?.get() == null
-    }
-
-
     final override fun setHolderSavedStateHandle(savedStateHandle: ISaveStateHandle) {
         Log.i(TAG, "setHolderSavedStateHandle: ${javaClass.canonicalName} , " + savedStateHandle)
         super.mSavedStateHandles[REMOTE_SAVED_INDEX] = savedStateHandle

@@ -79,18 +79,18 @@ public class InjectionHelp {
 //    }
 
 
-    @Nullable
-    public static <D extends ViewDataBinding> D findDataBinding(Context activity, Class<?> aClass, @Nullable ViewGroup parent, String name, int actualTypeArgumentsIndex) {
-        return findDataBinding(activity, aClass, parent, name, actualTypeArgumentsIndex, null);
-    }
+//    @Nullable
+//    public static <D extends ViewDataBinding> D findDataBinding(LayoutInflater activity, Class<?> aClass, @Nullable ViewGroup parent, String name, int actualTypeArgumentsIndex) {
+//        return findDataBinding(activity, aClass, parent, name, actualTypeArgumentsIndex, null);
+//    }
 
     @Nullable
-    public static <D extends ViewDataBinding> D findDataBinding(Context activity, Class<?> aClass, @Nullable ViewGroup parent, String name, int actualTypeArgumentsIndex,
+    public static <D extends ViewDataBinding> D findDataBinding(LayoutInflater layoutInflater, Class<?> aClass, @Nullable ViewGroup parent, String name, int actualTypeArgumentsIndex,
                                                                 @Nullable DataBindingComponent dataBindingComponent) {
 
         Function1<Method, D> function1 = method -> {
             try {
-                return (D) method.invoke(null, LayoutInflater.from(activity), parent, false, dataBindingComponent);
+                return (D) method.invoke(null, layoutInflater, parent, false, dataBindingComponent);
             } catch (Exception e) {
                 Log.i(TAG, "findDataBinding: error " + aClass.getCanonicalName());
                 e.printStackTrace();
@@ -130,7 +130,7 @@ public class InjectionHelp {
             return null;
         } else {
             //如果父类不符合名字要求，则递归往上层继续寻找
-            return findDataBinding(activity, aClass.getSuperclass(), parent, name, actualTypeArgumentsIndex);
+            return findDataBinding(layoutInflater, aClass.getSuperclass(), parent, name, actualTypeArgumentsIndex,dataBindingComponent);
         }
 
     }

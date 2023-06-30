@@ -2,10 +2,12 @@ package com.musongzi.core.base.fragment
 
 import android.os.Bundle
 import android.util.Log
+import android.view.FrameMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.musongzi.core.itf.holder.IHolderViewModel
 import com.musongzi.core.util.InjectionHelp
@@ -13,21 +15,19 @@ import com.musongzi.core.util.InjectionHelp
 /**
  * 有videmodel
  */
-abstract class ViewModelFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
-    DataBindingFragment<D>() {
+abstract class ViewModelFragment<V : IHolderViewModel<*>, D : ViewDataBinding> : DataBindingFragment<D>() {
 
     private var mVp: ViewModelProvider? = null
     private var vp: ViewModelProvider? = null
 
     private var modelProviderEnable = PROVIDER_NORMAL;
 
-    final override fun onCreateView(
+    final override fun createView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
-//        savedInstance = savedInstanceState;
         arguments?.let {
             modelProviderEnable = it.getInt(PROVIDER_MODEL_KEY, PROVIDER_NORMAL)
         }
@@ -39,7 +39,6 @@ abstract class ViewModelFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
         }else {
             Log.i(TAG, "onCreateView: cache had viewModel = ${getViewModel()}")
         }
-        handlerArguments()
         return v;
     }
 
@@ -99,10 +98,6 @@ abstract class ViewModelFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
     }
 
 
-    override fun handlerOnViewCreateSaveInstanceState(savedInstanceState: Bundle?) {
-        super.handlerOnViewCreateSaveInstanceState(savedInstanceState)
-        getViewModel().handlerSavedInstanceState(savedInstanceState)
-    }
 
 
     companion object {
@@ -126,7 +121,13 @@ abstract class ViewModelFragment<V : IHolderViewModel<*>, D : ViewDataBinding> :
          */
         const val PROVIDER_MAIN = PROVIDER_NORMAL.shl(2);
 
-        fun composeProvider(b: Bundle?, flag: Boolean) {
+        fun Fragment.composeProvider(flag: Boolean) {
+            var b : Bundle? = arguments
+            if(b == null){
+                arguments = Bundle().apply {
+                    b = this
+                }
+            }
             b?.putInt(PROVIDER_MODEL_KEY, if (flag) PROVIDER_MAIN else PROVIDER_SINGLE)
         }
 

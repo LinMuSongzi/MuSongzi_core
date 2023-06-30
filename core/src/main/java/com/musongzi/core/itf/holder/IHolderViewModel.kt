@@ -6,13 +6,5 @@ import com.musongzi.core.itf.IBusiness
 
 interface IHolderViewModel<B : IBusiness> : IAgent, IHolderBusiness<B>, IHolderAnySaveStateHandler {
 
-    @Deprecated("~暂时先标记过时")
-    fun handlerSavedInstanceState(savedInstanceState: Bundle?);
-
-    @Deprecated("~暂时先标记过时")
-    fun isSavedInstanceStateNull(): Boolean
-
-//    fun localLifeSaveStateHandle():I
-
 
 }

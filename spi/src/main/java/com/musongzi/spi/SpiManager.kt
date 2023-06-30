@@ -1,7 +1,7 @@
 package com.musongzi.spi
 
-import com.musongzi.comment.ExtensionMethod.getSaveStateValue
-import com.musongzi.comment.ExtensionMethod.saveStateChange
+import com.musongzi.core.ExtensionCoreMethod.getSaveStateValue
+import com.musongzi.core.ExtensionCoreMethod.saveStateChange
 import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.itf.IHolderSavedStateHandle
 import com.musongzi.core.base.map.LocalSavedHandler

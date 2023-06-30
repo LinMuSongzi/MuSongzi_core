@@ -1,10 +1,8 @@
 package com.musongzi.core.itf
 
-interface IAttach<T> {
+interface IAttach<T> :IClear{
 
     fun attachNow(t: T?)
-
-    fun clear();
 
     fun isAttachNow(): Boolean
 

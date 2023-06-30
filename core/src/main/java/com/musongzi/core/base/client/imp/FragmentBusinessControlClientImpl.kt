@@ -1,7 +1,6 @@
 package com.musongzi.core.base.client.imp
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.musongzi.core.base.client.ClientImpl
 import com.musongzi.core.base.client.FragmentClient
@@ -25,7 +24,7 @@ class FragmentBusinessControlClientImpl(f: FragmentClient) : ClientImpl<Fragment
         base.getHolderFragmentManager().findFragmentByTag(tag)
 
     override fun addFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
-        base.getHolderFragmentManager().beginTransaction().add(layoutId(), fragment, tag).apply {
+        base.getHolderFragmentManager().beginTransaction().add(fragmentControlLayoutId(), fragment, tag).apply {
             hideMethod.invoke(this, fragment, isHide).commitAllowingStateLoss()
 
         }
@@ -40,7 +39,7 @@ class FragmentBusinessControlClientImpl(f: FragmentClient) : ClientImpl<Fragment
     }
 
     override fun replaceFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
-        base.getHolderFragmentManager().beginTransaction().replace(layoutId(), fragment, tag)
+        base.getHolderFragmentManager().beginTransaction().replace(fragmentControlLayoutId(), fragment, tag)
             .apply {
                 hideMethod.invoke(this, fragment, isHide).commitAllowingStateLoss()
             }
@@ -82,7 +81,7 @@ class FragmentBusinessControlClientImpl(f: FragmentClient) : ClientImpl<Fragment
         }
     }
 
-    override fun layoutId() = base.layoutId()
+    override fun fragmentControlLayoutId() = base.fragmentControlLayoutId()
 
     override fun getHolderFragmentManager() = base.getHolderFragmentManager()
 

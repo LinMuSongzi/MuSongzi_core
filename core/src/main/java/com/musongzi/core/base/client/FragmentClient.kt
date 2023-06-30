@@ -5,6 +5,6 @@ import com.musongzi.core.itf.holder.IHolderFragmentManager
 
 interface FragmentClient :IHolderFragmentManager,IClient{
 
-    fun layoutId():Int
+    fun fragmentControlLayoutId():Int
 
 }

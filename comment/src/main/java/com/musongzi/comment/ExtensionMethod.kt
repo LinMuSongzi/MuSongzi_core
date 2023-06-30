@@ -23,23 +23,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.musongzi.comment.business.DoubleLimiteBusiness
 import com.musongzi.comment.util.ApkUtil
 import com.musongzi.core.StringChooseBean
-import com.musongzi.core.annotation.CollecttionsEngine
-import com.musongzi.comment.activity.SupportFragmentActivity
 import com.musongzi.core.base.bean.BusinessInfo
 import com.musongzi.core.base.bean.FragmentDescribe
 import com.musongzi.core.base.bean.StyleMessageDescribe
-import com.musongzi.comment.business.SupproActivityBusiness
 import com.musongzi.core.base.bean.ActivityDescribe
-import com.musongzi.core.base.business.collection.BaseMoreViewEngine
-import com.musongzi.core.base.business.collection.ViewListPageFactory
 import com.musongzi.core.base.business.itf.IHolderSupportActivityBusiness
-import com.musongzi.core.base.fragment.BaseCollectionsViewFragment
-import com.musongzi.core.base.fragment.CollectionsViewFragment
 import com.musongzi.core.base.fragment.ViewModelFragment
 import com.musongzi.core.base.manager.ActivityLifeManager
-import com.musongzi.core.base.vm.ClientViewModel
 import com.musongzi.core.itf.*
-import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.util.ActivityThreadHelp
 import com.musongzi.core.util.ActivityThreadHelp.getCurrentApplication
 import com.musongzi.core.util.InjectionHelp
@@ -52,182 +43,12 @@ import io.reactivex.rxjava3.core.Observable
 object ExtensionMethod {
 
 
-    /**
-     * 获取到集合数据集<CollectionsViewFragment>组件当前的 IPageEngine业务
-     * [IPageEngine]
-     * [CollectionsViewFragment]
-     */
-    @JvmStatic
-    fun CollectionsViewFragment.asInterfaceByEngine(runOnResume: (page: IPageEngine<*>?) -> Unit) {
-        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            runOnResume.invoke(this@asInterfaceByEngine.getPageEngine())
-        } else {
-            lifecycle.addObserver(object : DefaultLifecycleObserver {
-                override fun onResume(owner: LifecycleOwner) {
-                    runOnResume.invoke(this@asInterfaceByEngine.getPageEngine())
-                    owner.lifecycle.removeObserver(this)
-                }
-            })
-        }
-    }
-
-    /**
-     * 基于集合引擎 继承于 [BaseMoreViewEngine]
-     * 快速打开一个已经构建好的集合列表
-     * @param title 新的activity的标题
-     * @param barColor 状态栏颜色
-     * @param data 要传递的数据
-     * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
-     */
-    fun <E : BaseMoreViewEngine<*, *>> Class<E>.startRecycleActivity(
-        title: String? = null,
-        barColor: Int = R.color.bg_white,
-        data: Bundle? = null,
-        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
-    ) {
-        CollectionsViewFragment::class.java.startActivityNormal(
-            null,
-            StyleMessageDescribe(title, barColor),
-            getColletionInfoBundle(data, onInfoObserver)//,CollectionsBusiness::class.java.name
-        )
-    }
-
-    /**
-     * 基于集合引擎 继承于 [BaseMoreViewEngine]
-     * 快速构建一个集合fragment
-     * @param data 要传递的数据
-     * @param onInfoObserver 当前构建好的集合控制信息对象回调，可以再做进一步的修改
-     */
-    @JvmStatic
-    @JvmOverloads
-    fun <E : BaseMoreViewEngine<*, *>> Class<E>.convertFragment(
-        data: Bundle? = null,
-        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)? = null
-    ): CollectionsViewFragment {
-        return InjectionHelp.injectFragment(
-            CollectionsViewFragment::class.java,
-            getColletionInfoBundle(data, onInfoObserver)
-        ) as CollectionsViewFragment
-    }
-
-    private fun <E : BaseMoreViewEngine<*, *>> Class<E>.getColletionInfoBundle(
-        data: Bundle?,
-        onInfoObserver: ((info: CollectionsViewModel.CollectionsInfo) -> Unit)?
-    ): Bundle {
-        val cAnnotation: CollecttionsEngine? = InjectionHelp.findAnnotation(this)
-        val mCollectionsInfo = cAnnotation?.let {
-            CollectionsViewModel.CollectionsInfo(it)
-        } ?: CollectionsViewModel.CollectionsInfo()
-        onInfoObserver?.invoke(mCollectionsInfo)
-        val bundle = Bundle();
-        data?.let {
-            bundle.putBundle(CollecttionsEngine.B, it)
-        }
-        ViewModelFragment.composeProvider(bundle, false)
-        mCollectionsInfo.engineName = name
-        bundle.putParcelable(ViewListPageFactory.INFO_KEY, mCollectionsInfo)
-        return bundle
-    }
-
-    @JvmStatic
-    fun CollectionsViewFragment.updateCollectionFragmentInfo(update: (CollectionsViewModel.CollectionsInfo) -> Unit): Fragment {
-        val info: CollectionsViewModel.CollectionsInfo? =
-            arguments?.getParcelable(ViewListPageFactory.INFO_KEY);
-        info?.let {
-            update.invoke(it)
-            arguments?.putParcelable(ViewListPageFactory.INFO_KEY, it)
-        }
-        return this;
-    }
-
-    fun <V : ViewModel> Class<V>.instacne(
-        provider: ViewModelProvider?,
-        ifEsayViewModelInjectRun: ((ClientViewModel<*, *>) -> Unit)? = null
-    ): V? {
-        return provider?.let {
-            val vm = InjectionHelp.getViewModel(it, this) as V
-            (vm as? ClientViewModel<*, *>)?.apply {
-                ifEsayViewModelInjectRun?.invoke(this)
-            }
-            vm
-        }
-    }
-
-    @JvmStatic
-    fun CollectionsViewFragment.bindTotalSize(l: LifecycleOwner, run: Observer<Int>) {
-        BaseCollectionsViewFragment.TOTAL_KEY.liveSaveStateObserverOnOwner(getViewModel(), run, l)
-    }
 
     fun String.bean() = StringChooseBean().let {
         it.title = this
         it
     }
 
-    /**
-     * 通过fragment直接打开一个activity
-     * @param activity 框架内的一个[SupportFragmentActivity]activity。继承于此的任何子类都可以
-     * @param mStyleMessageDescribe 控制样式一些信息，比如标题，状态栏颜色
-     * @param dataBundle 传递的数据
-     * @param businessClassName 如果fragment继承于 [ViewModelFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
-     *                          请注意，一定要是相关的继承关系
-     */
-    @JvmStatic
-    @JvmOverloads
-    fun <F : Fragment> Class<F>.startActivityNormal(
-        activity: Class<*>? = null,
-        mStyleMessageDescribe: StyleMessageDescribe,
-        dataBundle: Bundle? = null,
-        businessClassName: String? = null
-    ) {
-        (ActivityLifeManager.getInstance().getTopActivity() ?: getCurrentApplication()).let {
-            val activityClass = activity ?: SupportFragmentActivity::class.java;
-            val intent = Intent(it, activityClass)
-            val fInfo = FragmentDescribe(
-                this.name,
-                mStyleMessageDescribe,
-                if (businessClassName != null) BusinessInfo(businessClassName) else null
-            )
-            intent.putExtra(
-                SupproActivityBusiness.ACTIVITY_DESCRIBE_INFO_KEY,
-                ActivityDescribe(activityClass.name, fInfo)
-            )
-            dataBundle?.let { b ->
-                intent.putExtra(SupproActivityBusiness.BUNDLE_KEY, b)
-            }
-            if (it is Application) {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            it.startActivity(intent)
-        }
-    }
-
-
-    /**
-     * 通过fragment直接打开一个activity
-     * @param title 标题
-     * @param activity 框架内的一个[SupportFragmentActivity]activity。继承于此的任何子类都可以
-     * @param barColor 状态栏颜色
-     * @param dataBundle 传递的数据
-     * @param businessClassName 如果fragment继承于 [ViewModelFragment] 此注入可以控制当前 viewmodel 的业务的business初始化类型
-     *                          请注意，一定要是相关的继承关系
-     */
-    @JvmStatic
-    @JvmOverloads
-    fun <F : Fragment> Class<F>.startActivityNormal(
-        title: String? = null,
-        //其实必须是NormalFragmentActivity 子类
-        activity: Class<*>? = SupportFragmentActivity::class.java,
-        barColor: Int = R.color.bg_white,
-        dataBundle: Bundle? = null,
-        businessClassName: String? = null
-    ) {
-        startActivityNormal(
-            activity,
-            StyleMessageDescribe(title, barColor),
-            dataBundle,
-            businessClassName
-        )
-    }
 
     /**
      * 打开一个activity
@@ -370,18 +191,7 @@ object ExtensionMethod {
         return saveStateHandle.getLiveData(this);
     }
 
-    /**
-     * 获取基于“key”的可观察的value
-     */
-    @JvmStatic
-    fun <T> String.getSaveStateValue(holder: IHolderSavedStateHandle): T? {
-        return holder.getHolderSavedStateHandle()[this]
-    }
 
-    @JvmStatic
-    fun <T> String.getSaveStateValue(saveStateHandle: ISaveStateHandle): T? {
-        return saveStateHandle[this]
-    }
 
     @JvmStatic
     fun <T> String.savedStateAllLiveChangeValue(values: T) {

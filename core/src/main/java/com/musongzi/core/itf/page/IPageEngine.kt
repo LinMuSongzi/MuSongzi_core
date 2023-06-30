@@ -24,9 +24,6 @@ interface IPageEngine<I> : Book, ISource<I>, IRead, IClear, OnDataChangeListener
 
     fun setMaxCount(maxCount:Int)
 
-//    @Deprecated("")
-//    fun getHolderDataChangeListeners():IHolderOnDataChangeListener<I>
-
     /**
      * page id的
      * 如果刷新，那么此id就会更新。他的含义就是此次刷新数据组的id，下拉不会改变此数值

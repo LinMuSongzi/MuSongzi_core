@@ -27,157 +27,44 @@ import com.musongzi.core.view.TipDialog
 import com.trello.rxlifecycle4.components.support.RxFragment
 import java.lang.ref.WeakReference
 
-abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderActivity,
-    IDisconnect, IHolderDataBinding<D>, FragmentControlClient {
+abstract class DataBindingFragment<D : ViewDataBinding> : BaseLayoutFragment(),
+    IDisconnect, IHolderDataBinding<D> {
 
 
-    private var tipDialog: Dialog? = null
-    protected val TAG = javaClass.name
     protected lateinit var dataBinding: D
-    private lateinit var fControl: FragmentControlClient
-
-    override fun runOnUiThread(runnable: Runnable) {
-        requireActivity().runOnUiThread(runnable)
-    }
-
-    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        handlerOnViewCreateSaveInstanceState(savedInstanceState)
-        initView()
-        initData();
-        initEvent()
-    }
-
-    protected open fun handlerOnViewCreateSaveInstanceState(savedInstanceState: Bundle?) {
-        Log.i(TAG, "handlerOnViewCreateSaveInstanceState: bundle = $savedInstanceState")
-    }
-
-    abstract fun initView()
-    abstract fun initEvent()
-    abstract fun initData()
-
-    protected open fun createDialog() = TipDialog(requireActivity())
-
-    override fun showDialog(msg: String?) {
-        (tipDialog ?: let {
-            val t = createDialog()
-            tipDialog = t;
-            t
-        }).show()
-    }
-
-    override fun disimissDialog() {
-        tipDialog?.apply {
-            dismiss()
-        }
-    }
-
-    override fun getClient(): IClient = this
-
-    override fun getDefaultViewModelProviderFactory(): ViewModelProvider.Factory {
-        return newFactory(this)
-    }
-
-    private fun newFactory(owner: SavedStateRegistryOwner): ViewModelProvider.Factory =
-        object : AbstractSavedStateViewModelFactory(owner, getFactoryDefaultArgs()) {
-            override fun <T : ViewModel> create(
-                key: String,
-                modelClass: Class<T>,
-                handle: SavedStateHandle
-            ): T {
-                return InjectionHelp.injectViewModel(
-                    this@DataBindingFragment,
-                    arguments,
-                    modelClass,
-                    handle
-                )!!
-            }
-        }
-
-    private fun getFactoryDefaultArgs(): Bundle? {
-        return arguments;
-    }
-
-    override fun topViewModelProvider(): ViewModelProvider? {
-        return if (requireActivity() is IHolderViewModelProvider) {
-            (requireActivity() as IHolderViewModelProvider).topViewModelProvider()
-        } else {
-            val factory = requireActivity() as? IHolderViewModelFactory
-            ViewModelProvider(
-                requireActivity(),
-                (factory?.getHolderFactory() ?: newFactory(requireActivity()))
-            )
-        }
-    }
-
-    override fun thisViewModelProvider(): ViewModelProvider? {
-        return ViewModelProvider(this, defaultViewModelProviderFactory)
-    }
-
-    override fun layoutId(): Int = 0
-
-    override fun getHolderFragmentManager() = childFragmentManager
-
-    override fun getHolderParentFragmentManager(): FragmentManager? = parentFragmentManager
-
-//    override fun getNextByClass(nextClass: Class<*>): IClient?  = nul
-
-    override fun getHolderActivity(): FragmentActivity? = activity
-
-    override fun getMainLifecycle(): IHolderActivity? = requireActivity() as? IHolderActivity
-
-    override fun getThisLifecycle(): LifecycleOwner? = this
-
-    override fun getHolderContext(): Context? = context
-
-    override fun putArguments(d: Bundle?) {
-        arguments = d;
-    }
 
 
-    override fun handlerArguments() {
-
-    }
-
-    override fun disconnect(): Boolean {
-        requireActivity().finish()
-        return true
-    }
-
-     override fun onCreateView(
+    override fun createView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         Log.i(TAG, "FragmentState:onCreateView")
-        fControl = FragmentBusinessControlClientImpl(this)
         val v = instanceView(layoutInflater, container!!)
         dataBinding.lifecycleOwner = this
         return v
     }
 
-    private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View? {
-        return if (getLayoutId() == 0) {
-            Log.i(TAG, "FragmentState:instanceView findDataBinding")
-            if (view == null) {
-                dataBinding = InjectionHelp.findDataBinding(
-                    javaClass,
-                    container,
-                    superDatabindingName(),
-                    actualTypeArgumentsDatabindinIndex())!!
-            }
-            dataBinding.root
+    override fun getLayoutId() = 0
 
-        } else if (getLayoutId() == View.NO_ID) {
-            null
-        } else {
-            Log.i(TAG, "FragmentState:instanceView inflate layout")
-            inflater.inflate(getLayoutId(), container, false);
+    private fun instanceView(inflater: LayoutInflater, container: ViewGroup): View? {
+
+        Log.i(TAG, "FragmentState:instanceView findDataBinding")
+        if (view == null) {
+            dataBinding = InjectionHelp.findDataBinding(
+                inflater,
+                javaClass,
+                container,
+                superDatabindingName(),
+                actualTypeArgumentsDatabindinIndex(),createDataBindingCompact()
+            )!!
         }
+        return dataBinding.root
     }
 
-    @Deprecated("已过时", ReplaceWith("ViewDataBinding"))
-    protected open fun getLayoutId(): Int = 0
+    private fun createDataBindingCompact(): DataBindingComponent? {
+        return null
+    }
 
     protected open fun superDatabindingName(): String = DataBindingFragment::class.java.name
 
@@ -185,117 +72,10 @@ abstract class DataBindingFragment<D : ViewDataBinding> : RxFragment(), IHolderA
 
     override fun getHolderDataBinding(): D = dataBinding
 
-    override fun notifyDataSetChanged() {
-
-    }
-
-    override fun notifyDataSetChangedItem(postiont: Int) {
-
-    }
-
-
-    override fun addFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
-        fControl.addFragment(fragment, tag, isHide)
-    }
-
-    override fun <F : Fragment> addFragment(
-        fragmentClass: Class<F>,
-        tag: String?,
-        isHide: Boolean
-    ) {
-        fControl.addFragment(fragmentClass, tag, isHide)
-    }
-
-    override fun replaceFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
-        fControl.replaceFragment(fragment, tag, isHide)
-    }
-
-    override fun <F : Fragment> replaceFragment(
-        fragmentClass: Class<F>,
-        tag: String?,
-        isHide: Boolean
-    ) {
-        fControl.replaceFragment(fragmentClass, tag, isHide)
-    }
-
-    override fun removeFragment(tag: String) {
-        fControl.removeFragment(tag)
-    }
-
-    override fun removeFragment(fragment: Fragment) {
-        fControl.removeFragment(fragment)
-    }
-
-    override fun <F : Fragment> removeFragment(fragmentClass: Class<F>) {
-        fControl.removeFragment(fragmentClass)
-    }
-
-    override fun getFragmentByTag(tag: String): Fragment? = fControl.getFragmentByTag(tag)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.i(TAG, "FragmentState:onCreate")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.i(TAG, "FragmentState:onResume")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i(TAG, "FragmentState:onStart")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.i(TAG, "FragmentState:onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i(TAG, "FragmentState:onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "FragmentState:onDestory")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         dataBinding.unbind()
         Log.i(TAG, "FragmentState:onDestoryView")
     }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.i(TAG, "FragmentState:onDetach")
-    }
-
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-        Log.i(TAG, "FragmentState:onAttach(activity:$activity)")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.i(TAG, "FragmentState:onAttach(context:$context)")
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        Log.i(TAG, "FragmentState:onHiddenChange($hidden)")
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        Log.i(TAG, "FragmentState:onLowMemory")
-    }
-
-//    class DataBindingComponentInstance(activity: Activity?) : DataBindingComponent {
-//        var weakReference = WeakReference<Activity>(activity)
-//    }
-
 
 }

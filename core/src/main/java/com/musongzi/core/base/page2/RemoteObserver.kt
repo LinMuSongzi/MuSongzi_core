@@ -81,7 +81,7 @@ internal class RemoteObserver<D> private constructor(
     /**
      * 清空数据
      */
-    override fun clearNow() {
+    override fun onClearOperate(any:Any?): Boolean {
         /**
          * 如果还没有数据到达，但是因为某中情况需要清空
          * 那么取消订阅
@@ -94,7 +94,7 @@ internal class RemoteObserver<D> private constructor(
         bean = null
         pageLoader = null
 //        data = null
+        return true
     }
-
 
 }

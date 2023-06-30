@@ -559,7 +559,7 @@ public class PageLoader<ListItem, DataEntity> implements ICataloguePage2<ListIte
     }
 
     @Override
-    public void clearNow() {
+    public boolean onClearOperate(Object holderPage) {
         thisRefreshTime = System.currentTimeMillis();
         isEndPage = false;
         lastSize = 0;
@@ -567,6 +567,7 @@ public class PageLoader<ListItem, DataEntity> implements ICataloguePage2<ListIte
         setStateInfo(new StateInfo(-1, -1, IState2.STATE_CLEAR));
         data.clear();
         clearRemoteDatas();
+        return true;
     }
 
     @Override
@@ -630,7 +631,7 @@ public class PageLoader<ListItem, DataEntity> implements ICataloguePage2<ListIte
         mRemoteObservers.clear();
         if (remoteObserverList.size() > 0) {
             for (RemoteObserver<DataEntity> value : remoteObserverList) {
-                value.clearNow();
+                value.onClearOperate(this);
             }
         }
     }
