@@ -44,7 +44,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(path: ':musiclib')
+//    implementation project(path: ':musiclib')
     implementation project(path: ':spi')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 //    implementation project(path: ':support')
