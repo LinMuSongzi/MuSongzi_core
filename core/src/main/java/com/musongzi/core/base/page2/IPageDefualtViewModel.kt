@@ -26,11 +26,11 @@ interface IPageDefualtViewModel : IHolderAnySaveStateHandler {
             return STATE_INFO_KEY.getSaveStateValue(this)
         }
 
-    fun observerState(lifecycleOwner: LifecycleOwner, observer: Observer<Int>) {
+    fun observerState(lifecycleOwner: LifecycleOwner, observer: Observer<Int?>) {
         STATE_KEY.liveSaveStateObserver(lifecycleOwner, this, observer)
     }
 
-    fun observerInfo(lifecycleOwner: LifecycleOwner, observer: Observer<DefaultShowInfo>) {
+    fun observerInfo(lifecycleOwner: LifecycleOwner, observer: Observer<DefaultShowInfo?>) {
         STATE_INFO_KEY.liveSaveStateObserver(lifecycleOwner, this, observer)
     }
 

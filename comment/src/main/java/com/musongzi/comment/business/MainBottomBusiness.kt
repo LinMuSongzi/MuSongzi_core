@@ -1,6 +1,7 @@
 package com.musongzi.comment.business
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -28,6 +29,7 @@ import kotlin.collections.ArrayList
 /*** created by linhui * on 2022/7/20 */
 abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMainIndexBusiness {
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun buildDataBySize() {
         iAgent.getRemoteMainIndexBean().sub {
             val source = iAgent.getSource()
@@ -52,8 +54,10 @@ abstract class MainBottomBusiness : BaseLifeBusiness<IMainIndexViewModel>(), IMa
                     adapter
                 }
             INDEX_CLICK_SAVED_KEY.liveSaveStateObserver<Int>(iAgent) {
-                iAgent.wantPick().pickRun(source.realData()[it])
-                adapter.notifyDataSetChanged()
+                it?.apply {
+                    iAgent.wantPick().pickRun(source.realData()[this])
+                    adapter.notifyDataSetChanged()
+                }
             }
             handlerViewPageValues()
         }

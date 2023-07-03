@@ -5,11 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import com.musongzi.core.itf.ISaveStateHandle
 
 class SaveStateHandleWarp(private val stateHandle: SavedStateHandle) : ISaveStateHandle {
-    override fun <T> getLiveData(key: String): MutableLiveData<T> {
+    override fun <T> getLiveData(key: String): MutableLiveData<T?> {
         return stateHandle.getLiveData(key)
     }
 
-    override fun <T> getLiveData(key: String, initialValue: T?): MutableLiveData<T> {
+    override fun <T> getLiveData(key: String, initialValue: T?): MutableLiveData<T?> {
         return stateHandle.getLiveData(key, initialValue)
     }
 

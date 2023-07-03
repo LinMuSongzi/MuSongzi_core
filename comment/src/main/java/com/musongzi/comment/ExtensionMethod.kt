@@ -115,7 +115,7 @@ object ExtensionMethod {
     @JvmStatic
     fun <T> String.liveSaveStateObserver(
         holder: ILifeSaveStateHandler,
-        observer: Observer<T>
+        observer: Observer<T?>
     ) {
         holder.getThisLifecycle()?.let {
             liveSaveStateObserver(it, holder.getHolderSavedStateHandle(), observer)
@@ -126,7 +126,7 @@ object ExtensionMethod {
     fun <T> String.liveSaveStateObserver(
         lifecycle: LifecycleOwner,
         saveStateHandle: ISaveStateHandle,
-        observer: Observer<T>
+        observer: Observer<T?>
     ) {
         saveStateHandle.getLiveData<T>(this).observe(lifecycle, observer)
     }
@@ -140,7 +140,7 @@ object ExtensionMethod {
     @JvmOverloads
     fun <T> String.liveSaveStateObserverOnOwner(
         holder: ILifeSaveStateHandler,
-        observer: Observer<T>,
+        observer: Observer<T?>,
         l: LifecycleOwner,
         isRemove: Boolean = false,
     ) {
@@ -158,15 +158,15 @@ object ExtensionMethod {
     fun <T> String.liveSaveStateObserverOnOwner(
         holder: ISaveStateHandle,
         myLifecycleOwner: LifecycleOwner?,
-        observer: Observer<T>,
+        observer: Observer<T?>,
         otherLifecycleOwner: LifecycleOwner,
         isRemove: Boolean = false,
     ) {
         if (myLifecycleOwner != null) {
             val liveData = holder.getLiveData<T>(this);
             if (isRemove) {
-                liveData.observe(otherLifecycleOwner, object : Observer<T> {
-                    override fun onChanged(t: T) {
+                liveData.observe(otherLifecycleOwner, object : Observer<T?> {
+                    override fun onChanged(t: T?) {
                         observer.onChanged(t)
                         liveData.removeObserver(this)
                     }
@@ -182,12 +182,12 @@ object ExtensionMethod {
      * 获取基于“key”的可观察的livedata
      */
     @JvmStatic
-    fun <T> String.getSaveStateLiveData(holder: IHolderSavedStateHandle): LiveData<T> {
+    fun <T> String.getSaveStateLiveData(holder: IHolderSavedStateHandle): LiveData<T?> {
         return holder.getHolderSavedStateHandle().getLiveData(this);
     }
 
     @JvmStatic
-    fun <T> String.getSaveStateLiveData(saveStateHandle: ISaveStateHandle): LiveData<T> {
+    fun <T> String.getSaveStateLiveData(saveStateHandle: ISaveStateHandle): LiveData<T?> {
         return saveStateHandle.getLiveData(this);
     }
 
@@ -218,12 +218,12 @@ object ExtensionMethod {
     @JvmStatic
     fun <T> String.liveSaveStateObserverCall(
         holder: ILifeSaveStateHandler,
-        observer: (call: T) -> Boolean
+        observer: (call: T?) -> Boolean
     ) {
         holder.getThisLifecycle()?.let {
             val liveData = holder.getHolderSavedStateHandle().getLiveData<T>(this);
-            liveData.observe(it, object : Observer<T> {
-                override fun onChanged(t: T) {
+            liveData.observe(it, object : Observer<T?> {
+                override fun onChanged(t: T?) {
                     if (observer.invoke(t)) {
                         liveData.removeObserver(this)
                     }

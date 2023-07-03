@@ -8,13 +8,13 @@ import androidx.lifecycle.MutableLiveData
 /*** created by linhui * on 2022/7/13 */
 interface ISaveStateHandle {
     @MainThread
-    fun <T> getLiveData(key: String): MutableLiveData<T>
+    fun <T> getLiveData(key: String): MutableLiveData<T?>
 
     @MainThread
     fun contains(key: String): Boolean
 
     @MainThread
-    fun <T> getLiveData(key: String, @SuppressLint("UnknownNullness") initialValue: T?): MutableLiveData<T>
+    fun <T> getLiveData(key: String, @SuppressLint("UnknownNullness") initialValue: T?): MutableLiveData<T?>
 
     @MainThread
     fun keys(): Set<String?>

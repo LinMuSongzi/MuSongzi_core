@@ -8,11 +8,11 @@ interface IHolderAnySaveStateHandler : IHolderSavedStateHandler, IHolderLocaSave
 
 //    fun <R>
 
-    fun <T> observerByKey(key: String, lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    fun <T> observerByKey(key: String, lifecycleOwner: LifecycleOwner, observer: Observer<T?>) {
         key.liveSaveStateObserver(lifecycleOwner, this, observer)
     }
 
-    fun <T> observerLocalByKey(key: String, lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    fun <T> observerLocalByKey(key: String, lifecycleOwner: LifecycleOwner, observer: Observer<T?>) {
         key.liveSaveStateObserver(lifecycleOwner, localSavedStateHandle, observer)
     }
 

@@ -75,10 +75,10 @@ dependencies {
     // 协程Java8支持库
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.0"
 
-    // lifecycle对于协程的扩展封装
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
+//    // lifecycle对于协程的扩展封装
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+//    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 
 
 //    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.1'

@@ -38,13 +38,13 @@ class LocalSavedHandler : ISaveStateHandle {
         return mutableLd
     }
 
-    override fun <T> getLiveData(key: String): MutableLiveData<T> {
-       return getLiveDataInternal(key, false, null) as MutableLiveData<T>
+    override fun <T> getLiveData(key: String): MutableLiveData<T?> {
+       return getLiveDataInternal(key, false, null) as MutableLiveData<T?>
     }
 
 
-    override fun <T> getLiveData(key: String, initialValue: T?): MutableLiveData<T> {
-        return getLiveDataInternal(key, true, initialValue) as MutableLiveData<T>
+    override fun <T> getLiveData(key: String, initialValue: T?): MutableLiveData<T?> {
+        return getLiveDataInternal(key, true, initialValue)
     }
 
     override fun contains(key: String): Boolean {

@@ -1,11 +1,8 @@
 package com.msz.filesytem
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.annotation.SuppressLint
+import androidx.core.app.ComponentActivity
 
+//@SuppressLint("RestrictedApi")
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 }

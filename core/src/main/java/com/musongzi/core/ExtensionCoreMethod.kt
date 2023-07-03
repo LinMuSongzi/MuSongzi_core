@@ -489,14 +489,14 @@ object ExtensionCoreMethod {
 
     @JvmStatic
     fun <T> String.liveSaveStateObserver(
-        lifecycle: LifecycleOwner?, saveStateHandle: IHolderSavedStateHandler?, observer: Observer<T>
+        lifecycle: LifecycleOwner?, saveStateHandle: IHolderSavedStateHandler?, observer: Observer<T?>
     ) {
         liveSaveStateObserver(lifecycle, saveStateHandle?.getHolderSavedStateHandle(), observer)
     }
 
     @JvmStatic
     fun <T> String.liveSaveStateObserver(
-        lifecycle: LifecycleOwner?, saveStateHandle: ISaveStateHandle?, observer: Observer<T>
+        lifecycle: LifecycleOwner?, saveStateHandle: ISaveStateHandle?, observer: Observer<T?>
     ) {
         if (lifecycle != null) {
             saveStateHandle?.getLiveData<T>(this)?.observe(lifecycle, observer)
