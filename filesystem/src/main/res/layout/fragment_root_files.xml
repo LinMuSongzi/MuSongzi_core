@@ -19,7 +19,8 @@
                 android:id="@+id/id_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="15dp"
+                android:paddingVertical="15dp"
+                android:paddingStart="15dp"
                 tools:listitem="@layout/item_disk" />
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 

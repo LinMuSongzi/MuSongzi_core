@@ -1,6 +1,7 @@
 package com.msz.filesystem.instance
 
 import android.util.Log
+import com.luck.picture.lib.basic.PictureSelector
 import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.base.manager.RetrofitManager
 import java.lang.reflect.Method
@@ -12,6 +13,7 @@ class RetrofitIntance: InstanceManager {
     }
     override fun onReady(a: Any?) {
         RetrofitManager.getInstance().init { URL2 }
+//        PictureSelector.
     }
 
 }

@@ -1,7 +1,10 @@
 package com.msz.filesystem.fragment
 
+import android.view.ViewGroup.LayoutParams
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import com.msz.filesystem.api.FileApi
 import com.msz.filesystem.bean.FileInfo
 import com.msz.filesystem.bean.IFile.Companion.ROOT
@@ -22,7 +25,9 @@ import com.musongzi.core.base.page2.PageLoader
 import com.musongzi.core.base.page2.RequestObservableBean
 import com.musongzi.core.itf.page.IPageEngine
 import com.musongzi.core.itf.page.IRead
+import com.musongzi.core.util.ScreenUtil
 import io.reactivex.rxjava3.core.Observable
+import java.lang.ref.WeakReference
 
 class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
 
@@ -57,16 +62,30 @@ class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
         dataBinding.idSmartRefreshLayout.refreshLayoutInit({
             refresh()
         }, isEnableLoadMore = false)
-        dataBinding.idRecyclerView.gridLayoutManager(4) {
-            pageLoader.adapter(ItemFiieBinding::class.java) { d, i, p ->
-
+        val w = (ScreenUtil.getScreenWidth() - ScreenUtil.dp2px(15 * 4)) / 3
+        dataBinding.idRecyclerView.gridLayoutManager(3) {
+            pageLoader.adapter(ItemFiieBinding::class.java, { d, _ ->
+                d.root.layoutParams.apply {
+                    this.width = w
+                }
+                d.idFileIv.layoutParams.apply {
+                    this.width = w - ScreenUtil.dp2px(30)
+                    this.height = this.width
+                }
+            }) { d, i, _ ->
                 chooseBean?.chooseFlag = chooseBean?.id_ == i.id_
 
                 d.root.setOnClickListener {
                     chooseBean?.chooseFlag = false
                     chooseBean = i
                     chooseBean?.chooseFlag = true
-                    notifyDataSetChanged()
+                    val w = WeakReference(this@DirListFragment)
+                    lifecycle.addObserver(object :DefaultLifecycleObserver{
+                        override fun onResume(owner: LifecycleOwner) {
+                            w.get()?.notifyDataSetChanged()
+                            owner.lifecycle.removeObserver(this)
+                        }
+                    })
                     i.startDirOrOther(true, pageLoader.realData())
                 }
             }

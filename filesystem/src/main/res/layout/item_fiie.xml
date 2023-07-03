@@ -10,43 +10,53 @@
             type="com.msz.filesystem.bean.FileInfo" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingHorizontal="5dp"
-        android:elevation="5dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        app:cardCornerRadius="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        app:cardElevation="10dp">
 
-        <ImageView
-            android:id="@+id/id_file_iv"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:scaleType="centerCrop"
-            imageLoadNormal="@{bean.src}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@mipmap/ic_normal_file" />
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@mipmap/ic_remember"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_margin="5dp"
-            viewVisibility="@{bean.choose}"/>
-
-        <TextView
-            style="@style/textType333"
-            setTextNormal="@{bean.name}"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/id_file_iv"
-            tools:text="d：" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/id_file_iv"
+                imageLoadNormal="@{bean.src}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@mipmap/ic_normal_file" />
+
+            <com.musongzi.comment.view.CustomRoundAngleImageView
+                app:radius="10dp"
+                viewVisibility="@{bean.choose}"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_margin="5dp"
+                android:src="@mipmap/ic_remember"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/textType333"
+                setTextNormal="@{bean.name}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_file_iv"
+                tools:text="d：" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
 </layout>

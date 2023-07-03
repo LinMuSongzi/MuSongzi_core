@@ -4,14 +4,10 @@ import android.os.Parcelable
 import android.util.Log
 import com.msz.filesystem.R
 import com.msz.filesystem.bean.IFile.Companion.DIR_TYPE
-import com.msz.filesystem.bean.IFile.Companion.ROOT
-import com.msz.filesystem.bean.IFile.Companion.asPathUrl
-import com.msz.filesystem.bean.IFile.Companion.isFile
-import com.msz.filesystem.instance.RetrofitIntance
+import com.msz.filesystem.bean.IFile.Companion.asImagePathUrl
 import com.musongzi.core.base.bean.BaseChooseBean
 
 import kotlinx.android.parcel.Parcelize
-import java.util.Arrays
 
 @Parcelize
 class FileInfo(
@@ -59,7 +55,7 @@ class FileInfo(
                         }
 
                         "jpeg", "png", "webp", "jpg" -> {
-                            return asPathUrl()
+                            return asImagePathUrl()
 //                            R.mipmap.ic_image
                         }
 
