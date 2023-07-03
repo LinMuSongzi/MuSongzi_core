@@ -21,7 +21,7 @@
             android:src="@mipmap/ic_disk" />
 
         <TextView
-            setTextNormal="@{bean.name}"
+            setTextNormal="@{bean.path}"
             style="@style/textType333"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

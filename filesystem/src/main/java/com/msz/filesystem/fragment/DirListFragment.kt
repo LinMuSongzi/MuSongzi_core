@@ -5,12 +5,14 @@ import androidx.lifecycle.LifecycleOwner
 import com.msz.filesystem.api.FileApi
 import com.msz.filesystem.bean.FileInfoI
 import com.msz.filesystem.bean.IFile.Companion.ROOT
+import com.msz.filesystem.bean.IFile.Companion.startDir
 import com.msz.filesystem.bean.RespondInfo
 import com.msz.filesystem.databinding.FragmentRootFilesBinding
 import com.msz.filesystem.databinding.ItemFiieBinding
 import com.musongzi.core.ExtensionCoreMethod.adapter
 import com.musongzi.core.ExtensionCoreMethod.gridLayoutManager
 import com.musongzi.core.ExtensionCoreMethod.refreshLayoutInit
+import com.musongzi.core.base.bean.BaseChooseBean
 import com.musongzi.core.base.fragment.DataBindingFragment
 import com.musongzi.core.base.manager.RetrofitManager
 import com.musongzi.core.base.page2.PageCallBack
@@ -27,6 +29,8 @@ class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
             return arguments?.getString("dir")!!
         }
 
+    var chooseBean: BaseChooseBean? = null
+
     private val pageLoader: IPageEngine<FileInfoI> by lazy {
         PageLoader.createInstance(object : PageCallBack<FileInfoI, RespondInfo<List<FileInfoI>>> {
             override val thisLifecycle: LifecycleOwner? = this@DirListFragment
@@ -40,19 +44,35 @@ class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
             }
 
             override fun handlerDataChange(data: MutableList<FileInfoI>, request: RequestObservableBean<RespondInfo<List<FileInfoI>>>) {
-                dataBinding.idRecyclerView.adapter?.notifyDataSetChanged()
+                notifyDataSetChanged()
             }
 
         })
     }
 
     override fun initView() {
+
         dataBinding.idSmartRefreshLayout.refreshLayoutInit({
             refresh()
         }, isEnableLoadMore = false)
         dataBinding.idRecyclerView.gridLayoutManager(4) {
-            pageLoader.adapter(ItemFiieBinding::class.java)
+            pageLoader.adapter(ItemFiieBinding::class.java) { d, i, p ->
+
+                chooseBean?.chooseFlag = chooseBean?.id_ == i.id_
+
+                d.root.setOnClickListener {
+                    chooseBean?.chooseFlag = false
+                    chooseBean = i
+                    chooseBean?.chooseFlag = true
+                    notifyDataSetChanged()
+                    i.startDir()
+                }
+            }
         }
+    }
+
+    override fun notifyDataSetChanged() {
+        dataBinding.idRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun initData() {

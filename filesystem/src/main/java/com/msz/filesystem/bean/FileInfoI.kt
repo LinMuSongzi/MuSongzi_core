@@ -3,6 +3,7 @@ package com.msz.filesystem.bean
 import android.os.Parcelable
 import com.msz.filesystem.R
 import com.msz.filesystem.bean.IFile.Companion.DIR_TYPE
+import com.musongzi.core.base.bean.BaseChooseBean
 
 import kotlinx.android.parcel.Parcelize
 
@@ -16,11 +17,20 @@ class FileInfoI(
     val fileFormat: String? = null,
     val allName: String? = null,
     override var token: String? = null
-) : ITokenInfo, IFile, Parcelable {
+) : ITokenInfo, IFile, Parcelable, BaseChooseBean() {
 
     companion object {
 
     }
+
+    override var id_: String
+        get() {
+            return path
+        }
+        set(value) {
+
+        }
+
 
     val src: Int
         get() {
@@ -28,9 +38,8 @@ class FileInfoI(
                 DIR_TYPE -> {
                     R.mipmap.ic_folder
                 }
-
                 else -> {
-                    when (if (path.endsWith(".")) (path.split(".").run {
+                    when (if (path.endsWith("\\.")) (path.split("\\.").run {
                         get(size - 1)
                     }) else "") {
                         "text" -> {

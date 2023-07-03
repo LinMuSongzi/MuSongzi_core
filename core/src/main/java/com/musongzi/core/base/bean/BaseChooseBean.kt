@@ -7,7 +7,7 @@ open class BaseChooseBean : IChoose ,IAttribute{
 
     var chooseFlag = false
 
-    var id_ = ""
+    open var id_ = ""
 
     override fun isChoose(): Boolean = chooseFlag
 

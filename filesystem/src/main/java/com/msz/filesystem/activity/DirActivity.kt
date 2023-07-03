@@ -19,8 +19,9 @@ class DirActivity : AppCompatActivity() {
                 commit()
             }
         }
-    }
+        supportActionBar?.title = intent.getStringExtra("dir")
 
+    }
 
 
 }
