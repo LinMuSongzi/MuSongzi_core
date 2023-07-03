@@ -11,9 +11,6 @@ class EmployeeEasyFragment: ViewModelFragment<EsayViewModel,ViewDataBinding>() {
 
     }
 
-    override fun initEvent() {
-
-    }
 
     override fun initData() {
 

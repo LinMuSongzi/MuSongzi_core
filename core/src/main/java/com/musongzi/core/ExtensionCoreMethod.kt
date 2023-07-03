@@ -185,6 +185,45 @@ object ExtensionCoreMethod {
 //        refreshLayoutInit(this, p, isEnableRefresh, isEnableLoadMore, time, mRefreshHeader, mRefreshFooter)
 //    }
 
+
+    fun SmartRefreshLayout?.refreshLayoutInit(
+        refresh: (()->Unit)? = null,
+        loadMore: (()->Unit)? = null,
+        isEnableRefresh: Boolean = true,
+        isEnableLoadMore: Boolean = true,
+        time: Int = 500,
+        mRefreshHeader: RefreshHeader? = null,
+        mRefreshFooter: RefreshFooter? = null
+    ) {
+        if(this == null){
+            Log.i("refreshLayoutInit", "init : SmartRefreshLayout == null  || IPageEngine == null")
+            return
+        }
+
+        Log.i("refreshLayoutInit", ": $isEnableRefresh , $isEnableLoadMore")
+        if (isEnableRefresh) {
+            setOnRefreshListener {
+                finishRefresh(time)
+                refresh?.invoke()
+            }
+        }
+        if (isEnableLoadMore) {
+            setOnLoadMoreListener {
+                finishLoadMore(time)
+                loadMore?.invoke()
+            }
+        }
+        if (isEnableRefresh) {
+            setRefreshHeader(mRefreshHeader ?: MaterialHeader(context))
+        }
+        if (isEnableLoadMore) {
+            setRefreshFooter(mRefreshFooter ?: ClassicsFooter(context))
+        }
+        setEnableRefresh(isEnableRefresh)
+        setEnableLoadMore(isEnableLoadMore)
+        setEnableAutoLoadMore(false);
+    }
+
     @JvmStatic
     fun SmartRefreshLayout?.refreshLayoutInit(
         p: IPageEngine<*>? = null,
