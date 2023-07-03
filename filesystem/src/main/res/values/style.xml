@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <style name="textType333">
+        <item name="android:textColor">@color/ps_color_33</item>
+        <item name="android:textSize">@dimen/activity_text_dp</item>
+    </style>
+
+</resources>

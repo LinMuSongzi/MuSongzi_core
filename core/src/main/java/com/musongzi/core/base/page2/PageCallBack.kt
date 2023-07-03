@@ -3,6 +3,8 @@ package com.musongzi.core.base.page2
 import androidx.lifecycle.LifecycleOwner
 import com.musongzi.core.itf.page.IDataObservable2
 import com.musongzi.core.itf.page.IAdMessage
+import com.musongzi.core.itf.page.IPageEngine
+import com.musongzi.core.itf.page.IRead
 import io.reactivex.rxjava3.core.Observable
 
 
@@ -16,7 +18,7 @@ interface PageCallBack<I, D> : IDataObservable2<D> {
     /**
      * 广告参数
      */
-    fun getAdMessage(): IAdMessage<I>?
+    fun getAdMessage(): IAdMessage<I>? = null
 
     /**
      * view 层的 activity/fragment
@@ -28,7 +30,7 @@ interface PageCallBack<I, D> : IDataObservable2<D> {
      * 对应state 在 [com.heart.core.itf.page.IPageEngine.Companion]
      * @param state
      */
-    fun handlerState(state: Int?)
+    fun handlerState(state: Int?){}
 
     /**
      * 获取业务处理数据并且的业务模式
@@ -39,7 +41,7 @@ interface PageCallBack<I, D> : IDataObservable2<D> {
      *
      */
     @Deprecated("暂时标记过")
-    fun getBusinessMode(): Int
+    fun getBusinessMode(): Int = IRead.SIMPLE_MODE
 
     /**
      * 获取一个数据被观察者
@@ -61,32 +63,32 @@ interface PageCallBack<I, D> : IDataObservable2<D> {
      * @return 返回的是一个默认发送的 otto 对象
      */
     @Deprecated("过期")
-    fun createPostEvent(request: RequestObservableBean<D>): Any?
+    fun createPostEvent(request: RequestObservableBean<D>): Any? = null
 
     /**
      * 返回首页的index
      * @return 第一页
      */
-    fun thisStartPage(): Int
+    fun thisStartPage(): Int = IPageEngine.START_PAGE_INDEX
 
     /**
      * 数据转换，根据订阅的观察者转换数据为 list
      * @return 返回被转化的数据
      */
-    fun transformDataToList(entity: D?): MutableList<I>
+    fun transformDataToList(entity: D?): List<I>
 
     /**
      * 跟[getBusinessMode]配合这使用，自己去定义数据的拼接方式
      * @param data 当前的数据集
      * @param transList 订阅到被观察者后回调的数据集
      */
-    fun convertListByNewData(data: MutableList<I>, transList: MutableList<I>)
+    fun convertListByNewData(data: MutableList<I>, transList: MutableList<I>){}
 
     /**
      * 当前一页的数量
      * @return 数量
      */
-    fun pageSize(): Int
+    fun pageSize(): Int = IPageEngine.PAGE_SIZE
 
     /**
      * 根据参数返回需要加载的指定页数index

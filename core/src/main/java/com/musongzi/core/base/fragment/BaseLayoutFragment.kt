@@ -148,7 +148,7 @@ abstract class BaseLayoutFragment: RxFragment() , IHolderActivity,FragmentContro
         super.onViewCreated(view, savedInstanceState)
         initView()
         initData();
-        initEvent()
+//        initEvent()
     }
 
     override fun addFragment(fragment: Fragment, tag: String?, isHide: Boolean) {
@@ -191,7 +191,7 @@ abstract class BaseLayoutFragment: RxFragment() , IHolderActivity,FragmentContro
 
 
     abstract fun initView()
-    abstract fun initEvent()
+//    abstract fun initEvent()
     abstract fun initData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
