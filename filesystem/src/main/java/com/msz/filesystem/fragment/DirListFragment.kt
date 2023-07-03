@@ -76,7 +76,7 @@ class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
     }
 
     override fun initData() {
-        dataBinding.idSmartRefreshLayout.autoRefresh(200)
+        pageLoader.refresh()
     }
 
     override fun refresh() {

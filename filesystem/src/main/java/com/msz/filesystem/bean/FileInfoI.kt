@@ -39,9 +39,13 @@ class FileInfoI(
                     R.mipmap.ic_folder
                 }
                 else -> {
-                    when (if (path.endsWith("\\.")) (path.split("\\.").run {
-                        get(size - 1)
-                    }) else "") {
+                    when (path.split("\\.").run {
+                        if(isNotEmpty()) {
+                            get(size - 1)
+                        }else{
+                            ""
+                        }
+                    }) {
                         "text" -> {
                             R.mipmap.ic_txt
                         }

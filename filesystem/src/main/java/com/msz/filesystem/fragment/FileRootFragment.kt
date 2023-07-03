@@ -51,6 +51,6 @@ class FileRootFragment : DataBindingFragment<FragmentRootFilesBinding>() {
     }
 
     override fun initData() {
-        dataBinding.idSmartRefreshLayout.autoRefresh(200)
+        loadRemote()
     }
 }

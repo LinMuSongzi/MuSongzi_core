@@ -6,7 +6,7 @@
 
     <style name="textType333">
         <item name="android:textColor">@color/ps_color_33</item>
-        <item name="android:textSize">@dimen/activity_text_dp</item>
+        <item name="android:textSize">@dimen/text_normal_dp</item>
     </style>
 
 </resources>
