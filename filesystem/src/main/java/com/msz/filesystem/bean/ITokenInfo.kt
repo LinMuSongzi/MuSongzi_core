@@ -1,6 +1,7 @@
 package com.msz.filesystem.bean
 
-open class TokenInfo(var token: String? = null) {
 
+interface ITokenInfo {
+    var token: String?
 
 }

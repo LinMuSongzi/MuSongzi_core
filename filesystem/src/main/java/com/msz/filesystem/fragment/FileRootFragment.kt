@@ -1,11 +1,10 @@
 package com.msz.filesystem.fragment
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import com.msz.filesystem.api.FileApi
-import com.msz.filesystem.bean.DiskInfo
-import com.msz.filesystem.bean.RespondInfo
+import com.msz.filesystem.bean.DiskInfoI
+import com.msz.filesystem.bean.IFile.Companion.ROOT
+import com.msz.filesystem.bean.IFile.Companion.startDir
 import com.msz.filesystem.databinding.FragmentRootFilesBinding
 import com.msz.filesystem.databinding.ItemDiskBinding
 import com.musongzi.comment.util.SourceImpl
@@ -15,20 +14,11 @@ import com.musongzi.core.ExtensionCoreMethod.refreshLayoutInit
 import com.musongzi.core.ExtensionCoreMethod.sub
 import com.musongzi.core.base.fragment.DataBindingFragment
 import com.musongzi.core.base.manager.RetrofitManager
-import com.musongzi.core.base.page2.PageCallBack
-import com.musongzi.core.base.page2.PageLoader
-import com.musongzi.core.base.page2.RequestObservableBean
-import com.musongzi.core.itf.page.IPageEngine2
-import io.reactivex.rxjava3.core.Observable
 
 class FileRootFragment : DataBindingFragment<FragmentRootFilesBinding>() {
-    companion object {
-        const val ROOT = "root_msz"
-        const val ROOT_TIME = -1L
-    }
 
     private val mDiskInfos by lazy {
-        SourceImpl<DiskInfo>()
+        SourceImpl<DiskInfoI>()
     }
 
     override fun initView() {
@@ -38,7 +28,11 @@ class FileRootFragment : DataBindingFragment<FragmentRootFilesBinding>() {
         }, isEnableLoadMore = false)
 
         dataBinding.idRecyclerView.gridLayoutManager(2, GridLayoutManager.VERTICAL) {
-            mDiskInfos.adapter(ItemDiskBinding::class.java)
+            mDiskInfos.adapter(ItemDiskBinding::class.java) { d, i, _ ->
+                d.root.setOnClickListener {
+                    i.startDir()
+                }
+            }
         }
 
     }

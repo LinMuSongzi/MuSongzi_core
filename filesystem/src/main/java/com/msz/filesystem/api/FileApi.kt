@@ -1,7 +1,7 @@
 package com.msz.filesystem.api
 
-import com.msz.filesystem.bean.DiskInfo
-import com.msz.filesystem.bean.FileInfo
+import com.msz.filesystem.bean.DiskInfoI
+import com.msz.filesystem.bean.FileInfoI
 import com.msz.filesystem.bean.RespondInfo
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.Field
@@ -12,11 +12,11 @@ interface FileApi {
 
     @FormUrlEncoded
     @POST("/disk/search")
-    fun getRoot(@Field("acceseKey") acceseKey:String): Observable<RespondInfo<List<DiskInfo>>>
+    fun getRoot(@Field("acceseKey") acceseKey:String): Observable<RespondInfo<List<DiskInfoI>>>
 
     @FormUrlEncoded
     @POST("/disk/files")
-    fun getDirFiles(@Field("acceseKey") acceseKey: String, @Field("path") path: String): Observable<RespondInfo<List<FileInfo>>>
+    fun getDirFiles(@Field("acceseKey") acceseKey: String, @Field("path") path: String): Observable<RespondInfo<List<FileInfoI>>>
 
 //    @GET("/disk/file2")
 //    @Throws(IOException::class)

@@ -6,7 +6,7 @@
 
         <variable
             name="bean"
-            type="com.msz.filesystem.bean.DiskInfoI" />
+            type="com.msz.filesystem.bean.FileInfoI" />
     </data>
 
     <LinearLayout
@@ -16,13 +16,14 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/ic_disk" />
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@{bean.src}"
+            tools:src="@mipmap/ic_normal_file" />
 
         <TextView
-            setTextNormal="@{bean.name}"
             style="@style/textType333"
+            setTextNormal="@{bean.name}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="d：" />
