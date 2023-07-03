@@ -7,7 +7,6 @@ import com.musongzi.ConfigManager
 import com.musongzi.core.ExtensionCoreMethod.bean
 import com.musongzi.core.StringChooseBean
 import com.musongzi.core.base.MszApplicaton
-import com.musongzi.core.base.manager.ActivityLifeManager.Companion.registerEvent
 import com.musongzi.core.base.manager.InstanceManager
 import com.musongzi.core.base.manager.ManagerInstanceHelp
 import com.musongzi.core.base.manager.ManagerInstanceHelp.Companion.instanceHelp

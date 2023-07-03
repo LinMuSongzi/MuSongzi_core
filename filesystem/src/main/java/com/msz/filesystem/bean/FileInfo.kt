@@ -1,15 +1,21 @@
 package com.msz.filesystem.bean
 
 import android.os.Parcelable
+import android.util.Log
 import com.msz.filesystem.R
 import com.msz.filesystem.bean.IFile.Companion.DIR_TYPE
+import com.msz.filesystem.bean.IFile.Companion.ROOT
+import com.msz.filesystem.bean.IFile.Companion.asPathUrl
+import com.msz.filesystem.bean.IFile.Companion.isFile
+import com.msz.filesystem.instance.RetrofitIntance
 import com.musongzi.core.base.bean.BaseChooseBean
 
 import kotlinx.android.parcel.Parcelize
+import java.util.Arrays
 
 @Parcelize
-class FileInfoI(
-    val name: String,
+class FileInfo(
+    override var name: String,
     override val path: String,
     override var fileType: Int,
     val cover: String? = null,
@@ -18,6 +24,7 @@ class FileInfoI(
     val allName: String? = null,
     override var token: String? = null
 ) : ITokenInfo, IFile, Parcelable, BaseChooseBean() {
+
 
     companion object {
 
@@ -32,20 +39,17 @@ class FileInfoI(
         }
 
 
-    val src: Int
+    val src: Any
         get() {
             return when (fileType) {
                 DIR_TYPE -> {
                     R.mipmap.ic_folder
                 }
+
                 else -> {
-                    when (path.split("\\.").run {
-                        if(isNotEmpty()) {
-                            get(size - 1)
-                        }else{
-                            ""
-                        }
-                    }) {
+                    val s = getLastIndexStr()
+                    Log.i("FileInfo", ": s = $s")
+                    when (s) {
                         "text" -> {
                             R.mipmap.ic_txt
                         }
@@ -55,14 +59,15 @@ class FileInfoI(
                         }
 
                         "jpeg", "png", "webp", "jpg" -> {
-                            R.mipmap.ic_image
+                            return asPathUrl()
+//                            R.mipmap.ic_image
                         }
 
-                        "mp4" -> {
+                        "mp4", "rmvb", "wmv", "flv", "ASF", "avi" -> {
                             R.mipmap.ic_video
                         }
 
-                        "mp3" -> {
+                        "mp3", "pcm", "wav" -> {
                             R.mipmap.ic_audio
                         }
 
@@ -97,5 +102,7 @@ class FileInfoI(
                 }
             }
         }
+
+
 
 }

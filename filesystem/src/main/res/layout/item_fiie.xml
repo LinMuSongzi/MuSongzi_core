@@ -7,7 +7,7 @@
 
         <variable
             name="bean"
-            type="com.msz.filesystem.bean.FileInfoI" />
+            type="com.msz.filesystem.bean.FileInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

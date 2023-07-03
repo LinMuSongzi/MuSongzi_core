@@ -3,9 +3,11 @@ package com.msz.filesystem.fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.msz.filesystem.api.FileApi
-import com.msz.filesystem.bean.FileInfoI
+import com.msz.filesystem.bean.FileInfo
 import com.msz.filesystem.bean.IFile.Companion.ROOT
 import com.msz.filesystem.bean.IFile.Companion.startDir
+import com.msz.filesystem.bean.IFile.Companion.startDirOrOther
+import com.msz.filesystem.bean.IFile.Companion.startDirOrOtherBySource
 import com.msz.filesystem.bean.RespondInfo
 import com.msz.filesystem.databinding.FragmentRootFilesBinding
 import com.msz.filesystem.databinding.ItemFiieBinding
@@ -31,19 +33,19 @@ class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
 
     var chooseBean: BaseChooseBean? = null
 
-    private val pageLoader: IPageEngine<FileInfoI> by lazy {
-        PageLoader.createInstance(object : PageCallBack<FileInfoI, RespondInfo<List<FileInfoI>>> {
+    private val pageLoader: IPageEngine<FileInfo> by lazy {
+        PageLoader.createInstance(object : PageCallBack<FileInfo, RespondInfo<List<FileInfo>>> {
             override val thisLifecycle: LifecycleOwner? = this@DirListFragment
 
-            override fun getRemoteData(page: Int, pageSize: Int): Observable<RespondInfo<List<FileInfoI>>>? {
+            override fun getRemoteData(page: Int, pageSize: Int): Observable<RespondInfo<List<FileInfo>>>? {
                 return RetrofitManager.getInstance().getApi(FileApi::class.java, this@DirListFragment).getDirFiles(ROOT, dir)
             }
 
-            override fun transformDataToList(entity: RespondInfo<List<FileInfoI>>?): List<FileInfoI> {
+            override fun transformDataToList(entity: RespondInfo<List<FileInfo>>?): List<FileInfo> {
                 return entity?.data ?: mutableListOf()
             }
 
-            override fun handlerDataChange(data: MutableList<FileInfoI>, request: RequestObservableBean<RespondInfo<List<FileInfoI>>>) {
+            override fun handlerDataChange(data: MutableList<FileInfo>, request: RequestObservableBean<RespondInfo<List<FileInfo>>>) {
                 notifyDataSetChanged()
             }
 
@@ -65,7 +67,7 @@ class DirListFragment : DataBindingFragment<FragmentRootFilesBinding>(), IRead {
                     chooseBean = i
                     chooseBean?.chooseFlag = true
                     notifyDataSetChanged()
-                    i.startDir()
+                    i.startDirOrOther(true, pageLoader.realData())
                 }
             }
         }
