@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/aptlib" />
             <option value="$PROJECT_DIR$/comment" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/filesystem" />
             <option value="$PROJECT_DIR$/spi" />
             <option value="$PROJECT_DIR$/videoplay" />
           </set>

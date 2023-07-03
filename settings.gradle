@@ -7,3 +7,4 @@ rootProject.name = "My Application"
 include ':spi'
 include ':videoplay'
 
+include ':filesystem'

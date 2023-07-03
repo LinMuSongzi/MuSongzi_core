@@ -7,13 +7,13 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.musongzi.comment.ExtensionMethod.getSaveStateValue
 import com.musongzi.comment.ExtensionMethod.liveSaveStateObserver
 import com.musongzi.comment.bean.SimpleCardInfo
 import com.musongzi.comment.business.itf.IMainIndexBusiness
 import com.musongzi.comment.viewmodel.itf.IMainIndexViewModel
 import com.musongzi.comment.databinding.AdapterMainBottomItemBinding
 import com.musongzi.core.ExtensionCoreMethod.adapter
+import com.musongzi.core.ExtensionCoreMethod.getSaveStateValue
 import com.musongzi.core.ExtensionCoreMethod.linearLayoutManager
 import com.musongzi.core.ExtensionCoreMethod.saveStateChange
 import com.musongzi.core.ExtensionCoreMethod.sub
