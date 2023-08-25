@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/drawable-v24/ic_loading_99.jpg",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/drawable-v24/ic_loading_99.jpg"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/drawable-v24/ic_launcher_foreground.xml",
+        "source": "com.musongzi.music.musiclib-main-46:/drawable-v24/ic_launcher_foreground.xml"
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-xhdpi-v4/ic_launcher.png",
+        "source": "com.musongzi.music.musiclib-main-46:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-xhdpi-v4/ic_launcher_round.png",
+        "source": "com.musongzi.music.musiclib-main-46:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-xhdpi-v4/ic_nav_back.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/mipmap-xhdpi-v4/ic_nav_back.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-xhdpi-v4/ic_empty_data.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/mipmap-xhdpi-v4/ic_empty_data.png"
+    }
+]

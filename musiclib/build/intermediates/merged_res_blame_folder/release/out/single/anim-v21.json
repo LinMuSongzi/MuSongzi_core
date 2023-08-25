@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/anim-v21/design_bottom_sheet_slide_out.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/anim-v21/design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/anim-v21/mtrl_bottom_sheet_slide_out.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/anim-v21/mtrl_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/anim-v21/fragment_fast_out_extra_slow_in.xml",
+        "source": "com.musongzi.music.musiclib-fragment-1.3.6-6:/anim-v21/fragment_fast_out_extra_slow_in.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/anim-v21/mtrl_bottom_sheet_slide_in.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/anim-v21/mtrl_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/anim-v21/design_bottom_sheet_slide_in.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/anim-v21/design_bottom_sheet_slide_in.xml"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-xxxhdpi-v4/ic_launcher_round.png",
+        "source": "com.musongzi.music.musiclib-main-46:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-xxxhdpi-v4/ic_launcher.png",
+        "source": "com.musongzi.music.musiclib-main-46:/mipmap-xxxhdpi/ic_launcher.png"
+    }
+]

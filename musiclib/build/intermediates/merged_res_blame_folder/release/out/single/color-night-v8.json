@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/color-night-v8/material_timepicker_modebutton_tint.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/color-night-v8/material_timepicker_modebutton_tint.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/color-night-v8/material_timepicker_clockface.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/color-night-v8/material_timepicker_clockface.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/color-night-v8/material_timepicker_button_stroke.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/color-night-v8/material_timepicker_button_stroke.xml"
+    }
+]

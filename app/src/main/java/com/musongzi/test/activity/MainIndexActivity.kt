@@ -1,9 +1,9 @@
 package com.musongzi.test.activity
 
-import com.musongzi.comment.activity.SupportFragmentActivity
+//import com.musongzi.comment.activity.SupportFragmentActivity
 
 /*** created by linhui * on 2022/7/20 */
-class MainIndexActivity : SupportFragmentActivity() {
+class MainIndexActivity : BaseActivity() {
 
 //    lateinit var id_title:TextView
 //

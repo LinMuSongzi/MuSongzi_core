@@ -1,0 +1,31 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:2:1-11:12
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:2:1-11:12
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:2:1-11:12
+	package
+		ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:3:5-33
+		INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+		INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:5:5-9:19
+activity#com.musongzi.music.MainActivity
+ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:7:9-49
+	android:name
+		ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml:7:19-47
+uses-sdk
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+		ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+		INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+		ADDED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml
+		INJECTED from D:\as_project\MuSongzi_core\musiclib\src\main\AndroidManifest.xml

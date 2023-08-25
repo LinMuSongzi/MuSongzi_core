@@ -1,0 +1,622 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_chip_zero_corner_radius.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_chip_zero_corner_radius.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/select_dialog_singlechoice_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/select_dialog_singlechoice_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_expanded_menu_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_expanded_menu_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_big_media_custom.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_big_media_custom.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_cascading_menu_item_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_cascading_menu_item_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_widget_seekbar_material.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_widget_seekbar_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_days_of_week.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_days_of_week.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/fragment_splash.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/fragment_splash.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/dialog_tip.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/dialog_tip.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/fragment_test_main.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/fragment_test_main.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_text_input_end_icon.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_text_input_end_icon.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_dropdown.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_dropdown.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_category.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_category.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_big_media.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_big_media.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_dialog_edittext.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_dialog_edittext.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_months.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_months.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_list_menu_item_checkbox.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_list_menu_item_checkbox.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_header_dialog.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_header_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_year.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_year.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_activity_chooser_view_list_item.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_toolbar_surface.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_toolbar_surface.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_popup_menu_item_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_popup_menu_item_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_model_show_1.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_model_show_1.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_action_menu_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_list_menu_item_radio.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_list_menu_item_radio.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_screen_simple_overlay_action_mode.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_radial_view_group.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_radial_view_group.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_activity_chooser_view.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_activity_chooser_view.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_action_mode_close_item_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_action_mode_close_item_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_alert_dialog_title_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_alert_dialog_title_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_big_media_narrow.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_horizontal.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_horizontal.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_alert_select_dialog_singlechoice.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_alert_select_dialog_singlechoice.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_bottom_sheet_dialog.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_bottom_sheet_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/custom_dialog.xml",
+        "source": "com.musongzi.music.musiclib-core-1.7.0-31:/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_action_menu_item_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_action_menu_item_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_list_fragment.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_list_fragment.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/srl_classics_header.xml",
+        "source": "com.musongzi.music.musiclib-jetified-refresh-header-classics-2.0.3-24:/layout/srl_classics_header.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_clockface_textview.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_clockface_textview.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/select_dialog_multichoice_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_dialog_title_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_layout_tab_icon.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_layout_tab_icon.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_list_menu_item_icon.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_design_radiobutton.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_design_radiobutton.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_timepicker_dialog.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_timepicker_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_clockface_view.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_clockface_view.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/activity_main.xml",
+        "source": "com.musongzi.music.musiclib-main-46:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_month.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_month.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_day.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_day.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_recyclerview.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_recyclerview.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_widget_checkbox.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_widget_checkbox.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_part_chronometer.xml",
+        "source": "com.musongzi.music.musiclib-core-1.7.0-31:/layout/notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_text_input_date.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_text_input_date.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_screen_simple.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_screen_simple.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_timepicker_textinput_display.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_timepicker_textinput_display.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_tooltip.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_tooltip.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_navigation_item.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_navigation_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_mode_card_2.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_mode_card_2.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_widget_seekbar.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_widget_seekbar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_main_bottom_item.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_main_bottom_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_clock_display_divider.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_clock_display_divider.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_header_toggle.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_header_toggle.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_action_bar_up_container.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/fragment_recycle_list.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/fragment_recycle_list.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_screen_content_include.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_screen_content_include.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_popup_menu_header_item_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_fullscreen.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_fullscreen.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_design_checkbox.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_design_checkbox.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/activity_normal_fragment.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/activity_normal_fragment.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_navigation_menu.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_navigation_menu.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_alert_dialog.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_alert_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_action_mode_bar.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_media_custom.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_media_custom.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_navigation_item_header.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_navigation_item_header.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_lines_media.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_lines_media.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_model_select_swich_1.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_model_select_swich_1.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/text_view_with_line_height_from_layout.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/text_view_with_line_height_from_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_layout_snackbar_include.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_layout_snackbar_include.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_category_material.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_category_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_day_of_week.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_day_of_week.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_layout_tab_text.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_layout_tab_text.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/text_view_with_line_height_from_style.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/text_view_with_line_height_from_style.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_part_time.xml",
+        "source": "com.musongzi.music.musiclib-core-1.7.0-31:/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/expand_button.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/expand_button.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_search_view.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_search_view.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_information_material.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_information_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/layout_empty_data_show.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/layout_empty_data_show.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_navigation_rail_item.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_navigation_rail_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_actions.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_actions.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_header_title_text.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_header_title_text.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_text_input_date_range.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_text_input_date_range.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_toolbar.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_toolbar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/select_dialog_item_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/select_dialog_item_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_textinput_timepicker.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_textinput_timepicker.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_select_dialog_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/srl_classics_footer.xml",
+        "source": "com.musongzi.music.musiclib-jetified-refresh-footer-classics-2.0.3-36:/layout/srl_classics_footer.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_widget_switch.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_widget_switch.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_layout_snackbar.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_layout_snackbar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_model_show_cricle_1.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_model_show_cricle_1.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/msz_layout_recycle_view.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/msz_layout_recycle_view.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_reflow_chipgroup.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_reflow_chipgroup.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_menu_item_action_area.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_menu_item_action_area.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_list_menu_item_layout.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_list_menu_item_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/msz_title_layout.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-40:/layout/msz_title_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_search_dropdown_item_icons_2line.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_search_dropdown_item_icons_2line.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_action_chip.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_action_chip.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_time_input.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_time_input.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_media_action.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_media_action.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/image_frame.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/image_frame.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_alert_dialog_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_alert_dialog_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_text_input_start_icon.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_text_input_start_icon.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_layout_snackbar.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_layout_snackbar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_alert_select_dialog_multichoice.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_alert_select_dialog_multichoice.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_vertical.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_vertical.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_model_message_1.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_model_message_1.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_alert_select_dialog_item.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_alert_select_dialog_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/support_simple_spinner_dropdown_item.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_toolbar_custom_background.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_toolbar_custom_background.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_clock_display.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_clock_display.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_dialog.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_clock_period_toggle.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_clock_period_toggle.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_media_cancel_action.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_media_cancel_action.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_alert_dialog_button_bar_material.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_alert_dialog_title.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_alert_dialog_title.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_action_bar_title_item.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_action_bar_title_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_material.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_bottom_navigation_item.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_bottom_navigation_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_month_navigation.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_month_navigation.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_header_fullscreen.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_header_fullscreen.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_model_choose_1.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_model_choose_1.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_media.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_media.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_model_card_1.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_model_card_1.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_photo_list_other_choose.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_photo_list_other_choose.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_navigation_item_separator.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_navigation_item_separator.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/text_view_with_theme_line_height.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/text_view_with_theme_line_height.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_chip_input_combo.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_chip_input_combo.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/text_view_without_line_height.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/text_view_without_line_height.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_picker_header_selection_text.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_picker_header_selection_text.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/adapter_file.xml",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/layout/adapter_file.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_timepicker.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_timepicker.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_navigation_item_subheader.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_navigation_item_subheader.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/design_navigation_menu_item.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/design_navigation_menu_item.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/text_view_with_line_height_from_appearance.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/text_view_with_line_height_from_appearance.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/abc_screen_toolbar.xml",
+        "source": "com.musongzi.music.musiclib-appcompat-1.3.1-28:/layout/abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_information.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_information.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_toolbar_elevation.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_toolbar_elevation.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_alert_dialog_actions.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_alert_dialog_actions.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_calendar_month_labeled.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_calendar_month_labeled.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_widget_switch_compat.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_widget_switch_compat.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/mtrl_layout_snackbar_include.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/mtrl_layout_snackbar_include.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/preference_dropdown_material.xml",
+        "source": "com.musongzi.music.musiclib-preference-1.1.1-10:/layout/preference_dropdown_material.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/notification_template_big_media_narrow_custom.xml",
+        "source": "com.musongzi.music.musiclib-media-1.0.0-21:/layout/notification_template_big_media_narrow_custom.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/test_navigation_bar_item_layout.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/test_navigation_bar_item_layout.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout/material_time_chip.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout/material_time_chip.xml"
+    }
+]

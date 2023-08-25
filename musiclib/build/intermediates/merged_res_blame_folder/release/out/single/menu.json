@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/menu/example_menu.xml",
+        "source": "com.musongzi.music.musiclib-core-1.7.0-31:/menu/example_menu.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/menu/example_menu2.xml",
+        "source": "com.musongzi.music.musiclib-core-1.7.0-31:/menu/example_menu2.xml"
+    }
+]

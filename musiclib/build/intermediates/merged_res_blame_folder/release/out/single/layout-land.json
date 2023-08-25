@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout-land/mtrl_picker_header_dialog.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout-land/mtrl_picker_header_dialog.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout-land/material_clock_period_toggle_land.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout-land/material_clock_period_toggle_land.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout-land/material_timepicker.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout-land/material_timepicker.xml"
+    }
+]

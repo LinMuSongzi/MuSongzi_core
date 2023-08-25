@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                       
+                                                   
+
+    
+                 
+                       
+                                                                      
+           
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" android:tag="layout/msz_title_layout_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+        <FrameLayout
+            android:id="@+id/fl_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="50dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_height="match_parent"
+                android:contentDescription="iv_back"
+                android:padding="17dp"
+                android:onClick="goBack"
+                android:paddingHorizontal="15dp"
+                android:src="@mipmap/ic_nav_back" />
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingHorizontal="15dp"
+            tools:text="标题"
+            android:tag="binding_1"     
+            android:textColor="#ff000000"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_right"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:background="@drawable/title_3"-->
+<!--            android:foreground="?android:attr/selectableItemBackground"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingHorizontal="10dp"-->
+<!--            android:text="完成"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:visibility="gone"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <TextView
+            android:id="@+id/tv_right_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingHorizontal="10dp"
+            tools:text="完成"
+            android:tag="binding_2"         
+            android:textColor="#666666"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+         

@@ -7,15 +7,8 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import com.musongzi.comment.ExtensionMethod.startActivityNormal
-import com.musongzi.comment.ExtensionMethod.startRecycleActivity
 import com.musongzi.test.R
 import com.musongzi.test.databinding.ActivityMainBinding
-import com.musongzi.test.fragment.Fast2DataBindingFragment
-import com.musongzi.test.fragment.FastRecycleFragment
-import com.musongzi.test.fragment.SoulAppTestFragemnt
-import com.musongzi.test.fragment.ViewModelTestFragment
-import com.musongzi.test.simple.BannerAndRetrofitMainFragment
 import kotlinx.coroutines.*
 
 class SplashActivity : BaseActivity() {
@@ -112,7 +105,7 @@ class SplashActivity : BaseActivity() {
 
 //        BannerAndRetrofitMainFragment::class.java.startActivityNormal("Banner请求")
 
-        ViewModelTestFragment::class.java.startActivityNormal("测试recycle")
+//        ViewModelTestFragment::class.java.startActivityNormal("测试recycle")
 
 //        TowActivity::class.java.startActivity()
 

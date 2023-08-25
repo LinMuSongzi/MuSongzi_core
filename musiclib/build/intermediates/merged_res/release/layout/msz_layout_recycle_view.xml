@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                        
+
+    
+
+           
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/id_SmartRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:tag="layout/msz_layout_recycle_view_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/id_recyclerView_2"
+            android:layout_width="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_height="match_parent" />
+
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+         

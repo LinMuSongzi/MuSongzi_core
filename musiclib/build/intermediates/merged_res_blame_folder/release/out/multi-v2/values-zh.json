@@ -1,0 +1,102 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.musongzi.music.musiclib-merged_res-45:/values-zh/values-zh.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-3\\ac478e6ff8077b45ecebb67c95eac91f\\transformed\\jetified-refresh-header-classics-2.0.3\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,106,157,214,268,324,378,434",
+                        "endColumns": "50,50,56,53,55,53,55,60",
+                        "endOffsets": "101,152,209,263,319,373,429,490"
+                    },
+                    "to": {
+                        "startLines": "11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "633,684,735,792,846,902,956,1012",
+                        "endColumns": "50,50,56,53,55,53,55,60",
+                        "endOffsets": "679,730,787,841,897,951,1007,1068"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-3\\7097f3d7b9cb3bd9e1b59401c5fe45cc\\transformed\\jetified-refresh-layout-kernel-2.0.3\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,163",
+                        "endColumns": "107,91",
+                        "endOffsets": "158,250"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-3\\e662678f572bd7dd3ef8a53fb51748ce\\transformed\\jetified-refresh-footer-classics-2.0.3\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,106,157,210,265,319,379",
+                        "endColumns": "50,50,52,54,53,59,53",
+                        "endOffsets": "101,152,205,260,314,374,428"
+                    },
+                    "to": {
+                        "startLines": "4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "255,306,357,410,465,519,579",
+                        "endColumns": "50,50,52,54,53,59,53",
+                        "endOffsets": "301,352,405,460,514,574,628"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "com.musongzi.music.musiclib-mergeReleaseResources-43:/values-zh/values-zh.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-3\\ac478e6ff8077b45ecebb67c95eac91f\\transformed\\jetified-refresh-header-classics-2.0.3\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,106,157,214,268,324,378,434",
+                        "endColumns": "50,50,56,53,55,53,55,60",
+                        "endOffsets": "101,152,209,263,319,373,429,490"
+                    },
+                    "to": {
+                        "startLines": "11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "633,684,735,792,846,902,956,1012",
+                        "endColumns": "50,50,56,53,55,53,55,60",
+                        "endOffsets": "679,730,787,841,897,951,1007,1068"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-3\\7097f3d7b9cb3bd9e1b59401c5fe45cc\\transformed\\jetified-refresh-layout-kernel-2.0.3\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,163",
+                        "endColumns": "107,91",
+                        "endOffsets": "158,250"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-3\\e662678f572bd7dd3ef8a53fb51748ce\\transformed\\jetified-refresh-footer-classics-2.0.3\\res\\values-zh\\values-zh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,106,157,210,265,319,379",
+                        "endColumns": "50,50,52,54,53,59,53",
+                        "endOffsets": "101,152,205,260,314,374,428"
+                    },
+                    "to": {
+                        "startLines": "4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "255,306,357,410,465,519,579",
+                        "endColumns": "50,50,52,54,53,59,53",
+                        "endOffsets": "301,352,405,460,514,574,628"
+                    }
+                }
+            ]
+        }
+    ]
+}

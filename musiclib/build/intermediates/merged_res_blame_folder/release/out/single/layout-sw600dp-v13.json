@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout-sw600dp-v13/mtrl_layout_snackbar.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout-sw600dp-v13/mtrl_layout_snackbar.xml"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/layout-sw600dp-v13/design_layout_snackbar.xml",
+        "source": "com.musongzi.music.musiclib-material-1.4.0-11:/layout-sw600dp-v13/design_layout_snackbar.xml"
+    }
+]

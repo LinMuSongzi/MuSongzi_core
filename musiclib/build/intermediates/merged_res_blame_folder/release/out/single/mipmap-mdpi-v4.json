@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/cricle_gray_1.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/cricle_gray_1.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/ic_launcher_round.png",
+        "source": "com.musongzi.music.musiclib-main-46:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/ic_launcher.png",
+        "source": "com.musongzi.music.musiclib-main-46:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/ic_camera_1.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/ic_camera_1.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/cricle_purple_2.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/cricle_purple_2.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/cricle_null_white.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/cricle_null_white.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/cricle_purple_1.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/cricle_purple_1.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/ic_play_1.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/ic_play_1.png"
+    },
+    {
+        "merged": "com.musongzi.music.musiclib-merged_res-45:/mipmap-mdpi-v4/ic_lock_1.png",
+        "source": "com.musongzi.music.musiclib-packaged_res-39:/mipmap-mdpi-v4/ic_lock_1.png"
+    }
+]

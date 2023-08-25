@@ -1,9 +1,10 @@
 package com.musongzi.test.activity;
 
-import com.musongzi.comment.activity.SupportFragmentActivity;
+
+import androidx.fragment.app.FragmentActivity;
 
 /*** created by linhui * on 2022/7/7 */
-public class BaseActivity extends SupportFragmentActivity {
+public class BaseActivity extends FragmentActivity {
 
 
 
